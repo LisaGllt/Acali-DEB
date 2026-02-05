@@ -1,0 +1,46 @@
+MonteCarlo( "DEB_MC_10.out",  # output file
+      200,           # iterations
+      121212);          # random seed
+
+Integrate (Lsodes,  1e-07, 1e-06, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
+    
+Distrib (rOM_ClxHorse, LogUniform,               0.001,      0.01);
+Distrib (Fm,           Uniform,               0.2,      0.4);
+Distrib (pAm,          Uniform,               50,      400);
+Distrib (r_pAm_pM,     Uniform,               0.6,      1);
+Distrib (kap,          Uniform,               0.4,     0.8);
+Distrib (kJ,           LogUniform,            0.0001,     0.003);
+Distrib (Ehp,          Uniform,              50,      120);
+Distrib (E_coc,       Uniform,              30,      100);
+
+Simulation { # Gollot2026_dens_D2b
+    Init= 1;
+    WeightSoilCosm = 200;
+    Winit=0.00923;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Soil=1;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          7,
+                          0, 28, 56, 84, 112, 140, 154,
+                          Replace, Replace, Replace, Replace, Replace, Replace, Replace, 
+                           6.52, 6.52, 6.52, 6.52, 6.52, 6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           7,
+                           0, 28, 56, 84, 112, 140, 154,
+                           Replace, Replace, Replace, Replace, Replace, Replace, Replace, 
+                            5.4, 5.4, 5.4, 5.4, 5.4, 5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           5,
+                           14, 42, 70, 98, 126,
+                           Add, Add, Add, Add, Add, 
+                            5.4, 5.4, 5.4, 5.4, 5.4);
+                               
+    PrintStep(Weight,
+    Reproduction,
+				0, 154, 0.1);
+}
+End.
+

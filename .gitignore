@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+**/.DS_Store
+*.out
+/.quarto/
+*.rdb
+*.rds
+*.rdx
+*.RData
+**/.DS_Store

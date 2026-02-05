@@ -1,0 +1,475 @@
+```{r, include = F}
+library(here)
+source(file=here::here("functions/fun.R"))
+f_load_libraries_colors()
+```
+
+# Impact of density and food quantity on earthworm growth and reproduction
+
+## Protocol
+
+Synchronized newly hatched earthworms are put in cosms with 200 g of Closeaux soil with a WHC of 70%. They are fed every 14 days and the soil is renewed every 28 days. Soil humidity is checked every week. Earthworms are weighted every 14 days. Once at least one earthworm is adult, cocoons produced are retrieved every 28 days when changing the soil. 
+
+Conditions :
+
+- D1 : One earthworm per cosm | Food = 3 g/14 days
+- D2 : 2 earthworms per cosm | Food = 3 g/14 days
+- D2b : 2 earthworms per cosm | Food = 6 g/14 days
+- D5 : 5 earthworms per cosm | Food = 3 g/14 days
+- D7 : 7 earthworms per cosm | Food = 3 g/14 days
+
+Some earthworm died in the first 14 days of the experiment. Another batch of earthworms were then started 28 days after the first one.
+
+## Results
+
+```{r}
+df_dens <- read_excel(here::here("data/Data_DENS.xlsx"), sheet=1)%>%
+  mutate(
+    ID = paste0(Lot, Condition, Nb_rep),
+    Weight = as.numeric(w),
+    L = Weight^(1/3), 
+    Lot = as.factor(Lot),
+    Nb_rep = paste0(Lot, Nb_rep)
+    ) |> 
+  filter(Keep == "Yes") |> 
+  filter(!(Nb_rep %in% c("B1", "B2")))
+
+df_dens_mean <- df_dens%>%
+  aggregate(Weight~Condition+Nb_rep+Lot+t, FUN=mean)
+
+df_dens_egg <- read_excel(here::here("data/Data_DENS.xlsx"), sheet=2)%>%
+  mutate(
+    ID = paste0(Lot, Condition, Nb_rep),
+    Lot = as.factor(Lot),
+    Nb_rep = paste0(Lot, Nb_rep)
+    ) |> 
+  filter(Keep == "Yes") |> 
+  filter(!(Nb_rep %in% c("B1", "B2")))
+
+```
+
+### Initial conditions
+
+```{r, warning = F, message = F}
+#| fig-cap: Initial weight of earthworms.
+#| label: fig-densinit
+#| fig-height: 4
+#| fig-width: 6
+
+
+df_dens_t0 <- subset(df_dens, t==0)
+
+p <- ggplot(
+  data = df_dens_t0,
+  aes(
+    x = "",
+    y = Weight
+  )
+)+
+  geom_boxplot(
+    alpha=0,
+    color=Nord_polar[4]
+  )+
+  geom_dotplot(
+    aes(
+    color = Lot,
+    fill = Lot
+    ),
+    binaxis='y',
+    stackdir='center',
+    alpha=0.5
+  )+
+  labs(
+    x="Conditions",
+    y = "Weight (mg)"
+  )+
+  scale_color_manual(
+    values = c(Nord_frost[4], Nord_polar[4])
+  )+
+  scale_fill_manual(
+    values = c(Nord_frost[4], Nord_polar[4])
+  )+
+  facet_wrap(
+    ~Condition,
+    ncol=5
+    )+
+  theme_minimal()
+p
+```
+
+### Growth trajectories
+
+```{r, warning = F, message = F}
+#| fig-cap: Growth trajectories of earthworms per conditions.
+#| label: fig-densgrowthtraj
+#| fig-height: 10
+#| fig-width: 8
+
+xmax <- 170
+ymax <- 2000
+
+p <- ggplot()+
+  geom_point(
+    data = df_dens,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition),
+      group=as.factor(ID)
+    ),
+    alpha=0.5,
+    size=2
+  )+
+  geom_point(
+    data = df_dens_mean,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    ),
+    size=2
+  )+
+  geom_line(
+    data = df_dens_mean,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    )
+  )+
+  scale_color_manual(
+    name="Replicate\nnumber",
+    values=c(Nord_aurora, Nord_frost)
+    )+
+  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
+  scale_x_continuous(
+    limits = c(0, xmax),       
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14) 
+  ) +
+  ylim(0, ymax)+
+  labs(
+    x="Time (days)",
+    y = "Weight (mg)"
+  )+
+  theme_minimal()
+p
+```
+
+```{r growthrate, message=F, warning=F}
+f_GrowthRate <- function(data){
+ 
+  df_GrowthRate <- data.frame() 
+ 
+  for (i in unique(data$ID_cosm)){
+
+    data_i <- subset(data, ID_cosm == i) 
+    Nb_vdt_i <- unique(subset(data_i, t==0)$Nb_vdt)
+    Food_i <- unique(subset(data_i, t==0)$Food)
+    Nb_rep_i <- unique(subset(data_i, t==0)$Nb_rep)
+    Lot_i <- unique(subset(data_i, t==0)$Lot)
+    Condition_i <- unique(subset(data_i, t==0)$Condition)
+   
+    if (length(na.omit(data_i$L))<2) {
+      a.Est <- NA
+      
+    }else if(length(na.omit(data_i$L))==2){ 
+     
+      a.Est <- (subset(data_i, !t==0)$L - subset(data_i, t==0)$L)/subset(data_i, !t==0)$t # (L(t=t)-L(t=0))/t
+     
+    }else{
+      lm_i <- lm(L~t, data=data_i)
+      a.Est <- lm_i$coefficients[2]
+    }
+   
+    df_GrowthRate_i <- data.frame(
+      ID_cosm = i,
+      Nb_vdt = Nb_vdt_i,
+      Food = Food_i,
+      Nb_rep = Nb_rep_i,
+      Lot = Lot_i,
+      Condition = Condition_i,
+      Growth_rate = a.Est
+    )
+    
+    df_GrowthRate <- rbind(df_GrowthRate, df_GrowthRate_i)
+  }
+ 
+  return(df_GrowthRate) 
+}
+
+df_dens_juv_mean <- df_dens |> 
+  filter(Status == "J") |> 
+  aggregate(Weight~Condition+Nb_rep+Nb_vdt+Food+Lot+t, FUN=mean) |> 
+  mutate(
+    ID_cosm = paste0(Condition, Nb_rep),
+    L = Weight^(1/3),
+    Nb_vdt_f = as.factor(Nb_vdt)
+  )
+
+df_GrowthRate <- f_GrowthRate(df_dens_juv_mean) |> 
+  mutate(
+    Nb_vdt_f = as.factor(Nb_vdt),
+    Food_f = as.factor(Food)
+  )
+
+```
+
+## Effect of density
+
+```{r}
+df_dens_dens <- df_dens |> 
+  filter(!(Condition %in% c("D2b")))
+df_dens_dens_mean <- df_dens_mean |> 
+  filter(!(Condition %in% c("D2b")))
+```
+
+```{r, warning = F, message = F}
+#| fig-cap: Growth trajectories of earthworms per conditions.
+#| label: fig-densgrowthtraj21
+#| fig-height: 8
+#| fig-width: 8
+
+
+xmax <- 170
+ymax <- 2000
+
+p <- ggplot()+
+  geom_point(
+    data = df_dens_dens,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition),
+      group=as.factor(ID)
+    ),
+    alpha=0.5,
+    size=2
+  )+
+  geom_point(
+    data = df_dens_dens_mean,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    ),
+    size=2
+  )+
+  geom_line(
+    data = df_dens_dens_mean,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    )
+  )+
+  scale_color_manual(
+    name="Replicate\nnumber",
+    values=c(Nord_aurora, Nord_frost)
+    )+
+  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
+  scale_x_continuous(
+    limits = c(0, xmax),       
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14) 
+  ) +
+  ylim(0, ymax)+
+  labs(
+    x="Time (days)",
+    y = "Weight (mg)"
+  )+
+  theme_minimal()
+p
+```
+```{r, warning = F, message = F}
+#| fig-cap: Reproduction of earthworms per conditions.
+#| label: fig-densegg
+#| fig-height: 8
+#| fig-width: 8
+
+
+xmax <- 170
+ymax <- 25
+
+p <- ggplot()+
+  geom_point(
+    data = df_dens_egg,
+    aes(
+      x=t,
+      y=Reproduction,
+      color=as.factor(Condition)
+    ),
+    size=2
+  )+
+  geom_line(
+    data = df_dens_egg,
+    aes(
+      x=t,
+      y=Reproduction,
+      color=as.factor(Condition)
+    )
+  )+
+  scale_color_manual(
+    name="Replicate\nnumber",
+    values=c(Nord_aurora, Nord_frost)
+    )+
+  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
+  scale_x_continuous(
+    limits = c(0, xmax),       
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14) 
+  ) +
+  ylim(0, ymax)+
+  labs(
+    x="Time (days)",
+    y = "Cumulated reproduction (#/ind)"
+  )+
+  theme_minimal()
+p
+```
+ 
+```{r, warning = F, message = F}
+#| fig-cap: Growth rates of earthworms per condition
+#| label: fig-densgrowthratedens
+#| fig-height: 6
+#| fig-width: 8
+
+p <- ggplot(
+  data = df_GrowthRate,
+  aes(
+    x = Condition,
+    y = Growth_rate
+  )
+)+
+  geom_boxplot(
+    alpha=0,
+    color=Nord_polar[4],
+    fill=Nord_frost[4]
+  )+
+  geom_dotplot(
+    binaxis='y',
+    stackdir='center',
+    alpha=0.5,
+    color=Nord_frost[4],
+    fill=Nord_frost[4]
+  )+
+  labs(
+    x = "Density (# earthworm / cosm)",
+    y = expression(paste("Growth rate (",mg^{1/3},"/day)"))
+  )+
+  theme_minimal()
+p
+```
+```{r, message=F, warning=F}
+
+df_GrowthRate_density <- subset(df_GrowthRate, Condition != "D2b")
+
+cat("Is there an effect of density on juvenile growth rate ? (Food = 3 g/14 days) \n")
+mod_aov <- aov(Growth_rate ~ Nb_vdt_f, data = df_GrowthRate_density)
+summary(mod_aov)
+
+pairwise_test <- glht(mod_aov, linfct = mcp(Nb_vdt_f = "Tukey"))
+summary(pairwise_test)
+```
+
+### D7 - Are the initial smallest the one who dies ?
+
+```{r}
+#| fig-cap: Growth of earthworm in the D7 condition
+#| label: fig-densD7
+#| fig-height: 6
+#| fig-width: 8
+
+df_dens_D7 <- read_excel(here::here("data/Data_DENS.xlsx"), sheet=1)%>%
+  mutate(
+    ID = paste0(Lot, Condition, Nb_rep),
+    Weight = as.numeric(w),
+    L = Weight^(1/3), 
+    Lot = as.factor(Lot),
+    Nb_rep = paste0(Lot, Nb_rep)
+    ) |> 
+  filter(Condition == "D7")
+
+df_rank <- df_dens_D7 %>%
+  group_by(t) %>%
+  mutate(rank = rank(-Weight, ties.method = "average"))  # rang 1 = plus lourd
+
+p <- ggplot()+
+  geom_point(
+    data = df_dens_D7,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition),
+      group=as.factor(ID)
+    ),
+    alpha=0.5,
+    size=2
+  )+
+  scale_color_manual(
+    name="Replicate\nnumber",
+    values=c(Nord_aurora, Nord_frost)
+    )+
+  facet_grid(rows=vars(Condition), cols=vars(Nb_rep))+
+  scale_x_continuous(
+    limits = c(0, xmax),       
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14) 
+  ) +
+  ylim(0, 800)+
+  labs(
+    x="Time (days)",
+    y = "Weight (mg)"
+  )+
+  theme_minimal()
+
+p
+```
+
+
+## Effect of food on growth rate
+
+```{r, message=F, warning=F}
+df_GrowthRate_food <- subset(df_GrowthRate, Nb_vdt == 2)
+```
+
+
+```{r, warning = F, message = F}
+#| fig-cap: Growth rates of earthworms per food condition (density = 2).
+#| label: fig-densgrowthratefood
+#| fig-height: 6
+#| fig-width: 8
+
+
+p <- ggplot(
+  data = df_GrowthRate_food,
+  aes(
+    x = Food_f,
+    y = Growth_rate
+  )
+)+
+  geom_boxplot(
+    alpha=0,
+    color=Nord_polar[4],
+    fill=Nord_frost[4]
+  )+
+  geom_dotplot(
+    binaxis='y',
+    stackdir='center',
+    alpha=0.5,
+    color=Nord_frost[4],
+    fill=Nord_frost[4]
+  )+
+  labs(
+    x = "Horse dung quantity given per earthworm every 14 days",
+    y = expression(paste("Growth rate (",mg^{1/3},"/day)"))
+  )+
+  theme_minimal()
+p
+
+shapiro.test(df_GrowthRate_food$Growth_rate) # Si pas signif alors donnee pas inconsistentes avec une loi normale
+var.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food) # Si pas signif alors variance égale
+t.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food, alternative = "two.sided", var.equal=T) # si signif différence signif entre les deux groupes
+```
+
+

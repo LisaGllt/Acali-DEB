@@ -1,0 +1,40 @@
+symbol,value,units,description,name
+p_Am,1712.41,J/d.cm^2,"{p_Am}, spec assimilation flux",pAm
+F_m,65.8979,g/d.cm^2,"{F_m}, max spec searching rate",Fm
+kap_X,0.258,-,digestion efficiency of food to reserve,kapX
+kap_P,0.1,-,faecation efficiency of food to faeces,kapP
+v,0.018505,cm/d,energy conductance,v
+kap,0.4373,-,allocation fraction to soma,kap
+kap_R,0.475,-,reproduction efficiency,kapR
+p_M,1680.1,J/d.cm^3,"[p_M], vol-spec somatic maint",pM
+p_T,0,J/d.cm^2,"{p_T}, surf-spec somatic maint",pT
+k_J,0.002793,1/d,maturity maint rate coefficient,kJ
+E_G,6880.33,J/cm^3,"[E_G], spec cost for structure",Eg
+E_Hb,20.63,J,maturity at birth,Ehb
+E_Hp,1167,J,maturity at puberty,Ehp
+h_a,3.258e-7,1/d^2,Weibull aging acceleration,ha
+s_G,1e-4,-,Gompertz stress coefficient,sG
+L0,0.26126,-,initial structural length in adults from Holm2001,L0
+T_AH,28750,K,Arrhenius temperature for upper boundary,TAH
+T_H,293.2,K,upper boundary,TH
+Wwg,0.34921,g,fresh weight of gut content in Holm2001,Wwg
+bw,0.73733,-,distribution width for diapause,bw
+del_M,0.066193,-,shape coefficient,Shape
+f,1,-,scaled functional response for 0-var data,f
+f_Bart_high,1.1011,-,scaled functional response for high food conditions of Bart2019 - 3g horse dung),fBartHigh
+f_Bart_high_b,0.89424,-,scaled functional response for medium food conditions of Bart2019 - 1.5g horse dung - paired worms),fBartHighb
+f_Bart_low,0.94424,-,scaled functional response for low food conditions of Bart2019 - 1g horse dung),fBartLow
+f_Bart_low_b,0.75832,-,scaled functional response for low food conditions of Bart2019 - 1g horse dung - paired worms),fBartLowb
+f_Bart_medium,0.97925,-,scaled functional response for high food conditions of Bart2019 - 3g horse dung),fBartMedium
+m_0,8.6098,,moisture threshold for movement,m0
+max_r_mb,77.8891,cm/d,maximum moisture dependent movement rate,maxRmb
+mu_OM,186.2,J/g.%,soil organic matter from percent to joule/gram,muOM
+mu_c,190,J/g,mass coupler energy - cast weight,muC
+r_mb,5.6028,cm/d,moisture dependent movement rate,Rmb
+t_0,39.6592,d,time at start development,t0
+wV,5.8976,g /cm^3,reserve contribution to weight - water replacement at reserve depletion,wV
+T_A,7976,K,Arrhenius temperature,TA
+T_ref,293.15,K,Reference temperature,Tref
+UE0,0.078,cm^2/d,Scaled cost of an egg,UE0
+E0,134.988,J,Scaled cost of an egg,E0
+w,27.24,g/cm^3,Contribution of reserve to bw,w

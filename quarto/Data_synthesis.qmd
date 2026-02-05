@@ -1,0 +1,2068 @@
+```{r, include = F}
+library(here)
+source(file=here::here("functions/fun.R"))
+f_load_libraries_colors()
+```
+
+# Synthesis of available data
+
+## Data obtained during Sylvain Bart PhD
+
+A significant part of the data are from the PhD of Sylvain Bart [@bart_2018].
+
+The first part of the data are from its article on *Aporrectodea caliginosa* life-cycle [@bart_2019d] where he studied the impact of food and density on growth and reproduction. The second part comes from the study of the impact of the Swing Gold pesticide on growth and reproduction [@bart_2020a]. The control data from this study can be used to inform a DEB model.
+
+### Earthworms, soil and food used in all Sylvain Bart experiments
+
+Earthworm culture [@bart_2019d] :
+
+-   Origin of the first earthworms : Adults of *Aporrectodea caliginosa s.s.* from an agriculture field at INRA (Estrées-mons, 49°52′ N 3°01′E) (refered later as the Mons culture)
+-   Earthworms are cultured in a climate room at 15 ± 1 °C
+-   Soil : a Luvisol (FAO soil classification), sampled from the top 0–20 cm in a permanent meadow in Versailles (48°48′ N, 2°5′ E) (refered later as Closeaux soil).
+-   Food : horse dung which was frozen and defrosted twice and then milled (\< 1 mm) as presented in Lowe and Butt (2005).
+
+### Experiments from @bart_2019d
+
+-   Soil : Renewed every 28 days and maintained at 70% of the water holding capacity (WHC) (corresponding to 28% of water content).
+-   Food : The horse dung at 70% of the water holding capacity and mixed with the soil.
+-   Vessels : 1 L plastic vessels with 400 g equivalent dry soil.
+-   Temperature : 15 ± 1 °C
+-   Growth measurements every 14 days until they reached 500 g and then every 7 days to monitor the switch to adult stage
+
+#### Experiment 1
+
+Monitoring of the growth of 10 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled at \< 1mm. Earthworms are individually placed in a 1 L vessel.
+
+This experiment can be separated in 2 experiments :
+
+-   XP1_1 (@fig-XP11) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
+-   XP1_2 (@fig-XP12) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
+
+```{r dataXP1}
+df_XP1 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP1")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+
+df_XP1_1 <- subset(df_XP1, Experiment == "Bart2019_XP1_1")
+df_XP1_2 <- subset(df_XP1, Experiment == "Bart2019_XP1_2")
+```
+
+```{r}
+#| fig-cap: Experiment 1_1 from @bart_2019d.
+#| label: fig-XP1_1
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 364
+
+p_XP1_1_w <- ggplot(
+  data = df_XP1_1,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP1_1_r <- ggplot(
+  data = df_XP1_1,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP1_1_w / p_XP1_1_r
+p
+
+```
+
+```{r}
+#| fig-cap: Experiment 1_2 from @bart_2019d.
+#| label: fig-XP1_2
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 364
+
+p_XP1_2_w <- ggplot(
+  data = df_XP1_2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP1_2_r <- ggplot(
+  data = df_XP1_2,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP1_2_w / p_XP1_2_r
+p
+
+```
+
+```{r}
+
+df_XP1_1_mean <- df_XP1_1 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  mutate(Reproduction = mean(Reproduction, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP1_1_mean <- df_XP1_1_mean |> 
+  mutate(ID_experiment = "Bart2019_XP1_1")
+
+df_XP1_2_mean <- df_XP1_2 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  mutate(Reproduction = mean(Reproduction, na.rm = TRUE)) |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP1_2_mean <- df_XP1_2_mean |> 
+  mutate(ID_experiment = "Bart2019_XP1_2")
+```
+
+```{r}
+#| fig-cap: Experiment 1_1 from @bart_2019d.
+#| label: fig-XP1_1_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 364
+
+p_XP1_1_w <- ggplot(
+  data = df_XP1_1,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP1_1_r <- ggplot(
+  data = df_XP1_1,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP1_1_w + p_XP1_1_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+```{r}
+#| fig-cap: Experiment 1_2 from @bart_2019d.
+#| label: fig-XP1_2_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 364
+
+p_XP1_2_w <- ggplot(
+  data = df_XP1_2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP1_2_r <- ggplot(
+  data = df_XP1_2,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP1_2_w + p_XP1_2_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+#### Experiment 2
+
+Monitoring of the growth of 7 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
+
+```{r dataXP2}
+df_XP2 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP2")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+```
+
+```{r}
+#| fig-cap: Experiment 2 from @bart_2019d.
+#| label: fig-XP2
+#| fig-height: 4
+#| fig-width: 6
+
+xmax <- 84
+
+p_XP2 <- ggplot(
+  data = df_XP2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+p_XP2
+```
+
+```{r}
+df_XP2_mean <- df_XP2 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP2_mean <- df_XP2_mean |> 
+  mutate(ID_experiment = "Bart2019_XP2")
+```
+
+```{r}
+#| fig-cap: Experiment 2 from @bart_2019d.
+#| label: fig-XP2_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 85
+
+p_XP2_w <- ggplot(
+  data = df_XP2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP2_r <- ggplot(
+  data = df_XP2,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP2_w + p_XP2_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+#### Experiment 3
+
+Monitoring of the growth of 5 earthworms under changing food condition : no food and 3 g/ind/14 days of horse dung milled **at \< 1mm**. Earthworms are individually placed in a 1 L vessel.
+
+```{r dataXP3}
+df_XP3 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP3")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+```
+
+```{r}
+#| fig-cap: Experiment 3 from @bart_2019d.
+#| label: fig-XP3
+#| fig-height: 4
+#| fig-width: 6
+
+xmax <- 238
+
+p_XP3 <- ggplot(
+  data = df_XP3,
+  aes(
+      x = Time,
+      y = Weight
+    ),
+  )+
+  geom_line(
+    aes(
+      group = ID_cosm
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = as.factor(Food),
+      group = ID_cosm
+    )
+  )+
+  
+  scale_color_manual(
+    name = "Food\n(g/ind/14 days)", 
+    values = c(Nord_frost[1], Nord_aurora[1])
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+p_XP3
+
+```
+
+```{r}
+df_XP3_mean <- df_XP3 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP3_mean <- df_XP3_mean |> 
+  mutate(ID_experiment = "Bart2019_XP3")
+```
+
+```{r}
+#| fig-cap: Experiment 3 from @bart_3019d.
+#| label: fig-XP3_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 240
+
+p_XP3_w <- ggplot(
+  data = df_XP3,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP3_r <- ggplot(
+  data = df_XP3,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP3_w + p_XP3_r+
+  plot_layout(ncol=1, heights=c(3,1))
+p
+
+```
+
+#### Experiment 4
+
+Monitoring of the growth of 10 earthworms under restrained food condition : 1 g/ind/14 days of horse dung milled at \< 1mm. Earthworms are individually placed in a 1 L vessel.
+
+This experiment can also be separated in 2 experiments :
+
+-   XP4_1 (@fig-XP41) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
+-   XP4_2 (@fig-XP42) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
+
+```{r dataXP4}
+df_XP4 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP4")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+df_XP4_1 <- subset(df_XP4, Experiment == "Bart2019_XP4_1")
+df_XP4_2 <- subset(df_XP4, Experiment == "Bart2019_XP4_2")
+```
+
+```{r}
+#| fig-cap: Experiment 4_1 from @bart_2019d.
+#| label: fig-XP4_1
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 392
+
+p_XP4_1_w <- ggplot(
+  data = df_XP4_1,
+  aes(
+    x = Time,
+    y = Weight,
+    group = ID_cosm
+  ),
+) +
+  geom_line(
+    color = Nord_polar[1],
+    alpha = 0.5
+  ) +
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  ) +
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  ) +
+  scale_x_continuous(
+    limits = c(0, xmax),
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP4_1_r <- ggplot(
+  data = df_XP4_1,
+  aes(
+    x = Time,
+    y = Reproduction,
+    group = ID_cosm
+  ),
+) +
+  geom_line(
+    color = Nord_polar[1],
+    alpha = 0.5
+  ) +
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  ) +
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  ) +
+  scale_x_continuous(
+    limits = c(0, xmax),
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP4_1_w / p_XP4_1_r
+p
+
+```
+
+```{r}
+#| fig-cap: Experiment 4_2 from @bart_2019d.
+#| label: fig-XP4_2
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 392
+
+p_XP4_2_w <- ggplot(
+  data = df_XP4_2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP4_2_r <- ggplot(
+  data = df_XP4_2,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP4_2_w / p_XP4_2_r
+p
+
+```
+
+```{r}
+
+df_XP4_1_mean <- df_XP4_1 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  mutate(Reproduction = mean(Reproduction, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP4_1_mean <- df_XP4_1_mean |> 
+  mutate(ID_experiment = "Bart2019_XP4_1")
+
+df_XP4_2_mean <- df_XP4_2 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  mutate(Reproduction = mean(Reproduction, na.rm = TRUE)) |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP4_2_mean <- df_XP4_2_mean |> 
+  mutate(ID_experiment = "Bart2019_XP4_2")
+```
+
+```{r}
+#| fig-cap: Experiment 4_1 from @bart_4_1019d.
+#| label: fig-XP4_1_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 240
+
+p_XP4_1_w <- ggplot(
+  data = df_XP4_1,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP4_1_r <- ggplot(
+  data = df_XP4_1,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP4_1_w + p_XP4_1_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+```{r}
+#| fig-cap: Experiment 4_2 from @bart_4_2019d.
+#| label: fig-XP4_2_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 240
+
+p_XP4_2_w <- ggplot(
+  data = df_XP4_2,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP4_2_r <- ggplot(
+  data = df_XP4_2,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP4_2_w + p_XP4_2_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+#### Experiment 5
+
+Monitoring of the growth of 5 earthworms under restained food condition : 1.5 g/ind/14 days of horse dung milled at \< 1mm. Earthworms are individually placed in a 1 L vessel.
+
+```{r dataXP5}
+df_XP5 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP5")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+```
+
+```{r}
+#| fig-cap: Experiment 5 from @bart_2019d.
+#| label: fig-XP5
+#| fig-height: 4
+#| fig-width: 6
+
+xmax <- 112
+
+p_XP5 <- ggplot(
+  data = df_XP5,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    aes(
+      color = ID_cosm
+    )
+  )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(14)
+p_XP5
+```
+
+```{r}
+df_XP5_mean <- df_XP5 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_XP5_mean <- df_XP5_mean |> 
+  mutate(ID_experiment = "Bart2019_XP5")
+```
+
+```{r}
+#| fig-cap: Experiment 5 from @bart_5019d.
+#| label: fig-XP5_mean
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 112
+
+p_XP5_w <- ggplot(
+  data = df_XP5,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP5_r <- ggplot(
+  data = df_XP5,
+  aes(
+      x = Time,
+      y = Reproduction,
+      group = ID_cosm
+    ),
+  )+
+  geom_line(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(
+    color = Nord_polar[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = Nord_polar[4]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP5_w + p_XP5_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+```{r}
+p <- p_XP1_1_w +
+  p_XP1_2_w + 
+  p_XP2_w + 
+  p_XP3_w + 
+  
+  p_XP1_1_r+
+  p_XP1_2_r+
+  p_XP2_r+
+  p_XP3_r+
+  
+  p_XP4_1_w + 
+  p_XP4_2_w + 
+  p_XP5_w + 
+  plot_spacer()+
+  
+  p_XP4_1_r+ 
+  p_XP4_2_r+
+  p_XP5_r+
+  plot_layout(ncol=4, heights=c(2,1,2, 1))
+```
+
+```{r}
+#| fig-cap: Experiments from @bart_2019d.
+#| label: fig-XPmeanfull
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 370
+
+pal_XP <- c(Nord_polar[1], Nord_frost[4], Nord_frost[2], Nord_aurora[4], Nord_aurora[3])
+
+p_XP_w <- ggplot()+
+  # XP1 1
+  geom_line(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[1],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_1,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[1]
+  )+
+  # XP1 2
+  geom_line(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[1],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_2,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[1]
+  )+
+  # XP2
+  geom_line(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[2],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP2,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[2],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[2]
+  )+
+  # XP3
+  geom_line(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[3],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP3,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[3],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[3]
+  )+
+  # XP4 1
+  geom_line(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_1,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[4],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[4]
+  )+
+  # XP4 2
+  geom_line(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_2,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[4],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[4]
+  )+
+  # XP5
+  geom_line(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = pal_XP[5],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP5,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm
+      ),
+    color = pal_XP[5],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[5]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p_XP_r <- ggplot()+
+  # XP1 1
+  geom_line(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[1],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_1,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[1]
+  )+
+  # XP1 2
+  geom_line(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[1],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP1_2,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[1],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP1_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[1]
+  )+
+  # XP2
+  geom_line(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[2],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP2,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[2],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[2]
+  )+
+  # XP3
+  geom_line(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[3],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP3,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[3],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP3_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[3]
+  )+
+  # XP4 1
+  geom_line(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_1,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[4],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_1_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[4]
+  )+
+  # XP4 2
+  geom_line(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[4],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP4_2,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[4],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP4_2_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[4]
+  )+
+  # XP5
+  geom_line(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = pal_XP[5],
+    alpha=0.5
+  )+
+  geom_point(
+    data = df_XP5,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm
+      ),
+    color = pal_XP[5],
+    alpha = 0.5
+  )+
+  geom_point(
+    data = df_XP5_mean,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    size = 3,
+    alpha = 1,
+    color = pal_XP[5]
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(12)
+
+p <- p_XP_w + p_XP_r+
+  plot_layout(ncol=1, heights=c(2,1))
+p
+
+```
+
+### Experiment from @bart_2020a
+
+The experimental conditions of all the control individual in this study are equal as the experiment 2 and actually include data from experiment 2 :
+
+Monitoring of the growth of 91 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
+
+```{r dataSG}
+df_Bart2020 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2020_Ctrl")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+```
+
+```{r}
+#| fig-cap: Individuals in control conditions from @bart_2020a.
+#| label: fig-SG
+#| fig-height: 4
+#| fig-width: 6
+
+xmax <- 98
+
+p_SG <- ggplot(
+  data = df_Bart2020,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    )
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point(alpha=0.5)+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(14)
+p_SG
+```
+
+```{r}
+df_Bart2020_mean <- df_Bart2020 |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_Bart2020_mean <- df_Bart2020_mean |> 
+  mutate(ID_experiment = "Bart2020")
+```
+
+
+## Data obtained during Lisa Gollot PhD
+
+### Experiment 1 - Growth in LUFA soil
+
+Growth of 30 earthworms in LUFA 2.4 soil at 70% of WHC fed with 3 g/ind/14 days (milled at \< 0.5 mm). Earthworms were individually placed in small High Density PolyEthylene vessels (5 cm x 5∅ cm) with 50 g of soil (dry weight).
+
+```{r lufa}
+df_Gollot2026_lufa <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Gollot2026_lufa")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement,                          
+  )
+```
+
+```{r, warning=F}
+#| fig-cap: growth experiment in LUFA soil.
+#| label: fig-lufa
+#| fig-height: 4
+#| fig-width: 6
+
+xmax <- 56
+
+p_lufa <- ggplot(
+  data = df_Gollot2026_lufa,
+  aes(
+      x = Time,
+      y = Weight,
+      group = ID_cosm
+    )
+  )+
+  geom_line(
+    color = Nord_polar[1],
+    alpha=0.5
+  )+
+  geom_point()+
+  # scale_color_manual(
+  #   values = c(Nord_aurora, Nord_frost, Nord_polar)
+  #   )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(14)
+p_lufa
+```
+
+```{r}
+df_Gollot2026_lufa_mean <- df_Gollot2026_lufa |> 
+  group_by(Time) |> 
+  mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
+  ungroup() |> 
+  distinct(Time, .keep_all = TRUE) |> 
+  arrange(Time)
+
+df_Gollot2026_lufa_mean <- df_Gollot2026_lufa_mean |> 
+  mutate(ID_experiment = "Gollot2026_lufa")
+```
+
+### Experiment 2 - Density effect on earthworm growth
+
+Growth of earthworms in Closeaux soil at 70% of WHC fed with 3 g/14 days (milled at \< 0.5 mm), but for the condition D2b where they were fed 6 g/14 days. Earthworms were placed in small vessels with 200 g of soil (dry weight).
+
+```{r dens}
+df_Gollot2026_dens <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Gollot2026_dens")|> 
+  mutate(
+    Weight=Weight_tot/Nb_ind_measurement, 
+    ID_cosm = paste0(Experiment, ID_cosm),
+    ID_experiment = paste0("Gollot2026_dens_", Experiment),
+    Condition = Experiment
+  )
+```
+
+```{r}
+df_Gollot2026_dens_mean <- df_Gollot2026_dens |> 
+  group_by(ID_experiment, Time) |> 
+  mutate(
+    Weight = mean(Weight, na.rm = TRUE),
+    Reproduction = mean(Reproduction, na.rm = TRUE)
+    ) |> 
+  distinct(Time, .keep_all = TRUE) |>
+  ungroup() |> 
+  arrange(Time)|> 
+  mutate(
+    Experiment = "Gollot2026_dens"
+    )
+df_Gollot2026_dens_mean_f <- df_Gollot2026_dens_mean |> 
+  dplyr::select(-Condition)
+```
+
+```{r, warning=F}
+#| fig-cap: growth experiment at different density.
+#| label: fig-dens
+#| fig-height: 8
+#| fig-width: 6
+
+xmax <- 112+14
+
+p_dens_w <- ggplot()+
+  # geom_line(
+  #   data = df_Gollot2026_dens,
+  #   aes(
+  #       x = Time,
+  #       y = Weight,
+  #       group = ID_cosm,
+  #       color = Condition
+  #     ),
+  #     alpha=0.5
+  #   )+
+  geom_point(
+    data = df_Gollot2026_dens,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm,
+        color = Condition
+      ),
+    alpha = 0.7
+   )+
+  geom_line(
+    data = df_Gollot2026_dens_mean,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm,
+        color = Condition
+      ),
+    alpha=0.5,
+    linewidth = 1.2
+    )+
+  geom_point(
+    data = df_Gollot2026_dens_mean,
+    aes(
+        x = Time,
+        y = Weight,
+        group = ID_cosm,
+        color = Condition
+      ),
+    size=3
+   )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (mg)"
+  )+
+  facet_wrap(~Condition, ncol=1)+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(14)
+
+
+p_dens_r <- ggplot()+
+  geom_point(
+    data = df_Gollot2026_dens,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm,
+        color = Condition
+      )
+  )+
+  geom_line(
+    data = df_Gollot2026_dens_mean,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm,
+        color = Condition
+      ),
+    alpha=0.5,
+    linewidth = 1.2
+    )+
+  geom_point(
+    data = df_Gollot2026_dens_mean,
+    aes(
+        x = Time,
+        y = Reproduction,
+        group = ID_cosm,
+        color = Condition
+      ),
+    size=3
+   )+
+  scale_color_manual(
+    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)"
+  )+
+  facet_wrap(~Condition, ncol=1)+
+  scale_x_continuous(
+    limits = c(0, xmax),        
+    breaks = seq(0, xmax, by = 28),        
+    minor_breaks = seq(0, xmax, by = 14)
+  ) +
+  theme_minimal(14)
+p <- p_dens_w + p_dens_r + plot_layout(ncol=2, guides="collect")
+p
+```
+
+
+
+```{r}
+df_DEB_mean <- rbind(
+  df_XP1_1_mean,
+  df_XP1_2_mean,
+  df_XP2_mean,
+  df_XP3_mean,
+  df_XP4_1_mean,
+  df_XP4_2_mean,
+  df_XP5_mean,
+  df_Bart2020_mean,
+  #df_persephone_mean,
+  df_Gollot2026_lufa_mean,
+  df_Gollot2026_dens_mean_f
+  )
+
+write.csv(df_DEB_mean,file = here::here("data/Data_DEB_mean.csv"))
+```
+
+### Experiments on IMD & EPX
+
+See section ....

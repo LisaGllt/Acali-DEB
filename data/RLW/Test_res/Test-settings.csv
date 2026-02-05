@@ -1,0 +1,2 @@
+"experimentId","micronsPerPixel","rollingBallRadius","thresholdMethod","closeRadius","minWormArea","maxWormArea","minTubeness"
+"Test","0.2467","75.0","Otsu","5.0","0.0","9999999.99","0.2"
