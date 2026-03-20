@@ -39,7 +39,7 @@ This experiment can be separated in 2 experiments :
 -   XP1_2 (@fig-XP12) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
 
 ```{r dataXP1}
-df_XP1 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP1")|> 
+df_XP1 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP1")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -418,7 +418,7 @@ p
 Monitoring of the growth of 7 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
 
 ```{r dataXP2}
-df_XP2 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP2")|> 
+df_XP2 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP2")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -580,7 +580,7 @@ p
 Monitoring of the growth of 5 earthworms under changing food condition : no food and 3 g/ind/14 days of horse dung milled **at \< 1mm**. Earthworms are individually placed in a 1 L vessel.
 
 ```{r dataXP3}
-df_XP3 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP3")|> 
+df_XP3 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP3")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -753,7 +753,7 @@ This experiment can also be separated in 2 experiments :
 -   XP4_2 (@fig-XP42) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
 
 ```{r dataXP4}
-df_XP4 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP4")|> 
+df_XP4 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP4")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -1136,7 +1136,7 @@ p
 Monitoring of the growth of 5 earthworms under restained food condition : 1.5 g/ind/14 days of horse dung milled at \< 1mm. Earthworms are individually placed in a 1 L vessel.
 
 ```{r dataXP5}
-df_XP5 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2019_XP5")|> 
+df_XP5 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP5")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -1782,7 +1782,7 @@ The experimental conditions of all the control individual in this study are equa
 Monitoring of the growth of 91 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
 
 ```{r dataSG}
-df_Bart2020 <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Bart2020_Ctrl")|> 
+df_Bart2020 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2020_Ctrl")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -1842,7 +1842,7 @@ df_Bart2020_mean <- df_Bart2020_mean |>
 Growth of 30 earthworms in LUFA 2.4 soil at 70% of WHC fed with 3 g/ind/14 days (milled at \< 0.5 mm). Earthworms were individually placed in small High Density PolyEthylene vessels (5 cm x 5∅ cm) with 50 g of soil (dry weight).
 
 ```{r lufa}
-df_Gollot2026_lufa <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Gollot2026_lufa")|> 
+df_Gollot2026_lufa <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Gollot2026_lufa")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
@@ -1899,10 +1899,10 @@ df_Gollot2026_lufa_mean <- df_Gollot2026_lufa_mean |>
 
 ### Experiment 2 - Density effect on earthworm growth
 
-Growth of earthworms in Closeaux soil at 70% of WHC fed with 3 g/14 days (milled at \< 0.5 mm), but for the condition D2b where they were fed 6 g/14 days. Earthworms were placed in small vessels with 200 g of soil (dry weight).
+Growth of earthworms in Closeaux soil at 70% of WHC fed with 3 g/14 days (milled at \< 0.5 mm) regardless of the number of earthworms in the cosm, but for the condition D2b where they were fed 6 g/14 days. Earthworms were placed in small vessels with 200 g of soil (dry weight).
 
 ```{r dens}
-df_Gollot2026_dens <- read_excel(here::here("data/Data_Acali.xlsx"), sheet="Gollot2026_dens")|> 
+df_Gollot2026_dens <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Gollot2026_dens")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement, 
     ID_cosm = paste0(Experiment, ID_cosm),
@@ -1926,6 +1926,11 @@ df_Gollot2026_dens_mean <- df_Gollot2026_dens |>
     )
 df_Gollot2026_dens_mean_f <- df_Gollot2026_dens_mean |> 
   dplyr::select(-Condition)
+
+df_Gollot2026_dens_mean_long <- df_Gollot2026_dens_mean |> 
+  pivot_longer(cols = c("Weight", "Reproduction"), names_to = "Variable", values_to = "Value") |> 
+  filter(!is.nan(Value))
+
 ```
 
 ```{r, warning=F}
@@ -1934,19 +1939,9 @@ df_Gollot2026_dens_mean_f <- df_Gollot2026_dens_mean |>
 #| fig-height: 8
 #| fig-width: 6
 
-xmax <- 112+14
+xmax <- 160
 
 p_dens_w <- ggplot()+
-  # geom_line(
-  #   data = df_Gollot2026_dens,
-  #   aes(
-  #       x = Time,
-  #       y = Weight,
-  #       group = ID_cosm,
-  #       color = Condition
-  #     ),
-  #     alpha=0.5
-  #   )+
   geom_point(
     data = df_Gollot2026_dens,
     aes(
@@ -1958,10 +1953,10 @@ p_dens_w <- ggplot()+
     alpha = 0.7
    )+
   geom_line(
-    data = df_Gollot2026_dens_mean,
+    data = df_Gollot2026_dens_mean_long  |> filter(Variable == "Weight"),
     aes(
         x = Time,
-        y = Weight,
+        y = Value,
         group = ID_cosm,
         color = Condition
       ),
@@ -1969,17 +1964,17 @@ p_dens_w <- ggplot()+
     linewidth = 1.2
     )+
   geom_point(
-    data = df_Gollot2026_dens_mean,
+    data = df_Gollot2026_dens_mean_long  |> filter(Variable == "Weight"),
     aes(
         x = Time,
-        y = Weight,
+        y = Value,
         group = ID_cosm,
         color = Condition
       ),
     size=3
    )+
   scale_color_manual(
-    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    values = c(Nord_frost, Nord_aurora[5], Nord_polar)
     )+
   labs(
     x = "Time (days)",
@@ -1991,7 +1986,10 @@ p_dens_w <- ggplot()+
     breaks = seq(0, xmax, by = 28),        
     minor_breaks = seq(0, xmax, by = 14)
   ) +
-  theme_minimal(14)
+  theme_minimal(14)+
+  theme(
+    legend.position = "none"
+  )
 
 
 p_dens_r <- ggplot()+
@@ -2005,10 +2003,10 @@ p_dens_r <- ggplot()+
       )
   )+
   geom_line(
-    data = df_Gollot2026_dens_mean,
+    data = df_Gollot2026_dens_mean_long  |> filter(Variable == "Reproduction"),
     aes(
         x = Time,
-        y = Reproduction,
+        y = Value,
         group = ID_cosm,
         color = Condition
       ),
@@ -2016,17 +2014,17 @@ p_dens_r <- ggplot()+
     linewidth = 1.2
     )+
   geom_point(
-    data = df_Gollot2026_dens_mean,
+    data = df_Gollot2026_dens_mean_long |> filter(Variable == "Reproduction"),
     aes(
         x = Time,
-        y = Reproduction,
+        y = Value,
         group = ID_cosm,
         color = Condition
       ),
     size=3
    )+
   scale_color_manual(
-    values = c(Nord_aurora, Nord_frost, Nord_polar)
+    values = c(Nord_frost, Nord_aurora[5], Nord_polar)
     )+
   labs(
     x = "Time (days)",
@@ -2038,9 +2036,23 @@ p_dens_r <- ggplot()+
     breaks = seq(0, xmax, by = 28),        
     minor_breaks = seq(0, xmax, by = 14)
   ) +
-  theme_minimal(14)
+  theme_minimal(14)+
+  theme(
+    legend.position = "none"
+  )
 p <- p_dens_w + p_dens_r + plot_layout(ncol=2, guides="collect")
 p
+```
+
+```{r, include = F}
+
+path_fig <- here::here("fig/")
+ggsave(
+  filename = "Summary_DENS.png",
+  plot = p,
+  width = 6, height = 8,
+  path = path_fig
+)
 ```
 
 
@@ -2063,6 +2075,15 @@ df_DEB_mean <- rbind(
 write.csv(df_DEB_mean,file = here::here("data/Data_DEB_mean.csv"))
 ```
 
-### Experiments on IMD & EPX
+## Usefull data from litterature 
 
-See section ....
+An estimate of cocoon energy content was required to parameterize the reproduction in the DEB model for *A. caliginosa*. Direct measurements of cocoon energy density are not available for this species. We therefore relied on published calorimetric data for *Lumbricidae* reported by @cummins_1971, who measured the energy density of whole individuals (“entire animals of various stages”). Mean energy densities were 5,690 cal g⁻¹ dry weight (n = 3), corresponding to 19,098 J g-1 dry weight, and 782 cal g-1 wet weight (n = 1), corresponding to 3,268 J g-1 wet weight. Although these measurements were not performed on cocoons specifically, they provide an order-of-magnitude estimate for annelid biomass energy density. Assuming a mean cocoon fresh mass of 10 mg, this corresponds to an energy content of approximately 33 J per cocoon (based on wet weight energy density). Comparable energy densities have been reported for soil invertebrates in other calorimetric studies (e.g. @driver_1974, @eggleton_2004), supporting the use of this approximation for the model prior on the energy of an egg. 
+
+
+
+
+
+
+
+
+

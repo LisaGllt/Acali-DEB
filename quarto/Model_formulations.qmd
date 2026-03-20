@@ -1,0 +1,239 @@
+```{r, include = F}
+library(here)
+source(file=here::here("functions/fun.R"))
+f_load_libraries_colors()
+```
+
+# Model formulation
+
+## Classication DEB standard formulation
+
+**Reserve energy dynamic**
+
+$$
+\frac{\mathrm{d}E}{\mathrm d t} = \frac{\{\dot p_{Am}\}_t}{L} \ \left(f - \frac{E\ \nu_t}{\{\dot p_{Am}\}_t}\right)
+$$
+
+With :
+- $E$ : Energy in the reserve ($J$)
+- $\nu_t$ : Energy conductance at temperature $T_{exp}$  ($cm.d^{-1}$)
+
+**Growth**
+
+$$
+\begin{aligned}
+\frac{\mathrm d L}{\mathrm d t} &= \frac{\nu_t}{3\ (\frac{E}{E_m} + g)} \left(\frac{E}{E_m} - \frac{L}{L_m}\right) \\ \\
+K_m &= \frac{[\dot p_{M,t}]}{[E_G]} \\
+E_m &= \frac{\{\dot p_{Am}\}_t}{\nu_t}\\
+g &= \frac{[E_G]}{\kappa_{\text{real}}\ E_m}\\
+L_m &= \frac{\nu_t}{K_m\ g}
+\end{aligned}
+$$
+
+With :
+- $L$ : Structural volumetric length ($cm$)
+- $[\dot p_{M,t}]$ : Volume-specific maintenance rate ($J.d^{-1}.cm^{-3}$)
+- $[E_G]$ : Volume-specific cost for structure ($J.cm^{-3}$)
+
+$$
+W_W = L^3 \left(1+\frac{E}{E_m}w\right)
+$$
+
+With :
+- $W_W$ : Wet weight of the earthworm ($g$)
+- $w$ : Contribution of reserve to body weight ($g.cm^{-3}$)
+
+**Maturity and reproduction**
+
+$$
+\dot p_C = \frac{g\ E}{g + \frac{E}{E_m}} (\nu_t\ L^2 + K_m\ L^3)
+$$
+
+With : 
+- $\dot p_C$ :  Mobilized energy flux from reserve ($J.d^{-1}$)
+
+$$
+\dot p_R = (1-\kappa_{\text{real}})\ \dot p_C - \dot k_{J,t}\ E_h
+$$
+
+With :
+- $\dot p_R$ : Allocated energy flux to reproduction ($J.d^{-1}$)
+- $\dot k_{J,t}$ : Maturity maintenance rate ($d^{-1}$)
+
+$$
+\frac{\mathrm{d}E_H}{\mathrm{d}t}= 
+\begin{cases}
+E_H \leq E_H^p,\ & \dot{p}_R\\
+E_H > E_H^p,\ & 0
+\end{cases}
+$$
+
+With :
+- $E_h$ : Maturity ($J$)
+- $E_h^p$ : Maturity at puberty ($J$)
+
+$$
+\frac{\mathrm{d}R}{\mathrm{d}t}= 
+\begin{cases}
+E_H \leq E_H^p,\ & 0 \\
+E_H > E_H^p,\ & \kappa_R\ \frac{\dot{p}_R}{E_{0}}
+\end{cases}
+$$
+
+With :
+- $R$ : Cumulated reproduction (#)
+- $\kappa_R$ : Reproduction efficiency (-)
+- $E_0$ : Energy cost for an egg ($J$)
+
+**Effect of temperature on rates**
+
+$$
+\begin{aligned}
+s_A &= \exp(\frac{T_A}{T_{ref}-\frac{T_A}{T_{exp}+273.15}})\\
+s_{rH} &= \frac{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{ref}+ 273.15})}{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{exp}+273.15})}\\
+T_c &= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 < T_{ref})\\ \\
+
+\{\dot p_{Am}\}_t &= \{\dot p_{Am}\}\ T_c\\
+[\dot p_{M,t}] &= [\dot p_{M}]\ T_c \\
+\nu_t &= \nu \ T_c \\
+\dot k_{J,t} &= \dot k_{J} \ T_c
+\end{aligned}
+$$
+
+## Energy assimilation in the case of earthworms
+
+$$
+\dot Q_{f,max} = \frac{\{\dot p_{Am}\}_t\ L^2}{\kappa_X}
+$$
+
+With : 
+- $\dot Q_{f,max}$ :  Maximal rate of energy ingested by the earthworm ($J.d^{-1}$)
+- $\{\dot p_{Am}\}_t$ : Surface-area-specific maximum assimilation rate at temperature $T_{exp}$ ($J.d^{-1}.cm^{-2}$)
+- $L$ : Structural volumetric length ($cm$)
+- $\kappa_X$ : Fraction of food energy fixed in reserve (digestion efficiency) (-)
+
+$$
+\begin{aligned}
+\dot Q_{f,soil} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
+\dot Q_{f,horse} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}}) \\
+\dot Q_{f,tot} &= \dot Q_{f,horse} + \dot Q_{f,soil}
+\end{aligned}
+$$
+
+- $\dot Q_{f,soil}$ :  Rate of energy ingested from the organic matter in the soil by the earthworm ($J.d^{-1}$)
+- $\dot Q_{f,horse}$ :  Rate of energy ingested from the organic matter in the horse dung by the earthworm ($J.d^{-1}$)
+- $\dot Q_{f,tot}$ :  Rate of energy ingested from organic matter by the earthworm ($J.d^{-1}$)
+- $[\dot{F}_m]$ : Maximum volume-specific searching rate ($g.d^{-1}.cm^{-3}$)
+- $W_w$ : Wet weight of the earthworm ($g$)
+- $\mu_{OM}$ : Horse dung organic matter energy content ($J.g^{-1}$)
+- $r_{OM}^{clx, horse}$ : Ratio between soil organic matter energy content and horse dung organic matter energy content (-)
+- $OM_{soil}$ : Organic matter from soil in a cosm (g)
+- $OM_{horse}$ : Organic matter from horse dung in a cosm (g)
+- $Nb_{ind}$ : Number of individual in the cosm (#)
+
+$$
+\begin{aligned}
+\dot{OM}_{out}^{soil} &= \frac{\dot Q_{f,soil}}{\mu_{OM}\ r_{OM}^{clx, horse}}\ Nb_{ind} \\
+\dot{OM}_{out}^{horse} &= \frac{\dot Q_{f,horse}}{\mu_{OM}} \ Nb_{ind}
+\end{aligned}
+$$
+
+With :
+- $\dot{OM}_{out}^{soil}$ : Rate of consumption of soil organic matter by all earthworms of the cosm ($g.d^{-1}$)
+- $\dot{OM}_{out}^{horse}$ : Rate of consumption of horse dung organic matter by all earthworms of the cosm ($g.d^{-1}$)
+
+$$
+f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
+$$
+
+With : 
+- $f$ : Functional response to organic matter (-)
+
+## Different model versions tested
+
+### Kappa
+
+The standard DEB model supposes a fixed $\kappa$ throughout the organism life (model F). But because of the observations of a switch in growth when earthworms are adult and able to reproduce with another individual, we tested a switch in energy allocation when earthworms are adults and not alone in a cosm, and therefore able to reproduce (model S). 
+
+$$
+\begin{aligned}
+&{\text{Model F: }}\ \kappa_{\text{real}} = \kappa \\
+&{\text{Model S: }}\ \kappa_{real} = 
+\begin{cases}
+E_h < E_h^p, & \kappa  & (\text{Juveniles})\\
+E_h \geq E_h^p\ \&\ Nb_{ind} = 1, & \kappa & (\text{Adult alone})\\
+E_h \geq E_h^p\ \&\ Nb_{ind} > 1, & 1-\kappa & (\text{Grouped adults})
+\end{cases}
+\end{aligned}
+$$
+
+### Soil ingestion
+
+Ingestion is often considered to be proportional to the structural surface of the individual (L$^2$, model L) but we tested the possibility of it being proportional to structural volume and therefore to weight (L$^3$, model W). 
+
+$$
+\begin{aligned}
+\text{Model L:}\\
+\dot Q_{f,soil} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
+\dot Q_{f,horse} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}}) \\ \\
+\text{Model W:}\\
+\dot Q_{f,soil} &= [\dot{F}_m]\ L^3 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
+\dot Q_{f,horse} &= [\dot{F}_m]\ L^3 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}})
+\end{aligned}
+$$
+
+### Functional response to organic matter
+
+**Hyperbolic function (Model Y)**
+
+$$
+f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
+$$
+
+**Hill function (Model I)**
+
+$$
+f=\frac{X^{\text{Slope}}}{0.5^{\text{Slope}}+X^{\text{Slope}}}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} 
+$$
+
+```{r}
+Slope <- 2
+x_hy <- seq(0,1,0.01)
+x_hi <- seq(0,1,0.01)
+
+f_hyperbolic <- function(x){
+  res <- 2*x/(1+2*x)
+  return(res)
+}
+
+f_hill <- function(x, Slope){
+  res <- x^(Slope)/(0.5^(Slope) + x^(Slope))
+  return(res)
+}
+
+y_hy <- f_hyperbolic(x_hy)
+y_hi <- f_hill(x_hi, Slope)
+
+df <- data.frame(
+  x = c(x_hy, x_hi),
+  y = c(y_hy, y_hi),
+  type = c(rep("Hyperbolic", length(x_hy)), rep("Hill", length(x_hi)))
+)
+
+p <- ggplot(
+  data = df,
+  aes(
+    x=x,
+    y=y,
+    color = type
+  )
+)+
+  geom_line()+
+  labs(x = "Qf/Qfmax", y = "f")+
+  scale_color_manual(values = c(Nord_frost[2], Nord_frost[4]))+
+  theme_minimal()
+p
+
+```
+
+
