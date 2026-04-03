@@ -4,6 +4,8 @@ source(file=here::here("functions/fun.R"))
 f_load_libraries_colors()
 
 path_fig <- here::here("fig/DENS/")
+
+pal_dens <- c(Nord_aurora[5], rev(Nord_frost))
 ```
 
 # Impact of density and food quantity on earthworm growth and reproduction
@@ -55,6 +57,9 @@ df_dens_repro <- read_excel(here::here("data/Data_expe_raw/Data_DENS.xlsx"), she
   filter(Keep == "Yes") |> 
   filter(!(Nb_rep %in% c("B1", "B2")))
 
+df_dens_repro_mean_cond <- df_dens_repro %>%
+  aggregate(Reproduction~Condition+t, FUN=mean)
+
 ```
 
 ### Initial conditions
@@ -66,7 +71,7 @@ df_dens_repro <- read_excel(here::here("data/Data_expe_raw/Data_DENS.xlsx"), she
 #| fig-width: 6
 
 
-df_dens_t0 <- subset(df_dens, t==0)
+df_dens_t0 <- subset(df_dens_growth, t==0)
 
 p <- ggplot(
   data = df_dens_t0,
@@ -115,20 +120,25 @@ ggsave(
 )
 ```
 
+```{r}
+summary(df_dens_t0$Weight)
+```
+
+
 ### Growth trajectories
 
 ```{r, warning = F, message = F}
 #| fig-cap: Growth trajectories of earthworms per conditions.
 #| label: fig-densgrowthtraj
-#| fig-height: 10
+#| fig-height: 8
 #| fig-width: 8
 
 xmax <- 170
-ymax <- 2000
+ymax <- 2500
 
 p <- ggplot()+
   geom_point(
-    data = df_dens,
+    data = df_dens_growth_full,
     aes(
       x=t,
       y=Weight,
@@ -136,7 +146,7 @@ p <- ggplot()+
       group=as.factor(ID)
     ),
     alpha=0.5,
-    size=2
+    size=1
   )+
   geom_point(
     data = df_dens_growth_mean_rep,
@@ -145,7 +155,7 @@ p <- ggplot()+
       y=Weight,
       color=as.factor(Condition)
     ),
-    size=2
+    size=1.2
   )+
   geom_line(
     data = df_dens_growth_mean_rep,
@@ -157,7 +167,7 @@ p <- ggplot()+
   )+
   scale_color_manual(
     name="Conditions",
-    values=c(Nord_aurora, Nord_frost)
+    values=pal_dens
     )+
   facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
   scale_x_continuous(
@@ -225,7 +235,7 @@ f_GrowthRate <- function(data){
   return(df_GrowthRate) 
 }
 
-df_dens_juv_mean <- df_dens |> 
+df_dens_juv_mean <- df_dens_growth |> 
   filter(Status == "J") |> 
   aggregate(Weight~Condition+Nb_rep+Nb_vdt+Food+Lot+t, FUN=mean) |> 
   mutate(
@@ -240,7 +250,30 @@ df_GrowthRate <- f_GrowthRate(df_dens_juv_mean) |>
     Food_f = as.factor(Food)
   )
 
+df_GrowthRate_mean <- df_GrowthRate |> 
+  aggregate(Growth_rate~Condition, FUN=mean)
+
 ```
+
+```{r GRsummary}
+df_GrowthRate_mean <- df_GrowthRate |> 
+  aggregate(Growth_rate~Condition, FUN=mean)
+df_GrowthRate_mean
+```
+
+## Effect of density on juvenile growth rate
+
+```{r statGR}
+anova_model <- aov(Growth_rate ~ Condition, data = df_GrowthRate)
+summary(anova_model)
+# Normalité des résidus
+shapiro.test(residuals(anova_model))
+# Homogénéité des variances
+bartlett.test(Growth_rate ~ Condition, data = df_GrowthRate)
+TukeyHSD(anova_model)
+```
+
+
 
 ## Effect of density
 
@@ -404,17 +437,10 @@ summary(pairwise_test)
 ```{r}
 #| fig-cap: Growth of earthworm in the D7 condition
 #| label: fig-densD7
-#| fig-height: 6
-#| fig-width: 8
+#| fig-height: 14
+#| fig-width: 6
 
-df_dens_D7 <- read_excel(here::here("data/Data_DENS.xlsx"), sheet=1)%>%
-  mutate(
-    ID = paste0(Lot, Condition, Nb_rep),
-    Weight = as.numeric(w),
-    L = Weight^(1/3), 
-    Lot = as.factor(Lot),
-    Nb_rep = paste0(Lot, Nb_rep)
-    ) |> 
+df_dens_D7 <- df_dens_growth_full |>  
   filter(Condition == "D7")
 
 df_rank <- df_dens_D7 %>%
@@ -437,7 +463,7 @@ p <- ggplot()+
     name="Replicate\nnumber",
     values=c(Nord_aurora, Nord_frost)
     )+
-  facet_grid(rows=vars(Condition), cols=vars(Nb_rep))+
+  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
   scale_x_continuous(
     limits = c(0, xmax),       
     breaks = seq(0, xmax, by = 28),
@@ -499,26 +525,37 @@ var.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food) # Si pas signif
 t.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food, alternative = "two.sided", var.equal=T) # si signif différence signif entre les deux groupes
 ```
 
+## Reproduction
+
+```{r}
+df_dens_reprorate_mean <- df_dens_repro %>%
+  aggregate(Nb_cocoons_ind~Condition, FUN=mean)
+
+df_dens_reprorate_mean
+```
+
+
 ## Summary figures
 
 ```{r}
-df_dens_mean_cond <- df_dens_mean |> 
-  aggregate(Weight~Condition+t, FUN=mean)
-
-pal_DENS <- c(Nord_aurora[5], Nord_frost)
+#| fig-cap: Summary.
+#| label: fig-summary
+#| fig-height: 10
+#| fig-width: 8
 
 p_G <- ggplot()+
   geom_point(
-    data = df_dens_mean,
+    data = df_dens_growth_mean_rep,
     aes(
       x = t,
       y = Weight,
       color = Condition
     ),
-    alpha = 0.7
+    alpha = 0.5,
+    size = 1.4
   )+
   geom_line(
-    data = df_dens_mean_cond,
+    data = df_dens_growth_mean_cond,
     aes(
       x = t,
       y = Weight,
@@ -526,17 +563,68 @@ p_G <- ggplot()+
     )
   )+
   geom_point(
-    data = df_dens_mean_cond,
+    data = df_dens_growth_mean_cond,
     aes(
       x = t,
       y = Weight,
       color = Condition
-    )
+    ),
+    size = 1.8
   )+
   facet_wrap(
-    ~ Condition
+    ~ Condition, ncol=1
   )+
-  scale_color_manual(values = pal_DENS)+
-  theme_minimal()
+  labs(x = "Time (days)", y = "Weight (mg)")+
+  scale_color_manual(values = pal_dens)+
+  theme_minimal()+
+  theme(legend.position = "none")
+
+p_R <- ggplot()+
+  geom_point(
+    data = df_dens_repro,
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    ),
+    alpha = 0.5,
+    size = 1.4
+  )+
+  geom_line(
+    data = df_dens_repro_mean_cond,
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    )
+  )+
+  geom_point(
+    data = df_dens_repro_mean_cond,
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    ),
+    size = 1.8
+  )+
+  facet_wrap(
+    ~ Condition, ncol=1
+  )+
+  labs(x = "Time (days)", y = "Cumulated reproduction (#)")+
+  scale_color_manual(values = pal_dens)+
+  theme_minimal()+
+  theme(legend.position = "none")
+
+p <- p_G + p_R
+p
+```
+
+```{r, include=FALSE}
+ggsave(
+  filename = "DENS_summary.png",
+  plot = p,
+  width = 6, height = 8,
+  path = path_fig
+)
 ```
 

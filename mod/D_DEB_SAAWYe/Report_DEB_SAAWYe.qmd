@@ -411,14 +411,15 @@ Endpoints_print <- "Weight,
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,"
+    Organic_matter,
+    freal,
+    kapreal"
 
 f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff, text_param, Endpoints_print)
-#f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff=FALSE, text_param, text_print)
 
 # ./mcsim.DEBcali DEB_sim_full.in
 
-
+#./mcsim.DEBcaliA DEB_sim_full.in
 ```
 
 ```{r}
@@ -583,8 +584,7 @@ df_sim_long <- df_sim %>%
   mutate(Source = "Simulation") |> 
   filter(!(Variable %in% c("OM_out", "Qf", "Qfmax", "X", "Length_struct"))) |> 
   mutate(Variable = fct_relevel(Variable, 
-                                "Energy", "Size", "Weight", "Reproduction", "Maturity", "Organic_matter",
-                                "freal", "kapreal"))
+                                "Energy", "Size", "Weight", "Reproduction", "Maturity", "Organic_matter", "freal", "kapreal"))
 
 
 # 2. Format long pour les données expérimentales

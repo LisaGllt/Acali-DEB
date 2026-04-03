@@ -47,7 +47,9 @@ Simulation { # Bart2019_XP1_1
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 364, 0.1);
 }
 Simulation { # Bart2019_XP1_2
@@ -81,7 +83,9 @@ Simulation { # Bart2019_XP1_2
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 364, 0.1);
 }
 Simulation { # Bart2019_XP2
@@ -113,7 +117,9 @@ Simulation { # Bart2019_XP2
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 84, 0.1);
 }
 Simulation { # Bart2019_XP3
@@ -145,7 +151,9 @@ Simulation { # Bart2019_XP3
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 233, 0.1);
 }
 Simulation { # Bart2019_XP4_1
@@ -177,7 +185,9 @@ Simulation { # Bart2019_XP4_1
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 392, 0.1);
 }
 Simulation { # Bart2019_XP4_2
@@ -211,7 +221,9 @@ Simulation { # Bart2019_XP4_2
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 392, 0.1);
 }
 Simulation { # Bart2019_XP5
@@ -243,7 +255,9 @@ Simulation { # Bart2019_XP5
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 105, 0.1);
 }
 Simulation { # Bart2020
@@ -275,7 +289,9 @@ Simulation { # Bart2020
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 98, 0.1);
 }
 Simulation { # Gollot2026_dens_D1
@@ -307,7 +323,9 @@ Simulation { # Gollot2026_dens_D1
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 154, 0.1);
 }
 Simulation { # Gollot2026_dens_D2
@@ -339,7 +357,9 @@ Simulation { # Gollot2026_dens_D2
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 154, 0.1);
 }
 Simulation { # Gollot2026_dens_D2b
@@ -371,7 +391,9 @@ Simulation { # Gollot2026_dens_D2b
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 154, 0.1);
 }
 Simulation { # Gollot2026_dens_D5
@@ -403,7 +425,9 @@ Simulation { # Gollot2026_dens_D5
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 154, 0.1);
 }
 Simulation { # Gollot2026_dens_D7
@@ -435,7 +459,9 @@ Simulation { # Gollot2026_dens_D7
     Length_struct,
     Reproduction,
     Energy,
-    Organic_matter,,
+    Organic_matter,
+    freal,
+    kapreal,
 				0, 98, 0.1);
 }
 

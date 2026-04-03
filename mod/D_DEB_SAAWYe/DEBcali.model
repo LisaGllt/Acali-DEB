@@ -15,7 +15,9 @@ Outputs = {Energy,             # Energy in the reserve (J)
           Maturity,            # Maturity (J)
           Reproduction,        # Cumulated reproduction (# of cocoons produced)
 		      Organic_matter,
-		      Weight};             # Wet weight of the earthworm (g)
+		      Weight,
+		      freal,
+		      kapreal};             # Wet weight of the earthworm (g)
 		   
 Inputs = {Dens, # Number of earthworm in the cosm (#)
           Init,
@@ -200,7 +202,9 @@ CalcOutputs{
     Maturity = (Eh <= 0 ? 1E-9 : Eh); 
     Reproduction = (R < (Init_R*10) ? 1e-6 : R);
     Organic_matter = OM_soil + OM_horse;
-    Weight = Weight; 
+    Weight = Weight;
+    freal = freal;
+    kapreal = kapreal;
 }
 
 End.
