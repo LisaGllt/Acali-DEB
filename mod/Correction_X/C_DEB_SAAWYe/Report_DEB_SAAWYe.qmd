@@ -119,7 +119,7 @@ ATOL <- 1e-6
 
 # makemcsim DEBcali.model
 
-f_In_tot(file_path, l_Experiments, Adults_alone, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+#f_In_tot(file_path, l_Experiments, Adults_alone, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 # ./mcsim.DEBcali DEB_C1.in
 ```

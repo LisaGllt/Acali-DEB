@@ -1,0 +1,162 @@
+
+/*-- scss:defaults --*/
+
+$primary: #5E81AC !default;
+$font-size-root: 18px !default;
+
+$code-annotation-higlight-color: #E5E9F0  !default;
+$code-annotation-higlight-bg: #E5E9F0  !default;
+
+.code-annotation-anchor {
+  background-color: inherit !important;
+  color: #5E81AC !important;
+}
+
+.code-annotation-active {
+  background-color: #5E81AC !important;
+  color: #ECEFF4  !important;
+  border-color: #5E81AC !important;
+}
+
+/* Background of the annotation box*/
+.tippy-box[data-theme~=quarto] {
+    background-color: white !important;
+    color: #5E81AC !important;
+    border-color: #5E81AC !important;
+}
+
+.tippy-box[data-theme~="quarto"] > .tippy-svg-arrow {
+  border-color: #5E81AC !important
+}
+
+.tippy-box[data-theme~="quarto"] > .tippy-arrow:before {
+  border-color: #5E81AC !important
+}
+
+
+
+
+$secondary: #2E3440 !default;
+$light: #4C566A !default;
+$dark: #2E3440 !default;
+
+$gray-100: #ECEFF4 !default;
+$gray-200: #ECEFF4  !default; /*-- background code ; --*/
+$gray-300: #E5E9F0 !default;
+$gray-400: #D8DEE9 !default;
+$gray-500: #4C566A !default; 
+$gray-600: #434C5E !default;
+$gray-700: #3B4252 !default;
+$gray-800: #2E3440 !default;
+
+$gray: #D8DEE9 !default;
+
+
+/*-- Session info button ; --*/
+.accordion-button:not(.collapsed) {
+color: var(--bs-accordion-active-color);
+background-color: #ECEFF4 !important;
+border-top: 6px !important;
+border-bottom: 6px !important;
+border-radius: 12px !important;
+padding-left: 12px !important;
+padding-top: 12px !important;
+box-shadow: inset 0 calc(-1*var(--bs-accordion-border-width)) 0 var(--bs-accordion-border-color);
+}
+
+/*-- scss:rules --*/
+
+.cell-output pre {
+  background-color: #ECEFF4;
+  border-radius: 6px;
+}
+
+.cell-output {
+  background-color: #ECEFF4;
+  border-radius: 6px;
+}
+
+.sourceCode {
+  background: inherit;
+}
+
+.code-annotation-gutter-bg {
+  background-color: inherit;
+}
+
+.code-annotation-gutter {
+  background-color: inherit;
+}
+
+/* -- .code-fold {
+  background-color: #ECEFF4;
+  border-radius: 4px;
+}
+
+ .sourceCode .cell-code{
+  background-color: #ECEFF4;
+} --*/
+
+.sidebar-title {
+  color: #5E81AC;
+}
+
+div.sidebar-item-container .active {
+  font-weight: bold;
+}
+
+.sidebar nav[role=doc-toc] ul>li>a.active, .sidebar nav[role=doc-toc] ul>li>ul>li>a.active{
+  font-weight: bold;
+}
+
+img.quarto-cover-image {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+
+/* Headings ------------------------------------------------------ */
+
+#title-block-header.quarto-title-block.default .quarto-title h1.title {
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+h3 { margin-top: 1.5em; font-size: 1.2rem; font-weight: 500; }
+h4 { margin-top: 1.5em; font-size: 1.1rem; }
+h5 { margin-top: 1.5em; font-size: 1rem; }
+
+.quarto-section-identifier {
+  color: #5E81AC;
+  font-weight: normal;
+}
+
+/* Code ------------------------------------------------ */
+
+code {
+  color: #373a3c;
+}
+
+code a:any-link {
+  text-decoration: underline;
+  text-decoration-color: #ccc;
+}
+
+pre {
+  background-image: #ECEFF4;
+}
+
+.cell-output pre {
+background-color: #ECEFF4 !important;
+border-radius: 6px;
+}
+
+/* $table-stripped-bg: #ECEFF4 !important;
+$table-color: #2E3440 !important;
+
+.odd pre {
+background-color: #ECEFF4 !important;
+} */

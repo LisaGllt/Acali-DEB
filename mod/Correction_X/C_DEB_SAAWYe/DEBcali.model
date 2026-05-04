@@ -54,20 +54,19 @@ r_pAm_pM = 1.5;         # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
 v = 0.18505;            # energy conductance (cm/d)
 
 K = 0.1;                # Slope of functional threshold (K model)
-z;                      # Functional response threshold (D model)
 
 kap = 0.4373;           # allocation fraction to soma (-)
-kapA;
+kapA;                   # allocation fraction to soma for grouped adults (-) (model A)
 
 # Maintenance and growth
 pM = 1680.1;               # [p_M], vol-spec somatic maint (J/d.cm^3)
 pT = 0;                    # {p_T}, surf-spec somatic maint (J/d.cm^2)
 Eg = 4183;  # 6880.33;     # [E_G], spec cost for structure (J/cm^3)
 Shape = 0.066193;          # shape coefficient (-)
-dv = 1;                    # Structure density (g/cm^3)
-wE;                        # Energy density of reserve (g/J)
-w = 27.24;                 # Contribution of reserve to body weight (g/cm^3)
-wv = 6.72;                 # Contribution of water replacement to body fresh weight (g/cm^3);
+dv = 1;                    # Structure density (g/cm^3) (models w & e)
+wE;                        # Energy density of reserve (g/J) (model e)
+w = 27.24;                 # Contribution of reserve to body weight (g/cm^3) (model w)
+wv = 6.72;                 # Contribution of water replacement to body fresh weight (g/cm^3) (model w)
 
 # Maturity
 kJ = 0.002793;          # maturity maint rate coefficient (1/d)
@@ -91,12 +90,13 @@ Init_R = 1e-6;
 
 Initialize{
 
-      kapreal = (Eh < Ehp ? kap : (Dens > 1 ? kapA : kap)); # A model (must be defined before g)
+      # kapreal = kap; #(Model F)
+      kapreal = (Eh < Ehp ? kap : (Dens > 1 ? kapA : kap)); #(Model A)
       
       pM = r_pAm_pM * pAm;
     	
     	# Coefficient for temperature correction (Texp in °C)
-    	sA = exp(TA/Tref-TA/(Texp+273.15));
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
       srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
     	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
     	
@@ -106,15 +106,16 @@ Initialize{
       kJ_t   = kJ * Tc;
       
     # Primary parameters          
-      Km = pM / Eg ;
+      Km   = pM / Eg ;
       Km_t = Km * Tc;
-      Em = pAm / v ;
-      g = Eg / (kapreal * Em);
-      Lm = (v / (Km*g));
+      Em   = pAm / v ;
+      g    = Eg / (kapreal * Em);
+      Lm   = (v / (Km*g));
 
     # Starting points
       E = Em;
-      L = pow(((Winit-wE*Em)/(dv)),(1.0/3.0)); # E/Em = 1. Winit en g ! IL FAUT METTRE DES POINTS SINON C'EST DES INT ET PAS DES FLOAT
+      # L = pow(((Winit)/(dv+w)),(1.0/3.0)); #(Model w)
+      L = pow(((Winit-wE*Em)/(dv)),(1.0/3.0)); #(Model e)
       Weight = Winit;
       Weight_struct = dv*pow(L,3);
       Eh = Ehb;
@@ -127,7 +128,7 @@ Initialize{
 Dynamics{
 
     # Coefficient for temperature correction (Texp in °C)
-    	sA = exp(TA/Tref-TA/(Texp+273.15));
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
       srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
     	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
     	
@@ -136,15 +137,18 @@ Dynamics{
       v_t    = v   * Tc;
       kJ_t   = kJ * Tc;
       
-      kapreal = (Eh < Ehp ? kap : (Dens > 1 ? kapA : kap));
+      # kapreal = kap; #(Model F)
+      kapreal = (Eh < Ehp ? kap : (Dens > 1 ? kapA : kap)); #(Model A)
+
+      
       pM = r_pAm_pM * pAm;
       
     # Primary parameters          
-      Km = pM / Eg ;
+      Km   = pM / Eg ;
       Km_t = Km * Tc;
-      Em = pAm / v ;
-      g = Eg / (kapreal * Em);
-      Lm = (v / (Km*g));
+      Em   = pAm / v ;
+      g    = Eg / (kapreal * Em);
+      Lm   = (v / (Km*g));
       
     
     # Energie assimilation
@@ -154,30 +158,37 @@ Dynamics{
       
       Weight_struct = dv*pow(L,3);
       
+      Type_Fm = Weight_struct; #(Model W)
+      # Type_Fm = pow(L,2); #(Model L)
+      
       # Energy ingested by the earthworm per day (J/d)
-      Qf_soil_calc = Fm * Weight_struct*(muOM * rOM_ClxHorse * OM_soil/Dens); 
-      Qf_horse_calc = Fm * Weight_struct*(muOM * OM_horse/Dens);   
+      Qf_soil_calc  = Fm * Type_Fm*(muOM * rOM_ClxHorse * OM_soil/Dens); 
+      Qf_horse_calc = Fm * Type_Fm*(muOM                * OM_horse/Dens);   
       Qf_calc = Qf_soil_calc + Qf_horse_calc;
       
-      Qf_soil = (Qf_calc > Qfmax ? (Qfmax*rOM_ClxHorse*OM_soil/(rOM_ClxHorse*OM_soil + OM_horse)) : Qf_soil_calc);
-      Qf_horse = (Qf_calc > Qfmax ? (Qfmax*OM_horse/(rOM_ClxHorse*OM_soil + OM_horse)) : Qf_horse_calc);
+      Qf_soil  = (Qf_calc > Qfmax ? (Qfmax*OM_soil  /(OM_soil + OM_horse)) : Qf_soil_calc);
+      Qf_horse = (Qf_calc > Qfmax ? (Qfmax*OM_horse /(OM_soil + OM_horse)) : Qf_horse_calc);
       Qf = Qf_soil + Qf_horse;
       
       # Quantity of organic matter consummed by all earthworms in one cosm per day (g/d)
-      OM_soil_out = (Qf_soil/(muOM*rOM_ClxHorse))*Dens;   
-      OM_horse_out = (Qf_horse/muOM)*Dens; # gOM/cosm/d   
+      OM_soil_out  = (Qf_soil  /(muOM*rOM_ClxHorse))*Dens;   
+      OM_horse_out = (Qf_horse /muOM               )*Dens; # gOM/cosm/d   
       
       # Dynamics of organic matter in the cosm (which cannot be negative)
     
       dt(OM_soil)  = - OM_soil_out;
-      dt(OM_horse) =  - OM_horse_out;
+      dt(OM_horse) = - OM_horse_out;
       
       OM_soil  = (OM_soil  < 1e-9 ? 1e-9 : OM_soil);
       OM_horse = (OM_horse < 1e-9 ? 1e-9 : OM_horse);
       
-      # Functional response of the earthworm to organic matter (K model)
+      # Functional response of the earthworm to organic matter (Y model)
       X = Qf/(2*Qfmax);
       freal = X/(1+X);
+      
+      # Functional response of the earthworm to organic matter (K model)
+      # X = Qf/(Qfmax);
+      # freal = X/(K*(1-X)+X);
       
     # Energy in the reserve (which cannot be negative)
     
@@ -187,7 +198,9 @@ Dynamics{
     # Structural length
     
       dt(L) = (v_t / (3 * ( ( (E/Em) + g) ) ) ) * ((E/Em) - (L/Lm));
-      Weight = pow(L,3)*dv + E*wE;
+      
+      # Weight = pow(L,3)*(dv + E/Em*w); #(Model w)
+      Weight = pow(L,3)*dv + E*wE;     #(Model e)
 
     # Maturity
     

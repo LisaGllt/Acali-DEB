@@ -1,0 +1,52 @@
+project:
+  type: book
+
+book:
+  title: "Linking physiological processes to life-history traits : a bioenergetic approach based on DEB theory"
+  subtitle: "Git repository"
+  author:
+    - name: "Lisa Gollot"
+      orcid: ""
+      affiliations:
+        - name: "Université Paris-Saclay, INRAE, AgroParisTech, UMR 1402 ECOSYS"
+          department: "Sol&Tox"
+        - name: "Ineris"
+          department: "TEAM"
+  date: "6/25/2024"
+  chapters:
+    - index.qmd
+    - quarto/A_Earthworm_culture.qmd
+    - quarto/B_DENS_experiment.qmd
+    - quarto/C_Data_synthesis.qmd
+    - quarto/D_Model_formulations.qmd
+    - quarto/E_Model_comparison.qmd
+    - quarto/F_Conclusion.qmd
+    #- quarto/references.qmd
+  navbar:
+    right:
+      - icon: github
+        href: https://github.com/LisaGllt/Ew-Growth-IdVar
+
+bibliography: references/references.bib # ne pas exporter toute la bibliothèse juste la collection PhD
+csl: references/apa.csl
+execute:
+  cache: true
+  freeze: auto
+execute-dir: project
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    code-block-bg: true
+    highlight-style: appearance/lightnord.theme
+    code-block-border-left: "#E5E9F0"
+    code-overflow: wrap
+    code-annotations: select
+    theme:
+      - cosmo
+      - appearance/html_css.scss
+
+editor: 
+    markdown:
+      canonical: true
+

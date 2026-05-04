@@ -63,7 +63,7 @@ ggplot(
 # Homographie tq F(0)=0 et f(1)=1
 
 
-Slope <- 0.4
+Slope <- 0.02
 
 f_Hill <- function(x, EC, Slope){
   Y = x/(Slope * (1-x) + x)
@@ -188,7 +188,7 @@ ggplot(
 
 
 
-K <- 0.2396
+K <- 1
 Alpha <- 2
 
 f_Hill <- function(x, K, Alpha){
@@ -197,7 +197,7 @@ f_Hill <- function(x, K, Alpha){
 }
 
 df <- data.frame(
-  x = seq(0,1,0.01)
+  x = seq(0,1,0.05)
 ) |> 
   mutate(
     y = f_Hill(x, K, Alpha)
@@ -312,6 +312,122 @@ ggplot() +
 
 
 
+alpha <- 2
+delta <- 7
+t_A <- 100
+kapJ <- 0.6
+kapA <- 0.8
 
+f_T <- function(x, alpha){
+  
+  y <- ifelse(x < 0, 0, ifelse(x > 1, 1, x^alpha/(x^alpha +(1-x)^alpha)))
+
+  return(y)
+}
+
+df_fT <- data.frame(
+  x = seq(0, 1, 0.01)
+) |> 
+  mutate(y = f_T(x, alpha))
+
+ggplot() +
+  geom_line(
+    data = df_fT,
+    aes(
+      x = x,
+      y = y
+    ),
+    color = "blue"
+  ) +
+  theme_minimal()
+
+t <- seq(0,300, 0.1)
+
+df <- data.frame(
+  t = t
+) |> 
+  mutate(
+    x = (t -(t_A))/(delta),
+    y_T = f_T(x, alpha),
+    kap = f_T(x, alpha)*kapA + (1-f_T(x, alpha))*kapJ
+  )
+
+ggplot() +
+  geom_line(
+    data = df,
+    aes(
+      x = x,
+      y = y_T
+    ),
+    color = Nord_polar[1]
+  ) +
+  lims(x=c(0,10))+
+  theme_minimal()
+
+
+ggplot() +
+  geom_abline(
+    intercept = kapA,
+    slope = 0,
+    color = Nord_aurora[1],
+    linetype = "dashed"
+  )+
+  geom_abline(
+    intercept = kapJ,
+    slope = 0,
+    color = Nord_aurora[4],
+    linetype = "dashed"
+  )+
+  
+  annotate(
+    geom = "text",
+    x = 75,
+    y = 0.63,
+    fontface = "bold",
+    label = "kapJ",
+    color = Nord_aurora[4],
+    size = 4
+  ) +
+  
+  annotate(
+    geom = "text",
+    x = 75,
+    y = 0.77,
+    fontface = "bold",
+    label = "kapA",
+    color = Nord_aurora[1],
+    size = 4
+  ) +
+
+  geom_line(
+    data = df,
+    aes(
+      x = t,
+      y = kap
+    ),
+    color = Nord_polar[1],
+    linewidth = 1
+  ) +
+  
+  geom_vline(
+    xintercept = t_A,
+    color = Nord_frost[2],
+    linetype = "dashed",
+    linewidth = 1
+  )+
+  
+  annotate(
+    geom = "text",
+    x = 125,
+    y = 0,
+    fontface = "bold",
+    label = "tA tq Eh(tA)=Ehp",
+    color = Nord_frost[2],
+    size = 4
+  ) +
+  
+  lims(x=c(75,150), y = c(0, 1))+
+  labs(y = "Kapreal", x = "Time (days)")+
+  theme_minimal()
 
 
