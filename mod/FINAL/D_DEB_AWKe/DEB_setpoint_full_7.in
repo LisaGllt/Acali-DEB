@@ -34,7 +34,7 @@ Simulation { # Bart2020
                                
     PrintStep(Weight,
     Reproduction,
-				0, 84, 0.01);
+				0, 84, 0.05);
 }
 
   End.

@@ -44,7 +44,6 @@ Adults_alone <- FALSE
 
 df_data_fit <- f_import_data_DEB(l_Experiments_fit, Adults_alone)
 
-
 Experiments_carac <- f_get_experiments()
 l_Experiments_tot <- Experiments_carac$l_Experiments_tot
 l_carac <- Experiments_carac$l_carac
@@ -410,7 +409,6 @@ df_result
 ## Chains
 
 ::: panel-tabset
-
 ## A_FLYw
 
 ```{r, echo=F, message=F, warning=F}
@@ -686,13 +684,11 @@ ggsave(
   path=path_fig
   )
 ```
-
 :::
 
 ## Likelihoods
 
 ::: panel-tabset
-
 ## A_FLYw
 
 ```{r, message=F, warning=F, echo=F}
@@ -1136,7 +1132,6 @@ ggsave(
   path=path_fig
   )
 ```
-
 :::
 
 ## Chains convergence
@@ -1254,7 +1249,6 @@ mcmc_list_F_ALKe <- as.mcmc.list(mcmc_list_F_ALKe)
 ```
 
 ::: panel-tabset
-
 ## A_FLYw
 
 ```{r, echo=F, message=F, warning=F}
@@ -1584,14 +1578,11 @@ ipairs(
 
 dev.off()
 ```
-
 :::
 
 ## Posterior distributions
 
 ::: panel-tabset
-
-
 ## A_FLYw
 
 ```{r, echo=F, message=F, warning=F}
@@ -2059,11 +2050,9 @@ ggsave(
   path=path_fig
   )
 ```
-
 :::
 
 ## Experiment simulations
-
 
 ```{r, message=F, warning=F}
 
@@ -2127,7 +2116,6 @@ f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff, text_param, En
 
 ## Predicted vs. Observed
 
-
 ```{r}
 l_param_name <- names(Summary_res) |>
   stringr::str_remove_all("\\.1\\.")
@@ -2156,8 +2144,16 @@ df_data_obs <- df_data |>
 
 df_pred_A_FLYw <- f_read_predobs(path_A_FLYw, Nb_experiment, df_data_obs)
 
-df_pred_Weight_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_A_FLYw <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2175,8 +2171,16 @@ df_predobs_Weight_A_FLYw <- df_data_obs |>
 
 df_pred_B_FLYe <- f_read_predobs(path_B_FLYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_B_FLYe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2194,8 +2198,16 @@ df_predobs_Weight_B_FLYe <- df_data_obs |>
 
 df_pred_C_AWYe <- f_read_predobs(path_C_AWYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_C_AWYe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2213,8 +2225,16 @@ df_predobs_Weight_C_AWYe <- df_data_obs |>
 
 df_pred_D_AWKe <- f_read_predobs(path_D_AWKe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_D_AWKe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2232,8 +2252,16 @@ df_predobs_Weight_D_AWKe <- df_data_obs |>
 
 df_pred_E_ALYe <- f_read_predobs(path_E_ALYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_E_ALYe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2251,8 +2279,16 @@ df_predobs_Weight_E_ALYe <- df_data_obs |>
 
 df_pred_F_ALKe <- f_read_predobs(path_F_ALKe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Weight" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Reproduction" & Time !=0)|>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction_F_ALKe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2269,7 +2305,6 @@ df_predobs_Weight_F_ALKe <- df_data_obs |>
 ```
 
 ::: panel-tabset
-
 ## A_FLYw
 
 ```{r, message=F, warning=F}
@@ -3361,5 +3396,60 @@ ggsave(
   path = path_fig
 ) 
 ```
-
 :::
+
+```{r countfold, warning=F}
+
+No_round <- 1
+
+f_count_fold <- function(df_predobs_Weight, df_predobs_Reproduction, No_round) {
+  Weight_count_fold2 <- round(length(subset(df_predobs_Weight, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100, No_round)
+
+  Weight_count_fold5 <- round(length(subset(df_predobs_Weight, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100, No_round)
+  
+  Repro_count_fold2 <- round(length(subset(df_predobs_Reproduction, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Reproduction_obs) / length(df_predobs_Reproduction$Reproduction_obs) * 100, No_round)
+  
+  Repro_count_fold5 <- round(length(subset(df_predobs_Reproduction, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Reproduction_obs) / length(df_predobs_Reproduction$Reproduction_obs) * 100, No_round)
+  
+  df_predobs_Reproduction_0 <- df_predobs_Reproduction |>
+    filter(Reproduction_obs > 0) 
+  
+  Repro0_count_fold2 <- round(length(subset(df_predobs_Reproduction_0, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Reproduction_obs) / length(df_predobs_Reproduction_0$Reproduction_obs) * 100, No_round)
+  
+  Repro0_count_fold5 <- round(length(subset(df_predobs_Reproduction_0, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Reproduction_obs) / length(df_predobs_Reproduction_0$Reproduction_obs) * 100, No_round)
+  
+  df_fold <- data.frame(
+    Endpoint = c("Weight", "Reproduction", "Observed reproduction above 0"),
+    '% of predictions in fold 2' = c(Weight_count_fold2, Repro_count_fold2, Repro0_count_fold2),
+    '% of predictions in fold 5' = c(Weight_count_fold5, Repro_count_fold5, Repro0_count_fold5)
+  )
+  
+  return(df_fold)
+
+}
+
+list_weight <- mget(paste0("df_predobs_Weight_", list_models))
+list_repro  <- mget(paste0("df_predobs_Reproduction_", list_models))
+
+df_fold <- purrr::map2_dfr(
+  list_weight,
+  list_repro,
+  f_count_fold,
+  .id = "Model"
+)
+
+df_fold <- df_fold %>%
+  dplyr::mutate(Model = model_names[as.integer(Model)])
+
+df_fold |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    ),
+  class="hover"
+  )
+
+```

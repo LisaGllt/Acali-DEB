@@ -36,7 +36,7 @@ Simulation { # Bart2019_XP1_2
                                
     PrintStep(Weight,
     Reproduction,
-				0, 364, 0.01);
+				0, 364, 0.05);
 }
 
   End.

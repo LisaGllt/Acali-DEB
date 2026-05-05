@@ -34,7 +34,7 @@ Simulation { # Gollot2026_dens_D2
                                
     PrintStep(Weight,
     Reproduction,
-				0, 154, 0.01);
+				0, 154, 0.05);
 }
 
   End.

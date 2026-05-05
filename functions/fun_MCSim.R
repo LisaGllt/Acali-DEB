@@ -1626,26 +1626,25 @@ Integrate(Lsodes, 1E-5, 1E-6, 1);
   
 }
 
-f_read_Setpoint_full <- function(file_path, Nb_experiment, select_times){
-  
-  Sim.Res.Exp.full <- lapply(1:Nb_experiment, function(j){
-    read_tsv(file.path(file_path, paste0("DEB_setpoint_full_", j, ".out"))) |> 
-      filter (Time %in% select_times) |> 
-      mutate(No_sim = j)
-  }) |> 
-    bind_rows()
+f_read_Setpoint_full <- function(file_path, Nb_experiment, select_times, step_sim){
   
   df_pred_full <- NULL
   
   for (i in 1:Nb_experiment){
     
+    Sim.Res.Exp_i <- readr::read_tsv(
+      file.path(file_path, paste0("DEB_setpoint_full_", i, ".out"))
+    ) |>
+      dplyr::mutate(No_sim = i) |> 
+      dplyr::select(where(~ !all(is.na(.x))))
+    
     ID_i <- unique(df_data_obs$ID_experiment)[i]
     
-    Sim.Res.Exp_i  <- subset(Sim.Res.Exp, No_sim == i) |> 
-      dplyr::select(where(~ !all(is.na(.x))))
     df_data_obs_i <- subset(df_data_obs, ID_experiment == ID_i)
     
-    Time_pred = df_data_obs_i$Time # !!!
+    Time_pred = seq(0, max(df_data_obs_i$Time, na.rm=TRUE), step_sim) # !!!
+    
+    
     Nom_Endpoints = c("Weight", "Reproduction")
     Nsortie = 2
     MPV = IC_min = IC_max = Endpoint = index = NULL
@@ -1673,12 +1672,21 @@ f_read_Setpoint_full <- function(file_path, Nb_experiment, select_times){
     )
     
     df_pred_i <- df_pred_i %>%
-      mutate(ID_experiment=ID_i)
+      mutate(ID_experiment=ID_i) |> 
+      filter (Time %in% select_times) |> 
+      mutate(
+        predict.endpoint = case_when(
+         ( predict.endpoint <= 5e-6 & Endpt == "Reproduction") ~ 0,
+          .default = predict.endpoint
+        )
+        )
     
     df_pred_full <- rbind(df_pred_full, df_pred_i)
-    
-    return(df_pred_full)
   }
+  
+  saveRDS(df_pred_full, file.path(file_path, paste0("Sim.Res.Exp.full.rds")))
+  
+  return(df_pred_full)
 }
 
 f_In_simulations_sim <- function(file_path, l_Experiments, Adults_alone, OM_diff, text_param, Endpoints_print){

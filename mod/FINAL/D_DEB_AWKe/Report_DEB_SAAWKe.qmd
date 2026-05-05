@@ -40,7 +40,7 @@ l_Experiments <- c(
 
 Adults_alone <- FALSE
 
-df_data <- f_import_data_DEB(l_Experiments, Adults_alone)
+df_data_fit <- f_import_data_DEB(l_Experiments, Adults_alone)
 
 ```
 
@@ -376,7 +376,7 @@ p_post
 
 ```{r, message=F, warning=F}
 
-l_Experiments <- c(
+l_Experiments_sim <- c(
   "Bart2019_XP1_1",  
   "Bart2019_XP1_2",  
   "Bart2019_XP2",
@@ -395,7 +395,7 @@ l_Experiments <- c(
 
 Adults_alone <- TRUE
 
-df_data <- f_import_data_DEB(l_Experiments, Adults_alone)
+df_data <- f_import_data_DEB(l_Experiments_sim, Adults_alone)
 
 text_param <- Summary_res["Result_mode", , drop = FALSE] %>%
   t() %>%
@@ -688,7 +688,7 @@ done
 
 Nb_experiment <- 12
 
-df_data_obs <- df_data |> 
+df_data_obs <- df_data_fit |> 
   mutate(
     Weight_obs = Weight,
     Reproduction_obs = Reproduction
@@ -744,8 +744,16 @@ for (i in 1:Nb_experiment){
   df_pred <- rbind(df_pred, df_pred_i)
 }
 
-df_pred_Weight <- subset(df_pred, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction <- subset(df_pred, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight <- subset(df_pred, Endpt == "Weight" & Time !=0) |>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+df_pred_Reproduction <- subset(df_pred, Endpt == "Reproduction" & Time !=0) |>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
 
 df_predobs_Reproduction <- df_data_obs |> 
   filter(Time !=0) |>
@@ -933,15 +941,71 @@ p_predobs
 
 ```
 
+```{r countfold, warning=F}
+
+f_count_fold <- function(df_predobs_Weight, df_predobs_Reproduction) {
+  Weight_count_fold2 <- length(subset(df_predobs_Weight, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100
+
+  Weight_count_fold5 <- length(subset(df_predobs_Weight, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100
+  
+  Repro_count_fold2 <- length(subset(df_predobs_Reproduction, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Reproduction_obs) / length(df_predobs_Reproduction$Reproduction_obs) * 100
+  
+  Repro_count_fold5 <- length(subset(df_predobs_Reproduction, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Reproduction_obs) / length(df_predobs_Reproduction$Reproduction_obs) * 100
+  
+  df_predobs_Reproduction_0 <- df_predobs_Reproduction |>
+    filter(Reproduction_obs > 0) 
+  
+  Repro0_count_fold2 <- length(subset(df_predobs_Reproduction_0, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Reproduction_obs) / length(df_predobs_Reproduction_0$Reproduction_obs) * 100
+  
+  Repro0_count_fold5 <- length(subset(df_predobs_Reproduction_0, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Reproduction_obs) / length(df_predobs_Reproduction_0$Reproduction_obs) * 100
+  
+  df_fold <- data.frame(
+    Endpoint = c("Weight", "Reproduction", "Observed reproduction above 0"),
+    '% of predictions in fold 2' = c(Weight_count_fold2, Repro_count_fold2, Repro0_count_fold2),
+    '% of predictions in fold 5' = c(Weight_count_fold5, Repro_count_fold5, Repro0_count_fold5)
+  )
+  
+  return(df_fold)
+
+}
+
+
+df_fold <- f_count_fold(df_predobs_Weight, df_predobs_Reproduction)
+
+
+```
+
+```{r RMSE}
+f_RMSE_experiment <- function(df_predobs_Weight, df_predobs_Reproduction){
+  df_rmse_W <- df_predobs_Weight %>%
+    group_by(ID_experiment) %>%
+    summarise(
+      RMSE = sqrt(mean((predict.endpoint - Weight_obs)^2, na.rm = TRUE))
+    )  |> 
+    mutate(Endpoint = "Weight")
+  
+  df_rmse_R <- df_predobs_Reproduction %>%
+    group_by(ID_experiment) %>%
+    summarise(
+      RMSE = sqrt(mean((predict.endpoint - Reproduction_obs)^2, na.rm = TRUE))
+    ) |> 
+    mutate(Endpoint = "Reproduction")
+}
+```
 
 # 6. Setpoints full
 
 ```{r}
 l_param_name <- names(Summary_res) |>
   stringr::str_remove_all("\\.1\\.")
-step_sim <- 0.01
+
+Nb_experiment <- 12
+step_sim <- 0.05
+select_times <- seq(0,400, 0.1)
+
 Endpoints_print <- "Weight,
     Reproduction"
+
 f_In_Setpoint_full(file_path, l_Experiments, Adults_alone, OM_diff, l_param_name, step_sim, Endpoints_print)
 ```
 
@@ -952,11 +1016,155 @@ done
 ```
 
 ```{r}
-select_times <- seq(0,400, 0.1)
 
-f_read_Setpoint_full(file_path, Nb_experiment, select_times)
+file_rds <- file.path(file_path, paste0("Sim.Res.Exp.full.rds"))
 
+if (file.exists(file_rds)) {
+  df_pred_full <- readRDS(file_rds)
+} else {
+  df_pred_full <- f_read_Setpoint_full(file_path, Nb_experiment, select_times, step_sim)
+}
 ```
 
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred
+#| fig-height: 12
+#| fig-width: 12
 
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
 
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
