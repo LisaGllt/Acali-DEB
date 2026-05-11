@@ -1,0 +1,193 @@
+---
+title: "Toward a Mechanistic DEB Model for *Aporrectodea caliginosa* - Linking Food Availability, Organic Matter Quality, and Energy Assimilation"
+subtitle: "Supplementary information"
+lang: eng
+format:
+  pdf:
+    documentclass: scrreprt
+    toc: true
+    toc-depth: 3
+    lof: true
+    lot: true
+    tbl-colwidths: auto
+    df-print: tibble
+    number-sections: true
+    fig-pos: "H"
+    fontsize: large
+    linestretch: 1.2
+    layout: 
+      - header=1cm
+    geometry: 
+      - top=2cm
+      - bottom=2cm
+      - left=2cm
+      - right=2cm
+    include-in-header: 
+      text: 
+        \usepackage{pdfpages}
+editor: 
+    markdown:
+      canonical: true
+---
+
+# Earthworm culture
+
+## Breeding and experiment soil
+
+The soil used in the culture of earthworms is collected from the top 10 cm of a meadow in Versailles called "Les Closeaux". It is then dried before being milled at \< 2 mm.
+
+| Characteristics                 | Value |
+|---------------------------------|-------|
+| Clay ( \< 2 µm, g/kg)           | 226.0 |
+| Fine silt (2-20 µm, g/kg)       | 174.1 |
+| Coarse silt (20-50 µm, g/kg)    | 298.9 |
+| Fine sand (50-200 µm, g/kg)     | 239.1 |
+| Coarse sand (200-2000 µm, g/kg) | 47.9  |
+| $CaCO_3$ total (g/kg)           | 23.3  |
+| Organic matter (g/kg)           | 32.6  |
+| $P_2O_5$ (g/kg)                 | 0.1   |
+| Organic carbon (g/kg)           | 18.9  |
+| Total nitrogen (N) (g/kg)       | 1.5   |
+| C/N                             | 12.5  |
+| pH                              | 7.5   |
+| Total $Cu$ (mg/kg)              | 25.2  |
+
+: Main characteristics of the breeding soil from Versailles. Table from @bart_2017. {@tbl-Clx}
+
+## DNA barcoding
+
+![Results of the DNA barcoding of 10 individuals from the culture (highlighted in yellow)](../../photos/DNA_barcoding.png)
+
+The phylogenetic tree was realised thanks to maximum likelyhood bootstrap method (1000 simulations) with the Tamura-Nei model (nucleotides). Bootstrap frequency is indicated on each branch.
+
+*Aporrectodea caliginosa* is a cryptic species complex comprising three lineages. Our earthworm culture is known to include individuals from two closely related lineages (2 and 3). While these lineages could potentially exhibit differences in sensitivity, previous research on *Gammarus roeselii* has shown that tolerance within cryptic species complexes is not always lineage dependent [@kabus_2024].
+
+# Experiments
+
+The @tbl-SummaryXP presents the characteristics of each experiment used to calibrate the DEB model.
+
+| Reference | Experiment name | Soil in cosm | Food (g/ind/14d) | Density (#/cosm) | Temperature (°C) |
+|----|----|----|----|----|----|
+| @bart_2019 | XP1_1 | Closeaux soil (400 g, WHC 70%) | 3 | 1 | 15 |
+|  | X1_2 | Closeaux soil (400 g, WHC 70%) | 3 | 1 then 2 from day 112, 3 from day 210 and 6 from day 294 | 15 |
+|  | XP_3 | Closeaux soil (400 g, WHC 70%) | 0 but 3 at days 70, 84 and 140 | 1 | 15 |
+|  | XP4_1 | Closeaux soil (400 g, WHC 70%) | 1 | 1 | 15 |
+|  | XP4_2 | Closeaux soil (400 g, WHC 70%) | 1 | 1 then 2 from day 140, 3 from day 224 and 6 from day 322 | 15 |
+|  | XP5 | Closeaux soil (400 g, WHC 70%) | 1.5 | 1 | 15 |
+| @bart_2020 | Control individuals | Closeaux soil (400 g, WHC 70%) | 3 | 1 | 15 |
+| Present paper | D1 | Closeaux soil (200 g, WHC 70%) | 3 | 1 | 18 |
+|  | D2 | Closeaux soil (200 g, WHC 70%) | 1.5 | 2 | 18 |
+|  | D2b | Closeaux soil (200 g, WHC 70%) | 3 | 2 | 18 |
+|  | D5 | Closeaux soil (200 g, WHC 70%) | 0.6 | 5 | 18 |
+|  | D7 | Closeaux soil (200 g, WHC 70%) | 0.4 | 7 | 18 |
+
+: Summary of the experimental conditions and measured endpoints for each experiment used to calibrate the DEB model. The numbering for @bart_2019 follows that of the original publication. Control individuals from @bart_2020 include those from the XP2 experiment reported in @bart_2019. {#tbl-SummaryXP}
+
+# Models
+
+## Priors used
+
+Priors are the same between models :
+
+-   Distrib (Fm, TruncNormal, 0.1, 0.2, 0.0001, 0.8);
+-   Distrib (pAm, TruncNormal_cv, 100, 0.2, 40, 2000);
+-   Distrib (r_pAm_pM, TruncNormal_cv, 0.8, 0.1, 0.1, 2);
+-   Distrib (v, TruncNormal_cv, 0.18505, 0.1, 0.001, 2);
+-   Distrib (kap, Uniform, 0, 1);
+-   Distrib (kapJ, Uniform, 0, 1);
+-   Distrib (kapA, Uniform, 0, 1);
+-   Distrib (Ehp, TruncNormal_cv, 100, 0.2, 20, 300);
+-   Distrib (E_coc, TruncNormal_cv, 30, 0.2, 1, 300);
+-   Distrib (rOM_ClxHorse, LogUniform, 0.00001, 0.3);
+-   Distrib (K, Uniform, 0.0001, 1);
+-   Distrib (dv, TruncNormal_cv, 2, 0.5, 0, 10);
+-   Distrib (wE, LogUniform, 1, 1000);
+-   Distrib (de, LogUniform, 0.000000001, 0.1);
+-   Distrib (tau, TruncNormal_cv, 7, 0.5, 0, 50);
+
+Log-Likelihood calculations :
+
+-   Distrib (Sigma_W, TruncNormal, 5, 1, 0.01, 100);
+-   Likelihood (Weight, Normal, Prediction(Weight), Sigma_W);
+-   Likelihood (Reproduction, Poisson, Prediction(Reproduction));
+
+## Model A_FLYw
+
+![Posteriors.](../../fig/DEB_Models/A_FLYw_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/A_FLYw_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/A_FLYw_trajWR.png)
+
+## Model B_FLYe
+
+![Posteriors.](../../fig/DEB_Models/B_FLYe_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/B_FLYe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/B_FLYe_trajWR.png)
+
+## Model C_CWYe
+
+![Posteriors.](../../fig/DEB_Models/C_CWYe_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/C_CWYe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/C_CWYe_trajWR.png)
+
+## Model D_CWKe
+
+![Chains.](../../fig/DEB_Models/D_CWKe_chains.png)
+
+![Chain correlations.](../../fig/DEB_Models/D_CWKe_ipairs_plot.png)
+
+![Posteriors.](../../fig/DEB_Models/D_CWKe_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/D_CWKe_predobs.png)
+
+## Model E_CLYe
+
+![Posteriors.](../../fig/DEB_Models/E_CLYe_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/E_CLYe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/E_CLYe_trajWR.png)
+
+## Model F_CLKe
+
+![Chains.](../../fig/DEB_Models/F_CLKe_chains.png)
+
+![Chain correlations.](../../fig/DEB_Models/F_CLKe_ipairs_plot.png)
+
+![Posteriors.](../../fig/DEB_Models/F_CLKe_post.png)
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/F_CLKe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/F_CLKe_trajWR.png)
+
+::: landscape
+## Summary
+
+| Parameter | A_FLYw | B_FLYe | C_CWYe | D_CWKe | E_CLYe | F_CLKe |
+|----|----|----|----|----|----|----|
+| $\{\dot p_{Am}\}$ | 250.319 \newline \[240.761 ; 276.843\] | 298.245 \newline \[258.518 ; 316.234\] | 273.659 \newline \[252.217 ; 299.58\] | 160.852 \newline \[146.801 ; 187.569\] | 272.54 \newline \[249.868 ; 303.334\] | 158.477 \newline \[144.995 ; 185.4\] |
+| $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 1.087 \newline \[0.991 ; 1.133\] | 0.583 \newline \[0.475 ; 0.589\] | 0.246 \newline \[0.133 ; 0.287\] | 0.755 \newline \[0.617 ; 0.896\] | 0.219 \newline \[0.133 ; 0.299\] | 0.674 \newline \[0.578 ; 0.806\] |
+| $\{\dot{F}_m\}$ or $[\dot{F}_m]$ | 0.123 \newline \[0.12 ; 0.291\] | 0.216 \newline \[0.136 ; 0.294\] | 0.163 \newline \[0.096 ; 0.275\] | 0.001 \newline \[0.001 ; 0.004\] | 0.142 \newline \[0.131 ; 0.288\] | 0.005 \newline \[0.003 ; 0.009\] |
+| $r_{OM}$ | 0.015 \newline \[0.006 ; 0.016\] | 0.01 \newline \[0.003 ; 0.014\] | 0.005 \newline \[0.003 ; 0.009\] | 0.009 \newline \[0.006 ; 0.011\] | 0.008 \newline \[0.003 ; 0.011\] | 0.006 \newline \[0.005 ; 0.01\] |
+| $K$ | NA | NA | NA | 0.006 \newline \[0.008 ; 0.038\] | NA | 0.036 \newline \[0.021 ; 0.06\] |
+| $v$ | 0.185 \newline \[0.16 ; 0.229\] | 0.212 \newline \[0.17 ; 0.237\] | 0.204 \newline \[0.168 ; 0.235\] | 0.212 \newline \[0.152 ; 0.222\] | 0.207 \newline \[0.167 ; 0.235\] | 0.193 \newline \[0.154 ; 0.225\] |
+| $\kappa$ | 0.644 \newline \[0.524 ; 0.718\] | 0.951 \newline \[0.893 ; 0.951\] | NA | NA | NA | NA |
+| $\kappa_J$ | NA | NA | 0.941 \newline \[0.877 ; 0.952\] | 0.914 \newline \[0.878 ; 0.943\] | 0.929 \newline \[0.874 ; 0.957\] | 0.909 \newline \[0.865 ; 0.942\] |
+| $\kappa_A$ | NA | NA | 0.404 \newline \[0.231 ; 0.466\] | 0.494 \newline \[0.406 ; 0.572\] | 0.355 \newline \[0.234 ; 0.479\] | 0.478 \newline \[0.396 ; 0.535\] |
+| $\tau$ | NA | NA | 19.658 \newline \[15.137 ; 26.274\] | 12.937 \newline \[7.738 ; 21.387\] | 19.468 \newline \[15.016 ; 26.369\] | 17.791 \newline \[9.225 ; 22.21\] |
+| $E_h^p$ | 23.485 \newline \[21.11 ; 28.918\] | 20.498 \newline \[20.3 ; 41.713\] | 30.119 \newline \[24.395 ; 66.988\] | 97.525 \newline \[70.534 ; 134.682\] | 35.615 \newline \[22.366 ; 70.391\] | 110.327 \newline \[69.513 ; 139.361\] |
+| $E_{coc}$ | 1.001 \newline \[1.002 ; 1.23\] | 1.009 \newline \[1.029 ; 2.248\] | 13.182 \newline \[11.365 ; 18.649\] | 27.452 \newline \[23.468 ; 36.155\] | 14.243 \newline \[11.283 ; 19.406\] | 29.756 \newline \[22.911 ; 35.876\] |
+| $d_V$ | 2.113 \newline \[0.359 ; 3.982\] | 8.8 \newline \[6.35 ; 9.377\] | 7.473 \newline \[5.981 ; 8.647\] | 4.477 \newline \[3.384 ; 5.324\] | 7.499 \newline \[5.732 ; 8.535\] | 3.941 \newline \[3.428 ; 5.744\] |
+| $d_E$ | NA | 1.0e-9 \[1.2e-9 ; 5.7e-7\] | 1.3e-9 \[1.1e-9 ; 7.1e-7\] | 1.8e-9 \[1.4e-9 ; 3.1e-6\] | 1.7e-9 \[1.1e-9 ; 7.3e-7\] | 1.8e-9 \[1.8e-9 ; 1.1e-5\] |
+| $w_E$ | 443.852 \newline \[280.85 ; 716.83\] | NA | NA | NA | NA | NA |
+| $\sigma_W$ | 0.169 \newline \[0.144 ; 0.186\] | 0.206 \newline \[0.2 ; 0.272\] | 0.153 \newline \[0.136 ; 0.176\] | 0.123 \newline \[0.109 ; 0.14\] | 0.156 \newline \[0.136 ; 0.176\] | 0.11 \newline \[0.098 ; 0.127\] |
+| Log-likelihood | -68.94 | -119.24 | -64.24 | -28.05 | -66.93 | -9.61 |
+| BIC | 194.12 | 294.73 | 195.96 | 129.20 | 201.35 | 92.33 |
+
+: Estimate summary of each models and their respective log-likelihood and BIC.
+:::

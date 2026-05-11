@@ -15,8 +15,9 @@ $$
 $$
 
 With :
-- $E$ : Energy in the reserve ($J$)
-- $\nu_t$ : Energy conductance at temperature $T_{exp}$  ($cm.d^{-1}$)
+
+-   $E$ : Energy in the reserve ($J$)
+-   $\nu_t$ : Energy conductance at temperature $T_{exp}$ ($cm.d^{-1}$)
 
 **Growth**
 
@@ -31,17 +32,19 @@ L_m &= \frac{\nu_t}{K_m\ g}
 $$
 
 With :
-- $L$ : Structural volumetric length ($cm$)
-- $[\dot p_{M,t}]$ : Volume-specific maintenance rate ($J.d^{-1}.cm^{-3}$)
-- $[E_G]$ : Volume-specific cost for structure ($J.cm^{-3}$)
+
+-   $L$ : Structural volumetric length ($cm$)
+-   $[\dot p_{M,t}]$ : Volume-specific maintenance rate ($J.d^{-1}.cm^{-3}$)
+-   $[E_G]$ : Volume-specific cost for structure ($J.cm^{-3}$)
 
 $$
 W_W = L^3 \left(1+\frac{E}{E_m}w\right)
 $$
 
 With :
-- $W_W$ : Wet weight of the earthworm ($g$)
-- $w$ : Contribution of reserve to body weight ($g.cm^{-3}$)
+
+-   $W_W$ : Wet weight of the earthworm ($g$)
+-   $w$ : Contribution of reserve to body weight ($g.cm^{-3}$)
 
 **Maturity and reproduction**
 
@@ -49,16 +52,18 @@ $$
 \dot p_C = \frac{g\ E}{g + \frac{E}{E_m}} (\nu_t\ L^2 + K_m\ L^3)
 $$
 
-With : 
-- $\dot p_C$ :  Mobilized energy flux from reserve ($J.d^{-1}$)
+With :
+
+-   $\dot p_C$ : Mobilized energy flux from reserve ($J.d^{-1}$)
 
 $$
 \dot p_R = (1-\kappa_{\text{real}})\ \dot p_C - \dot k_{J,t}\ E_h
 $$
 
 With :
-- $\dot p_R$ : Allocated energy flux to reproduction ($J.d^{-1}$)
-- $\dot k_{J,t}$ : Maturity maintenance rate ($d^{-1}$)
+
+-   $\dot p_R$ : Allocated energy flux to reproduction ($J.d^{-1}$)
+-   $\dot k_{J,t}$ : Maturity maintenance rate ($d^{-1}$)
 
 $$
 \frac{\mathrm{d}E_H}{\mathrm{d}t}= 
@@ -69,8 +74,9 @@ E_H > E_H^p,\ & 0
 $$
 
 With :
-- $E_h$ : Maturity ($J$)
-- $E_h^p$ : Maturity at puberty ($J$)
+
+-   $E_h$ : Maturity ($J$)
+-   $E_h^p$ : Maturity at puberty ($J$)
 
 $$
 \frac{\mathrm{d}R}{\mathrm{d}t}= 
@@ -81,13 +87,15 @@ E_H > E_H^p,\ & \kappa_R\ \frac{\dot{p}_R}{E_{0}}
 $$
 
 With :
-- $R$ : Cumulated reproduction (#)
-- $\kappa_R$ : Reproduction efficiency (-)
-- $E_0$ : Energy cost for an egg ($J$)
+
+-   $R$ : Cumulated reproduction (#)
+-   $\kappa_R$ : Reproduction efficiency (-)
+-   $E_0$ : Energy cost for an egg ($J$)
 
 **Effect of temperature on rates**
 
-$$
+\$\$
+
 \begin{aligned}
 s_A &= \exp(\frac{T_A}{T_{ref}-\frac{T_A}{T_{exp}+273.15}})\\
 s_{rH} &= \frac{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{ref}+ 273.15})}{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{exp}+273.15})}\\
@@ -98,7 +106,8 @@ T_c &= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 < T_{ref})\\
 \nu_t &= \nu \ T_c \\
 \dot k_{J,t} &= \dot k_{J} \ T_c
 \end{aligned}
-$$
+
+\$\$
 
 ## Energy assimilation in the case of earthworms
 
@@ -106,11 +115,12 @@ $$
 \dot Q_{f,max} = \frac{\{\dot p_{Am}\}_t\ L^2}{\kappa_X}
 $$
 
-With : 
-- $\dot Q_{f,max}$ :  Maximal rate of energy ingested by the earthworm ($J.d^{-1}$)
-- $\{\dot p_{Am}\}_t$ : Surface-area-specific maximum assimilation rate at temperature $T_{exp}$ ($J.d^{-1}.cm^{-2}$)
-- $L$ : Structural volumetric length ($cm$)
-- $\kappa_X$ : Fraction of food energy fixed in reserve (digestion efficiency) (-)
+With :
+
+-   $\dot Q_{f,max}$ : Maximal rate of energy ingested by the earthworm ($J.d^{-1}$)
+-   $\{\dot p_{Am}\}_t$ : Surface-area-specific maximum assimilation rate at temperature $T_{exp}$ ($J.d^{-1}.cm^{-2}$)
+-   $L$ : Structural volumetric length ($cm$)
+-   $\kappa_X$ : Fraction of food energy fixed in reserve (digestion efficiency) (-)
 
 $$
 \begin{aligned}
@@ -120,16 +130,18 @@ $$
 \end{aligned}
 $$
 
-- $\dot Q_{f,soil}$ :  Rate of energy ingested from the organic matter in the soil by the earthworm ($J.d^{-1}$)
-- $\dot Q_{f,horse}$ :  Rate of energy ingested from the organic matter in the horse dung by the earthworm ($J.d^{-1}$)
-- $\dot Q_{f,tot}$ :  Rate of energy ingested from organic matter by the earthworm ($J.d^{-1}$)
-- $[\dot{F}_m]$ : Maximum volume-specific searching rate ($g.d^{-1}.cm^{-3}$)
-- $W_w$ : Wet weight of the earthworm ($g$)
-- $\mu_{OM}$ : Horse dung organic matter energy content ($J.g^{-1}$)
-- $r_{OM}^{clx, horse}$ : Ratio between soil organic matter energy content and horse dung organic matter energy content (-)
-- $OM_{soil}$ : Organic matter from soil in a cosm (g)
-- $OM_{horse}$ : Organic matter from horse dung in a cosm (g)
-- $Nb_{ind}$ : Number of individual in the cosm (#)
+With :
+
+-   $\dot Q_{f,soil}$ : Rate of energy ingested from the organic matter in the soil by the earthworm ($J.d^{-1}$)
+-   $\dot Q_{f,horse}$ : Rate of energy ingested from the organic matter in the horse dung by the earthworm ($J.d^{-1}$)
+-   $\dot Q_{f,tot}$ : Rate of energy ingested from organic matter by the earthworm ($J.d^{-1}$)
+-   $[\dot{F}_m]$ : Maximum volume-specific searching rate ($g.d^{-1}.cm^{-3}$)
+-   $W_w$ : Wet weight of the earthworm ($g$)
+-   $\mu_{OM}$ : Horse dung organic matter energy content ($J.g^{-1}$)
+-   $r_{OM}^{clx, horse}$ : Ratio between soil organic matter energy content and horse dung organic matter energy content (-)
+-   $OM_{soil}$ : Organic matter from soil in a cosm (g)
+-   $OM_{horse}$ : Organic matter from horse dung in a cosm (g)
+-   $Nb_{ind}$ : Number of individual in the cosm (#)
 
 $$
 \begin{aligned}
@@ -139,37 +151,36 @@ $$
 $$
 
 With :
-- $\dot{OM}_{out}^{soil}$ : Rate of consumption of soil organic matter by all earthworms of the cosm ($g.d^{-1}$)
-- $\dot{OM}_{out}^{horse}$ : Rate of consumption of horse dung organic matter by all earthworms of the cosm ($g.d^{-1}$)
+
+-   $\dot{OM}_{out}^{soil}$ : Rate of consumption of soil organic matter by all earthworms of the cosm ($g.d^{-1}$)
+-   $\dot{OM}_{out}^{horse}$ : Rate of consumption of horse dung organic matter by all earthworms of the cosm ($g.d^{-1}$)
 
 $$
 f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
 $$
 
-With : 
-- $f$ : Functional response to organic matter (-)
+With :
+
+-   $f$ : Functional response to organic matter (-)
 
 ## Different model versions tested
 
-### Kappa
+### Relationship of wet weight to structural length
 
-The standard DEB model supposes a fixed $\kappa$ throughout the organism life (model F). But because of the observations of a switch in growth when earthworms are adult and able to reproduce with another individual, we tested a switch in energy allocation when earthworms are adults and not alone in a cosm, and therefore able to reproduce (model S). 
+In the standard DEB model, reserve is proportional to structure under constant food condition. As it is not the case in the different experiment of this study (especially bart2019_XP3), we considered another equation where reserve is independent to structure.
 
 $$
 \begin{aligned}
-&{\text{Model F: }}\ \kappa_{\text{real}} = \kappa \\
-&{\text{Model S: }}\ \kappa_{real} = 
-\begin{cases}
-E_h < E_h^p, & \kappa  & (\text{Juveniles})\\
-E_h \geq E_h^p\ \&\ Nb_{ind} = 1, & \kappa & (\text{Adult alone})\\
-E_h \geq E_h^p\ \&\ Nb_{ind} > 1, & 1-\kappa & (\text{Grouped adults})
-\end{cases}
+\text{Model w:}\\
+&W_w = L^3\left(d_V + \frac{E}{E_m} w_E\right) \ \text{(DEB-std)}\\ \\
+\text{Model e:}\\
+&W_w = L^3\ d_V + E\ d_E
 \end{aligned}
 $$
 
 ### Soil ingestion
 
-Ingestion is often considered to be proportional to the structural surface of the individual (L$^2$, model L) but we tested the possibility of it being proportional to structural volume and therefore to weight (L$^3$, model W). 
+Ingestion is often considered to be proportional to the structural surface of the individual (L$^2$, model L) but we tested the possibility of it being proportional to structural volume and therefore to weight (L$^3$, model W).
 
 $$
 \begin{aligned}
@@ -190,14 +201,19 @@ $$
 f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
 $$
 
-**Hill function (Model I)**
+**Normalized hyperbolic function reaching 1 at maximum ingestion (Model K)**
 
 $$
-f=\frac{X^{\text{Slope}}}{0.5^{\text{Slope}}+X^{\text{Slope}}}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} 
+f=\frac{X}{K(1-X)+X}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} 
 $$
 
 ```{r}
-Slope <- 2
+#| fig-cap: Aspect of the two tested functional response functions.
+#| label: fig-functionalresponse
+#| fig-height: 4
+#| fig-width: 6
+
+K <- 0.006
 x_hy <- seq(0,1,0.01)
 x_hi <- seq(0,1,0.01)
 
@@ -207,7 +223,7 @@ f_hyperbolic <- function(x){
 }
 
 f_hill <- function(x, Slope){
-  res <- x^(Slope)/(0.5^(Slope) + x^(Slope))
+  res <- x/(K*(1-x) + x)
   return(res)
 }
 
@@ -217,7 +233,7 @@ y_hi <- f_hill(x_hi, Slope)
 df <- data.frame(
   x = c(x_hy, x_hi),
   y = c(y_hy, y_hi),
-  type = c(rep("Hyperbolic", length(x_hy)), rep("Hill", length(x_hi)))
+  Type = c(rep("Hyperbolic", length(x_hy)), rep("Normalized hyperbolic", length(x_hi)))
 )
 
 p <- ggplot(
@@ -225,7 +241,7 @@ p <- ggplot(
   aes(
     x=x,
     y=y,
-    color = type
+    color = Type
   )
 )+
   geom_line()+
@@ -236,4 +252,25 @@ p
 
 ```
 
+### Change in kappa
 
+The standard DEB model supposes a fixed $\kappa$ throughout the organism life (model F). But because of the observations of a switch in growth when earthworms are adult and able to reproduce with another individual, we tested a switch in energy allocation when earthworms are adults and not alone in a cosm, and therefore able to reproduce (model S).
+
+$$
+\begin{aligned}
+{\text{Model F: }}\\ &\kappa_{\text{real}} = \kappa \\ \\
+{\text{Model C: }}\\ 
+& x = 
+\begin{cases}
+E_h < E_h^p, & 0 \\
+E_h \geq E_h^p, &\min \left(1,\frac{t-t_p}{\tau}\right)
+\end{cases}\\
+&\kappa_{A,real} = (1-x)\ \kappa_J + x\ \kappa_A \\
+&\kappa_{real} = 
+\begin{cases}
+E_h < E_h^p, & \kappa_J  & (\text{Juveniles})\\
+E_h \geq E_h^p\ \&\ Nb_{ind} = 1, & \kappa_J & (\text{Adult alone})\\
+E_h \geq E_h^p\ \&\ Nb_{ind} > 1, & \kappa_{A,real} & (\text{Grouped adults})
+\end{cases}
+\end{aligned}
+$$

@@ -500,9 +500,4 @@ kable(df_IMD_tox)
 
 ### Environmental concentrations
 
-```{r, warning=F, message=F}
-df_rescape <- read.csv(here::here("data/Data_Rescape_long.csv")) |> 
-  subset(pesticide %in% c("EPX", "IMD"))
-
-df_litt_soils <- read_excel(here::here("data/Data_litt_EPX_IMD.xlsx"), sheet=2)
-```
+Recent monitoring data from French agricultural soils reveal substantial variability in pesticide residue levels. @froger_2023 reported imidacloprid concentrations with median values of 2.9 ng/g (0.0029 mg/kg), reaching maximum concentrations of 13.8 ng/g (0.0138 mg/kg) and third quartile values of 5.8 ng/g (0.0058 mg/kg). Epoxiconazole concentrations were higher, with median concentrations of 5.8 ng/g (0.0058 mg/kg), maximum values of 23.6 ng/g (0.0236 mg/kg), and third quartile concentrations of 10.9 ng/g (0.0109 mg/kg). More comprehensive surveys focusing on conventional cereal farming systems show elevated contamination levels (Pelosi et al., 2021). Imidacloprid median concentrations reached 15.1 ng/g (0.0151 mg/kg) with maximum values of 160 ng/g (0.16 mg/kg), while epoxiconazole showed median concentrations of 34.6 ng/g (0.0346 mg/kg) with maximum values of 283 ng/g (0.283 mg/kg). These concentrations can be contextualized against recommended application doses of 168 ng/g for imidacloprid and 153 ng/g for epoxiconazole (Pelosi et al., 2021). Environmental residue levels show that soil contamination can reach substantial fractions of recommended doses, with maximum detected concentrations representing 95% (160/168) of the recommended dose for imidacloprid and 185% (283/153) for epoxiconazole. Median concentrations in conventional cereal farming represent 9% and 23% of recommended doses for imidacloprid and epoxiconazole, respectively.

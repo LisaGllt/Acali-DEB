@@ -2,16 +2,30 @@ project:
   type: book
 
 book:
-  title: "Linking physiological processes to life-history traits : a bioenergetic approach based on DEB theory"
+  title: "**Linking physiological processes to life-history traits** : a bioenergetic approach based on DEB theory"
   subtitle: "Git repository"
   author:
     - name: "Lisa Gollot"
-      orcid: ""
+      orcid: "https://orcid.org/0009-0004-5074-4275"
       affiliations:
         - name: "Université Paris-Saclay, INRAE, AgroParisTech, UMR 1402 ECOSYS"
           department: "Sol&Tox"
         - name: "Ineris"
-          department: "TEAM"
+          department: "NAHE, New approaches and models for human and environment health, INERIS, Verneuil en Halatte 65550, France"
+    - name: "Juliette Faburé"
+      orcid: "https://orcid.org/0000-0002-8055-3224"
+      affiliations:
+        - name: "Université Paris-Saclay, INRAE, AgroParisTech, UMR EcoSys, 91120 Palaiseau, France"
+          department: "Sol&Tox"
+    - name: "Raphaël Royauté"
+      orcid: "https://orcid.org/0000-0002-5837-633X"
+      affiliations:
+        - name: "Université Paris-Saclay, INRAE, AgroParisTech, UMR EcoSys, 91120 Palaiseau, France"
+          department: "Sol&Tox"
+    - name: "Rémy Beaudouin"
+      orcid: "https://orcid.org/0000-0002-2855-1571"
+      affiliations:
+        - name: "NAHE, New approaches and models for human and environment health, INERIS, Verneuil en Halatte 65550, France ; Institut national de l'environnement industriel et des risques, Université de Reims Champagne-Ardenne, Université Le Havre Normandie, Normandie Univ, UMR-I 02 SEBIO, 60550 Verneuil-en-Halatte, France"
   date: "6/25/2024"
   chapters:
     - index.qmd
@@ -20,7 +34,8 @@ book:
     - quarto/C_Data_synthesis.qmd
     - quarto/D_Model_formulations.qmd
     - quarto/E_Model_comparison.qmd
-    - quarto/F_Conclusion.qmd
+    - quarto/F_IsolatedAdults.qmd
+    - quarto/G_Conclusion.qmd
     #- quarto/references.qmd
   navbar:
     right:

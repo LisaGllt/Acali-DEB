@@ -2,8 +2,7 @@
 
 ## Repository organisation
 
-The git repository linked to this website is available here : https://github.com/LisaGllt/Acali-DEB)
-and is saved via SoftwareHeritage on this https://archive.softwareheritage.org/browse/origin/https://github.com/LisaGllt/Acali-DEB.
+The git repository linked to this website is available here : https://github.com/LisaGllt/Acali-DEB) and is saved via SoftwareHeritage on this https://archive.softwareheritage.org/browse/origin/https://github.com/LisaGllt/Acali-DEB.
 
 Folders containing files concerning directly the study :
 
@@ -25,16 +24,16 @@ Folders concerning the setup of the git repository and the web pages :
 -   `_freeze` folder : Cache the results of code blocks (code cells) to avoid recalculating them on each execution
 -   `.git`, `.gitignore` & `.github` : Git related folders
 -   `.quarto` : Store configuration files, metadata, and intermediate files related to a Quarto project
--   `.Rproj.user` & `ew-growth-vi.Rproj` : R project related files
+-   `.Rproj.user` & `Acali-DEB.Rproj` : R project related files
 -   `html_css.scss` : CSS file to modify the look of the html pages
 -   `lightnord.theme` : Theme to use for code blocks displayed in the html pages
 
 ## How to reproduce everything
 
-If you wish to reproduce the results of this study, all you need are available in the `quarto` folder, the `mod` folder and the `bootstrap` folder.
+If you wish to reproduce the results of this study, all you need are available in the `quarto` folder, and the `mod` folder.
 
 Instructions :
 
 -   Whether or not you want to run the models again, please delete the folders from the `quarto` folder that end by `_cache` or `_files` and delete all the figures present in the `fig` folder.
-    -   If you wish to run the models again, please follow the steps described in the quarto files. 
+    -   If you wish to run the models again, please follow the steps described in the quarto files.
 -   Then, you can render again all .qmd files from the `quarto` folder in the alphabetical order of their name. Some code line will have to be de-commented for some figures to be rendered again.

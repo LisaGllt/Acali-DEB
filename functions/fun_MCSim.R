@@ -916,7 +916,7 @@ Integrate (Lsodes,  %g, %g, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
   )
 }
 
-f_In_tot <- function(File_path, l_Experiments, Adults_alone = FALSE, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
+f_In_tot <- function(file_path, l_Experiments, Adults_alone = FALSE, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
   
   text_Level_global <- 
     'Level{ # Global
@@ -958,7 +958,7 @@ End.'
   }
 }
 
-f_In_tot_sim <- function(File_path, l_Experiments, Adults_alone = FALSE, OM_diff, text_priors, text_likelihood, NbIter, seeds) {
+f_In_tot_sim <- function(file_path, l_Experiments, Adults_alone = FALSE, OM_diff, text_priors, text_likelihood, NbIter, seeds) {
   
   text_Level_global <- 
     'Level{ # Global
@@ -1432,9 +1432,9 @@ f_read_predobs <- function(file_path, Nb_experiment, df_data_obs){
       mutate(ID_experiment=ID_i)
     
     df_pred <- rbind(df_pred, df_pred_i)
-    
-    return(df_pred)
   }
+  
+  return(df_pred)
 }
 
 f_In_Setpoint_full <- function(file_path, l_Experiments, Adults_alone, OM_diff, l_param_name, step_sim, Endpoints_print){
@@ -2634,6 +2634,7 @@ f_AS_Sobol_design <- function(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, N
 }
 
 f_AS_Sobol_index <- function(df_AS_sim, Sobol_info){
+  
   df_AS_sim_mean <- df_AS_sim |> 
     summarise(
       across(

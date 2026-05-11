@@ -10,18 +10,18 @@ f_load_libraries_colors()
 
 A significant part of the data are from the PhD of Sylvain Bart [@bart_2018].
 
-The first part of the data are from its article on *Aporrectodea caliginosa* life-cycle [@bart_2019d] where he studied the impact of food and density on growth and reproduction. The second part comes from the study of the impact of the Swing Gold pesticide on growth and reproduction [@bart_2020a]. The control data from this study can be used to inform a DEB model.
+The first part of the data are from its article on *Aporrectodea caliginosa* life-cycle [@bart_2019] where he studied the impact of food and density on growth and reproduction. The second part comes from the study of the impact of the Swing Gold pesticide on growth and reproduction [@bart_2020]. The control data from this study can be used to inform a DEB model.
 
 ### Earthworms, soil and food used in all Sylvain Bart experiments
 
-Earthworm culture [@bart_2019d] :
+Earthworm culture [@bart_2019] :
 
 -   Origin of the first earthworms : Adults of *Aporrectodea caliginosa s.s.* from an agriculture field at INRA (Estrées-mons, 49°52′ N 3°01′E) (refered later as the Mons culture)
 -   Earthworms are cultured in a climate room at 15 ± 1 °C
 -   Soil : a Luvisol (FAO soil classification), sampled from the top 0–20 cm in a permanent meadow in Versailles (48°48′ N, 2°5′ E) (refered later as Closeaux soil).
 -   Food : horse dung which was frozen and defrosted twice and then milled (\< 1 mm) as presented in Lowe and Butt (2005).
 
-### Experiments from @bart_2019d
+### Experiments from @bart_2019
 
 -   Soil : Renewed every 28 days and maintained at 70% of the water holding capacity (WHC) (corresponding to 28% of water content).
 -   Food : The horse dung at 70% of the water holding capacity and mixed with the soil.
@@ -35,8 +35,8 @@ Monitoring of the growth of 10 earthworms under *ad libitum* condition : 3 g/ind
 
 This experiment can be separated in 2 experiments :
 
--   XP1_1 (@fig-XP11) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
--   XP1_2 (@fig-XP12) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
+-   XP1_1 (@fig-XP1_1) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
+-   XP1_2 (@fig-XP1_2) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019).
 
 ```{r dataXP1}
 df_XP1 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP1")|> 
@@ -48,8 +48,8 @@ df_XP1_1 <- subset(df_XP1, Experiment == "Bart2019_XP1_1")
 df_XP1_2 <- subset(df_XP1, Experiment == "Bart2019_XP1_2")
 ```
 
-```{r}
-#| fig-cap: Experiment 1_1 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 1_1 from @bart_2019.
 #| label: fig-XP1_1
 #| fig-height: 8
 #| fig-width: 6
@@ -123,8 +123,8 @@ p
 
 ```
 
-```{r}
-#| fig-cap: Experiment 1_2 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 1_2 from @bart_2019.
 #| label: fig-XP1_2
 #| fig-height: 8
 #| fig-width: 6
@@ -198,7 +198,7 @@ p
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 
 df_XP1_1_mean <- df_XP1_1 |> 
   group_by(Time) |> 
@@ -222,8 +222,8 @@ df_XP1_2_mean <- df_XP1_2_mean |>
   mutate(ID_experiment = "Bart2019_XP1_2")
 ```
 
-```{r}
-#| fig-cap: Experiment 1_1 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 1_1 from @bart_2019.
 #| label: fig-XP1_1_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -315,8 +315,8 @@ p
 
 ```
 
-```{r}
-#| fig-cap: Experiment 1_2 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 1_2 from @bart_2019.
 #| label: fig-XP1_2_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -417,15 +417,15 @@ p
 
 Monitoring of the growth of 7 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
 
-```{r dataXP2}
+```{r dataXP2, warning=F, message=F}
 df_XP2 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP2")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
 ```
 
-```{r}
-#| fig-cap: Experiment 2 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 2 from @bart_2019.
 #| label: fig-XP2
 #| fig-height: 4
 #| fig-width: 6
@@ -465,7 +465,7 @@ p_XP2 <- ggplot(
 p_XP2
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_XP2_mean <- df_XP2 |> 
   group_by(Time) |> 
   mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
@@ -477,8 +477,8 @@ df_XP2_mean <- df_XP2_mean |>
   mutate(ID_experiment = "Bart2019_XP2")
 ```
 
-```{r}
-#| fig-cap: Experiment 2 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 2 from @bart_2019.
 #| label: fig-XP2_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -579,7 +579,7 @@ p
 
 Monitoring of the growth of 5 earthworms under changing food condition : no food and 3 g/ind/14 days of horse dung milled **at \< 1mm**. Earthworms are individually placed in a 1 L vessel.
 
-```{r dataXP3}
+```{r dataXP3, warning=F, message=F}
 df_XP3 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP3")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
@@ -587,7 +587,7 @@ df_XP3 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Ba
 ```
 
 ```{r}
-#| fig-cap: Experiment 3 from @bart_2019d.
+#| fig-cap: Experiment 3 from @bart_2019.
 #| label: fig-XP3
 #| fig-height: 4
 #| fig-width: 6
@@ -633,7 +633,7 @@ p_XP3
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_XP3_mean <- df_XP3 |> 
   group_by(Time) |> 
   mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
@@ -645,7 +645,7 @@ df_XP3_mean <- df_XP3_mean |>
   mutate(ID_experiment = "Bart2019_XP3")
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Experiment 3 from @bart_3019d.
 #| label: fig-XP3_mean
 #| fig-height: 8
@@ -749,10 +749,10 @@ Monitoring of the growth of 10 earthworms under restrained food condition : 1 g/
 
 This experiment can also be separated in 2 experiments :
 
--   XP4_1 (@fig-XP41) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
--   XP4_2 (@fig-XP42) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019d).
+-   XP4_1 (@fig-XP4_1) : The growth of earthworms individually placed in 1L vessels. These earthworms could not reproduce when adult.
+-   XP4_2 (@fig-XP4_2) : The growth of adult earthworms pooled first by 2 for 84 days (3 vessels with 2 individuals, for each food condition), then by 3 for 84 days (2 vessels with 3 individuals, for each food condition), and finally by 6 (all in- dividuals in one vessel, for each food condition) for 84 days. (corresponding to the first part of experiment 6 in @bart_2019).
 
-```{r dataXP4}
+```{r dataXP4, warning=F, message=F}
 df_XP4 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP4")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
@@ -761,8 +761,8 @@ df_XP4_1 <- subset(df_XP4, Experiment == "Bart2019_XP4_1")
 df_XP4_2 <- subset(df_XP4, Experiment == "Bart2019_XP4_2")
 ```
 
-```{r}
-#| fig-cap: Experiment 4_1 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 4_1 from @bart_2019.
 #| label: fig-XP4_1
 #| fig-height: 8
 #| fig-width: 6
@@ -836,8 +836,8 @@ p
 
 ```
 
-```{r}
-#| fig-cap: Experiment 4_2 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 4_2 from @bart_2019.
 #| label: fig-XP4_2
 #| fig-height: 8
 #| fig-width: 6
@@ -911,7 +911,7 @@ p
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 
 df_XP4_1_mean <- df_XP4_1 |> 
   group_by(Time) |> 
@@ -935,7 +935,7 @@ df_XP4_2_mean <- df_XP4_2_mean |>
   mutate(ID_experiment = "Bart2019_XP4_2")
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_1 from @bart_4_1019d.
 #| label: fig-XP4_1_mean
 #| fig-height: 8
@@ -1033,7 +1033,7 @@ p
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_2 from @bart_4_2019d.
 #| label: fig-XP4_2_mean
 #| fig-height: 8
@@ -1135,15 +1135,15 @@ p
 
 Monitoring of the growth of 5 earthworms under restained food condition : 1.5 g/ind/14 days of horse dung milled at \< 1mm. Earthworms are individually placed in a 1 L vessel.
 
-```{r dataXP5}
+```{r dataXP5, warning=F, message=F}
 df_XP5 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2019_XP5")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
 ```
 
-```{r}
-#| fig-cap: Experiment 5 from @bart_2019d.
+```{r, warning=F, message=F}
+#| fig-cap: Experiment 5 from @bart_2019.
 #| label: fig-XP5
 #| fig-height: 4
 #| fig-width: 6
@@ -1183,7 +1183,7 @@ p_XP5 <- ggplot(
 p_XP5
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_XP5_mean <- df_XP5 |> 
   group_by(Time) |> 
   mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
@@ -1195,7 +1195,7 @@ df_XP5_mean <- df_XP5_mean |>
   mutate(ID_experiment = "Bart2019_XP5")
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Experiment 5 from @bart_5019d.
 #| label: fig-XP5_mean
 #| fig-height: 8
@@ -1293,7 +1293,7 @@ p
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 p <- p_XP1_1_w +
   p_XP1_2_w + 
   p_XP2_w + 
@@ -1315,15 +1315,22 @@ p <- p_XP1_1_w +
   plot_layout(ncol=4, heights=c(2,1,2, 1))
 ```
 
-```{r}
-#| fig-cap: Experiments from @bart_2019d.
+#### Summary of @bart_2019 experiments
+
+```{r, warning=F, message=F}
+#| fig-cap: Experiments from @bart_2019.
 #| label: fig-XPmeanfull
 #| fig-height: 8
 #| fig-width: 6
 
 xmax <- 370
 
-pal_XP <- c(Nord_polar[1], Nord_frost[4], Nord_frost[2], Nord_aurora[4], Nord_aurora[3])
+pal_XP <- c(
+  Nord_aurora[1], Nord_aurora[1], 
+  Nord_polar[1],
+  Nord_aurora[2], Nord_aurora[2], 
+  Nord_aurora[3]
+  )
 
 p_XP_w <- ggplot()+
   # XP1 1
@@ -1775,21 +1782,21 @@ p
 
 ```
 
-### Experiment from @bart_2020a
+### Experiment from @bart_2020
 
 The experimental conditions of all the control individual in this study are equal as the experiment 2 and actually include data from experiment 2 :
 
 Monitoring of the growth of 91 earthworms under *ad libitum* condition : 3 g/ind/14 days of horse dung milled *at \< 0.5mm*. Earthworms are individually placed in a 1 L vessel.
 
-```{r dataSG}
+```{r dataSG, warning=F, message=F}
 df_Bart2020 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Bart2020_Ctrl")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
 ```
 
-```{r}
-#| fig-cap: Individuals in control conditions from @bart_2020a.
+```{r, warning=F, message=F}
+#| fig-cap: Individuals in control conditions from @bart_2020.
 #| label: fig-SG
 #| fig-height: 4
 #| fig-width: 6
@@ -1822,7 +1829,7 @@ p_SG <- ggplot(
 p_SG
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_Bart2020_mean <- df_Bart2020 |> 
   group_by(Time) |> 
   mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
@@ -1834,21 +1841,20 @@ df_Bart2020_mean <- df_Bart2020_mean |>
   mutate(ID_experiment = "Bart2020")
 ```
 
-
 ## Data obtained during Lisa Gollot PhD
 
 ### Experiment 1 - Growth in LUFA soil
 
 Growth of 30 earthworms in LUFA 2.4 soil at 70% of WHC fed with 3 g/ind/14 days (milled at \< 0.5 mm). Earthworms were individually placed in small High Density PolyEthylene vessels (5 cm x 5∅ cm) with 50 g of soil (dry weight).
 
-```{r lufa}
+```{r lufa, warning=F, message=F}
 df_Gollot2026_lufa <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Gollot2026_lufa")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement,                          
   )
 ```
 
-```{r, warning=F}
+```{r, warning=F, warning=F, message=F}
 #| fig-cap: growth experiment in LUFA soil.
 #| label: fig-lufa
 #| fig-height: 4
@@ -1885,7 +1891,7 @@ p_lufa <- ggplot(
 p_lufa
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_Gollot2026_lufa_mean <- df_Gollot2026_lufa |> 
   group_by(Time) |> 
   mutate(Weight = mean(Weight, na.rm = TRUE)) |> 
@@ -1901,7 +1907,7 @@ df_Gollot2026_lufa_mean <- df_Gollot2026_lufa_mean |>
 
 Growth of earthworms in Closeaux soil at 70% of WHC fed with 3 g/14 days (milled at \< 0.5 mm) regardless of the number of earthworms in the cosm, but for the condition D2b where they were fed 6 g/14 days. Earthworms were placed in small vessels with 200 g of soil (dry weight).
 
-```{r dens}
+```{r dens, warning=F, message=F}
 df_Gollot2026_dens <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Gollot2026_dens")|> 
   mutate(
     Weight=Weight_tot/Nb_ind_measurement, 
@@ -1911,7 +1917,7 @@ df_Gollot2026_dens <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 df_Gollot2026_dens_mean <- df_Gollot2026_dens |> 
   group_by(ID_experiment, Time) |> 
   mutate(
@@ -1933,7 +1939,7 @@ df_Gollot2026_dens_mean_long <- df_Gollot2026_dens_mean |>
 
 ```
 
-```{r, warning=F}
+```{r, warning=F, message=F}
 #| fig-cap: growth experiment at different density.
 #| label: fig-dens
 #| fig-height: 8
@@ -2044,7 +2050,7 @@ p <- p_dens_w + p_dens_r + plot_layout(ncol=2, guides="collect")
 p
 ```
 
-```{r, include = F}
+```{r, include = F, warning=F, message=F}
 
 path_fig <- here::here("fig/")
 ggsave(
@@ -2055,9 +2061,7 @@ ggsave(
 )
 ```
 
-
-
-```{r}
+```{r, warning=F, message=F}
 df_DEB_mean <- rbind(
   df_XP1_1_mean,
   df_XP1_2_mean,
@@ -2075,15 +2079,6 @@ df_DEB_mean <- rbind(
 write.csv(df_DEB_mean,file = here::here("data/Data_DEB_mean.csv"))
 ```
 
-## Usefull data from litterature 
+## Usefull data from litterature
 
-An estimate of cocoon energy content was required to parameterize the reproduction in the DEB model for *A. caliginosa*. Direct measurements of cocoon energy density are not available for this species. We therefore relied on published calorimetric data for *Lumbricidae* reported by @cummins_1971, who measured the energy density of whole individuals (“entire animals of various stages”). Mean energy densities were 5,690 cal g⁻¹ dry weight (n = 3), corresponding to 19,098 J g-1 dry weight, and 782 cal g-1 wet weight (n = 1), corresponding to 3,268 J g-1 wet weight. Although these measurements were not performed on cocoons specifically, they provide an order-of-magnitude estimate for annelid biomass energy density. Assuming a mean cocoon fresh mass of 10 mg, this corresponds to an energy content of approximately 33 J per cocoon (based on wet weight energy density). Comparable energy densities have been reported for soil invertebrates in other calorimetric studies (e.g. @driver_1974, @eggleton_2004), supporting the use of this approximation for the model prior on the energy of an egg. 
-
-
-
-
-
-
-
-
-
+An estimate of cocoon energy content was required to parameterize the reproduction in the DEB model for *A. caliginosa*. Direct measurements of cocoon energy density are not available for this species. We therefore relied on published calorimetric data for *Lumbricidae* reported by @cummins_1971, who measured the energy density of whole individuals (“entire animals of various stages”). Mean energy densities were 5,690 cal g⁻¹ dry weight (n = 3), corresponding to 19,098 J g-1 dry weight, and 782 cal g-1 wet weight (n = 1), corresponding to 3,268 J g-1 wet weight. Although these measurements were not performed on cocoons specifically, they provide an order-of-magnitude estimate for annelid biomass energy density. Assuming a mean cocoon fresh mass of 10 mg, this corresponds to an energy content of approximately 33 J per cocoon (based on wet weight energy density). Comparable energy densities have been reported for soil invertebrates in other calorimetric studies (e.g. @driver_1974, @eggleton_2004), supporting the use of this approximation for the model prior on the energy of an egg.

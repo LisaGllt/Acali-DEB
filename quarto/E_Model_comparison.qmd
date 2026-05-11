@@ -16,12 +16,12 @@ lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 path_fig <- here::here("fig/DEB_Models")
 
-path_A_FLYw <- here::here("mod/FINAL/A_DEB_FLYw")
-path_B_FLYe <- here::here("mod/FINAL/B_DEB_FLYe")
-path_C_AWYe <- here::here("mod/FINAL/C_DEB_AWYe")
-path_D_AWKe <- here::here("mod/FINAL/D_DEB_AWKe")
-path_E_ALYe <- here::here("mod/FINAL/E_DEB_ALYe")
-path_F_ALKe <- here::here("mod/FINAL/F_DEB_ALKe")
+path_A_FLYw <- here::here("mod/A_DEB_FLYw")
+path_B_FLYe <- here::here("mod/B_DEB_FLYe")
+path_C_CWYe <- here::here("mod/C_DEB_CWYe")
+path_D_CWKe <- here::here("mod/D_DEB_CWKe")
+path_E_CLYe <- here::here("mod/E_DEB_CLYe")
+path_F_CLKe <- here::here("mod/F_DEB_CLKe")
 
 l_Experiments_fit <- c(
   "Bart2019_XP1_1",  
@@ -81,7 +81,7 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_A_FLYw, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_A_FLYw, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######### B FLYe ###############################################################
@@ -106,10 +106,10 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_B_FLYe, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_B_FLYe, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
-######### C AWYe ###############################################################
+######### C CWYe ###############################################################
 
 seeds <- c(C1 = 3333, C2 = 6669, C3 = 1210)
 
@@ -133,10 +133,10 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_C_AWYe, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_C_CWYe, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
-######### D AWKe ###############################################################
+######### D CWKe ###############################################################
 
 seeds <- c(C1 = 3303, C2 = 6636, C3 = 2929)
 
@@ -161,10 +161,10 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_D_AWKe, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_D_CWKe, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
-######### E ALYe ###############################################################
+######### E CLYe ###############################################################
 
 seeds <- c(C1 = 3333, C2 = 7880, C3 = 1210)
 
@@ -188,10 +188,10 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_E_ALYe, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_E_CLYe, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
-######### F ALKe ###############################################################
+######### F CLKe ###############################################################
 
 seeds <- c(C1 = 3330, C2 = 6646, C3 = 1212)
 
@@ -216,7 +216,7 @@ Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
 text_likelihood <- 'Likelihood (Weight,    Normal, Prediction(Weight), Sigma_W);  
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
-f_In_tot(path_F_ALKe, l_Experiments, Adults_alone, OM_diff, 
+f_In_tot(path_F_CLKe, l_Experiments_fit, Adults_alone, OM_diff, 
          text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ```
@@ -236,16 +236,16 @@ Nb_iter_kept_A_FLYw <- MCMC_out_A_FLYw$Nb_iter_kept
 N_iter_setpoint_A_FLYw <- MCMC_out_A_FLYw$N_iter_setpoint
 L_parameters_A_FLYw <- unique(MCMC_out_A_FLYw$Priors$Nom)
 
-LL_A_FLYw <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_A_FLYw <- length(na.omit(df_data$Weight)) + 
-  length(na.omit(df_data$Reproduction))
-k_A_FLYw <- Nb_param - 1 # On enlève le Sigma_W
+LL_A_FLYw <- f_get_mode(MCMC_out_A_FLYw$df_LnData$LnData)
+n_A_FLYw <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_A_FLYw <- Nb_param_A_FLYw - 1 # On enlève le Sigma_W
 
 BIC_A_FLYw <- -2*LL_A_FLYw+k_A_FLYw*log(n_A_FLYw)
 
 Summary_res_A_FLYw <- 
   as.data.frame(MCMC_out_A_FLYw$Summary_res)[1:length(L_parameters_A_FLYw)] |> 
-  mutate(Model = "A_FLYw")
+  mutate(Model = "A_FLYw") 
 
 ######### B FLYe ###############################################################
 
@@ -258,108 +258,119 @@ Nb_iter_kept_B_FLYe <- MCMC_out_B_FLYe$Nb_iter_kept
 N_iter_setpoint_B_FLYe <- MCMC_out_B_FLYe$N_iter_setpoint
 L_parameters_B_FLYe <- unique(MCMC_out_B_FLYe$Priors$Nom)
 
-LL_B_FLYe <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_B_FLYe <- length(na.omit(df_data$Weight)) + 
-  length(na.omit(df_data$Reproduction))
-k_B_FLYe <- Nb_param - 1 # On enlève le Sigma_W
+LL_B_FLYe <- f_get_mode(MCMC_out_B_FLYe$df_LnData$LnData)
+n_B_FLYe <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_B_FLYe <- Nb_param_B_FLYe - 1 # On enlève le Sigma_W
 
 BIC_B_FLYe <- -2*LL_B_FLYe+k_B_FLYe*log(n_B_FLYe)
 
 Summary_res_B_FLYe <- 
   as.data.frame(MCMC_out_B_FLYe$Summary_res)[1:length(L_parameters_B_FLYe)] |> 
-  mutate(Model = "B_FLYe")
+  mutate(Model = "B_FLYe") 
 
-######### C AWYe ###############################################################
+######### C CWYe ###############################################################
 
-MCMC_out_C_AWYe <- f_MCSim(path_C_AWYe)
+MCMC_out_C_CWYe <- f_MCSim(path_C_CWYe)
 
-NC_C_AWYe <- MCMC_out_C_AWYe$NC
-Nb_param_C_AWYe <- MCMC_out_C_AWYe$Nb_param
-Nb_experiment_C_AWYe <- MCMC_out_C_AWYe$Nb_experiment
-Nb_iter_kept_C_AWYe <- MCMC_out_C_AWYe$Nb_iter_kept
-N_iter_setpoint_C_AWYe <- MCMC_out_C_AWYe$N_iter_setpoint
-L_parameters_C_AWYe <- unique(MCMC_out_C_AWYe$Priors$Nom)
+NC_C_CWYe <- MCMC_out_C_CWYe$NC
+Nb_param_C_CWYe <- MCMC_out_C_CWYe$Nb_param
+Nb_experiment_C_CWYe <- MCMC_out_C_CWYe$Nb_experiment
+Nb_iter_kept_C_CWYe <- MCMC_out_C_CWYe$Nb_iter_kept
+N_iter_setpoint_C_CWYe <- MCMC_out_C_CWYe$N_iter_setpoint
+L_parameters_C_CWYe <- unique(MCMC_out_C_CWYe$Priors$Nom)
 
-LL_C_AWYe <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_C_AWYe <- length(na.omit(df_data$Weight)) + 
-  length(na.omit(df_data$Reproduction))
-k_C_AWYe <- Nb_param - 1 # On enlève le Sigma_W
+LL_C_CWYe <- f_get_mode(MCMC_out_C_CWYe$df_LnData$LnData)
+n_C_CWYe <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_C_CWYe <- Nb_param_C_CWYe - 1 # On enlève le Sigma_W
 
-BIC_C_AWYe <- -2*LL_C_AWYe+k_C_AWYe*log(n_C_AWYe)
+BIC_C_CWYe <- -2*LL_C_CWYe+k_C_CWYe*log(n_C_CWYe)
 
-Summary_res_C_AWYe <- 
-  as.data.frame(MCMC_out_C_AWYe$Summary_res)[1:length(L_parameters_C_AWYe)] |> 
-  mutate(Model = "C_AWYe")
+Summary_res_C_CWYe <- 
+  as.data.frame(MCMC_out_C_CWYe$Summary_res)[1:length(L_parameters_C_CWYe)] |> 
+  mutate(Model = "C_CWYe") 
 
-######### D AWKe ###############################################################
+######### D CWKe ###############################################################
 
-MCMC_out_D_AWKe <- f_MCSim(path_D_AWKe)
+MCMC_out_D_CWKe <- f_MCSim(path_D_CWKe)
 
-NC_D_AWKe <- MCMC_out_D_AWKe$NC
-Nb_param_D_AWKe <- MCMC_out_D_AWKe$Nb_param
-Nb_experiment_D_AWKe <- MCMC_out_D_AWKe$Nb_experiment
-Nb_iter_kept_D_AWKe <- MCMC_out_D_AWKe$Nb_iter_kept
-N_iter_setpoint_D_AWKe <- MCMC_out_D_AWKe$N_iter_setpoint
-L_parameters_D_AWKe <- unique(MCMC_out_D_AWKe$Priors$Nom)
+NC_D_CWKe <- MCMC_out_D_CWKe$NC
+Nb_param_D_CWKe <- MCMC_out_D_CWKe$Nb_param
+Nb_experiment_D_CWKe <- MCMC_out_D_CWKe$Nb_experiment
+Nb_iter_kept_D_CWKe <- MCMC_out_D_CWKe$Nb_iter_kept
+N_iter_setpoint_D_CWKe <- MCMC_out_D_CWKe$N_iter_setpoint
+L_parameters_D_CWKe <- unique(MCMC_out_D_CWKe$Priors$Nom)
 
-LL_D_AWKe <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_D_AWKe <- length(na.omit(df_data$Weight)) + 
-  length(na.omit(df_data$Reproduction))
-k_D_AWKe <- Nb_param - 1 # On enlève le Sigma_W
+LL_D_CWKe <- f_get_mode(MCMC_out_D_CWKe$df_LnData$LnData)
+n_D_CWKe <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_D_CWKe <- Nb_param_D_CWKe - 1 # On enlève le Sigma_W
 
-BIC_D_AWKe <- -2*LL_D_AWKe+k_D_AWKe*log(n_D_AWKe)
+BIC_D_CWKe <- -2*LL_D_CWKe+k_D_CWKe*log(n_D_CWKe)
 
-Summary_res_D_AWKe <- 
-  as.data.frame(MCMC_out_D_AWKe$Summary_res)[1:length(L_parameters_D_AWKe)] |> 
-  mutate(Model = "D_AWKe")
+Summary_res_D_CWKe <- 
+  as.data.frame(MCMC_out_D_CWKe$Summary_res)[1:length(L_parameters_D_CWKe)] |> 
+  mutate(Model = "D_CWKe") 
 
-######### E ALYe ###############################################################
+######### E CLYe ###############################################################
 
-MCMC_out_E_ALYe <- f_MCSim(path_E_ALYe)
+MCMC_out_E_CLYe <- f_MCSim(path_E_CLYe)
 
-NC_E_ALYe <- MCMC_out_E_ALYe$NC
-Nb_param_E_ALYe <- MCMC_out_E_ALYe$Nb_param
-Nb_experiment_E_ALYe <- MCMC_out_E_ALYe$Nb_experiment
-Nb_iter_kept_E_ALYe <- MCMC_out_E_ALYe$Nb_iter_kept
-N_iter_setpoint_E_ALYe <- MCMC_out_E_ALYe$N_iter_setpoint
-L_parameters_E_ALYe <- unique(MCMC_out_E_ALYe$Priors$Nom)
+NC_E_CLYe <- MCMC_out_E_CLYe$NC
+Nb_param_E_CLYe <- MCMC_out_E_CLYe$Nb_param
+Nb_experiment_E_CLYe <- MCMC_out_E_CLYe$Nb_experiment
+Nb_iter_kept_E_CLYe <- MCMC_out_E_CLYe$Nb_iter_kept
+N_iter_setpoint_E_CLYe <- MCMC_out_E_CLYe$N_iter_setpoint
+L_parameters_E_CLYe <- unique(MCMC_out_E_CLYe$Priors$Nom)
 
-LL_E_ALYe <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_E_ALYe <- length(na.omit(df_data$Weight)) + 
-  length(na.omit(df_data$Reproduction))
-k_E_ALYe <- Nb_param - 1 # On enlève le Sigma_W
+LL_E_CLYe <- f_get_mode(MCMC_out_E_CLYe$df_LnData$LnData)
+n_E_CLYe <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_E_CLYe <- Nb_param_E_CLYe - 1 # On enlève le Sigma_W
 
-BIC_E_ALYe <- -2*LL_E_ALYe+k_E_ALYe*log(n_E_ALYe)
+BIC_E_CLYe <- -2*LL_E_CLYe+k_E_CLYe*log(n_E_CLYe)
 
-Summary_res_E_ALYe <- 
-  as.data.frame(MCMC_out_E_ALYe$Summary_res)[1:length(L_parameters_E_ALYe)] |> 
-  mutate(Model = "E_ALYe")
+Summary_res_E_CLYe <- 
+  as.data.frame(MCMC_out_E_CLYe$Summary_res)[1:length(L_parameters_E_CLYe)] |> 
+  mutate(Model = "E_CLYe") 
 
-######### F ALKe ###############################################################
+######### F CLKe ###############################################################
 
-MCMC_out_F_ALKe <- f_MCSim(path_F_ALKe)
+MCMC_out_F_CLKe <- f_MCSim(path_F_CLKe)
 
-NC_F_ALKe <- MCMC_out_F_ALKe$NC
-Nb_param_F_ALKe <- MCMC_out_F_ALKe$Nb_param
-Nb_experiment_F_ALKe <- MCMC_out_F_ALKe$Nb_experiment
-Nb_iter_kept_F_ALKe <- MCMC_out_F_ALKe$Nb_iter_kept
-N_iter_setpoint_F_ALKe <- MCMC_out_F_ALKe$N_iter_setpoint
-L_parameters_F_ALKe <- unique(MCMC_out_F_ALKe$Priors$Nom)
+NC_F_CLKe <- MCMC_out_F_CLKe$NC
+Nb_param_F_CLKe <- MCMC_out_F_CLKe$Nb_param
+Nb_experiment_F_CLKe <- MCMC_out_F_CLKe$Nb_experiment
+Nb_iter_kept_F_CLKe <- MCMC_out_F_CLKe$Nb_iter_kept
+N_iter_setpoint_F_CLKe <- MCMC_out_F_CLKe$N_iter_setpoint
+L_parameters_F_CLKe <- unique(MCMC_out_F_CLKe$Priors$Nom)
 
-LL_F_ALKe <- f_get_mode(MCMC_out$df_LnData$LnData)
-n_F_ALKe <- length(na.omit(df_data$Weight)) + length(na.omit(df_data$Reproduction))
-k_F_ALKe <- Nb_param - 1 # On enlève le Sigma_W
+LL_F_CLKe <- f_get_mode(MCMC_out_F_CLKe$df_LnData$LnData)
+n_F_CLKe <- length(na.omit(df_data_fit$Weight)) + 
+  length(na.omit(df_data_fit$Reproduction))
+k_F_CLKe <- Nb_param_F_CLKe - 1 # On enlève le Sigma_W
 
-BIC_F_ALKe <- -2*LL_F_ALKe+k_F_ALKe*log(n_F_ALKe)
+BIC_F_CLKe <- -2*LL_F_CLKe+k_F_CLKe*log(n_F_CLKe)
 
-Summary_res_F_ALKe <- 
-  as.data.frame(MCMC_out_F_ALKe$Summary_res)[1:length(L_parameters_F_ALKe)] |> 
-  mutate(Model = "F_ALKe")
+Summary_res_F_CLKe <- 
+  as.data.frame(MCMC_out_F_CLKe$Summary_res)[1:length(L_parameters_F_CLKe)] |> 
+  mutate(Model = "F_CLKe") 
+
+list_models <- c("A_FLYw", "B_FLYe", "C_CWYe", "D_CWKe", "E_CLYe", "F_CLKe")
+df_LL_BIC <- data.frame(
+  Model = list_models,
+  LL = round(unlist(mget(paste0("LL_", list_models))), 2),
+  BIC = round(unlist(mget(paste0("BIC_", list_models))), 2)
+)
 
 ```
 
 ```{r resall}
 #| tbl-cap: Estimation results from all models. 
+
+list_models <- c("A_FLYw", "B_FLYe", "C_CWYe", "D_CWKe", "E_CLYe", "F_CLKe")
+list_model_summary <- mget(paste0("Summary_res_", list_models))
 
 param_order <- c(
   "pAm", "r_pAm_pM", "Fm", "rOM_ClxHorse", "K", "v", "kap", "kapJ", "kapA", "tau",
@@ -393,17 +404,26 @@ format_summary <- function(df) {
     )
 }
 
-df_result <- list_models %>%
+df_result <- list_model_summary %>%
   map(format_summary) %>%
   bind_rows() %>%
   dplyr::select(
     Model,
     any_of(param_order),
     everything()
+  ) |> 
+  left_join(df_LL_BIC)
+
+df_result |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    ),
+  class="hover"
   )
-
-df_result
-
 ```
 
 ## Chains
@@ -501,17 +521,17 @@ ggsave(
   )
 ```
 
-## C_AWYe
+## C_CWYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
-#| label: fig-chains_C_AWYe
+#| label: fig-chains_C_CWYe
 #| fig-height: 8
 #| fig-width: 8
 
 p_chains <-  
   ggplot(
-    data = MCMC_out_C_AWYe$Chains |> 
+    data = MCMC_out_C_CWYe$Chains |> 
       filter(Iteration !=1), 
     aes(
       x = Iteration, 
@@ -538,26 +558,26 @@ p_chains
   
 ```
 
-```{r savechainsC_AWYe, include = F}
+```{r savechainsC_CWYe, include = F}
 ggsave(
-  filename="C_AWYe_chains.png", 
+  filename="C_CWYe_chains.png", 
   plot=p_chains, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## D_AWKe
+## D_CWKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
-#| label: fig-chains_D_AWKe
+#| label: fig-chains_D_CWKe
 #| fig-height: 8
 #| fig-width: 8
 
 p_chains <-  
   ggplot(
-    data = MCMC_out_D_AWKe$Chains |> 
+    data = MCMC_out_D_CWKe$Chains |> 
       filter(Iteration !=1), 
     aes(
       x = Iteration, 
@@ -584,26 +604,26 @@ p_chains
   
 ```
 
-```{r savechainsD_AWKe, include = F}
+```{r savechainsD_CWKe, include = F}
 ggsave(
-  filename="D_AWKe_chains.png", 
+  filename="D_CWKe_chains.png", 
   plot=p_chains, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## E_ALYe
+## E_CLYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
-#| label: fig-chains_E_ALYe
+#| label: fig-chains_E_CLYe
 #| fig-height: 8
 #| fig-width: 8
 
 p_chains <-  
   ggplot(
-    data = MCMC_out_E_ALYe$Chains |> 
+    data = MCMC_out_E_CLYe$Chains |> 
       filter(Iteration !=1), 
     aes(
       x = Iteration, 
@@ -630,26 +650,26 @@ p_chains
   
 ```
 
-```{r savechainsE_ALYe, include = F}
+```{r savechainsE_CLYe, include = F}
 ggsave(
-  filename="E_ALYe_chains.png", 
+  filename="E_CLYe_chains.png", 
   plot=p_chains, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## F_ALKe
+## F_CLKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
-#| label: fig-chains_F_ALKe
+#| label: fig-chains_F_CLKe
 #| fig-height: 8
 #| fig-width: 8
 
 p_chains <-  
   ggplot(
-    data = MCMC_out_F_ALKe$Chains |> 
+    data = MCMC_out_F_CLKe$Chains |> 
       filter(Iteration !=1), 
     aes(
       x = Iteration, 
@@ -676,9 +696,9 @@ p_chains
   
 ```
 
-```{r savechainsF_ALKe, include = F}
+```{r savechainsF_CLKe, include = F}
 ggsave(
-  filename="F_ALKe_chains.png", 
+  filename="F_CLKe_chains.png", 
   plot=p_chains, 
   width=8, height = 8, 
   path=path_fig
@@ -699,7 +719,7 @@ ggsave(
 
 p1 <- ggplot(
   MCMC_out_A_FLYw$df_LnPost_start |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -716,7 +736,7 @@ p1 <- ggplot(
 
 p2 <- ggplot(
   MCMC_out_A_FLYw$df_LnPost |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -733,7 +753,7 @@ p2 <- ggplot(
 
 p3 <- ggplot(
   MCMC_out_A_FLYw$df_Devc |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -754,11 +774,11 @@ p_LL
 
 ```
 
-```{r savechainsA_FLYw, include = F}
+```{r saveLLA_FLYw, include = F}
 ggsave(
   filename="A_FLYw_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -773,7 +793,7 @@ ggsave(
 
 p1 <- ggplot(
   MCMC_out_B_FLYe$df_LnPost_start |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -790,7 +810,7 @@ p1 <- ggplot(
 
 p2 <- ggplot(
   MCMC_out_B_FLYe$df_LnPost |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -807,7 +827,7 @@ p2 <- ggplot(
 
 p3 <- ggplot(
   MCMC_out_B_FLYe$df_Devc |> 
-      filter(Iteration !=1), 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -828,26 +848,26 @@ p_LL
 
 ```
 
-```{r savechainsB_FLYe, include = F}
+```{r saveLLB_FLYe, include = F}
 ggsave(
   filename="B_FLYe_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
 
-## C_AWYe
+## C_CWYe
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_C_AWYe
+#| label: fig-like_C_CWYe
 #| fig-height: 8
 #| fig-width: 8
 
 p1 <- ggplot(
-  MCMC_out_C_AWYe$df_LnPost_start |> 
-      filter(Iteration !=1), 
+  MCMC_out_C_CWYe$df_LnPost_start |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -863,8 +883,8 @@ p1 <- ggplot(
   theme_minimal()
 
 p2 <- ggplot(
-  MCMC_out_C_AWYe$df_LnPost |> 
-      filter(Iteration !=1), 
+  MCMC_out_C_CWYe$df_LnPost |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -874,14 +894,14 @@ p2 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_C_AWYe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_C_CWYe$Nb_iter_kept, "last iterations"), 
     y = "LnPosterior"
     ) +
   theme_minimal()
 
 p3 <- ggplot(
-  MCMC_out_C_AWYe$df_Devc |> 
-      filter(Iteration !=1), 
+  MCMC_out_C_CWYe$df_Devc |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -891,7 +911,7 @@ p3 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_C_AWYe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_C_CWYe$Nb_iter_kept, "last iterations"), 
     y = "Ratio Deviance"
     ) +
   theme_minimal()
@@ -902,26 +922,26 @@ p_LL
 
 ```
 
-```{r savechainsC_AWYe, include = F}
+```{r saveLLC_CWYe, include = F}
 ggsave(
-  filename="C_AWYe_chainsLL.png", 
+  filename="C_CWYe_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
 
-## D_AWKe
+## D_CWKe
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_D_AWKe
+#| label: fig-like_D_CWKe
 #| fig-height: 8
 #| fig-width: 8
 
 p1 <- ggplot(
-  MCMC_out_D_AWKe$df_LnPost_start |> 
-      filter(Iteration !=1), 
+  MCMC_out_D_CWKe$df_LnPost_start |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -937,8 +957,8 @@ p1 <- ggplot(
   theme_minimal()
 
 p2 <- ggplot(
-  MCMC_out_D_AWKe$df_LnPost |> 
-      filter(Iteration !=1), 
+  MCMC_out_D_CWKe$df_LnPost |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -948,14 +968,14 @@ p2 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_D_AWKe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_D_CWKe$Nb_iter_kept, "last iterations"), 
     y = "LnPosterior"
     ) +
   theme_minimal()
 
 p3 <- ggplot(
-  MCMC_out_D_AWKe$df_Devc |> 
-      filter(Iteration !=1), 
+  MCMC_out_D_CWKe$df_Devc |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -965,7 +985,7 @@ p3 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_D_AWKe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_D_CWKe$Nb_iter_kept, "last iterations"), 
     y = "Ratio Deviance"
     ) +
   theme_minimal()
@@ -976,26 +996,26 @@ p_LL
 
 ```
 
-```{r savechainsD_AWKe, include = F}
+```{r saveLLD_CWKe, include = F}
 ggsave(
-  filename="D_AWKe_chainsLL.png", 
+  filename="D_CWKe_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
 
-## E_ALYe
+## E_CLYe
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_E_ALYe
+#| label: fig-like_E_CLYe
 #| fig-height: 8
 #| fig-width: 8
 
 p1 <- ggplot(
-  MCMC_out_E_ALYe$df_LnPost_start |> 
-      filter(Iteration !=1), 
+  MCMC_out_E_CLYe$df_LnPost_start |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -1011,8 +1031,8 @@ p1 <- ggplot(
   theme_minimal()
 
 p2 <- ggplot(
-  MCMC_out_E_ALYe$df_LnPost |> 
-      filter(Iteration !=1), 
+  MCMC_out_E_CLYe$df_LnPost |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -1022,14 +1042,14 @@ p2 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_E_ALYe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_E_CLYe$Nb_iter_kept, "last iterations"), 
     y = "LnPosterior"
     ) +
   theme_minimal()
 
 p3 <- ggplot(
-  MCMC_out_E_ALYe$df_Devc |> 
-      filter(Iteration !=1), 
+  MCMC_out_E_CLYe$df_Devc |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -1039,7 +1059,7 @@ p3 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_E_ALYe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_E_CLYe$Nb_iter_kept, "last iterations"), 
     y = "Ratio Deviance"
     ) +
   theme_minimal()
@@ -1050,26 +1070,26 @@ p_LL
 
 ```
 
-```{r savechainsE_ALYe, include = F}
+```{r saveLLE_CLYe, include = F}
 ggsave(
-  filename="E_ALYe_chainsLL.png", 
+  filename="E_CLYe_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
 
-## F_ALKe
+## F_CLKe
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_F_ALKe
+#| label: fig-like_F_CLKe
 #| fig-height: 8
 #| fig-width: 8
 
 p1 <- ggplot(
-  MCMC_out_F_ALKe$df_LnPost_start |> 
-      filter(Iteration !=1), 
+  MCMC_out_F_CLKe$df_LnPost_start |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -1085,8 +1105,8 @@ p1 <- ggplot(
   theme_minimal()
 
 p2 <- ggplot(
-  MCMC_out_F_ALKe$df_LnPost |> 
-      filter(Iteration !=1), 
+  MCMC_out_F_CLKe$df_LnPost |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = LnPosterior, 
@@ -1096,14 +1116,14 @@ p2 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_F_ALKe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_F_CLKe$Nb_iter_kept, "last iterations"), 
     y = "LnPosterior"
     ) +
   theme_minimal()
 
 p3 <- ggplot(
-  MCMC_out_F_ALKe$df_Devc |> 
-      filter(Iteration !=1), 
+  MCMC_out_F_CLKe$df_Devc |> 
+      filter(iteration !=1), 
   aes(
     x = iteration, 
     y = RatioDeviance, 
@@ -1113,7 +1133,7 @@ p3 <- ggplot(
   geom_line() +
   scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
   labs(
-    x = paste(MCMC_out_F_ALKe$Nb_iter_kept, "last iterations"), 
+    x = paste(MCMC_out_F_CLKe$Nb_iter_kept, "last iterations"), 
     y = "Ratio Deviance"
     ) +
   theme_minimal()
@@ -1124,11 +1144,11 @@ p_LL
 
 ```
 
-```{r savechainsF_ALKe, include = F}
+```{r saveLLF_CLKe, include = F}
 ggsave(
-  filename="F_ALKe_chainsLL.png", 
+  filename="F_CLKe_chainsLL.png", 
   plot=p_LL, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -1174,13 +1194,13 @@ mcmc_list_B_FLYe <- lapply(
 
 mcmc_list_B_FLYe <- as.mcmc.list(mcmc_list_B_FLYe)
 
-####### C_AWYe #################################################################
+####### C_CWYe #################################################################
 
 # Large format per chain
-mcmc_list_C_AWYe <- lapply(
+mcmc_list_C_CWYe <- lapply(
   split(
-    MCMC_out_C_AWYe$Chains, 
-    MCMC_out_C_AWYe$Chains$Chain
+    MCMC_out_C_CWYe$Chains, 
+    MCMC_out_C_CWYe$Chains$Chain
     ),
   function(d) {
     wide <- d %>%
@@ -1190,15 +1210,15 @@ mcmc_list_C_AWYe <- lapply(
    mcmc(as.matrix(wide[,-1]))
 })
 
-mcmc_list_C_AWYe <- as.mcmc.list(mcmc_list_C_AWYe)
+mcmc_list_C_CWYe <- as.mcmc.list(mcmc_list_C_CWYe)
 
-####### D_AWKe #################################################################
+####### D_CWKe #################################################################
 
 # Large format per chain
-mcmc_list_D_AWKe <- lapply(
+mcmc_list_D_CWKe <- lapply(
   split(
-    MCMC_out_D_AWKe$Chains, 
-    MCMC_out_D_AWKe$Chains$Chain
+    MCMC_out_D_CWKe$Chains, 
+    MCMC_out_D_CWKe$Chains$Chain
     ),
   function(d) {
     wide <- d %>%
@@ -1208,15 +1228,15 @@ mcmc_list_D_AWKe <- lapply(
    mcmc(as.matrix(wide[,-1]))
 })
 
-mcmc_list_D_AWKe <- as.mcmc.list(mcmc_list_D_AWKe)
+mcmc_list_D_CWKe <- as.mcmc.list(mcmc_list_D_CWKe)
 
-####### E_ALYe #################################################################
+####### E_CLYe #################################################################
 
 # Large format per chain
-mcmc_list_E_ALYe <- lapply(
+mcmc_list_E_CLYe <- lapply(
   split(
-    MCMC_out_E_ALYe$Chains, 
-    MCMC_out_E_ALYe$Chains$Chain
+    MCMC_out_E_CLYe$Chains, 
+    MCMC_out_E_CLYe$Chains$Chain
     ),
   function(d) {
     wide <- d %>%
@@ -1226,15 +1246,15 @@ mcmc_list_E_ALYe <- lapply(
    mcmc(as.matrix(wide[,-1]))
 })
 
-mcmc_list_E_ALYe <- as.mcmc.list(mcmc_list_E_ALYe)
+mcmc_list_E_CLYe <- as.mcmc.list(mcmc_list_E_CLYe)
 
-####### F_ALKe #################################################################
+####### F_CLKe #################################################################
 
 # Large format per chain
-mcmc_list_F_ALKe <- lapply(
+mcmc_list_F_CLKe <- lapply(
   split(
-    MCMC_out_F_ALKe$Chains, 
-    MCMC_out_F_ALKe$Chains$Chain
+    MCMC_out_F_CLKe$Chains, 
+    MCMC_out_F_CLKe$Chains$Chain
     ),
   function(d) {
     wide <- d %>%
@@ -1244,7 +1264,7 @@ mcmc_list_F_ALKe <- lapply(
    mcmc(as.matrix(wide[,-1]))
 })
 
-mcmc_list_F_ALKe <- as.mcmc.list(mcmc_list_F_ALKe)
+mcmc_list_F_CLKe <- as.mcmc.list(mcmc_list_F_CLKe)
 
 ```
 
@@ -1291,17 +1311,29 @@ mcmc_list_corr_A_FLYw <- mcmc.list(
   })
 )
 
-png("fig/DEB_Models/A_FLYw_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/A_FLYw_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/A_FLYw_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_A_FLYw), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
   as.matrix(mcmc_list_corr_A_FLYw), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
-
-dev.off()
 ```
 
 ## B_FLYe
@@ -1346,30 +1378,42 @@ mcmc_list_corr_B_FLYe <- mcmc.list(
   })
 )
 
-png("fig/DEB_Models/B_FLYe_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/B_FLYe_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/B_FLYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_B_FLYe), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
   as.matrix(mcmc_list_corr_B_FLYe), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
-
-dev.off()
 ```
 
-## C_AWYe
+## C_CWYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_C_AWYe
+#| label: fig-chainsconvergence_C_CWYe
 #| fig-height: 8
 #| fig-width: 8
 
   par(mfrow=c(1,3))
 
-  gelman.plot(mcmc_list_C_AWYe,
+  gelman.plot(mcmc_list_C_CWYe,
             bin.width = 10,      # Number of observations per segment,
             # first segment --> at least 50 iterations.
             max.bins = 50,       # Maximum number of bins, excluding the last one
@@ -1379,7 +1423,7 @@ dev.off()
 
   
   gelman <- gelman.diag(
-    mcmc_list_C_AWYe, 
+    mcmc_list_C_CWYe, 
     confidence = 0.95, 
     transform=FALSE, 
     autoburnin=TRUE, 
@@ -1391,40 +1435,52 @@ dev.off()
 
 ```{r corr, message=F, warning=F}
 #| fig-cap: Parameter correlations.
-#| label: fig-corr_C_AWYe
+#| label: fig-corr_C_CWYe
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_C_AWYe <- mcmc.list(
-  lapply(mcmc_list_C_AWYe, function(x) {
+mcmc_list_corr_C_CWYe <- mcmc.list(
+  lapply(mcmc_list_C_CWYe, function(x) {
     mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
   })
 )
 
-png("fig/DEB_Models/C_AWYe_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/C_CWYe_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/C_CWYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_C_CWYe), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
-  as.matrix(mcmc_list_corr_C_AWYe), 
+  as.matrix(mcmc_list_corr_C_CWYe), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
-
-dev.off()
 ```
 
-## D_AWKe
+## D_CWKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_D_AWKe
+#| label: fig-chainsconvergence_D_CWKe
 #| fig-height: 8
 #| fig-width: 8
 
   par(mfrow=c(1,3))
 
-  gelman.plot(mcmc_list_D_AWKe,
+  gelman.plot(mcmc_list_D_CWKe,
             bin.width = 10,      # Number of observations per segment,
             # first segment --> at least 50 iterations.
             max.bins = 50,       # Maximum number of bins, excluding the last one
@@ -1434,7 +1490,7 @@ dev.off()
 
   
   gelman <- gelman.diag(
-    mcmc_list_D_AWKe, 
+    mcmc_list_D_CWKe, 
     confidence = 0.95, 
     transform=FALSE, 
     autoburnin=TRUE, 
@@ -1446,40 +1502,52 @@ dev.off()
 
 ```{r corr, message=F, warning=F}
 #| fig-cap: Parameter correlations.
-#| label: fig-corr_D_AWKe
+#| label: fig-corr_D_CWKe
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_D_AWKe <- mcmc.list(
-  lapply(mcmc_list_D_AWKe, function(x) {
+mcmc_list_corr_D_CWKe <- mcmc.list(
+  lapply(mcmc_list_D_CWKe, function(x) {
     mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
   })
 )
 
-png("fig/DEB_Models/D_AWKe_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/D_CWKe_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/D_CWKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_D_CWKe), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
-  as.matrix(mcmc_list_corr_D_AWKe), 
+  as.matrix(mcmc_list_corr_D_CWKe), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
-
-dev.off()
 ```
 
-## E_ALYe
+## E_CLYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_E_ALYe
+#| label: fig-chainsconvergence_E_CLYe
 #| fig-height: 8
 #| fig-width: 8
 
   par(mfrow=c(1,3))
 
-  gelman.plot(mcmc_list_E_ALYe,
+  gelman.plot(mcmc_list_E_CLYe,
             bin.width = 10,      # Number of observations per segment,
             # first segment --> at least 50 iterations.
             max.bins = 50,       # Maximum number of bins, excluding the last one
@@ -1489,7 +1557,7 @@ dev.off()
 
   
   gelman <- gelman.diag(
-    mcmc_list_E_ALYe, 
+    mcmc_list_E_CLYe, 
     confidence = 0.95, 
     transform=FALSE, 
     autoburnin=TRUE, 
@@ -1501,40 +1569,53 @@ dev.off()
 
 ```{r corr, message=F, warning=F}
 #| fig-cap: Parameter correlations.
-#| label: fig-corr_E_ALYe
+#| label: fig-corr_E_CLYe
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_E_ALYe <- mcmc.list(
-  lapply(mcmc_list_E_ALYe, function(x) {
+mcmc_list_corr_E_CLYe <- mcmc.list(
+  lapply(mcmc_list_E_CLYe, function(x) {
     mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
   })
 )
 
-png("fig/DEB_Models/E_ALYe_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/E_CLYe_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/E_CLYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_E_CLYe), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
-  as.matrix(mcmc_list_corr_E_ALYe), 
+  as.matrix(mcmc_list_corr_E_CLYe), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
 
-dev.off()
 ```
 
-## F_ALKe
+## F_CLKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_F_ALKe
+#| label: fig-chainsconvergence_F_CLKe
 #| fig-height: 8
 #| fig-width: 8
 
   par(mfrow=c(1,3))
 
-  gelman.plot(mcmc_list_F_ALKe,
+  gelman.plot(mcmc_list_F_CLKe,
             bin.width = 10,      # Number of observations per segment,
             # first segment --> at least 50 iterations.
             max.bins = 50,       # Maximum number of bins, excluding the last one
@@ -1544,7 +1625,7 @@ dev.off()
 
   
   gelman <- gelman.diag(
-    mcmc_list_F_ALKe, 
+    mcmc_list_F_CLKe, 
     confidence = 0.95, 
     transform=FALSE, 
     autoburnin=TRUE, 
@@ -1556,27 +1637,39 @@ dev.off()
 
 ```{r corr, message=F, warning=F}
 #| fig-cap: Parameter correlations.
-#| label: fig-corr_F_ALKe
+#| label: fig-corr_F_CLKe
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_F_ALKe <- mcmc.list(
-  lapply(mcmc_list_F_ALKe, function(x) {
+mcmc_list_corr_F_CLKe <- mcmc.list(
+  lapply(mcmc_list_F_CLKe, function(x) {
     mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
   })
 )
 
-png("fig/DEB_Models/F_ALKe_ipairs_plot.png", width = 3000, height = 3000, res = 300)
-
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+
+file_rds <- here::here("fig/DEB_Models/F_CLKe_ipairs_plot.png")
+
+if (!file.exists(file_rds)) {
+  
+  png(here::here("fig/DEB_Models/F_CLKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_F_CLKe), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+    )
+  dev.off()
+}
+
 ipairs(
-  as.matrix(mcmc_list_corr_F_ALKe), 
+  as.matrix(mcmc_list_corr_F_CLKe), 
   colramp = colramp_aurora, 
   pixs=0.25, 
   cex.diag = 0.5
   )
-
-dev.off()
 ```
 :::
 
@@ -1628,7 +1721,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_A_FLYw$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_A_FLYw$Chains_plot, Nom %in% L_parameters_A_FLYw),
     mapping = aes(
       x=value
     ),
@@ -1706,7 +1799,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_B_FLYe$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_B_FLYe$Chains_plot, Nom %in% L_parameters_B_FLYe),
     mapping = aes(
       x=value
     ),
@@ -1739,17 +1832,17 @@ ggsave(
   )
 ```
 
-## C_AWYe
+## C_CWYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_C_AWYe
+#| label: fig-post_C_CWYe
 #| fig-height: 8
 #| fig-width: 8
 
 n_samples <- 1e5 # Simulation of the distribution
 
-df_priors_dist <- MCMC_out_C_AWYe$Priors |> 
+df_priors_dist <- MCMC_out_C_CWYe$Priors |> 
   dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
   rowwise() |> 
   mutate(samples = case_when(
@@ -1765,7 +1858,7 @@ alpha_post <- 0.5
 col_prior <- Nord_snow[1]
 col_post <- col_IMD
 
-MCMC_out_C_AWYe$Chains_plot <- MCMC_out_C_AWYe$Chains |> 
+MCMC_out_C_CWYe$Chains_plot <- MCMC_out_C_CWYe$Chains |> 
   mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
 
 p_post <- ggplot() +
@@ -1784,7 +1877,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_C_AWYe$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_C_CWYe$Chains_plot, Nom %in% L_parameters_C_CWYe),
     mapping = aes(
       x=value
     ),
@@ -1808,26 +1901,26 @@ p_post <- ggplot() +
 p_post
 ```
 
-```{r savepostC_AWYe, include = F}
+```{r savepostC_CWYe, include = F}
 ggsave(
-  filename="C_AWYe_post.png", 
+  filename="C_CWYe_post.png", 
   plot=p_post, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## D_AWKe
+## D_CWKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_D_AWKe
+#| label: fig-post_D_CWKe
 #| fig-height: 8
 #| fig-width: 8
 
 n_samples <- 1e5 # Simulation of the distribution
 
-df_priors_dist <- MCMC_out_D_AWKe$Priors |> 
+df_priors_dist <- MCMC_out_D_CWKe$Priors |> 
   dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
   rowwise() |> 
   mutate(samples = case_when(
@@ -1843,7 +1936,7 @@ alpha_post <- 0.5
 col_prior <- Nord_snow[1]
 col_post <- col_IMD
 
-MCMC_out_D_AWKe$Chains_plot <- MCMC_out_D_AWKe$Chains |> 
+MCMC_out_D_CWKe$Chains_plot <- MCMC_out_D_CWKe$Chains |> 
   mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
 
 p_post <- ggplot() +
@@ -1862,7 +1955,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_D_AWKe$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_D_CWKe$Chains_plot, Nom %in% L_parameters_D_CWKe),
     mapping = aes(
       x=value
     ),
@@ -1886,26 +1979,26 @@ p_post <- ggplot() +
 p_post
 ```
 
-```{r savepostD_AWKe, include = F}
+```{r savepostD_CWKe, include = F}
 ggsave(
-  filename="D_AWKe_post.png", 
+  filename="D_CWKe_post.png", 
   plot=p_post, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## E_ALYe
+## E_CLYe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_E_ALYe
+#| label: fig-post_E_CLYe
 #| fig-height: 8
 #| fig-width: 8
 
 n_samples <- 1e5 # Simulation of the distribution
 
-df_priors_dist <- MCMC_out_E_ALYe$Priors |> 
+df_priors_dist <- MCMC_out_E_CLYe$Priors |> 
   dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
   rowwise() |> 
   mutate(samples = case_when(
@@ -1921,7 +2014,7 @@ alpha_post <- 0.5
 col_prior <- Nord_snow[1]
 col_post <- col_IMD
 
-MCMC_out_E_ALYe$Chains_plot <- MCMC_out_E_ALYe$Chains |> 
+MCMC_out_E_CLYe$Chains_plot <- MCMC_out_E_CLYe$Chains |> 
   mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
 
 p_post <- ggplot() +
@@ -1940,7 +2033,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_E_ALYe$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_E_CLYe$Chains_plot, Nom %in% L_parameters_E_CLYe),
     mapping = aes(
       x=value
     ),
@@ -1964,26 +2057,26 @@ p_post <- ggplot() +
 p_post
 ```
 
-```{r savepostE_ALYe, include = F}
+```{r savepostE_CLYe, include = F}
 ggsave(
-  filename="E_ALYe_post.png", 
+  filename="E_CLYe_post.png", 
   plot=p_post, 
   width=8, height = 8, 
   path=path_fig
   )
 ```
 
-## F_ALKe
+## F_CLKe
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_F_ALKe
+#| label: fig-post_F_CLKe
 #| fig-height: 8
 #| fig-width: 8
 
 n_samples <- 1e5 # Simulation of the distribution
 
-df_priors_dist <- MCMC_out_F_ALKe$Priors |> 
+df_priors_dist <- MCMC_out_F_CLKe$Priors |> 
   dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
   rowwise() |> 
   mutate(samples = case_when(
@@ -1999,7 +2092,7 @@ alpha_post <- 0.5
 col_prior <- Nord_snow[1]
 col_post <- col_IMD
 
-MCMC_out_F_ALKe$Chains_plot <- MCMC_out_F_ALKe$Chains |> 
+MCMC_out_F_CLKe$Chains_plot <- MCMC_out_F_CLKe$Chains |> 
   mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
 
 p_post <- ggplot() +
@@ -2018,7 +2111,7 @@ p_post <- ggplot() +
   
   # Posterior
   stat_halfeye(
-    data = subset(MCMC_out_F_ALKe$Chains_plot, Nom %in% L_parameters),
+    data = subset(MCMC_out_F_CLKe$Chains_plot, Nom %in% L_parameters_F_CLKe),
     mapping = aes(
       x=value
     ),
@@ -2042,9 +2135,9 @@ p_post <- ggplot() +
 p_post
 ```
 
-```{r savepostF_ALKe, include = F}
+```{r savepostF_CLKe, include = F}
 ggsave(
-  filename="F_ALKe_post.png", 
+  filename="F_CLKe_post.png", 
   plot=p_post, 
   width=8, height = 8, 
   path=path_fig
@@ -2052,75 +2145,44 @@ ggsave(
 ```
 :::
 
-## Experiment simulations
-
-```{r, message=F, warning=F}
-
-l_Experiments <- c(
-  "Bart2019_XP1_1",  
-  "Bart2019_XP1_2",  
-  "Bart2019_XP2",
-  "Bart2019_XP3",   
-  "Bart2019_XP4_1",
-  "Bart2019_XP4_2",
-  "Bart2019_XP5", 
-  "Bart2020",
-  #"Gollot2026_lufa"
-  "Gollot2026_dens_D1",
-  "Gollot2026_dens_D2",
-  "Gollot2026_dens_D2b",
-  "Gollot2026_dens_D5",
-  "Gollot2026_dens_D7"
-  )
-
-Adults_alone <- TRUE
-
-df_data <- f_import_data_DEB(l_Experiments, Adults_alone)
-
-
-
-
-
-
-
-text_param <- Summary_res["Result_mode", , drop = FALSE] %>%
-  t() %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column("param") %>%
-  rename(val = 2) %>%
-  mutate(
-    param = gsub("\\.1\\.$|\\.1\\.", "", param),
-    line  = glue("{param} = {val};")
-  ) %>%
-  pull(line) %>%
-  paste(collapse = "\n")
-
-Endpoints_print <- "Weight,
-    Length_struct,
-    Reproduction,
-    Energy,
-    Organic_matter,
-    kapreal,
-    freal,
-    Qf_soil,
-    Qf_horse,
-    X"
-
-step_sim <- 0.01
-
-f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff, text_param, Endpoints_print, step_sim)
-# ./mcsim.DEBcali DEB_sim_full.in
-
-
-```
-
 ## Predicted vs. Observed
 
 ```{r}
-l_param_name <- names(Summary_res) |>
+l_param_name_A_FLYw <- names(Summary_res_A_FLYw) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.") 
+
+f_In_predobs(path_A_FLYw, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_A_FLYw)
+
+l_param_name_B_FLYe <- names(Summary_res_B_FLYe) |>
+  head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(file_path, l_Experiments, Adults_alone, OM_diff, l_param_name)
+f_In_predobs(path_B_FLYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_B_FLYe)
+
+l_param_name_C_CWYe <- names(Summary_res_C_CWYe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_predobs(path_C_CWYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_C_CWYe)
+
+l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_predobs(path_D_CWKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_D_CWKe)
+
+l_param_name_E_CLYe <- names(Summary_res_E_CLYe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_predobs(path_E_CLYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_E_CLYe)
+
+l_param_name_F_CLKe <- names(Summary_res_F_CLKe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_predobs(path_F_CLKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_F_CLKe)
 ```
 
 ```{bash, eval=F, execute=F}
@@ -2129,11 +2191,11 @@ for j in $(seq 1 12); do
 done
 ```
 
-```{r}
+```{r, results=F, message=F, warning=F}
 
 Nb_experiment <- 12
 
-df_data_obs <- df_data |> 
+df_data_obs <- df_data_fit |> 
   mutate(
     Weight_obs = Weight,
     Reproduction_obs = Reproduction
@@ -2144,16 +2206,8 @@ df_data_obs <- df_data |>
 
 df_pred_A_FLYw <- f_read_predobs(path_A_FLYw, Nb_experiment, df_data_obs)
 
-df_pred_Weight_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_A_FLYw <- subset(df_pred_A_FLYw, Endpt == "Reproduction" & Time !=0)
 
 df_predobs_Reproduction_A_FLYw <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2171,16 +2225,8 @@ df_predobs_Weight_A_FLYw <- df_data_obs |>
 
 df_pred_B_FLYe <- f_read_predobs(path_B_FLYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_B_FLYe <- subset(df_pred_B_FLYe, Endpt == "Reproduction" & Time !=0)
 
 df_predobs_Reproduction_B_FLYe <- df_data_obs |> 
   filter(Time !=0) |>
@@ -2194,111 +2240,79 @@ df_predobs_Weight_B_FLYe <- df_data_obs |>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-######## C_AWYe ###############################################################
+######## C_CWYe ###############################################################
 
-df_pred_C_AWYe <- f_read_predobs(path_C_AWYe, Nb_experiment, df_data_obs)
+df_pred_C_CWYe <- f_read_predobs(path_C_CWYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_C_AWYe <- subset(df_pred_C_AWYe, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_C_CWYe <- subset(df_pred_C_CWYe, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_C_CWYe <- subset(df_pred_C_CWYe, Endpt == "Reproduction" & Time !=0)
 
-df_predobs_Reproduction_C_AWYe <- df_data_obs |> 
+df_predobs_Reproduction_C_CWYe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Reproduction_C_AWYe, suffix = c("_obs", "_pred")) |> 
+  left_join(df_pred_Reproduction_C_CWYe, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-df_predobs_Weight_C_AWYe <- df_data_obs |> 
+df_predobs_Weight_C_CWYe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Weight_C_AWYe, suffix = c("_obs", "_pred"))|>
+  left_join(df_pred_Weight_C_CWYe, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-######## D_AWKe ###############################################################
+######## D_CWKe ###############################################################
 
-df_pred_D_AWKe <- f_read_predobs(path_D_AWKe, Nb_experiment, df_data_obs)
+df_pred_D_CWKe <- f_read_predobs(path_D_CWKe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_D_AWKe <- subset(df_pred_D_AWKe, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_D_CWKe <- subset(df_pred_D_CWKe, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_D_CWKe <- subset(df_pred_D_CWKe, Endpt == "Reproduction" & Time !=0)
 
-df_predobs_Reproduction_D_AWKe <- df_data_obs |> 
+df_predobs_Reproduction_D_CWKe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Reproduction_D_AWKe, suffix = c("_obs", "_pred")) |> 
+  left_join(df_pred_Reproduction_D_CWKe, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-df_predobs_Weight_D_AWKe <- df_data_obs |> 
+df_predobs_Weight_D_CWKe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Weight_D_AWKe, suffix = c("_obs", "_pred"))|>
+  left_join(df_pred_Weight_D_CWKe, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-######## E_ALYe ###############################################################
+######## E_CLYe ###############################################################
 
-df_pred_E_ALYe <- f_read_predobs(path_E_ALYe, Nb_experiment, df_data_obs)
+df_pred_E_CLYe <- f_read_predobs(path_E_CLYe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_E_ALYe <- subset(df_pred_E_ALYe, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_E_CLYe <- subset(df_pred_E_CLYe, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_E_CLYe <- subset(df_pred_E_CLYe, Endpt == "Reproduction" & Time !=0)
 
-df_predobs_Reproduction_E_ALYe <- df_data_obs |> 
+df_predobs_Reproduction_E_CLYe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Reproduction_E_ALYe, suffix = c("_obs", "_pred")) |> 
+  left_join(df_pred_Reproduction_E_CLYe, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-df_predobs_Weight_E_ALYe <- df_data_obs |> 
+df_predobs_Weight_E_CLYe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Weight_E_ALYe, suffix = c("_obs", "_pred"))|>
+  left_join(df_pred_Weight_E_CLYe, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-######## F_ALKe ###############################################################
+######## F_CLKe ###############################################################
 
-df_pred_F_ALKe <- f_read_predobs(path_F_ALKe, Nb_experiment, df_data_obs)
+df_pred_F_CLKe <- f_read_predobs(path_F_CLKe, Nb_experiment, df_data_obs)
 
-df_pred_Weight_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Weight" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Weight_obs,
-    Residuals = predict.endpoint - Weight_obs
-  )
-df_pred_Reproduction_F_ALKe <- subset(df_pred_F_ALKe, Endpt == "Reproduction" & Time !=0)|>
-  mutate(
-    Ratio_predobs = predict.endpoint / Reproduction_obs,
-    Residuals = predict.endpoint - Reproduction_obs
-  )
+df_pred_Weight_F_CLKe <- subset(df_pred_F_CLKe, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_F_CLKe <- subset(df_pred_F_CLKe, Endpt == "Reproduction" & Time !=0)
 
-df_predobs_Reproduction_F_ALKe <- df_data_obs |> 
+df_predobs_Reproduction_F_CLKe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Reproduction_F_ALKe, suffix = c("_obs", "_pred")) |> 
+  left_join(df_pred_Reproduction_F_CLKe, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
-df_predobs_Weight_F_ALKe <- df_data_obs |> 
+df_predobs_Weight_F_CLKe <- df_data_obs |> 
   filter(Time !=0) |>
-  left_join(df_pred_Weight_F_ALKe, suffix = c("_obs", "_pred"))|>
+  left_join(df_pred_Weight_F_CLKe, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
   drop_na()
 
@@ -2323,7 +2337,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -2505,7 +2519,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -2669,11 +2683,11 @@ ggsave(
 ) 
 ```
 
-## C_AWYe
+## C_CWYe
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_C_AWYe
+#| label: fig-predobs_C_CWYe
 #| fig-height: 4
 #| fig-width: 8
 
@@ -2687,7 +2701,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -2706,7 +2720,7 @@ df_line <- data.frame(
   )
 
 p_W <- ggplot(
-  data = df_predobs_Weight_C_AWYe,
+  data = df_predobs_Weight_C_CWYe,
   mapping = aes(
       x = Weight_obs,
       y = predict.endpoint
@@ -2780,7 +2794,7 @@ df_line <- data.frame(
   )
 
 p_R <- ggplot(
-  data = df_predobs_Reproduction_C_AWYe,
+  data = df_predobs_Reproduction_C_CWYe,
   mapping = aes(
       x = Reproduction_obs,
       y = predict.endpoint
@@ -2842,20 +2856,20 @@ p_predobs
 
 ```
 
-```{r savepredobsC_AWYe, include = F}
+```{r savepredobsC_CWYe, include = F}
 ggsave(
-  filename = "C_AWYe_predobs.png",
+  filename = "C_CWYe_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
 ) 
 ```
 
-## D_AWKe
+## D_CWKe
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_D_AWKe
+#| label: fig-predobs_D_CWKe
 #| fig-height: 4
 #| fig-width: 8
 
@@ -2869,7 +2883,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -2888,7 +2902,7 @@ df_line <- data.frame(
   )
 
 p_W <- ggplot(
-  data = df_predobs_Weight_D_AWKe,
+  data = df_predobs_Weight_D_CWKe,
   mapping = aes(
       x = Weight_obs,
       y = predict.endpoint
@@ -2962,7 +2976,7 @@ df_line <- data.frame(
   )
 
 p_R <- ggplot(
-  data = df_predobs_Reproduction_D_AWKe,
+  data = df_predobs_Reproduction_D_CWKe,
   mapping = aes(
       x = Reproduction_obs,
       y = predict.endpoint
@@ -3024,20 +3038,20 @@ p_predobs
 
 ```
 
-```{r savepredobsD_AWKe, include = F}
+```{r savepredobsD_CWKe, include = F}
 ggsave(
-  filename = "D_AWKe_predobs.png",
+  filename = "D_CWKe_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
 ) 
 ```
 
-## E_ALYe
+## E_CLYe
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_E_ALYe
+#| label: fig-predobs_E_CLYe
 #| fig-height: 4
 #| fig-width: 8
 
@@ -3051,7 +3065,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -3070,7 +3084,7 @@ df_line <- data.frame(
   )
 
 p_W <- ggplot(
-  data = df_predobs_Weight_E_ALYe,
+  data = df_predobs_Weight_E_CLYe,
   mapping = aes(
       x = Weight_obs,
       y = predict.endpoint
@@ -3144,7 +3158,7 @@ df_line <- data.frame(
   )
 
 p_R <- ggplot(
-  data = df_predobs_Reproduction_E_ALYe,
+  data = df_predobs_Reproduction_E_CLYe,
   mapping = aes(
       x = Reproduction_obs,
       y = predict.endpoint
@@ -3206,20 +3220,20 @@ p_predobs
 
 ```
 
-```{r savepredobsE_ALYe, include = F}
+```{r savepredobsE_CLYe, include = F}
 ggsave(
-  filename = "E_ALYe_predobs.png",
+  filename = "E_CLYe_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
 ) 
 ```
 
-## F_ALKe
+## F_CLKe
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_F_ALKe
+#| label: fig-predobs_F_CLKe
 #| fig-height: 4
 #| fig-width: 8
 
@@ -3233,7 +3247,7 @@ col_line2 <- Nord_snow[1]
 col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -3252,7 +3266,7 @@ df_line <- data.frame(
   )
 
 p_W <- ggplot(
-  data = df_predobs_Weight_F_ALKe,
+  data = df_predobs_Weight_F_CLKe,
   mapping = aes(
       x = Weight_obs,
       y = predict.endpoint
@@ -3326,7 +3340,7 @@ df_line <- data.frame(
   )
 
 p_R <- ggplot(
-  data = df_predobs_Reproduction_F_ALKe,
+  data = df_predobs_Reproduction_F_CLKe,
   mapping = aes(
       x = Reproduction_obs,
       y = predict.endpoint
@@ -3388,9 +3402,9 @@ p_predobs
 
 ```
 
-```{r savepredobsF_ALKe, include = F}
+```{r savepredobsF_CLKe, include = F}
 ggsave(
-  filename = "F_ALKe_predobs.png",
+  filename = "F_CLKe_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
@@ -3398,11 +3412,26 @@ ggsave(
 ```
 :::
 
+### Folds
+
 ```{r countfold, warning=F}
+#| tbl-cap: Folds for Weight and Reproduction for each model.
 
 No_round <- 1
 
 f_count_fold <- function(df_predobs_Weight, df_predobs_Reproduction, No_round) {
+  
+  df_predobs_Weight <- df_predobs_Weight  |>
+  mutate(
+    Ratio_predobs = predict.endpoint / Weight_obs,
+    Residuals = predict.endpoint - Weight_obs
+  )
+  df_predobs_Reproduction <- df_predobs_Reproduction  |>
+  mutate(
+    Ratio_predobs = predict.endpoint / Reproduction_obs,
+    Residuals = predict.endpoint - Reproduction_obs
+  )
+  
   Weight_count_fold2 <- round(length(subset(df_predobs_Weight, Ratio_predobs >= 0.5 & Ratio_predobs <= 2)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100, No_round)
 
   Weight_count_fold5 <- round(length(subset(df_predobs_Weight, Ratio_predobs >= 0.2 & Ratio_predobs <= 5)$Weight_obs) / length(df_predobs_Weight$Weight_obs) * 100, No_round)
@@ -3421,7 +3450,8 @@ f_count_fold <- function(df_predobs_Weight, df_predobs_Reproduction, No_round) {
   df_fold <- data.frame(
     Endpoint = c("Weight", "Reproduction", "Observed reproduction above 0"),
     '% of predictions in fold 2' = c(Weight_count_fold2, Repro_count_fold2, Repro0_count_fold2),
-    '% of predictions in fold 5' = c(Weight_count_fold5, Repro_count_fold5, Repro0_count_fold5)
+    '% of predictions in fold 5' = c(Weight_count_fold5, Repro_count_fold5, Repro0_count_fold5),
+  check.names = FALSE
   )
   
   return(df_fold)
@@ -3439,17 +3469,1296 @@ df_fold <- purrr::map2_dfr(
 )
 
 df_fold <- df_fold %>%
-  dplyr::mutate(Model = model_names[as.integer(Model)])
+  dplyr::mutate(Model = str_remove(Model, "df_predobs_(Weight|Reproduction)_"))
 
 df_fold |> datatable(
   options = list(
     dom = 't',
+    pageLength = nrow(df_fold),
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
-      )
-    ),
-  class="hover"
+    )
+  ),
+  class = "hover"
+)
+
+```
+
+### RMSE per experiment
+
+```{r RMSE, message=F, warning=F}
+#| tbl-cap: RMSE for Weight and Reproduction per experiment for each model.
+
+
+f_RMSE_experiment <- function(df_predobs_Weight, df_predobs_Reproduction){
+  
+  df_rmse_W <- df_predobs_Weight %>%
+    group_by(ID_experiment) %>%
+    summarise(
+      RMSE_Weight = sqrt(mean((predict.endpoint - Weight_obs)^2, na.rm = TRUE))
+    )
+  
+  df_rmse_R <- df_predobs_Reproduction %>%
+    group_by(ID_experiment) %>%
+    summarise(
+      RMSE_Reproduction = sqrt(mean((predict.endpoint - Reproduction_obs)^2, na.rm = TRUE))
+    )
+  
+  df_rmse <- left_join(df_rmse_W, df_rmse_R)
+  
+  return(df_rmse)
+}
+
+
+df_rmse <- purrr::map2_dfr(
+  list_weight,
+  list_repro,
+  f_RMSE_experiment,
+  .id = "Model"
+)
+
+df_rmse <- df_rmse %>%
+  dplyr::mutate(Model = str_remove(Model, "df_predobs_(Weight|Reproduction)_")) %>%
+  pivot_longer(
+    cols = starts_with("RMSE"),
+    names_to = "Metric",
+    values_to = "RMSE"
   )
 
+df_rmse |>
+  pivot_wider(
+    names_from = Metric,
+    values_from = RMSE
+  ) |> 
+  datatable(
+  options = list(
+    dom = 't',
+    pageLength = nrow(df_rmse),
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+    )
+  ),
+  class = "hover"
+)
+
+```
+
+```{r}
+#| fig-cap: RMSE per experiment.
+#| label: fig-rmse
+#| fig-height: 10
+#| fig-width: 12
+
+ID_exp_plot_1 <- unique(df_rmse$ID_experiment)[1:6]
+ID_exp_plot_2 <- unique(df_rmse$ID_experiment)[7:12]
+
+ylim_metric <- df_rmse |>
+  group_by(Metric) |>
+  summarise(
+    ymin = min(RMSE, na.rm = TRUE),
+    ymax = max(RMSE, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+make_plot <- function(data, ids, metric_name) {
+  
+  lims <- ylim_metric |>
+    filter(Metric == metric_name)
+  
+  ggplot(
+    subset(data, ID_experiment %in% ids & Metric == metric_name),
+    aes(
+      x = Model,
+      y = RMSE,
+      color = Model
+    )
+  ) +
+    geom_point(size = 2) +
+    facet_grid(
+      . ~ ID_experiment
+    ) +
+    coord_cartesian(
+      ylim = c(lims$ymin, lims$ymax)
+    ) +
+    scale_color_manual(
+      name = "Models",
+      values = c(Nord_aurora, Nord_frost)
+    ) +
+    theme_bw() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+      strip.text = element_text(size = 8)
+    ) +
+    labs(
+      x = "Model",
+      y = "RMSE"
+    )
+}
+
+p1_metric1 <- make_plot(df_rmse, ID_exp_plot_1, unique(df_rmse$Metric)[1]) +
+  labs(title = "RMSE Weight") +
+  theme(
+    axis.title.x = element_blank()
+  )
+p2_metric1 <- make_plot(df_rmse, ID_exp_plot_2, unique(df_rmse$Metric)[1])
+
+p1_metric2 <- make_plot(df_rmse, ID_exp_plot_1, unique(df_rmse$Metric)[2]) +
+  labs(title = "RMSE Reproduction") +
+  theme(
+    axis.title.x = element_blank()
+  )
+p2_metric2 <- make_plot(df_rmse, ID_exp_plot_2, unique(df_rmse$Metric)[2])
+
+p <- (
+  p1_metric1 / p2_metric1 /
+  p1_metric2 / p2_metric2
+) +
+  plot_layout(guides = "collect")
+
+p
+
+```
+
+```{r saveRMSE, include = F}
+ggsave(
+  filename = "RMSE_per_experiment.png",
+  plot = p,
+  width = 12, height = 10,
+  path = path_fig
+) 
+```
+
+## Predicted trajectories for Weight and Reproduction
+
+```{r setpointfullin}
+
+Nb_experiment <- 12
+step_sim <- 0.05
+select_times <- seq(0,400, 0.1)
+
+Endpoints_print <- "Weight,
+    Reproduction"
+
+
+l_param_name_A_FLYw <- names(Summary_res_A_FLYw) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_A_FLYw, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_A_FLYw, step_sim, Endpoints_print
+  )
+
+l_param_name_B_FLYe <- names(Summary_res_B_FLYe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_B_FLYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_B_FLYe, step_sim, Endpoints_print
+  )
+
+l_param_name_C_CWYe <- names(Summary_res_C_CWYe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_C_CWYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_C_CWYe, step_sim, Endpoints_print
+  )
+
+l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_D_CWKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_D_CWKe, step_sim, Endpoints_print
+  )
+
+l_param_name_E_CLYe <- names(Summary_res_E_CLYe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_E_CLYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_E_CLYe, step_sim, Endpoints_print
+  )
+
+l_param_name_F_CLKe <- names(Summary_res_F_CLKe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_F_CLKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_F_CLKe, step_sim, Endpoints_print
+  )
+
+```
+
+```{bash, eval=F, execute=F}
+for j in $(seq 1 12); do
+./mcsim.DEBcali DEB_setpoint_full_${j}.in
+done
+```
+
+```{r}
+
+width_plot <- 12
+height_plot <- 12
+
+file_rds_A_FLYw <- file.path(path_A_FLYw, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_A_FLYw)) {
+  df_pred_full_A_FLYw <- readRDS(file_rds_A_FLYw)
+} else {
+  df_pred_full_A_FLYw <- f_read_Setpoint_full(path_A_FLYw, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_B_FLYe <- file.path(path_B_FLYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_B_FLYe)) {
+  df_pred_full_B_FLYe <- readRDS(file_rds_B_FLYe)
+} else {
+  df_pred_full_B_FLYe <- f_read_Setpoint_full(path_B_FLYe, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_C_CWYe <- file.path(path_C_CWYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_C_CWYe)) {
+  df_pred_full_C_CWYe <- readRDS(file_rds_C_CWYe)
+} else {
+  df_pred_full_C_CWYe <- f_read_Setpoint_full(path_C_CWYe, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_CWKe)) {
+  df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
+} else {
+  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_E_CLYe <- file.path(path_E_CLYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_E_CLYe)) {
+  df_pred_full_E_CLYe <- readRDS(file_rds_E_CLYe)
+} else {
+  df_pred_full_E_CLYe <- f_read_Setpoint_full(path_E_CLYe, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_F_CLKe <- file.path(path_F_CLKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_F_CLKe)) {
+  df_pred_full_F_CLKe <- readRDS(file_rds_F_CLKe)
+} else {
+  df_pred_full_F_CLKe <- f_read_Setpoint_full(path_F_CLKe, Nb_experiment, select_times, step_sim)
+}
+
+```
+
+::: panel-tabset
+## A_FLYw
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_A_FLYw
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRA_FLYw, include = F}
+ggsave(
+  filename="A_FLYw_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## B_FLYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_B_FLYe
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRB_FLYe, include = F}
+ggsave(
+  filename="B_FLYe_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## C_CWYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_C_CWYe
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRC_CWYe, include = F}
+ggsave(
+  filename="C_CWYe_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## D_CWKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_D_CWKe
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRD_CWKe, include = F}
+ggsave(
+  filename="D_CWKe_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## E_CLYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_E_CLYe
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRE_CLYe, include = F}
+ggsave(
+  filename="E_CLYe_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## F_CLKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_F_CLKe
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_ribbon(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r savetrajWRF_CLKe, include = F}
+ggsave(
+  filename="F_CLKe_trajWR.png", 
+  plot=p, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+:::
+
+## Sensitivity analysis - CWKe
+
+```{r ASparam}
+
+seed       <- 361224
+Sobol_type <- "Jansen"
+Nb_sim     <- 50000 # (p + 2) * Nb_sim simulations
+CV         <- 0.1
+processors <- 2
+Nboot      <- 1000 # nb replicat
+NOut       <- 3    # number of outputs
+Temperature_bol <- TRUE
+
+l_params_median <- c(
+  # Environment
+  muOM = 11700, rOM_ClxHorse = 0.0087741,
+  # Energy assimilation
+  Fm = 0.0006748850, kapX = 0.258, K = 0.00611915, pAm = 160.85200, v = 0.212075, 
+  kapJ  = 0.913533, kapA = 0.494191, tau = 12.9371,
+  # Maintenance and growth
+  r_pAm_pM = 0.75549700, Eg = 4183, dv = 4.47722, de = 1.849940e-09,         
+  # Maturity
+  kJ = 0.002793, Ehb = 0.5, Ehp = 97.5249,
+  # Reproduction
+  E_coc = 27.4525, kapR = 0.475,   
+  # Metabolic response to T
+  TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15   
+)
+
+# Sobol_design <- f_AS_Sobol_design(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, Nout, l_params_median, Temperature_bol)
+# 
+# l_Sobol_param <- Sobol_design$Sobol_param
+# Sobol_info <- Sobol_design$Sobol
+
+path_AS <- here::here("mod/Z_AS")
+file_rds_AS <- file.path(path_AS, paste0("df_Sobol_param.rds"))
+
+# if (file.exists(file_rds_AS)) {
+#   df_Sobol_param <- readRDS(file_rds_AS)
+# } else {
+#   # Long to generate
+#   df_Sobol_param <- do.call(rbind, lapply(l_Sobol_param, as.data.frame)) 
+#   df_Sobol_param <- cbind(id = seq_len(nrow(df_Sobol_param)), df_Sobol_param)
+#   saveRDS(df_Sobol_param, file_rds_AS)
+#   write.table(df_Sobol_param, file = here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t", row.names = FALSE, quote = FALSE)
+# }
+
+
+
+# tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
+
+# In the AS folder in the terminal :
+# makemcsim DEBcali.model
+# ./mcsim.DEBcali DEB_AS.in
+
+```
+
+```{r}
+Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
+
+# df_AS_sim_T <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,"_T.out"))) |> 
+#   dplyr::select(-(1:(length(l_params_median)+1))) |> 
+#   setNames(Names_AS_outputs)
+# 
+# df_AS_sim_noT <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,".out"))) |> 
+#   dplyr::select(-(1:(length(l_params_median)+1-4))) |> 
+#   setNames(Names_AS_outputs)
+# 
+# df_Sobol_results_T <- f_AS_Sobol_index(df_AS_sim_T, Sobol_info)
+# df_Sobol_results_noT <- f_AS_Sobol_index(df_AS_sim_noT, Sobol_info)
 ```

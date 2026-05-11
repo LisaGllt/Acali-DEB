@@ -10,3 +10,5 @@
 *.rdx
 *.RData
 **/.DS_Store
+mod/.txt
+mod/Z_AS/Param_sobol_Jansen.txt

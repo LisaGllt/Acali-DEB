@@ -8,19 +8,19 @@ path_fig <- here::here("fig/DENS/")
 pal_dens <- c(Nord_aurora[5], rev(Nord_frost))
 ```
 
-# Impact of density and food quantity on earthworm growth and reproduction
+# DENS experiment - Impact of density and food quantity
 
 ## Protocol
 
-Synchronized newly hatched earthworms are put in cosms with 200 g of Closeaux soil with a WHC of 70%. They are fed every 14 days and the soil is renewed every 28 days. Soil humidity is checked every week. Earthworms are weighted every 14 days. Once at least one earthworm is adult, cocoons produced are retrieved every 28 days when changing the soil. 
+Synchronized newly hatched earthworms are put in cosms with 200 g of Closeaux soil with a WHC of 70%. They are fed every 14 days and the soil is renewed every 28 days. Soil humidity is checked every week. Earthworms are weighted every 14 days. Once at least one earthworm is adult, cocoons produced are retrieved every 28 days when changing the soil.
 
 Conditions :
 
-- D1 : One earthworm per cosm | Food = 3 g/14 days
-- D2 : 2 earthworms per cosm | Food = 3 g/14 days
-- D2b : 2 earthworms per cosm | Food = 6 g/14 days
-- D5 : 5 earthworms per cosm | Food = 3 g/14 days
-- D7 : 7 earthworms per cosm | Food = 3 g/14 days
+-   D1 : One earthworm per cosm \| Food = 3 g/14 days
+-   D2 : 2 earthworms per cosm \| Food = 3 g/14 days
+-   D2b : 2 earthworms per cosm \| Food = 6 g/14 days
+-   D5 : 5 earthworms per cosm \| Food = 3 g/14 days
+-   D7 : 7 earthworms per cosm \| Food = 3 g/14 days
 
 Some earthworm died in the first 14 days of the experiment. Another batch of earthworms were then started 28 days after the first one.
 
@@ -121,11 +121,13 @@ ggsave(
 ```
 
 ```{r}
+cat("Summary of initial weights : \n")
 summary(df_dens_t0$Weight)
 ```
 
-
 ### Growth trajectories
+
+@fig-densgrowthtraj shows all data points collected during the experiment.
 
 ```{r, warning = F, message = F}
 #| fig-cap: Growth trajectories of earthworms per conditions.
@@ -193,6 +195,10 @@ ggsave(
 )
 ```
 
+## Effect of density
+
+### Juvenile growth rate
+
 ```{r growthrate, message=F, warning=F}
 f_GrowthRate <- function(data){
  
@@ -255,139 +261,6 @@ df_GrowthRate_mean <- df_GrowthRate |>
 
 ```
 
-```{r GRsummary}
-df_GrowthRate_mean <- df_GrowthRate |> 
-  aggregate(Growth_rate~Condition, FUN=mean)
-df_GrowthRate_mean
-```
-
-## Effect of density on juvenile growth rate
-
-```{r statGR}
-anova_model <- aov(Growth_rate ~ Condition, data = df_GrowthRate)
-summary(anova_model)
-# Normalité des résidus
-shapiro.test(residuals(anova_model))
-# Homogénéité des variances
-bartlett.test(Growth_rate ~ Condition, data = df_GrowthRate)
-TukeyHSD(anova_model)
-```
-
-
-
-## Effect of density
-
-```{r}
-df_dens_dens <- df_dens |> 
-  filter(!(Condition %in% c("D2b")))
-df_dens_dens_mean <- df_dens_mean |> 
-  filter(!(Condition %in% c("D2b")))
-```
-
-```{r, warning = F, message = F}
-#| fig-cap: Growth trajectories of earthworms per conditions.
-#| label: fig-densgrowthtraj21
-#| fig-height: 8
-#| fig-width: 8
-
-
-xmax <- 170
-ymax <- 2000
-
-p <- ggplot()+
-  geom_point(
-    data = df_dens_dens,
-    aes(
-      x=t,
-      y=Weight,
-      color=as.factor(Condition),
-      group=as.factor(ID)
-    ),
-    alpha=0.5,
-    size=2
-  )+
-  geom_point(
-    data = df_dens_dens_mean,
-    aes(
-      x=t,
-      y=Weight,
-      color=as.factor(Condition)
-    ),
-    size=2
-  )+
-  geom_line(
-    data = df_dens_dens_mean,
-    aes(
-      x=t,
-      y=Weight,
-      color=as.factor(Condition)
-    )
-  )+
-  scale_color_manual(
-    name="Replicate\nnumber",
-    values=c(Nord_aurora, Nord_frost)
-    )+
-  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
-  scale_x_continuous(
-    limits = c(0, xmax),       
-    breaks = seq(0, xmax, by = 28),
-    minor_breaks = seq(0, xmax, by = 14) 
-  ) +
-  ylim(0, ymax)+
-  labs(
-    x="Time (days)",
-    y = "Weight (mg)"
-  )+
-  theme_minimal()
-p
-```
-```{r, warning = F, message = F}
-#| fig-cap: Reproduction of earthworms per conditions.
-#| label: fig-densegg
-#| fig-height: 8
-#| fig-width: 8
-
-
-xmax <- 170
-ymax <- 25
-
-p <- ggplot()+
-  geom_point(
-    data = df_dens_egg,
-    aes(
-      x=t,
-      y=Reproduction,
-      color=as.factor(Condition)
-    ),
-    size=2
-  )+
-  geom_line(
-    data = df_dens_egg,
-    aes(
-      x=t,
-      y=Reproduction,
-      color=as.factor(Condition)
-    )
-  )+
-  scale_color_manual(
-    name="Replicate\nnumber",
-    values=c(Nord_aurora, Nord_frost)
-    )+
-  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
-  scale_x_continuous(
-    limits = c(0, xmax),       
-    breaks = seq(0, xmax, by = 28),
-    minor_breaks = seq(0, xmax, by = 14) 
-  ) +
-  ylim(0, ymax)+
-  labs(
-    x="Time (days)",
-    y = "Cumulated reproduction (#/ind)"
-  )+
-  theme_minimal()
-p
-```
- 
 ```{r, warning = F, message = F}
 #| fig-cap: Growth rates of earthworms per condition
 #| label: fig-densgrowthratedens
@@ -420,36 +293,59 @@ p <- ggplot(
   theme_minimal()
 p
 ```
-```{r, message=F, warning=F}
 
-df_GrowthRate_density <- subset(df_GrowthRate, Condition != "D2b")
+```{r GRsummary}
+#| tbl-cap: Growth rate per condition
 
-cat("Is there an effect of density on juvenile growth rate ? (Food = 3 g/14 days) \n")
-mod_aov <- aov(Growth_rate ~ Nb_vdt_f, data = df_GrowthRate_density)
-summary(mod_aov)
-
-pairwise_test <- glht(mod_aov, linfct = mcp(Nb_vdt_f = "Tukey"))
-summary(pairwise_test)
+df_GrowthRate_mean <- df_GrowthRate |> 
+  aggregate(Growth_rate~Condition, FUN=mean)
+df_GrowthRate_mean |> datatable(
+  options = list(
+    dom = 't',
+    pageLength = nrow(df_GrowthRate_mean),
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+    )
+  ),
+  class = "hover"
+)
 ```
 
-### D7 - Are the initial smallest the one who dies ?
+Is there an effect of density on juvenile growth rate ?
+
+```{r statDGR}
+anova_model <- aov(Growth_rate ~ Condition, data = subset(df_GrowthRate, Condition != "D2b"))
+summary(anova_model)
+# Normalité des résidus
+shapiro.test(residuals(anova_model))
+# Homogénéité des variances
+bartlett.test(Growth_rate ~ Condition, data = df_GrowthRate)
+TukeyHSD(anova_model)
+```
 
 ```{r}
-#| fig-cap: Growth of earthworm in the D7 condition
-#| label: fig-densD7
-#| fig-height: 14
-#| fig-width: 6
+df_dens_growth_dens <- df_dens_growth |> 
+  filter(!(Condition %in% c("D2b")))
+df_dens_growth_dens_mean_rep <- df_dens_growth_mean_rep |> 
+  filter(!(Condition %in% c("D2b")))
 
-df_dens_D7 <- df_dens_growth_full |>  
-  filter(Condition == "D7")
+pal_dens_dens <- c("#B48EAD", "#5E81AC", "#88C0D0", "#8FBCBB")
+```
 
-df_rank <- df_dens_D7 %>%
-  group_by(t) %>%
-  mutate(rank = rank(-Weight, ties.method = "average"))  # rang 1 = plus lourd
+```{r, warning = F, message = F}
+#| fig-cap: Growth trajectories of earthworms per conditions.
+#| label: fig-densgrowthtraj21
+#| fig-height: 8
+#| fig-width: 8
+
+
+xmax <- 170
+ymax <- 2000
 
 p <- ggplot()+
   geom_point(
-    data = df_dens_D7,
+    data = df_dens_growth_dens,
     aes(
       x=t,
       y=Weight,
@@ -459,9 +355,26 @@ p <- ggplot()+
     alpha=0.5,
     size=2
   )+
+  geom_point(
+    data = df_dens_growth_dens_mean_rep,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    ),
+    size=2
+  )+
+  geom_line(
+    data = df_dens_growth_dens_mean_rep,
+    aes(
+      x=t,
+      y=Weight,
+      color=as.factor(Condition)
+    )
+  )+
   scale_color_manual(
     name="Replicate\nnumber",
-    values=c(Nord_aurora, Nord_frost)
+    values=pal_dens_dens
     )+
   facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
   scale_x_continuous(
@@ -469,29 +382,141 @@ p <- ggplot()+
     breaks = seq(0, xmax, by = 28),
     minor_breaks = seq(0, xmax, by = 14) 
   ) +
-  ylim(0, 800)+
+  ylim(0, ymax)+
   labs(
     x="Time (days)",
     y = "Weight (mg)"
   )+
   theme_minimal()
-
 p
 ```
 
+### Cocoon production
 
-## Effect of food on growth rate
+```{r, warning = F, message = F}
+#| fig-cap: Reproduction of earthworms per conditions.
+#| label: fig-densegg
+#| fig-height: 8
+#| fig-width: 8
+
+xmax <- 170
+ymax <- 25
+
+p <- ggplot()+
+  geom_point(
+    data = subset(df_dens_repro, Condition != "D2b"),
+    aes(
+      x=t,
+      y=Reproduction,
+      color=as.factor(Condition)
+    ),
+    size=2
+  )+
+  geom_line(
+    data = subset(df_dens_repro, Condition != "D2b"),
+    aes(
+      x=t,
+      y=Reproduction,
+      color=as.factor(Condition)
+    )
+  )+
+  scale_color_manual(
+    name="Replicate\nnumber",
+    values=pal_dens
+    )+
+  facet_grid(cols=vars(Condition), rows=vars(Nb_rep))+
+  scale_x_continuous(
+    limits = c(0, xmax),       
+    breaks = seq(0, xmax, by = 28),
+    minor_breaks = seq(0, xmax, by = 14) 
+  ) +
+  ylim(0, ymax)+
+  labs(
+    x="Time (days)",
+    y = "Cumulated reproduction (#/ind)"
+  )+
+  theme_minimal()
+p
+```
+
+```{r}
+#| tbl-cap: Reproduction rate per condition
+
+df_dens_repro_clean <- df_dens_repro |>
+  filter(!(Condition %in% c("D1"))) |>
+  arrange(ID, t) |>
+  group_by(ID) |>
+  mutate(
+    start_repro = min(t[Nb_cocoons > 0], na.rm = TRUE)
+  ) |>
+  ungroup() |>
+  filter(is.finite(start_repro)) |>
+  arrange(ID, t) |>
+  group_by(ID) |>
+  mutate(
+    dt = t - lag(t)
+  ) |>
+  ungroup()  |>
+  mutate(
+    Repro_rate = Nb_cocoons / (Nb_vdt * dt)
+  ) |> 
+  filter(Repro_rate!=0) |> 
+  group_by(ID) |> 
+  slice(-1) |> # Remove first repro rate bc reproduction started some unknow time during the previous 28 days.
+  summarise(
+    Repro_rate = mean(Repro_rate, na.rm = TRUE),
+    Condition = first(Condition),
+    Food = first(Food),
+    Nb_vdt = first(Nb_vdt),
+    .groups = "drop"
+  ) |> 
+  ungroup()
+
+
+df_dens_reprorate_mean <- df_dens_repro_clean %>%
+  aggregate(Repro_rate~Condition, FUN=mean)
+
+df_dens_reprorate_mean  |> 
+  mutate(Repro_rate = round(Repro_rate, 2)) |> 
+  datatable(
+  options = list(
+    dom = 't',
+    pageLength = nrow(df_dens_reprorate_mean),
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+    )
+  ),
+  class = "hover"
+)
+```
+
+Is there an effect of density on earthworm reproduction ?
+
+```{r statDR}
+model <- glm(
+  Repro_rate ~ Condition,
+  family = Gamma(link = "log"),
+  data = df_dens_repro_clean |> filter(!(Condition == "D2b") & !is.na(Repro_rate))
+)
+summary(model)
+
+emmeans(model, pairwise ~ Condition, adjust = "tukey")
+```
+
+## Effect of food
+
+### Juvenile growth rate
 
 ```{r, message=F, warning=F}
 df_GrowthRate_food <- subset(df_GrowthRate, Nb_vdt == 2)
 ```
 
-
 ```{r, warning = F, message = F}
 #| fig-cap: Growth rates of earthworms per food condition (density = 2).
 #| label: fig-densgrowthratefood
-#| fig-height: 6
-#| fig-width: 8
+#| fig-height: 4
+#| fig-width: 6
 
 
 p <- ggplot(
@@ -519,21 +544,55 @@ p <- ggplot(
   )+
   theme_minimal()
 p
+```
 
+Is there an effect of food on growth rate ?
+
+```{r}
 shapiro.test(df_GrowthRate_food$Growth_rate) # Si pas signif alors donnee pas inconsistentes avec une loi normale
 var.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food) # Si pas signif alors variance égale
 t.test(df_GrowthRate_food$Growth_rate~df_GrowthRate_food$Food, alternative = "two.sided", var.equal=T) # si signif différence signif entre les deux groupes
 ```
 
-## Reproduction
+### Cocoon production
 
-```{r}
-df_dens_reprorate_mean <- df_dens_repro %>%
-  aggregate(Nb_cocoons_ind~Condition, FUN=mean)
-
-df_dens_reprorate_mean
+```{r, message=F, warning=F}
+df_dens_repro_clean_food <- subset(df_dens_repro_clean, Nb_vdt == 2) |> 
+  mutate(Food_f = as.factor(Food))
 ```
 
+```{r, warning = F, message = F}
+#| fig-cap: Reproduction rates of earthworms per food condition (density = 2).
+#| label: fig-densreproratefood
+#| fig-height: 4
+#| fig-width: 6
+
+p <- ggplot(
+  data = df_dens_repro_clean_food,
+  aes(
+    x = Food_f,
+    y = Repro_rate
+  )
+)+
+  geom_boxplot(
+    alpha=0,
+    color=Nord_polar[4],
+    fill=Nord_frost[4]
+  )+
+  geom_dotplot(
+    binaxis='y',
+    stackdir='center',
+    alpha=0.5,
+    color=Nord_frost[4],
+    fill=Nord_frost[4]
+  )+
+  labs(
+    x = "Horse dung quantity given per earthworm every 14 days",
+    y = expression(paste("Reproduction rate (#/ind/day)"))
+  )+
+  theme_minimal()
+p
+```
 
 ## Summary figures
 
@@ -627,4 +686,3 @@ ggsave(
   path = path_fig
 )
 ```
-
