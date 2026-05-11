@@ -1,7 +1,7 @@
 
 /*-- scss:defaults --*/
 
-$primary: #5E81AC !default;
+$primary: #4C566A !default;
 $font-size-root: 18px !default;
 
 $code-annotation-higlight-color: #E5E9F0  !default;
@@ -9,28 +9,28 @@ $code-annotation-higlight-bg: #E5E9F0  !default;
 
 .code-annotation-anchor {
   background-color: inherit !important;
-  color: #5E81AC !important;
+  color: #4C566A !important;
 }
 
 .code-annotation-active {
-  background-color: #5E81AC !important;
+  background-color: #4C566A !important;
   color: #ECEFF4  !important;
-  border-color: #5E81AC !important;
+  border-color: #4C566A !important;
 }
 
 /* Background of the annotation box*/
 .tippy-box[data-theme~=quarto] {
     background-color: white !important;
-    color: #5E81AC !important;
-    border-color: #5E81AC !important;
+    color: #4C566A !important;
+    border-color: #4C566A !important;
 }
 
 .tippy-box[data-theme~="quarto"] > .tippy-svg-arrow {
-  border-color: #5E81AC !important
+  border-color: #4C566A !important
 }
 
 .tippy-box[data-theme~="quarto"] > .tippy-arrow:before {
-  border-color: #5E81AC !important
+  border-color: #4C566A !important
 }
 
 
@@ -98,7 +98,7 @@ box-shadow: inset 0 calc(-1*var(--bs-accordion-border-width)) 0 var(--bs-accordi
 } --*/
 
 .sidebar-title {
-  color: #5E81AC;
+  color: #4C566A;
 }
 
 div.sidebar-item-container .active {
@@ -130,7 +130,7 @@ h4 { margin-top: 1.5em; font-size: 1.1rem; }
 h5 { margin-top: 1.5em; font-size: 1rem; }
 
 .quarto-section-identifier {
-  color: #5E81AC;
+  color: #4C566A;
   font-weight: normal;
 }
 
