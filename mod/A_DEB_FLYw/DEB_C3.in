@@ -18,7 +18,7 @@ Distrib (kap,          Uniform,                 0,        1);
 Distrib (Ehp,          TruncNormal_cv,        100,      0.2,      20,     300);
 Distrib (E_coc,        TruncNormal_cv,         30,      0.2,       1,     300);
 Distrib (rOM_ClxHorse, LogUniform,        0.00001,      0.3);
-Distrib (dv,           TruncNormal_cv,          2,      0.5,       0,      10);
+Distrib (dv,           TruncNormal_cv,          1,      0.05,       0,      4);
 Distrib (wE,           LogUniform,              1,      1000);
 
 # Calcul des vraissemblances

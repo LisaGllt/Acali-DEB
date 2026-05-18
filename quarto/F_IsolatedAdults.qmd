@@ -14,7 +14,7 @@ lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 ```{r}
 path_fig <- here::here("fig/DEB_Models")
-path_files <- here::here("mod/FINAL/Y_DEB_IsolatedAdultes")
+path_files <- here::here("mod/Y_DEB_IsolatedAdultes")
 
 col_experiment <- c(
   Nord_aurora[1], 
@@ -186,8 +186,13 @@ pW <- ggplot()+
     ID_experiment ~ kappa,
     scales = "free",
     labeller = labeller(
-    kappa = c("J" = expression(kappa[J]),
-              "A" = expression(kappa[A]))
+    kappa = as_labeller(
+      c(
+        J = "kappa[J]",
+        A = "kappa[A]"
+      ),
+      default = label_parsed
+    )
   )
   )+
   
@@ -196,7 +201,10 @@ pW <- ggplot()+
     y = "Weight (g)"
   )+
   
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    strip.text.x = element_text(size=12)
+  )
 
 pW
 ```
@@ -269,8 +277,13 @@ pR <- ggplot()+
     ID_experiment ~ kappa,
     scales = "free",
     labeller = labeller(
-    kappa = c("J" = expression(kappa[J]),
-              "A" = expression(kappa[A]))
+    kappa = as_labeller(
+      c(
+        J = "kappa[J]",
+        A = "kappa[A]"
+      ),
+      default = label_parsed
+    )
   )
   )+
   
@@ -279,7 +292,10 @@ pR <- ggplot()+
     y = "Reproduction (#)"
   )+
   
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    strip.text.x = element_text(size=12)
+  )
 
 pR
 ```

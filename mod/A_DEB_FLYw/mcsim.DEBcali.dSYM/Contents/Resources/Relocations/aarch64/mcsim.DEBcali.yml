@@ -11,7 +11,7 @@ relocations:
   - { offsetInCU: 0xE1, offset: 0xE1, size: 0x8, addend: 0x0, symName: _vnModelVars, symObjAddr: 0xA04, symBinAddr: 0x10000802C, symSize: 0x0 }
   - { offsetInCU: 0xF6, offset: 0xF6, size: 0x8, addend: 0x0, symName: _vnInputs, symObjAddr: 0xA08, symBinAddr: 0x100008030, symSize: 0x0 }
   - { offsetInCU: 0x10B, offset: 0x10B, size: 0x8, addend: 0x0, symName: _vnParms, symObjAddr: 0xA0C, symBinAddr: 0x100008034, symSize: 0x0 }
-  - { offsetInCU: 0x120, offset: 0x120, size: 0x8, addend: 0x0, symName: _bDelays, symObjAddr: 0x38AC, symBinAddr: 0x100008680, symSize: 0x0 }
+  - { offsetInCU: 0x120, offset: 0x120, size: 0x8, addend: 0x0, symName: _bDelays, symObjAddr: 0x38A4, symBinAddr: 0x100008680, symSize: 0x0 }
   - { offsetInCU: 0x140, offset: 0x140, size: 0x8, addend: 0x0, symName: _vrgvmGlo, symObjAddr: 0xA10, symBinAddr: 0x100008038, symSize: 0x0 }
   - { offsetInCU: 0x1DD, offset: 0x1DD, size: 0x8, addend: 0x0, symName: _vrgModelVars, symBinAddr: 0x100008FC8, symSize: 0x0 }
   - { offsetInCU: 0x205, offset: 0x205, size: 0x8, addend: 0x0, symName: _vrgInputs, symBinAddr: 0x100008788, symSize: 0x0 }

@@ -646,7 +646,7 @@ df_XP3_mean <- df_XP3_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 3 from @bart_3019d.
+#| fig-cap: Experiment 3 from @bart_2019d.
 #| label: fig-XP3_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -936,7 +936,7 @@ df_XP4_2_mean <- df_XP4_2_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 4_1 from @bart_4_1019d.
+#| fig-cap: Experiment 4_1 from @bart_2019d.
 #| label: fig-XP4_1_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -1034,7 +1034,7 @@ p
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 4_2 from @bart_4_2019d.
+#| fig-cap: Experiment 4_2 from @bart_2019d.
 #| label: fig-XP4_2_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -1196,7 +1196,7 @@ df_XP5_mean <- df_XP5_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 5 from @bart_5019d.
+#| fig-cap: Experiment 5 from @bart_2019d.
 #| label: fig-XP5_mean
 #| fig-height: 8
 #| fig-width: 6

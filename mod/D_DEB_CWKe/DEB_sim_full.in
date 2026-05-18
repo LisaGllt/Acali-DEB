@@ -5,20 +5,20 @@ Integrate(Lsodes, 1E-5, 1E-6, 1);
 
 ########## Experiments ################################################
 
-Fm = 0.000674885;
-pAm = 160.852;
-r_pAm_pM = 0.755497;
-v = 0.212075;
-kapJ = 0.913533;
-kapA = 0.494191;
-Ehp = 97.5249;
-E_coc = 27.4525;
-rOM_ClxHorse = 0.0087741;
-K = 0.00611915;
-dv = 4.47722;
-de = 1.84994e-09;
-tau = 12.9371;
-Sigma_W = 0.123448;
+Fm = 0.0187644;
+pAm = 254.472;
+r_pAm_pM = 0.75791;
+v = 0.224988;
+kapJ = 0.979406;
+kapA = 0.775049;
+Ehp = 78.804;
+E_coc = 46.9157;
+rOM_ClxHorse = 0.0051447;
+K = 0.0145154;
+dv = 1.13679;
+de = 1.65805e-09;
+tau = 13.2759;
+Sigma_W = 0.149129;
 
 Simulation { # Bart2019_XP1_1
     Init= 1;
@@ -95,43 +95,6 @@ Simulation { # Bart2019_XP1_2
     Qf_horse,
     X,
 				0, 364, 0.01);
-}
-Simulation { # Bart2019_XP2
-    Init= 1;
-    WeightSoilCosm = 400;
-    Winit=0.0125914285714286;
-    OM_soil_t0=13;
-    OM_horse_t0=2.7;
-    Soil=1;
-    Texp=15;
-    Dens=1;
-    OM_soil_replace=Events(OM_soil,
-                          4,
-                          0, 28, 56, 77,
-                          Replace, Replace, Replace, Replace, 
-                           13, 13, 13, 13);
-    OM_horse_replace=Events(OM_horse,
-                           4,
-                           0, 28, 56, 77,
-                           Replace, Replace, Replace, Replace, 
-                            2.7, 2.7, 2.7, 2.7);
-    OM_horse_add=Events(OM_horse,
-                           4,
-                           14, 42, 70, 84,
-                           Add, Add, Add, Add, 
-                            2.7, 2.7, 2.7, 2.7);
-                               
-    PrintStep(Weight,
-    Length_struct,
-    Reproduction,
-    Energy,
-    Organic_matter,
-    kapreal,
-    freal,
-    Qf_soil,
-    Qf_horse,
-    X,
-				0, 84, 0.01);
 }
 Simulation { # Bart2019_XP3
     Init= 1;
