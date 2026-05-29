@@ -42,12 +42,128 @@ l_Experiments_fit <- c(
 
 Adults_alone <- FALSE
 
-df_data_fit <- f_import_data_DEB(l_Experiments_fit, Adults_alone)
+df_data_fit <- f_import_data_DEB(l_Experiments_fit, Adults_alone) 
 
 Experiments_carac <- f_get_experiments()
 l_Experiments_tot <- Experiments_carac$l_Experiments_tot
 l_carac <- Experiments_carac$l_carac
 df_carc_exp <- Experiments_carac$df_carc_exp
+
+```
+
+```{r, echo=F, message=F, warning=F, include = F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_A_FLYw
+#| fig-height: 12
+#| fig-width: 12
+
+l_Experiments_Bart <- c(
+  "Bart2019_XP1_1",  
+  "Bart2019_XP1_2",  
+  #"Bart2019_XP2",
+  "Bart2019_XP3",   
+  "Bart2019_XP4_1",
+  "Bart2019_XP4_2",
+  "Bart2019_XP5", 
+  "Bart2020"#,
+  #"Gollot2026_lufa"
+  # "Gollot2026_dens_D1",
+  # "Gollot2026_dens_D2",
+  # "Gollot2026_dens_D2b",
+  # "Gollot2026_dens_D5",
+  # "Gollot2026_dens_D7"
+  )
+
+df_data_Bart <- f_import_data_DEB(l_Experiments_Bart, Adults_alone = TRUE) 
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+    Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+    Nord_aurora[2],
+    Nord_aurora[2], Nord_aurora[3],
+    Nord_aurora[4], 
+    Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    geom_point(
+      data = df_data_Bart,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_point(
+      data = df_data_Bart,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
 
 ```
 
@@ -225,6 +341,10 @@ f_In_tot(path_F_CLKe, l_Experiments_fit, Adults_alone, OM_diff,
 
 ```{r getres, echo=F, message=F, warning=F}
 
+n_data_Weight <- length(na.omit(df_data_fit$Weight))
+n_data_Reproduction <- length(na.omit(df_data_fit$Reproduction))
+n_data_fit <- n_data_Weight + n_data_Reproduction
+
 ######### A FLYw ###############################################################
 
 MCMC_out_A_FLYw <- f_MCSim(path_A_FLYw)
@@ -237,11 +357,9 @@ N_iter_setpoint_A_FLYw <- MCMC_out_A_FLYw$N_iter_setpoint
 L_parameters_A_FLYw <- unique(MCMC_out_A_FLYw$Priors$Nom)
 
 LL_A_FLYw <- f_get_mode(MCMC_out_A_FLYw$df_LnData$LnData)
-n_A_FLYw <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_A_FLYw <- Nb_param_A_FLYw - 1 # On enlève le Sigma_W
 
-BIC_A_FLYw <- -2*LL_A_FLYw+k_A_FLYw*log(n_A_FLYw)
+BIC_A_FLYw <- -2*LL_A_FLYw+k_A_FLYw*log(n_data_fit)
 
 Summary_res_A_FLYw <- 
   as.data.frame(MCMC_out_A_FLYw$Summary_res)[1:length(L_parameters_A_FLYw)] |> 
@@ -259,11 +377,9 @@ N_iter_setpoint_B_FLYe <- MCMC_out_B_FLYe$N_iter_setpoint
 L_parameters_B_FLYe <- unique(MCMC_out_B_FLYe$Priors$Nom)
 
 LL_B_FLYe <- f_get_mode(MCMC_out_B_FLYe$df_LnData$LnData)
-n_B_FLYe <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_B_FLYe <- Nb_param_B_FLYe - 1 # On enlève le Sigma_W
 
-BIC_B_FLYe <- -2*LL_B_FLYe+k_B_FLYe*log(n_B_FLYe)
+BIC_B_FLYe <- -2*LL_B_FLYe+k_B_FLYe*log(n_data_fit)
 
 Summary_res_B_FLYe <- 
   as.data.frame(MCMC_out_B_FLYe$Summary_res)[1:length(L_parameters_B_FLYe)] |> 
@@ -281,11 +397,9 @@ N_iter_setpoint_C_CWYe <- MCMC_out_C_CWYe$N_iter_setpoint
 L_parameters_C_CWYe <- unique(MCMC_out_C_CWYe$Priors$Nom)
 
 LL_C_CWYe <- f_get_mode(MCMC_out_C_CWYe$df_LnData$LnData)
-n_C_CWYe <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_C_CWYe <- Nb_param_C_CWYe - 1 # On enlève le Sigma_W
 
-BIC_C_CWYe <- -2*LL_C_CWYe+k_C_CWYe*log(n_C_CWYe)
+BIC_C_CWYe <- -2*LL_C_CWYe+k_C_CWYe*log(n_data_fit)
 
 Summary_res_C_CWYe <- 
   as.data.frame(MCMC_out_C_CWYe$Summary_res)[1:length(L_parameters_C_CWYe)] |> 
@@ -303,11 +417,9 @@ N_iter_setpoint_D_CWKe <- MCMC_out_D_CWKe$N_iter_setpoint
 L_parameters_D_CWKe <- unique(MCMC_out_D_CWKe$Priors$Nom)
 
 LL_D_CWKe <- f_get_mode(MCMC_out_D_CWKe$df_LnData$LnData)
-n_D_CWKe <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_D_CWKe <- Nb_param_D_CWKe - 1 # On enlève le Sigma_W
 
-BIC_D_CWKe <- -2*LL_D_CWKe+k_D_CWKe*log(n_D_CWKe)
+BIC_D_CWKe <- -2*LL_D_CWKe+k_D_CWKe*log(n_data_fit)
 
 Summary_res_D_CWKe <- 
   as.data.frame(MCMC_out_D_CWKe$Summary_res)[1:length(L_parameters_D_CWKe)] |> 
@@ -325,11 +437,9 @@ N_iter_setpoint_E_CLYe <- MCMC_out_E_CLYe$N_iter_setpoint
 L_parameters_E_CLYe <- unique(MCMC_out_E_CLYe$Priors$Nom)
 
 LL_E_CLYe <- f_get_mode(MCMC_out_E_CLYe$df_LnData$LnData)
-n_E_CLYe <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_E_CLYe <- Nb_param_E_CLYe - 1 # On enlève le Sigma_W
 
-BIC_E_CLYe <- -2*LL_E_CLYe+k_E_CLYe*log(n_E_CLYe)
+BIC_E_CLYe <- -2*LL_E_CLYe+k_E_CLYe*log(n_data_fit)
 
 Summary_res_E_CLYe <- 
   as.data.frame(MCMC_out_E_CLYe$Summary_res)[1:length(L_parameters_E_CLYe)] |> 
@@ -347,11 +457,9 @@ N_iter_setpoint_F_CLKe <- MCMC_out_F_CLKe$N_iter_setpoint
 L_parameters_F_CLKe <- unique(MCMC_out_F_CLKe$Priors$Nom)
 
 LL_F_CLKe <- f_get_mode(MCMC_out_F_CLKe$df_LnData$LnData)
-n_F_CLKe <- length(na.omit(df_data_fit$Weight)) + 
-  length(na.omit(df_data_fit$Reproduction))
 k_F_CLKe <- Nb_param_F_CLKe - 1 # On enlève le Sigma_W
 
-BIC_F_CLKe <- -2*LL_F_CLKe+k_F_CLKe*log(n_F_CLKe)
+BIC_F_CLKe <- -2*LL_F_CLKe+k_F_CLKe*log(n_data_fit)
 
 Summary_res_F_CLKe <- 
   as.data.frame(MCMC_out_F_CLKe$Summary_res)[1:length(L_parameters_F_CLKe)] |> 
@@ -1312,7 +1420,6 @@ mcmc_list_corr_A_FLYw <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/A_FLYw_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -1379,7 +1486,6 @@ mcmc_list_corr_B_FLYe <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/B_FLYe_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -1446,7 +1552,6 @@ mcmc_list_corr_C_CWYe <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/C_CWYe_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -1513,7 +1618,6 @@ mcmc_list_corr_D_CWKe <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/D_CWKe_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -1580,7 +1684,6 @@ mcmc_list_corr_E_CLYe <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/E_CLYe_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -1648,7 +1751,6 @@ mcmc_list_corr_F_CLKe <- mcmc.list(
 )
 
 colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-
 file_rds <- here::here("fig/DEB_Models/F_CLKe_ipairs_plot.png")
 
 if (!file.exists(file_rds)) {
@@ -2486,13 +2588,15 @@ p_R <- ggplot(
     )+
   theme_minimal()
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect")
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
 
 p_predobs
 
 ```
 
 ```{r savepredobsA_FLYw, include = F}
+
 ggsave(
   filename = "A_FLYw_predobs.png",
   plot = p_predobs,
@@ -2668,13 +2772,15 @@ p_R <- ggplot(
     )+
   theme_minimal()
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect")
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
 
 p_predobs
 
 ```
 
 ```{r savepredobsB_FLYe, include = F}
+
 ggsave(
   filename = "B_FLYe_predobs.png",
   plot = p_predobs,
@@ -2857,6 +2963,7 @@ p_predobs
 ```
 
 ```{r savepredobsC_CWYe, include = F}
+
 ggsave(
   filename = "C_CWYe_predobs.png",
   plot = p_predobs,
@@ -3032,13 +3139,15 @@ p_R <- ggplot(
     )+
   theme_minimal()
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect")
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
 
 p_predobs
 
 ```
 
 ```{r savepredobsD_CWKe, include = F}
+
 ggsave(
   filename = "D_CWKe_predobs.png",
   plot = p_predobs,
@@ -3214,13 +3323,15 @@ p_R <- ggplot(
     )+
   theme_minimal()
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect")
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
 
 p_predobs
 
 ```
 
 ```{r savepredobsE_CLYe, include = F}
+
 ggsave(
   filename = "E_CLYe_predobs.png",
   plot = p_predobs,
@@ -3396,13 +3507,15 @@ p_R <- ggplot(
     )+
   theme_minimal()
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect")
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
 
 p_predobs
 
 ```
 
 ```{r savepredobsF_CLKe, include = F}
+
 ggsave(
   filename = "F_CLKe_predobs.png",
   plot = p_predobs,
@@ -3710,7 +3823,7 @@ for j in $(seq 1 12); do
 done
 ```
 
-```{r}
+```{r, message = F, warning = F}
 
 width_plot <- 12
 height_plot <- 12
@@ -3720,7 +3833,7 @@ file_rds_A_FLYw <- file.path(path_A_FLYw, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_A_FLYw)) {
   df_pred_full_A_FLYw <- readRDS(file_rds_A_FLYw)
 } else {
-  df_pred_full_A_FLYw <- f_read_Setpoint_full(path_A_FLYw, Nb_experiment, select_times, step_sim)
+  df_pred_full_A_FLYw <- f_read_Setpoint_full(path_A_FLYw, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_B_FLYe <- file.path(path_B_FLYe, paste0("Sim.Res.Exp.full.rds"))
@@ -3728,7 +3841,7 @@ file_rds_B_FLYe <- file.path(path_B_FLYe, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_B_FLYe)) {
   df_pred_full_B_FLYe <- readRDS(file_rds_B_FLYe)
 } else {
-  df_pred_full_B_FLYe <- f_read_Setpoint_full(path_B_FLYe, Nb_experiment, select_times, step_sim)
+  df_pred_full_B_FLYe <- f_read_Setpoint_full(path_B_FLYe, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_C_CWYe <- file.path(path_C_CWYe, paste0("Sim.Res.Exp.full.rds"))
@@ -3736,7 +3849,7 @@ file_rds_C_CWYe <- file.path(path_C_CWYe, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_C_CWYe)) {
   df_pred_full_C_CWYe <- readRDS(file_rds_C_CWYe)
 } else {
-  df_pred_full_C_CWYe <- f_read_Setpoint_full(path_C_CWYe, Nb_experiment, select_times, step_sim)
+  df_pred_full_C_CWYe <- f_read_Setpoint_full(path_C_CWYe, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
@@ -3744,7 +3857,7 @@ file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_D_CWKe)) {
   df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
 } else {
-  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, Nb_experiment, select_times, step_sim)
+  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_E_CLYe <- file.path(path_E_CLYe, paste0("Sim.Res.Exp.full.rds"))
@@ -3752,7 +3865,7 @@ file_rds_E_CLYe <- file.path(path_E_CLYe, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_E_CLYe)) {
   df_pred_full_E_CLYe <- readRDS(file_rds_E_CLYe)
 } else {
-  df_pred_full_E_CLYe <- f_read_Setpoint_full(path_E_CLYe, Nb_experiment, select_times, step_sim)
+  df_pred_full_E_CLYe <- f_read_Setpoint_full(path_E_CLYe, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_F_CLKe <- file.path(path_F_CLKe, paste0("Sim.Res.Exp.full.rds"))
@@ -3760,7 +3873,7 @@ file_rds_F_CLKe <- file.path(path_F_CLKe, paste0("Sim.Res.Exp.full.rds"))
 if (file.exists(file_rds_F_CLKe)) {
   df_pred_full_F_CLKe <- readRDS(file_rds_F_CLKe)
 } else {
-  df_pred_full_F_CLKe <- f_read_Setpoint_full(path_F_CLKe, Nb_experiment, select_times, step_sim)
+  df_pred_full_F_CLKe <- f_read_Setpoint_full(path_F_CLKe, l_Experiments_fit, Nb_experiment, select_times, step_sim)
 }
 
 ```
@@ -3781,10 +3894,10 @@ if (file.exists(file_rds_F_CLKe)) {
   alpha_line <- 0.7
   wrap_nb_col <- 2
   
-  col_experiment <- c(
+col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -3915,7 +4028,8 @@ p
 ggsave(
   filename="A_FLYw_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
@@ -3938,7 +4052,7 @@ ggsave(
   col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -4069,7 +4183,8 @@ p
 ggsave(
   filename="B_FLYe_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
@@ -4092,7 +4207,7 @@ ggsave(
   col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -4223,7 +4338,8 @@ p
 ggsave(
   filename="C_CWYe_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
@@ -4246,7 +4362,7 @@ ggsave(
   col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -4377,7 +4493,8 @@ p
 ggsave(
   filename="D_CWKe_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
@@ -4400,7 +4517,7 @@ ggsave(
   col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -4531,7 +4648,8 @@ p
 ggsave(
   filename="E_CLYe_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
@@ -4554,7 +4672,7 @@ ggsave(
   col_experiment <- c(
   Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
   Nord_aurora[2],
-  Nord_aurora[3], Nord_aurora[3],
+  Nord_aurora[2], Nord_aurora[3],
   Nord_aurora[4], 
   Nord_aurora[5], rev(Nord_frost)
   )
@@ -4685,11 +4803,249 @@ p
 ggsave(
   filename="F_CLKe_trajWR.png", 
   plot=p, 
-  width=width_plot, height = height_plot, 
+  width=width_plot, 
+  height = height_plot, 
   path=path_fig
   )
 ```
 :::
+
+## Organic matter dynamic and functional response
+
+```{r}
+path_D_OM <- here::here("mod/D_DEB_CWKe/Dens_D2_D2b_f_OM")
+
+MCMC_out_D_OM <- f_MCSim(path_D_OM)
+L_parameters_D_OM <- unique(MCMC_out_D_OM$Priors$Nom)
+
+Summary_res_D_OM <- 
+  as.data.frame(MCMC_out_D_OM$Summary_res)[1:length(L_parameters_D_OM)] |> 
+  mutate(Model = "D_OM") 
+
+Nb_experiment <- 12
+step_sim <- 0.05
+select_times <- seq(0,400, 0.1)
+
+Endpoints_print <- "freal,
+    Organic_matter,
+    OMsoil,
+    OMhorse"
+
+l_param_name_D_OM <- names(Summary_res_D_OM) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_D_OM, l_Experiments_fit, 
+  Adults_alone = FALSE, OM_diff = TRUE, 
+  l_param_name_D_OM, step_sim, Endpoints_print
+  )
+
+# ./mcsim.DEBcali DEB_setpoint_full_1.in
+# ./mcsim.DEBcali DEB_setpoint_full_2.in
+
+# for j in $(seq 1 12); do
+# ./mcsim.DEBcali DEB_setpoint_full_${j}.in
+# done
+
+file_rds_D_OM <- file.path(path_D_OM, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_OM)) {
+  df_pred_full_D_OM <- readRDS(file_rds_D_OM)
+} else {
+  df_pred_full_D_OM <- f_read_Setpoint_full(path_D_OM, Adults_alone = FALSE, l_Experiments_fit, Nb_experiment, select_times, step_sim, bol_OM = TRUE)
+}
+
+df_pred_full_D_OM_wide <- df_pred_full_D_OM |> 
+  pivot_wider(
+    id_cols = c(Time, ID_experiment),
+    names_from = Endpt, 
+    values_from = predict.endpoint
+    ) |> 
+  mutate(OMtot = OMhorse + OMsoil)
+
+```
+
+```{r}
+
+col_D2 <- Nord_polar[1]
+col_D2b <- Nord_polar[4]
+type_D2b <- "solid"
+type_D2 <- "dotted"
+line_width <- 1
+font_size <- 10
+t_max <- 155
+
+df_pred_full_D_OM_wide_D22b <- df_pred_full_D_OM_wide |> filter(ID_experiment %in% c("Gollot2026_dens_D2", "Gollot2026_dens_D2b"))
+
+p_freal <- ggplot(
+    data = df_pred_full_D_OM_wide_D22b,
+    aes(
+      x = Time,
+      y = freal,
+      color = ID_experiment,
+      linetype = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(col_D2, col_D2b)
+    )+
+  scale_linetype_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(type_D2, type_D2b)
+  )+
+  labs(
+    x = "Time (days)",
+    y = "Functional response, f (-)"
+  )+
+  lims(y = c(0,1))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OM <- ggplot(
+    data = df_pred_full_D_OM_wide_D22b,
+    aes(
+      x = Time,
+      y = OMtot,
+      color = ID_experiment,
+      linetype = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(col_D2, col_D2b)
+    )+
+  scale_linetype_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(type_D2, type_D2b)
+  )+
+  labs(
+    x = "Time (days)",
+    y = "OM in the cosm (g)"
+  )+
+  lims(y = c(0,18))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OMhorse <- ggplot(
+    data = df_pred_full_D_OM_wide_D22b,
+    aes(
+      x = Time,
+      y = OMhorse,
+      color = ID_experiment,
+      linetype = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(col_D2, col_D2b)
+    )+
+  scale_linetype_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(type_D2, type_D2b)
+  )+
+  labs(
+    x = "Time (days)",
+    y = "OM horse in the cosm (g)"
+  )+
+  lims(y = c(0,18))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OMsoil <- ggplot(
+    data = df_pred_full_D_OM_wide_D22b,
+    aes(
+      x = Time,
+      y = OMsoil,
+      color = ID_experiment,
+      linetype = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(col_D2, col_D2b)
+    )+
+  scale_linetype_manual(
+    name = "Condition",
+    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    values = c(type_D2, type_D2b)
+  )+
+  lims(y = c(0,18))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "OM soil in the cosm (g)"
+  )+
+  theme_minimal(font_size)
+
+p <- p_freal + p_OM + p_OMhorse + p_OMsoil + plot_layout(ncol=1, guides = "collect") &
+  theme(legend.position = "bottom")
+```
+
+```{r}
+p_OM <- ggplot(
+    data = df_pred_full_D_OM_wide |> filter(ID_experiment =="Gollot2026_dens_D2b")
+  )+
+  geom_line(
+    aes(
+      x = Time,
+      y = OMtot
+    ),
+    linewidth = line_width,
+    color = "black"
+    )+
+  
+  geom_line(
+    aes(
+      x = Time,
+      y = OMhorse
+    ),
+    linewidth = line_width,
+    color = "brown"
+    )+
+  geom_line(
+    aes(
+      x = Time,
+      y = OMsoil
+    ),
+    linewidth = line_width,
+    color = "darkgreen"
+    )+ 
+  labs(
+    x = "Time (days)",
+    y = "OM in the cosm (g)"
+  )+
+  lims(y = c(0,18))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+```
 
 ## Sensitivity analysis - CWKe
 
@@ -4727,7 +5083,7 @@ ggsave(
 # 
 # 
 # 
-# path_AS <- here::here("mod/Z_AS")
+# path_AS <- here::here("mod/X_AS")
 # file_rds_AS_T <- file.path(path_AS, paste0("df_Sobol_param_T.rds"))
 # 
 # if (file.exists(file_rds_AS_T)) {
@@ -4769,7 +5125,7 @@ ggsave(
 ```{r}
 # Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
 # 
-# path_AS <- here::here("mod/Z_AS")
+# path_AS <- here::here("mod/X_AS")
 # file_rds_AS_res_T <- file.path(path_AS, paste0("df_Sobol_results_T.rds"))
 # file_rds_AS_res_noT <- file.path(path_AS, paste0("df_Sobol_results_noT.rds"))
 # 

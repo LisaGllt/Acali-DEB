@@ -597,14 +597,17 @@ p
 ## Summary figures
 
 ```{r}
-#| fig-cap: Summary.
-#| label: fig-summary
-#| fig-height: 10
+#| fig-cap: Growth curves and cumulative reproduction of earthworms across density treatments (cosm densities of 1, 2, 5, and 7 individuals). Small points correspond to the mean weight of earthworm at the replicate level, bigger plain squares correspond to the mean weight at the condition level.
+#| label: fig-summarydens
+#| fig-height: 6
 #| fig-width: 8
+
+
+t_max <- max((df_dens_growth_mean_rep |> filter(!(Condition == "D2b")))$t)
 
 p_G <- ggplot()+
   geom_point(
-    data = df_dens_growth_mean_rep,
+    data = df_dens_growth_mean_rep |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Weight,
@@ -614,7 +617,7 @@ p_G <- ggplot()+
     size = 1.4
   )+
   geom_line(
-    data = df_dens_growth_mean_cond,
+    data = df_dens_growth_mean_cond |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Weight,
@@ -622,25 +625,30 @@ p_G <- ggplot()+
     )
   )+
   geom_point(
-    data = df_dens_growth_mean_cond,
+    data = df_dens_growth_mean_cond |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Weight,
       color = Condition
     ),
-    size = 1.8
+    size = 2,
+    shape = shape_EPX
   )+
   facet_wrap(
-    ~ Condition, ncol=1
+    ~ Condition, ncol=4
   )+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
   labs(x = "Time (days)", y = "Weight (mg)")+
-  scale_color_manual(values = pal_dens)+
+  scale_color_manual(values = pal_dens[-3])+
   theme_minimal()+
   theme(legend.position = "none")
 
 p_R <- ggplot()+
   geom_point(
-    data = df_dens_repro,
+    data = df_dens_repro |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Reproduction,
@@ -650,7 +658,7 @@ p_R <- ggplot()+
     size = 1.4
   )+
   geom_line(
-    data = df_dens_repro_mean_cond,
+    data = df_dens_repro_mean_cond |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Reproduction,
@@ -658,19 +666,125 @@ p_R <- ggplot()+
     )
   )+
   geom_point(
-    data = df_dens_repro_mean_cond,
+    data = df_dens_repro_mean_cond |> filter(!(Condition == "D2b")),
     aes(
       x = t,
       y = Reproduction,
       color = Condition
     ),
-    size = 1.8
+    size = 2,
+    shape = shape_EPX
   )+
   facet_wrap(
-    ~ Condition, ncol=1
+    ~ Condition, ncol=4
   )+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
   labs(x = "Time (days)", y = "Cumulated reproduction (#)")+
-  scale_color_manual(values = pal_dens)+
+  scale_color_manual(values = pal_dens[-3])+
+  theme_minimal()+
+  theme(
+    legend.position = "none",
+    strip.text = element_blank()
+    )
+
+p <- p_G / p_R
+p
+```
+
+```{r, include=FALSE}
+ggsave(
+  filename = "DENS_summary_1.png",
+  plot = p,
+  width = 8, height = 6,
+  path = path_fig
+)
+```
+
+```{r}
+#| fig-cap: Comparison of growth curves and cumulative reproduction of earthworms under standard (D2, grey) and increased food supply (D2b, blue) at constant density. Small points correspond to the mean weight of earthworm at the replicate level, bigger plain squares correspond to the mean weight at the condition level.
+#| label: fig-summaryfood
+#| fig-height: 3
+#| fig-width: 6
+
+t_max <- max((df_dens_growth_mean_rep |> filter((Condition %in% c("D2","D2b"))))$t)
+t_D2b <- 112
+
+p_G <- ggplot()+
+  geom_point(
+    data = df_dens_growth_mean_rep |> filter((Condition %in% c("D2","D2b"))),
+    aes(
+      x = t,
+      y = Weight,
+      color = Condition
+    ),
+    alpha = 0.6,
+    size = 1.4
+  )+
+  geom_line(
+    data = df_dens_growth_mean_cond |> filter((Condition %in% c("D2","D2b"))&(!(Condition == "D2b" & t > t_D2b))),
+    aes(
+      x = t,
+      y = Weight,
+      color = Condition
+    )
+  )+
+  geom_point(
+    data = df_dens_growth_mean_cond |> filter((Condition %in% c("D2","D2b"))&(!(Condition == "D2b" & t > t_D2b))),
+    aes(
+      x = t,
+      y = Weight,
+      color = Condition
+    ),
+    size = 2,
+    shape = shape_EPX
+  )+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  labs(x = "Time (days)", y = "Weight (mg)")+
+  scale_color_manual(values = c(Nord_snow[1], pal_dens[3]))+
+  theme_minimal()+
+  theme(legend.position = "none")
+
+p_R <- ggplot()+
+  geom_point(
+    data = df_dens_repro |> filter((Condition %in% c("D2","D2b"))),
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    ),
+    alpha = 0.6,
+    size = 1.4
+  )+
+  geom_line(
+    data = df_dens_repro_mean_cond |> filter((Condition %in% c("D2","D2b"))&(!(Condition == "D2b" & t > t_D2b))),
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    )
+  )+
+  geom_point(
+    data = df_dens_repro_mean_cond |> filter((Condition %in% c("D2","D2b"))&(!(Condition == "D2b" & t > t_D2b))),
+    aes(
+      x = t,
+      y = Reproduction,
+      color = Condition
+    ),
+    size = 2,
+    shape = shape_EPX
+  )+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  labs(x = "Time (days)", y = "Cumulated reproduction (#)")+
+  scale_color_manual(values = c(Nord_snow[1], pal_dens[3]))+
   theme_minimal()+
   theme(legend.position = "none")
 
@@ -680,9 +794,9 @@ p
 
 ```{r, include=FALSE}
 ggsave(
-  filename = "DENS_summary.png",
+  filename = "DENS_summary_2.png",
   plot = p,
-  width = 6, height = 8,
+  width = 6, height = 3,
   path = path_fig
 )
 ```

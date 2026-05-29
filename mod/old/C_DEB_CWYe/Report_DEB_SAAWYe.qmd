@@ -1,0 +1,675 @@
+---
+title: "Report_DEB"
+format: pdf
+execute:
+  cache: true
+---
+
+```{r, include = F}
+library(here)
+source(file = here::here("functions/fun.R"))
+source(file = here::here("functions/fun_MCSim.R"))
+f_load_libraries_colors()
+col_Molecule <- rev(col_Molecule)
+pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
+lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
+```
+
+# 1. Importation des données
+
+```{r, message=F, warning=F}
+
+file_path <- here::here("mod/FINAL/C_DEB_AWYe")
+
+l_Experiments <- c(
+  "Bart2019_XP1_1",  
+  "Bart2019_XP1_2",  
+  #"Bart2019_XP2",
+  "Bart2019_XP3",   
+  "Bart2019_XP4_1",
+  "Bart2019_XP4_2",
+  "Bart2019_XP5", 
+  "Bart2020",
+  #"Gollot2026_lufa"
+  "Gollot2026_dens_D1",
+  "Gollot2026_dens_D2",
+  "Gollot2026_dens_D2b",
+  "Gollot2026_dens_D5",
+  "Gollot2026_dens_D7"
+  )
+
+Adults_alone <- FALSE
+
+df_data <- f_import_data_DEB(l_Experiments, Adults_alone)
+
+```
+
+```{r, echo=F, message=F, warning=F}
+
+l_Experiments_tot <- c(
+  "Bart2019_XP1_1",  
+  "Bart2019_XP1_2",  
+  "Bart2019_XP2",
+  "Bart2019_XP3",   
+  "Bart2019_XP4_1",
+  "Bart2019_XP4_2",
+  "Bart2019_XP5", 
+  "Bart2020",
+  "Gollot2026_lufa",
+  "Gollot2026_dens_D1",
+  "Gollot2026_dens_D2",
+  "Gollot2026_dens_D2b",
+  "Gollot2026_dens_D5",
+  "Gollot2026_dens_D7"
+  )
+
+l_carac <- c(
+  "3 g/ind/14 days - Closeaux soil (15°C)",
+  "3 g/ind/14 days - Closeaux soil (15°C)",
+  "3 g/ind/14 days - Closeaux soil (15°C)",
+  "0 or 3 g/ind/14 days - Closeaux soil (15°C)",
+  "1 g/ind/14 days - Closeaux soil (15°C)",
+  "1 g/ind/14 days - Closeaux soil (15°C)",
+  "1.5 g/ind/14 days - Closeaux soil (15°C)",
+  "3 g/ind/14 days - Closeaux soil (15°C)",
+  "3 g/ind/14 days - LUFA 2.4 soil (18°C)",
+  "3 g/14 days - 1/cosm - Closeaux soil (18°C)",
+  "3 g/14 days - 2/cosm - Closeaux soil (18°C)",
+  "6 g/14 days - 2/cosm - Closeaux soil (18°C)",
+  "3 g/14 days - 5/cosm - Closeaux soil (18°C)",
+  "3 g/14 days - 7/cosm - Closeaux soil (18°C)"
+)
+
+df_carc_exp <- data.frame(
+  ID_experiment = l_Experiments_tot,
+  carac = l_carac
+)
+
+```
+
+# 2. Model fit
+
+```{r, message=F, warning=F}
+NbIter <- 100000
+#seeds <- c(C1 = 3336, C2 = 6663, C3 = 1222, C4 = 2420, C5 = 4848, C6 = 5656, C7 = 7077, C8 = 8488)
+seeds <- c(C1 = 3333, C2 = 6669, C3 = 1210)
+
+text_priors <- '
+Distrib (Fm,           TruncNormal,           0.1,      0.2,  0.0001,     0.8);
+Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
+Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
+Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
+Distrib (kapJ,         Uniform,                 0,        1);
+Distrib (kapA,         Uniform,                 0,        1);
+Distrib (Ehp,          TruncNormal_cv,        100,      0.2,      20,     300);
+Distrib (E_coc,        TruncNormal_cv,         30,      0.2,       1,     300);
+Distrib (rOM_ClxHorse, LogUniform,        0.00001,      0.3);
+Distrib (dv,           TruncNormal_cv,          2,      0.5,       0,      10);
+Distrib (de,           LogUniform,     0.000000001,     0.1);
+Distrib (tau,          TruncNormal_cv,          7,      0.5,       0,      50);
+
+# Calcul des vraissemblances
+Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
+
+text_likelihood <- 'Likelihood (Weight,       Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
+
+OM_diff <- TRUE
+RTOL <- 1e-7
+ATOL <- 1e-6
+
+# makemcsim DEBcali.model
+
+f_In_tot(file_path, l_Experiments, Adults_alone, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+
+# ./mcsim.DEBcali DEB_C1.in
+```
+
+`OM_horse` and `OM_soil` distinct ? `r OM_diff`
+
+Adult and alone earthworm taken into account ? `r Adults_alone`
+
+# 3. Results
+
+```{r, echo=F, message=F, warning=F}
+MCMC_out <- f_MCSim(file_path)
+
+NC <- MCMC_out$NC
+Nb_param <- MCMC_out$Nb_param
+Nb_experiement <- MCMC_out$Nb_experiement
+Nb_iter_kept <- MCMC_out$Nb_iter_kept
+N_iter_setpoint <- MCMC_out$N_iter_setpoint
+L_parameters <- unique(MCMC_out$Priors$Nom)
+
+LL <- f_get_mode(MCMC_out$df_LnData$LnData)
+n <- length(na.omit(df_data$Weight)) + length(na.omit(df_data$Reproduction))
+k <- Nb_param - 1 # On enlève le Sigma_W
+
+BIC <- -2*LL+k*log(n)
+```
+
+```{r, echo=F, message=F, warning=F}
+Summary_res <- as.data.frame(MCMC_out$Summary_res)[1:length(L_parameters)] 
+Summary_res
+```
+
+```{r, echo=F, message=F, warning=F}
+cat("Number of observations, n = ", n,"\nNumber of parameters, k = ", k, "\nLog-likelihood, LL = ", LL, "\nBIC = ", BIC)
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out$Chains, 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r like, message=F, warning=F, echo=F}
+#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
+#| label: fig-like
+#| fig-height: 8
+#| fig-width: 8
+
+p1 <- ggplot(
+  MCMC_out$df_LnPost_start, 
+  aes(
+    x = iteration, 
+    y = LnPosterior, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = "First half iterations", 
+    y = "LnPosterior"
+    ) +
+  theme_minimal()
+
+p2 <- ggplot(
+  MCMC_out$df_LnPost, 
+  aes(
+    x = iteration, 
+    y = LnPosterior, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = paste(MCMC_out$Nb_iter_kept, "last iterations"), 
+    y = "LnPosterior"
+    ) +
+  theme_minimal()
+
+p3 <- ggplot(
+  MCMC_out$df_Devc, 
+  aes(
+    x = iteration, 
+    y = RatioDeviance, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = paste(MCMC_out$Nb_iter_kept, "last iterations"), 
+    y = "Ratio Deviance"
+    ) +
+  theme_minimal()
+
+p_LL <- p1 + p2 + p3 +
+  plot_layout(ncol=3, guides = "collect")
+p_LL
+
+```
+
+```{r, echo=F, message=F, warning=F}
+# Large format per chain
+mcmc_list <- lapply(split(MCMC_out$Chains, MCMC_out$Chains$Chain), function(d) {
+  wide <- d %>%
+    dplyr::select(Iteration, Parameter, value) %>%
+    pivot_wider(names_from = Parameter, values_from = value) %>%
+    arrange(Iteration)
+  
+  mcmc(as.matrix(wide[,-1]))
+})
+
+mcmc_list <- as.mcmc.list(mcmc_list)
+
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Chains convergence.
+#| label: fig-chainsconvergence
+#| fig-height: 8
+#| fig-width: 8
+
+  par(mfrow=c(1,3))
+
+  gelman.plot(mcmc_list,
+            bin.width = 10,      # Number of observations per segment,
+            # first segment --> at least 50 iterations.
+            max.bins = 50,       # Maximum number of bins, excluding the last one
+            confidence = 0.95,   # Coverage probability of confidence interval.
+            transform = FALSE,   # improve the normality of the distribution
+            autoburnin=TRUE)     # Remove first half of sequence
+
+  
+  gelman <- gelman.diag(mcmc_list, confidence = 0.95, transform=FALSE, autoburnin=TRUE, multivariate=TRUE)
+  print(gelman)
+```
+
+```{r corr, message=F, warning=F}
+#| fig-cap: Parameter correlations.
+#| label: fig-corr
+#| fig-height: 5
+#| fig-width: 6
+
+mcmc_list_corr <- mcmc.list(
+  lapply(mcmc_list, function(x) {
+    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
+  })
+)
+
+colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+ipairs(as.matrix(mcmc_list_corr), colramp = colramp_aurora, pixs=0.25, cex.diag = 0.5)
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post
+#| fig-height: 8
+#| fig-width: 8
+
+n_samples <- 1e5 # Simulation of the distribution
+
+df_priors_dist <- MCMC_out$Priors |> 
+  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+  rowwise() |> 
+  mutate(samples = case_when(
+    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+  )) |> 
+  unnest(samples)
+
+alpha_prior <- 0.5
+alpha_post <- 0.5
+col_prior <- Nord_snow[1]
+col_post <- col_IMD
+
+MCMC_out$Chains_plot <- MCMC_out$Chains |> 
+  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+
+p_post <- ggplot() +
+  
+  # Priors
+  stat_halfeye(
+    data = df_priors_dist,
+    aes(
+       x = samples,
+       ),
+    alpha = alpha_prior,
+    fill = col_prior,
+    color = col_prior,
+    normalize = "xy"
+    ) +
+  
+  # Posterior
+  stat_halfeye(
+    data = subset(MCMC_out$Chains_plot, Nom %in% L_parameters),
+    mapping = aes(
+      x=value
+    ),
+    fill = col_post,
+    color = col_post,
+    alpha = alpha_post,
+    normalize = "xy"
+  ) +
+  
+  facet_wrap(~Nom, scales = "free")+
+  labs(
+    title = "<span style = 'color:#88C0D0;'>Posterior</span>
+       and <span style = 'color:#D8DEE9;'>prior</span> distributions", 
+    x = "Parameter value", 
+    y = "Density"
+    ) +
+  theme_minimal()+
+  theme(
+    title=element_markdown(face="bold")
+  )
+
+p_post
+```
+
+# 4. Simulations
+
+```{r, message=F, warning=F}
+
+l_Experiments <- c(
+  "Bart2019_XP1_1",  
+  "Bart2019_XP1_2",  
+  "Bart2019_XP2",
+  "Bart2019_XP3",   
+  "Bart2019_XP4_1",
+  "Bart2019_XP4_2",
+  "Bart2019_XP5", 
+  "Bart2020",
+  #"Gollot2026_lufa"
+  "Gollot2026_dens_D1",
+  "Gollot2026_dens_D2",
+  "Gollot2026_dens_D2b",
+  "Gollot2026_dens_D5",
+  "Gollot2026_dens_D7"
+  )
+
+Adults_alone <- TRUE
+
+df_data <- f_import_data_DEB(l_Experiments, Adults_alone)
+
+text_param <- Summary_res["Result_mode", , drop = FALSE] %>%
+  t() %>%
+  as.data.frame() %>%
+  tibble::rownames_to_column("param") %>%
+  rename(val = 2) %>%
+  mutate(
+    param = gsub("\\.1\\.$|\\.1\\.", "", param),
+    line  = glue("{param} = {val};")
+  ) %>%
+  pull(line) %>%
+  paste(collapse = "\n")
+
+Endpoints_print <- "Weight,
+    Length_struct,
+    Reproduction,
+    Energy,
+    Organic_matter,
+    kapreal,
+    freal,
+    Qf_soil,
+    Qf_horse,
+    X"
+
+step_sim <- 0.01
+
+f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff, text_param, Endpoints_print, step_sim)
+#f_In_simulations(file_path, l_Experiments, Adults_alone, OM_diff=FALSE, text_param, text_print)
+
+# ./mcsim.DEBcali DEB_sim_full.in
+
+
+```
+
+```{r}
+
+##############################
+df_No_sim <- df_data |> 
+  dplyr::select(ID_experiment, No_sim)
+
+df_carac_color <- data.frame(
+  carac = unique(l_carac),
+  color = c(Nord_aurora[1], Nord_polar[2], Nord_aurora[3], Nord_aurora[2], Nord_aurora[5],
+            Nord_aurora[5], Nord_frost[4], Nord_frost[3], Nord_frost[2], Nord_frost[1])
+)
+v_color_carac <- setNames(df_carac_color$color, df_carac_color$carac)
+#############################
+
+df_data <- f_import_data_DEB(l_Experiments, Adults_alone) |> 
+  left_join(df_carc_exp, by="ID_experiment")
+
+# time_limits <- df_data %>%
+#   group_by(ID_experiment) %>%
+#   summarise(time_cutoff = max(Time, na.rm = TRUE) + 5)
+
+select_times <- seq(0,400, 0.1)
+
+df_sim <- f_MCSim_read_sim(here::here(file_path, "sim.out")) |> 
+  left_join(df_No_sim, by="No_sim") |> 
+  left_join(df_carc_exp, by="ID_experiment") |> 
+  # left_join(time_limits, by = "ID_experiment") |> 
+  # filter(Time <= time_cutoff) |> 
+  # dplyr::select(-time_cutoff) %>% 
+  filter(Time %in% select_times) |> 
+  mutate(
+    Reproduction = case_when(
+      Reproduction <= 5e-6 ~ 0,
+      .default = Reproduction
+    )
+  ) 
+  
+
+
+
+
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Simulations Weight and Reproduction.
+#| label: fig-pred
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  pW <- ggplot()+
+    
+    geom_line(
+      data = df_sim,
+      aes(
+        x = Time,
+        y = Weight,
+        color = carac
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight, 
+          color = carac  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiment characteristics",
+      values = v_color_carac
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    
+    geom_line(
+      data = df_sim,
+      aes(
+        x = Time,
+        y = Reproduction,
+        color = carac
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction, 
+          color = carac  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiment characteristics",
+      values = v_color_carac
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiment characteristics")) &
+  theme(legend.position = "none")
+
+p
+```
+
+```{r, echo= FALSE, message = FALSE, warning = FALSE}
+#| fig-width: 10
+#| fig-height: 8
+
+# 1. Format long pour la simulation
+df_sim_long <- df_sim %>%
+  pivot_longer(
+    cols = -c(Time, ID_experiment, No_sim, carac),
+    names_to = "Variable",
+    values_to = "Value"
+  ) %>%
+  mutate(Source = "Simulation") |> 
+  filter(!(Variable %in% c("OM_out", "Qf", "Qfmax", "Length_struct"))) |> 
+  mutate(Variable = fct_relevel(Variable, 
+                                "Energy", "Size", "Weight", "Reproduction", "Maturity", "Organic_matter",
+                                "freal", "kapreal", "Qf_soil", "Qf_horse", "X"))
+
+
+# 2. Format long pour les données expérimentales
+df_exp_long <- df_data %>%
+  dplyr::select(Time, Weight, Reproduction, ID_experiment, carac, No_sim) %>%
+  pivot_longer(
+    cols = -c(Time, ID_experiment, carac, No_sim), 
+    names_to = "Variable", 
+    values_to = "Value"
+    ) %>%
+  mutate(Source = "Expérience") |> 
+  filter()
+
+experiences <- unique(df_exp_long$ID_experiment)
+
+for (exp_id in experiences) {
+  
+  df_exp_i <- df_exp_long %>% filter(ID_experiment == exp_id)
+  df_sim_i <- df_sim_long %>% filter(ID_experiment == exp_id)
+  
+  df_combined_i <- bind_rows(df_sim_i, df_exp_i) |> 
+  mutate(
+    Variable = factor(
+      Variable,
+      levels = c("Energy", "Size", "Weight", "Reproduction", "Maturity", "Organic_matter",
+                 "freal", "kapreal", "Qf_soil", "Qf_horse", "X")
+    )
+  )
+
+  p <- ggplot(
+    df_combined_i,
+    aes(
+      x = Time, 
+      y = Value, 
+      color = Source
+      )
+    ) +
+    
+    geom_line(
+      data = filter(
+        df_combined_i, 
+        Source == "Simulation"
+        ),
+      linewidth = 1
+    ) +
+    geom_point(
+      data = filter(
+        df_combined_i, 
+        Source == "Expérience"
+        ),
+      size = 2
+    ) +
+    facet_wrap(
+      ~Variable, 
+      scales = "free",
+      ncol = 2
+      )+
+    scale_x_continuous(
+      breaks = seq(0, max(df_combined_i$Time), by = 28),
+      minor_breaks = seq(0, max(df_combined_i$Time), by = 14)
+    ) +
+    scale_color_manual(values = col_Molecule) +
+    labs(
+      title = paste("Expérience :", exp_id),
+      y = NULL, x = "Time (jours)"
+    ) +
+    theme_minimal()+
+    theme(
+      plot.title = element_text(face="bold", color = Nord_aurora[4]),
+      strip.placement = "outside",
+      strip.background = element_blank(),
+      axis.text.x = element_text(),       # Force affichage des ticks x
+      axis.ticks.x = element_line(),      # Force les ticks
+      panel.spacing = unit(1, "lines")    # Espacement entre facettes
+    )
+
+  print(p)
+}
+
+```

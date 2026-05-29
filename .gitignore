@@ -11,5 +11,8 @@
 *.RData
 **/.DS_Store
 mod/.txt
-mod/Z_AS/Param_sobol_Jansen_T.txt
-mod/Z_AS/Param_sobol_Jansen_noT.txt
+mod/X_AS/Param_sobol_Jansen_T.txt
+mod/X_AS/Param_sobol_Jansen_noT.txt
+
+mod/old/X_AS/Param_sobol_Jansen_T.txt
+mod/old/X_AS/Param_sobol_Jansen_noT.txt

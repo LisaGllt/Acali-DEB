@@ -1,0 +1,501 @@
+#### DEB-TKTD A. caliginosa | Epoxiconazole
+#===============================================
+
+Integrate(Lsodes, 1E-5, 1E-6, 1);
+
+########## Experiments ################################################
+
+kr = 1;
+nec = 5.1;
+b = 2;
+
+Simulation { # EPX_EC50_growth_Ctrl
+    Init = 1;
+    Ce0=0;
+    Winit=0.07212;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C1
+    Init = 1;
+    Ce0=0.928;
+    Winit=0.06558;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C2
+    Init = 1;
+    Ce0=2;
+    Winit=0.0598;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C3
+    Init = 1;
+    Ce0=4.3;
+    Winit=0.06414;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C4
+    Init = 1;
+    Ce0=9.28;
+    Winit=0.06644;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C5
+    Init = 1;
+    Ce0=20;
+    Winit=0.0673;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C6
+    Init = 1;
+    Ce0=43.1;
+    Winit=0.07596;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C7
+    Init = 1;
+    Ce0=92.8;
+    Winit=0.05734;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_growth_C8
+    Init = 1;
+    Ce0=200;
+    Winit=0.05398;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_Ctrl
+    Init = 2;
+    Ce0=0;
+    Winit=0.76124;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C1
+    Init = 2;
+    Ce0=0.928;
+    Winit=0.70581;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C2
+    Init = 2;
+    Ce0=2;
+    Winit=0.69614;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C3
+    Init = 2;
+    Ce0=4.3;
+    Winit=0.66864;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C4
+    Init = 2;
+    Ce0=9.28;
+    Winit=0.70255;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C5
+    Init = 2;
+    Ce0=20;
+    Winit=0.63882;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C6
+    Init = 2;
+    Ce0=43.1;
+    Winit=0.66693;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C7
+    Init = 2;
+    Ce0=92.8;
+    Winit=0.6482;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+Simulation { # EPX_EC50_repro_C8
+    Init = 2;
+    Ce0=200;
+    Winit=0.69538;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    PrintStep(Weight,
+              Reproduction,
+				      0, 28, 0.01);
+}
+
+
+
+End.

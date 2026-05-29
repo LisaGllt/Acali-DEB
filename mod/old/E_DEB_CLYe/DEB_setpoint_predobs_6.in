@@ -1,0 +1,39 @@
+#### DEB A. caliginosa
+#===============================================
+
+SetPoints("DEB_setpoint_predobs_6.out", "tab_setpoint.out", 0,Fm, pAm, r_pAm_pM, v, kapJ, kapA, Ehp, E_coc, rOM_ClxHorse, dv, de, tau, Sigma_W);
+
+Integrate(Lsodes, 1E-5, 1E-6, 1);
+
+########## Experiments ################################################
+
+Simulation { # Bart2019_XP5
+    Init= 1;
+    WeightSoilCosm = 400;
+    Winit=0.0111;
+    OM_soil_t0=13;
+    OM_horse_t0=1.35;
+    Soil=1;
+    Texp=15;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          4,
+                          0, 28, 56, 84,
+                          Replace, Replace, Replace, Replace, 
+                           13, 13, 13, 13);
+    OM_horse_replace=Events(OM_horse,
+                           4,
+                           0, 28, 56, 84,
+                           Replace, Replace, Replace, Replace, 
+                            1.35, 1.35, 1.35, 1.35);
+    OM_horse_add=Events(OM_horse,
+                           4,
+                           14, 42, 70, 98,
+                           Add, Add, Add, Add, 
+                            1.35, 1.35, 1.35, 1.35);
+                               
+    Print(Weight,0, 14, 28, 42, 56, 70, 84, 98);
+    Print(Reproduction,0, 14, 28, 42, 56, 70, 84, 98);
+}
+
+  End.

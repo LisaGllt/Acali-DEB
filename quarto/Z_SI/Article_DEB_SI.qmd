@@ -89,6 +89,146 @@ The @tbl-SummaryXP presents the characteristics of each experiment used to calib
 
 # Models
 
+## Model formulation
+
+### Model state and intermediate variables
+
+| Symbol | Description | Unit |
+|:---|:---|:--:|
+| **Environmental state variables** |  |  |
+| $OM_{horse}$ | Horse dung organic matter mass | $\mathrm{g_{OM}}$ |
+| $OM_{soil}$ | Soil organic matter mass | $\mathrm{g_{OM}}$ |
+| **Organism state variables** |  |  |
+| $E$ | Energy reserve | $\mathrm{J}$ |
+| $E_h$ | Maturity | $\mathrm{J}$ |
+| $L$ | Volumetric structural length | $\mathrm{cm}$ |
+| $R$ | Cumulated reproduction | $\#$ |
+| $W_w$ | Wet weight | $\mathrm{g}$ |
+| **Intermediate variables** |  |  |
+| $E_m$ | $\displaystyle \frac{\left\{\dot{p}_{Am}\right\}}{v}$ | $\mathrm{J.cm^{-1}}$ |
+| $f$ | Scaled functional response | $-$ |
+| $g$ | $\displaystyle \frac{[E_G]}{\kappa_{real} E_m}$ | $\mathrm{cm^{-2}}$ |
+| $K_m$ | $\displaystyle \frac{\left[\dot{p}_M\right]_t}{[E_G]}$ | $\mathrm{d^{-1}}$ |
+| $\kappa_{real}$ | Allocation fraction to soma | $-$ |
+| $L_m$ | $\displaystyle \frac{v_t}{K_m g}$ | $\mathrm{cm}$ |
+| $\dot{OM}_{out}^{horse}$ | Rate of consumption of horse dung organic matter | $\mathrm{g_{OM}.d^{-1}}$ |
+| $\dot{OM}_{out}^{soil}$ | Rate of consumption of soil organic matter | $\mathrm{g_{OM}.d^{-1}}$ |
+| $\dot{p}_C$ | Flux of mobilized energy from reserve | $\mathrm{J.d^{-1}}$ |
+| $\dot{p}_R$ | Energy flux allocated to maturity / reproduction | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_{f,max}$ | Maximum rate of energy ingested | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{horse}$ | Rate of energy ingested through horse dung | $\mathrm{J.d^{-1}}$ |
+
+: Model state and intermediate variables.
+
+### Standard DEB model
+
+**Reserve energy dynamic**
+
+$$
+\frac{\mathrm{d}E}{\mathrm d t} = \frac{\{\dot p_{Am}\}_t}{L} \ \left(f - \frac{E\ \nu_t}{\{\dot p_{Am}\}_t}\right)
+$$
+
+\noindent with :
+
+-   $E$ : Energy in the reserve ($J$)
+-   $\nu_t$ : Energy conductance at temperature $T_{exp}$ ($cm.d^{-1}$)
+
+**Growth**
+
+$$
+\begin{aligned}
+\frac{\mathrm d L}{\mathrm d t} &= \frac{\nu_t}{3\ (\frac{E}{E_m} + g)} \left(\frac{E}{E_m} - \frac{L}{L_m}\right) \\ \\
+K_m &= \frac{[\dot p_{M,t}]}{[E_G]} \\
+E_m &= \frac{\{\dot p_{Am}\}_t}{\nu_t}\\
+g &= \frac{[E_G]}{\kappa\ E_m}\\
+L_m &= \frac{\nu_t}{K_m\ g}
+\end{aligned}
+$$
+
+\noindent with :
+
+-   $L$ : Structural volumetric length ($cm$)
+-   $[\dot p_{M,t}]$ : Volume-specific maintenance rate ($J.d^{-1}.cm^{-3}$)
+-   $[E_G]$ : Volume-specific cost for structure ($J.cm^{-3}$)
+-   $\kappa$ : Energy allocation fraction to soma (-)
+
+$$
+W_W = L^3 \left(1+\frac{E}{E_m}w\right)
+$$
+
+\noindent with :
+
+-   $W_W$ : Wet weight of the earthworm ($g$)
+-   $w$ : Contribution of reserve to body weight ($g.cm^{-3}$)
+
+**Maturity and reproduction**
+
+$$
+\dot p_C = \frac{g\ E}{g + \frac{E}{E_m}} (\nu_t\ L^2 + K_m\ L^3)
+$$
+
+\noindent with :
+
+-   $\dot p_C$ : Mobilized energy flux from reserve ($J.d^{-1}$)
+
+$$
+\dot p_R = (1-\kappa)\ \dot p_C - \dot k_{J,t}\ E_h
+$$
+
+\noindent with :
+
+-   $\dot p_R$ : Allocated energy flux to reproduction ($J.d^{-1}$)
+-   $\dot k_{J,t}$ : Maturity maintenance rate ($d^{-1}$)
+
+$$
+\frac{\mathrm{d}E_H}{\mathrm{d}t}= 
+\begin{cases}
+E_H \leq E_H^p,\ & \dot{p}_R\\
+E_H > E_H^p,\ & 0
+\end{cases}
+$$
+
+\noindent with :
+
+-   $E_h$ : Maturity ($J$)
+-   $E_h^p$ : Maturity at puberty ($J$)
+
+$$
+\frac{\mathrm{d}R}{\mathrm{d}t}= 
+\begin{cases}
+E_H \leq E_H^p,\ & 0 \\
+E_H > E_H^p,\ & \kappa_R\ \frac{\dot{p}_R}{E_{0}}
+\end{cases}
+$$
+
+\noindent with :
+
+-   $R$ : Cumulated reproduction (#)
+-   $\kappa_R$ : Reproduction efficiency (-)
+-   $E_0$ : Energy cost for an egg ($J$)
+
+**Effect of temperature on rates**
+
+$$
+\begin{aligned}
+s_A &= \exp(\frac{T_A}{T_{ref}-\frac{T_A}{T_{exp}+273.15}})\\
+s_{rH} &= \frac{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{ref}+ 273.15})}{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{exp}+273.15})}\\
+T_c &= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 < T_{ref})\\ \\
+\{\dot p_{Am}\}_t &= \{\dot p_{Am}\}\ T_c\\
+[\dot p_{M,t}] &= [\dot p_{M}]\ T_c \\
+\nu_t &= \nu \ T_c \\
+\dot k_{J,t} &= \dot k_{J} \ T_c
+\end{aligned}
+$$
+
+\noindent with :
+
+-   $T_A$ : Arrhenius temperature (K)
+-   $T_A^H$ : Arrhenius temperature for upper boundary (K)
+-   $T^H$ : Upper boundary (K)
+-   $T_{ref}$ : Reference temperature (K)
+-   $T_{exp}$ : Experimental temperature (°C)
+
 ## Priors used
 
 Priors are the same between models :
@@ -115,9 +255,13 @@ Log-Likelihood calculations :
 -   Likelihood (Weight, Normal, Prediction(Weight), Sigma_W);
 -   Likelihood (Reproduction, Poisson, Prediction(Reproduction));
 
+For the maximum ingestion rate, we imposed a biologically realistic constraint based on the assumption that an earthworm cannot ingest more than its own body weight per day. This constraint was used to bound the parameter $[\dot{F}_m]$.
+
+An estimate of cocoon energy content was required to parameterize reproduction in the DEB model for *Aporrectodea caliginosa*. As no direct measurements are available for this species, we relied on published calorimetric data for *Lumbricidae* reported by @cumminns_1971, who measured the energy density of whole individuals across developmental stages. Reported mean energy densities were 5,690 cal.g$^{-1}$ dry weight ($n = 3$), corresponding to 19,098 J.g$^{-1}$, and 782 cal.g$^{-1}$ wet weight ($n = 1$), corresponding to 3,268 J.g$^{-1}$. Although these measurements do not specifically target cocoons, they provide a reasonable order-of-magnitude estimate for annelid biomass. Assuming a mean cocoon fresh mass of 10 mg, this yields an approximate energy content of 33 J per cocoon. Comparable values have been reported for soil invertebrates in other calorimetric studies (e.g., @driver_1974; @eggleton_2004), supporting the use of this approximation as a prior for egg energy content.
+
 ## Model A_FLYw
 
-![Posteriors.](../../fig/DEB_Models/A_FLYw_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/A_FLYw_post.png) {fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/A_FLYw_predobs.png)
 
@@ -125,7 +269,7 @@ Log-Likelihood calculations :
 
 ## Model B_FLYe
 
-![Posteriors.](../../fig/DEB_Models/B_FLYe_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/B_FLYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/B_FLYe_predobs.png)
 
@@ -133,7 +277,7 @@ Log-Likelihood calculations :
 
 ## Model C_CWYe
 
-![Posteriors.](../../fig/DEB_Models/C_CWYe_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/C_CWYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/C_CWYe_predobs.png)
 
@@ -141,17 +285,17 @@ Log-Likelihood calculations :
 
 ## Model D_CWKe
 
-![Chains.](../../fig/DEB_Models/D_CWKe_chains.png)
+![Model chains.](../../fig/DEB_Models/D_CWKe_chains.png)
 
 ![Chain correlations.](../../fig/DEB_Models/D_CWKe_ipairs_plot.png)
 
-![Posteriors.](../../fig/DEB_Models/D_CWKe_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/D_CWKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/D_CWKe_predobs.png)
 
 ## Model E_CLYe
 
-![Posteriors.](../../fig/DEB_Models/E_CLYe_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/E_CLYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/E_CLYe_predobs.png)
 
@@ -159,11 +303,11 @@ Log-Likelihood calculations :
 
 ## Model F_CLKe
 
-![Chains.](../../fig/DEB_Models/F_CLKe_chains.png)
+![Model chains.](../../fig/DEB_Models/F_CLKe_chains.png)
 
 ![Chain correlations.](../../fig/DEB_Models/F_CLKe_ipairs_plot.png)
 
-![Posteriors.](../../fig/DEB_Models/F_CLKe_post.png)
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/F_CLKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/F_CLKe_predobs.png)
 
@@ -197,3 +341,9 @@ Log-Likelihood calculations :
 :::
 
 ![RMSE for Weight and Reproduction per experiment for each tested model.](../../fig/DEB_Models/RMSE_per_experiment.png)
+
+# Isolated adults
+
+![Observed and predicted growth trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\kappa_A$, dark blue lines). Solid lines correspond to estimated model trajectories with transparent ribbons corresponding to the 95% credibilitty intervals. Transparent points represent observations from the juvenile stage, whereas filled points represent observations from the adult stage.](../../fig/DEB_Models/Y_IsolatedAdults_trajW.png){fig-scap="Observed and predicted growth trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\\kappa_A$, dark blue lines)."}
+
+![Observed and predicted reproduction trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\kappa_A$, dark blue lines). Solid lines correspond to estimated model trajectories with transparent ribbons corresponding to the 95% credibilitty intervals. Transparent points represent observations from the juvenile stage, whereas filled points represent observations from the adult stage.](../../fig/DEB_Models/Y_IsolatedAdults_trajR.png){fig-scap="Observed and predicted reproduction trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\\kappa_A$, dark blue lines)."}
