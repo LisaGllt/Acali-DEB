@@ -474,7 +474,7 @@ f_MC_RMSE_calc <- function(df_data, df_MonteCarlo_sim){
 
 ## DEB -----
 
-f_In_experiments <- function(l_Experiments, Adult_alone, OM_diff){
+f_In_experiments <- function(l_Experiments, Adult_alone){
   
   df_DEB_mean <- f_import_data_DEB(l_Experiments, Adults_alone) |> 
     mutate(
@@ -600,24 +600,15 @@ f_In_experiments <- function(l_Experiments, Adult_alone, OM_diff){
                                char_Add_horse, "\n                            ",
                                char_Add_OM_horse, ");", sep="")
     
-    text_OM_tot <- paste("    event_OM_tot=Events(OM_tot,\n                           ", 
-                         length(df_OM_tot_i$Time), ",\n                           ", 
-                         char_tOM_tot,",\n                           ", 
-                         char_Add_tot, ",\n                            ",
-                         char_OM_tot, ");", sep="")
     text_bol_XP3 <- paste("    bol_XP3=", bol_XP3, ";")
     
-    if(OM_diff){
-      text_OM_final <- paste(
-        text_OM_soil_Replace,
-        text_OM_horse_Replace,
-        text_OM_horse_Add,
-       # text_bol_XP3,
-        sep="\n"
-      )
-    }else {
-      text_OM_final <- text_OM_tot
-    }
+    text_OM_final <- paste(
+      text_OM_soil_Replace,
+      text_OM_horse_Replace,
+      text_OM_horse_Add,
+     # text_bol_XP3,
+      sep="\n"
+    )
     
     if(length(df_density_i$Density) == 1){
       text_density <- paste("    Dens=",char_density, ";", sep="")
@@ -871,7 +862,7 @@ Integrate (Lsodes,  %g, %g, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
   )
 }
 
-f_In_tot <- function(file_path, l_Experiments, Adults_alone = FALSE, OM_diff, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
+f_In_tot <- function(file_path, l_Experiments, Adults_alone = FALSE, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
   
   text_Level_global <- 
     'Level{ # Global
@@ -883,7 +874,7 @@ Level{
   ############## Experiments ###################
   '
   
-  text_experiment <- f_In_experiments(l_Experiments, Adult_alone, OM_diff)
+  text_experiment <- f_In_experiments(l_Experiments, Adult_alone)
   
   text_end <- '
 } # End
@@ -2504,7 +2495,8 @@ f_import_data_DEBTKTD <- function() {
   df_data_EC50_growth_raw <- read_excel(here::here("data/Data_expe_raw/Data_EC50.xlsx"), sheet = "Growth") |> 
     mutate(
       Time = t,
-      Weight = w/1000 # conversion in g
+      Weight = w/1000, # conversion in g
+      Dose = Dose * 1000, # mg/kg to ng/g
     ) |> 
     dplyr::select(-c(t,w, Date, Comments, ID_camp, ID))
   
@@ -2512,7 +2504,7 @@ f_import_data_DEBTKTD <- function() {
     filter(Molec %in% c("IMD", "Ctrl_1", "Ctrl_2")) 
   
   df_data_EC50_growth_IMD <- df_data_EC50_growth_IMD_raw |> 
-    group_by(Condition, Time, Dose) |> 
+    group_by(Condition, Time, Dose, Soil_w) |> 
     summarise(
       Weight = mean(Weight, na.rm = TRUE),
       .groups = "drop"
@@ -2537,7 +2529,7 @@ f_import_data_DEBTKTD <- function() {
     filter(Molec %in% c("EPX", "Ctrl_2")) 
   
   df_data_EC50_growth_EPX <- df_data_EC50_growth_EPX_raw |> 
-    group_by(Condition, Time, Dose) |> 
+    group_by(Condition, Time, Dose, Soil_w) |> 
     summarise(
       Weight = mean(Weight, na.rm = TRUE),
       .groups = "drop"
@@ -2581,7 +2573,8 @@ f_import_data_DEBTKTD <- function() {
       Nb_ind = 2,
       Status = "A",
       Weight = NA_real_,
-      Reproduction = NA_real_
+      Reproduction = NA_real_,
+      Soil_w = "200"
     )
   
   df_data_EC50_repro_raw <- bind_rows(
@@ -2594,7 +2587,7 @@ f_import_data_DEBTKTD <- function() {
     filter(Molec %in% c("IMD", "Ctrl_1", "Ctrl_2"))
   
   df_data_EC50_repro_IMD <- df_data_EC50_repro_IMD_raw |> 
-    group_by(Condition, Time, Dose) |> 
+    group_by(Condition, Time, Dose, Soil_w) |> 
     summarise(
       Weight = mean(Weight, na.rm = TRUE),
       Reproduction = mean(Reproduction, na.rm = TRUE),
@@ -2612,14 +2605,15 @@ f_import_data_DEBTKTD <- function() {
       Density = 2,
       Texp = 18,
       No_sim = match(Dose, unique(Dose)),
-      Molecule = "IMD"
+      Molecule = "IMD",
+      Soil_w = 200
     )
   
   df_data_EC50_repro_EPX_raw <- df_data_EC50_repro_raw |> 
     filter(Molec %in% c("EPX", "Ctrl_2"))
   
   df_data_EC50_repro_EPX <- df_data_EC50_repro_EPX_raw |> 
-    group_by(Condition, Time, Dose) |> 
+    group_by(Condition, Time, Dose, Soil_w) |> 
     summarise(
       Weight = mean(Weight, na.rm = TRUE),
       Reproduction = mean(Reproduction, na.rm = TRUE),
@@ -2637,7 +2631,8 @@ f_import_data_DEBTKTD <- function() {
       Density = 2,
       Texp = 18,
       No_sim = match(Dose, unique(Dose)),
-      Molecule = "EPX"
+      Molecule = "EPX",
+      Soil_w = 200
     )
   
   df_data_EC50_repro <- rbind(df_data_EC50_repro_EPX, df_data_EC50_repro_IMD) |> 
@@ -2716,7 +2711,7 @@ f_In_experiments_TKTD <- function(Molec){
     char_Add_horse <- paste(rep("Add, ", length(df_OM_horse_Add_i$Time)), collapse = "")
     
     # Soil quantity in cosm (g)
-    df_Soilw_i <- df_DEB_i |> 
+    df_Soilw_i <- df_data_EC50 |> 
       arrange(Time) |>                    
       filter(row_number() == 1 | Soil_w != lag(Soil_w))
     
@@ -2796,7 +2791,14 @@ f_In_experiments_TKTD <- function(Molec){
                             char_tdensity, ");", sep="")
     }
     
-    
+    if (length(df_Soilw_i$Time)==1) {
+      text_WeightSoilCosm <- paste0("    WeightSoilCosm = ", df_Soilw_i$Soil_w,";")
+    }else {
+      text_WeightSoilCosm <- paste("    WeightSoilCosm=NDoses(", 
+                                   length(df_Soilw_i$Time), ",\n                ", 
+                                   char_soilw,",\n                ", 
+                                   char_tsoilw, ");", sep="")
+    }
     
     text_Texp <- paste("    Texp=",subset(df_data_EC50_i, Time==0)$Texp, ";", sep="")
     
@@ -2871,7 +2873,7 @@ End.'
 }
 
 
-f_In_predobs_TKTD <- function(file_path, Molecule, l_param_name){
+f_In_predobs_TKTD <- function(file_path, Molec, l_param_name){
   
   
   df_data <- f_import_data_DEBTKTD()
@@ -2950,14 +2952,14 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
     
     # MCSim syntaxe
     
-    if (df_data_EC50_i$Experiment_type[1] == "Growth") {
+    if (df_DEB_i$Experiment_type[1] == "Growth") {
       Init_i <- 1
     } else {
       Init_i <- 2
     }
     
     text_init <- paste("    Init = ", Init_i, ";", sep="") # Init = 1 for juveniles and 2 for adults
-    text_Ce0 <- paste("    Ce0=", subset(df_data_EC50_i, Time==0)$Dose, ";", sep="")
+    text_Ce0 <- paste("    Ce0=", subset(df_DEB_i, Time==0)$Dose, ";", sep="")
     
     text_Winit <- paste("    Winit=", subset(df_DEB_i, Time==0)$Weight, ";", sep="")
     
@@ -3004,6 +3006,15 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
                             char_density,",\n                ", 
                             char_tdensity, ");", sep="")
     }
+      
+      if (length(df_Soilw_i$Time)==1) {
+        text_WeightSoilCosm <- paste0("    WeightSoilCosm = ", df_Soilw_i$Soil_w,";")
+      }else {
+        text_WeightSoilCosm <- paste("    WeightSoilCosm=NDoses(", 
+                                     length(df_Soilw_i$Time), ",\n                ", 
+                                     char_soilw,",\n                ", 
+                                     char_tsoilw, ");", sep="")
+      }
     
     text_Texp <- paste("    Texp=",subset(df_DEB_i, Time==0)$Texp, ";", sep="")
     
@@ -3137,8 +3148,14 @@ Integrate(Lsodes, 1E-5, 1E-6, 1);
 
     # MCSim syntaxe
     
+    if (df_DEB_i$Experiment_type[1] == "Growth") {
+      Init_i <- 1
+    } else {
+      Init_i <- 2
+    }
+    
     text_init <- paste("    Init = ", Init_i, ";", sep="") # Init = 1 for juveniles and 2 for adults
-    text_Ce0 <- paste("    Ce0=", subset(df_data_EC50_i, Time==0)$Dose, ";", sep="")
+    text_Ce0 <- paste("    Ce0=", subset(df_DEB_i, Time==0)$Dose, ";", sep="")
     
     text_Winit <- paste("    Winit=", subset(df_DEB_i, Time==0)$Weight, ";", sep="")
     
@@ -3183,6 +3200,14 @@ Integrate(Lsodes, 1E-5, 1E-6, 1);
                             char_tdensity, ");", sep="")
     }
     
+      if (length(df_Soilw_i$Time)==1) {
+        text_WeightSoilCosm <- paste0("    WeightSoilCosm = ", df_Soilw_i$Soil_w,";")
+      }else {
+        text_WeightSoilCosm <- paste("    WeightSoilCosm=NDoses(", 
+                                     length(df_Soilw_i$Time), ",\n                ", 
+                                     char_soilw,",\n                ", 
+                                     char_tsoilw, ");", sep="")
+      }
 
     
     text_Texp <- paste("    Texp=",subset(df_DEB_i, Time==0)$Texp, ";", sep="")

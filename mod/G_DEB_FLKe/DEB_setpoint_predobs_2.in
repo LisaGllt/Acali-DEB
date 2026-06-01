@@ -1,0 +1,41 @@
+#### DEB A. caliginosa
+#===============================================
+
+SetPoints("DEB_setpoint_predobs_2.out", "tab_setpoint.out", 0,Fm, pAm, r_pAm_pM, v, kap, Ehp, E_coc, rOM_ClxHorse, K, dv, de, Sigma_W);
+
+Integrate(Lsodes, 1E-5, 1E-6, 1);
+
+########## Experiments ################################################
+
+Simulation { # Bart2019_XP1_2
+    Init= 1;
+    WeightSoilCosm = 400;
+    Winit=0.0118833333333333;
+    OM_soil_t0=13;
+    OM_horse_t0=2.7;
+    Soil=1;
+    Texp=15;
+    Dens=NDoses(4,
+                1, 2, 3, 6,
+                0, 112, 210, 294);
+    OM_soil_replace=Events(OM_soil,
+                          14,
+                          0, 28, 56, 84, 112, 140, 168, 196, 224, 252, 280, 308, 336, 364,
+                          Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, 
+                           13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13);
+    OM_horse_replace=Events(OM_horse,
+                           14,
+                           0, 28, 56, 84, 112, 140, 168, 196, 224, 252, 280, 308, 336, 364,
+                           Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, Replace, 
+                            2.7, 2.7, 2.7, 2.7, 5.4, 5.4, 5.4, 5.4, 8.1, 8.1, 8.1, 16.2, 16.2, 16.2);
+    OM_horse_add=Events(OM_horse,
+                           13,
+                           14, 42, 70, 98, 126, 154, 182, 210, 238, 266, 294, 322, 350,
+                           Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, 
+                            2.7, 2.7, 2.7, 2.7, 5.4, 5.4, 5.4, 8.1, 8.1, 8.1, 16.2, 16.2, 16.2);
+                               
+    Print(Weight,0, 14, 28, 42, 56, 70, 84, 98, 112, 126, 140, 154, 168, 182, 196, 210, 224, 238, 252, 266, 280, 294, 308, 322, 336, 350, 364);
+    Print(Reproduction,0, 14, 28, 42, 56, 70, 84, 98, 112, 126, 140, 154, 168, 182, 196, 210, 224, 238, 252, 266, 280, 294, 308, 322, 336, 350, 364);
+}
+
+  End.

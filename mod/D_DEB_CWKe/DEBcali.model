@@ -173,8 +173,8 @@ Dynamics{
       # Energy ingested by the earthworm per day (J/d)
       
       Qfmatter = Fm * Type_Fm;                             # (g/d of matter)
-      QfOMsoil = Qfmatter * OM_soil/(Dens * WeightCosm);   # (g/d of OM from soil)
-      QfOMhorse = Qfmatter * OM_horse/(Dens * WeightCosm); # (g/d of OM from horse)
+      QfOMsoil = Qfmatter * OM_soil/(Dens * WeightSoilCosm);   # (g/d of OM from soil)
+      QfOMhorse = Qfmatter * OM_horse/(Dens * WeightSoilCosm); # (g/d of OM from horse)
       
       Qf_soil_calc  = QfOMsoil  * muOM * rOM_ClxHorse;     # (J/d)
       Qf_horse_calc = QfOMhorse * muOM;                    # (J/d)

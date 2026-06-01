@@ -82,7 +82,7 @@ file_rds_kapA <- file.path(file.path(path_files, "kapA"), paste0("Sim.Res.Exp.fu
 if (file.exists(file_rds_kapA)) {
   df_pred_full_kapA <- readRDS(file_rds_kapA)
 } else {
-  df_pred_full_kapA <- f_read_Setpoint_full(file.path(path_files, "kapA"), Nb_experiment, select_times, step_sim)
+  df_pred_full_kapA <- f_read_Setpoint_full(file.path(path_files, "kapA"), l_Experiments_IsolatedAdults, Adults_alone = TRUE, Nb_experiment, select_times, step_sim)
 }
 
 file_rds_kapJ <- file.path(file.path(path_files, "kapJ"), paste0("Sim.Res.Exp.full.rds"))
@@ -90,7 +90,7 @@ file_rds_kapJ <- file.path(file.path(path_files, "kapJ"), paste0("Sim.Res.Exp.fu
 if (file.exists(file_rds_kapJ)) {
   df_pred_full_kapJ <- readRDS(file_rds_kapJ)
 } else {
-  df_pred_full_kapJ <- f_read_Setpoint_full(file.path(path_files, "kapJ"), Nb_experiment, select_times, step_sim)
+  df_pred_full_kapJ <- f_read_Setpoint_full(file.path(path_files, "kapJ"), l_Experiments_IsolatedAdults, Adults_alone = TRUE, Nb_experiment, select_times, step_sim)
 }
 
 # Times where earthworm are first observed as adults
@@ -133,7 +133,7 @@ point_stroke <- 0.9
 alpha_line <- 0.7
 wrap_nb_col <- 2
 
-col_kappa <- c(Nord_frost[2], Nord_frost[4])
+col_kappa <- c(Nord_frost[2], Nord_frost[4], Nord_frost[4])
 col_data <- Nord_polar[4]
 
 ID_exp_plot <- "Bart2019_XP1_1"

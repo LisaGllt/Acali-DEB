@@ -3,14 +3,14 @@ MCMC( "DEB_C3.out",  # output file
       "",                # name of data file
       100000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
-      1211);               # random seed
+      1212);               # random seed
 
 Integrate (Lsodes,  1e-07, 1e-06, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
 Level{ # Global
     
 
-Distrib (Fm,           TruncNormal_cv,     0.1,      0.2,      0.0001,    0.8);
+Distrib (Fm,           LogUniform,         0.0001,        1);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);

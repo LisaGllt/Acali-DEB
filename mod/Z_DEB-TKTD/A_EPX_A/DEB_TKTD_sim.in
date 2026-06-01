@@ -1,13 +1,13 @@
 #### DEB-TKTD A. caliginosa | Epoxiconazole
 #===============================================
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-6, 1E-6, 1);
 
 ########## Experiments ################################################
 
 kr = 1;
-nec = 5.1;
-b = 2;
+nec = 1000;
+b = 1;
 
 Simulation { # EPX_EC50_growth_Ctrl
     Init = 1;
@@ -33,12 +33,12 @@ Simulation { # EPX_EC50_growth_Ctrl
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C1
     Init = 1;
-    Ce0=0.928;
+    Ce0=928;
     Winit=0.06558;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -60,12 +60,12 @@ Simulation { # EPX_EC50_growth_C1
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C2
     Init = 1;
-    Ce0=2;
+    Ce0=2000;
     Winit=0.0598;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -87,12 +87,12 @@ Simulation { # EPX_EC50_growth_C2
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C3
     Init = 1;
-    Ce0=4.3;
+    Ce0=4300;
     Winit=0.06414;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -114,12 +114,12 @@ Simulation { # EPX_EC50_growth_C3
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C4
     Init = 1;
-    Ce0=9.28;
+    Ce0=9280;
     Winit=0.06644;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -141,12 +141,12 @@ Simulation { # EPX_EC50_growth_C4
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C5
     Init = 1;
-    Ce0=20;
+    Ce0=20000;
     Winit=0.0673;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -168,12 +168,12 @@ Simulation { # EPX_EC50_growth_C5
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C6
     Init = 1;
-    Ce0=43.1;
+    Ce0=43100;
     Winit=0.07596;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -195,12 +195,12 @@ Simulation { # EPX_EC50_growth_C6
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C7
     Init = 1;
-    Ce0=92.8;
+    Ce0=92800;
     Winit=0.05734;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -222,12 +222,12 @@ Simulation { # EPX_EC50_growth_C7
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_growth_C8
     Init = 1;
-    Ce0=200;
+    Ce0=200000;
     Winit=0.05398;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -249,7 +249,7 @@ Simulation { # EPX_EC50_growth_C8
                            Add, 
                             2.7);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_Ctrl
@@ -276,12 +276,12 @@ Simulation { # EPX_EC50_repro_Ctrl
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C1
     Init = 2;
-    Ce0=0.928;
+    Ce0=928;
     Winit=0.70581;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -303,12 +303,12 @@ Simulation { # EPX_EC50_repro_C1
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C2
     Init = 2;
-    Ce0=2;
+    Ce0=2000;
     Winit=0.69614;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -330,12 +330,12 @@ Simulation { # EPX_EC50_repro_C2
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C3
     Init = 2;
-    Ce0=4.3;
+    Ce0=4300;
     Winit=0.66864;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -357,12 +357,12 @@ Simulation { # EPX_EC50_repro_C3
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C4
     Init = 2;
-    Ce0=9.28;
+    Ce0=9280;
     Winit=0.70255;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -384,12 +384,12 @@ Simulation { # EPX_EC50_repro_C4
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C5
     Init = 2;
-    Ce0=20;
+    Ce0=20000;
     Winit=0.63882;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -411,12 +411,12 @@ Simulation { # EPX_EC50_repro_C5
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C6
     Init = 2;
-    Ce0=43.1;
+    Ce0=43100;
     Winit=0.66693;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -438,12 +438,12 @@ Simulation { # EPX_EC50_repro_C6
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C7
     Init = 2;
-    Ce0=92.8;
+    Ce0=92800;
     Winit=0.6482;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -465,12 +465,12 @@ Simulation { # EPX_EC50_repro_C7
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 Simulation { # EPX_EC50_repro_C8
     Init = 2;
-    Ce0=200;
+    Ce0=200000;
     Winit=0.69538;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -492,7 +492,7 @@ Simulation { # EPX_EC50_repro_C8
                            Add, 
                             5.4);
     PrintStep(Weight,
-              Reproduction,
+              Reproduction, Stress, Damage, Ci, Ce,
 				      0, 28, 0.01);
 }
 
