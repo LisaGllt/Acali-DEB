@@ -2750,6 +2750,162 @@ ggsave(
   path=path_fig
   )
 ```
+
+## G_FLKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_G_FLKe
+#| fig-height: 8
+#| fig-width: 8
+
+n_samples <- 1e5 # Simulation of the distribution
+
+df_priors_dist <- MCMC_out_G_FLKe$Priors |> 
+  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+  rowwise() |> 
+  mutate(samples = case_when(
+    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+  )) |> 
+  unnest(samples)
+
+alpha_prior <- 0.5
+alpha_post <- 0.5
+col_prior <- Nord_snow[1]
+col_post <- col_IMD
+
+MCMC_out_G_FLKe$Chains_plot <- MCMC_out_G_FLKe$Chains |> 
+  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+
+p_post <- ggplot() +
+  
+  # Priors
+  stat_halfeye(
+    data = df_priors_dist,
+    aes(
+       x = samples,
+       ),
+    alpha = alpha_prior,
+    fill = col_prior,
+    color = col_prior,
+    normalize = "xy"
+    ) +
+  
+  # Posterior
+  stat_halfeye(
+    data = subset(MCMC_out_G_FLKe$Chains_plot, Nom %in% L_parameters_G_FLKe),
+    mapping = aes(
+      x=value
+    ),
+    fill = col_post,
+    color = col_post,
+    alpha = alpha_post,
+    normalize = "xy"
+  ) +
+  
+  facet_wrap(~Nom, scales = "free")+
+  labs(
+    title = "Posterior and prior distributions", 
+    x = "Parameter value", 
+    y = "Density"
+    ) +
+  theme_minimal()+
+  theme(
+    title=element_text(face="bold")
+  )
+
+p_post
+```
+
+```{r savepostG_FLKe, include = F}
+ggsave(
+  filename="G_FLKe_post.png", 
+  plot=p_post, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+
+## H_FWKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_H_FWKe
+#| fig-height: 8
+#| fig-width: 8
+
+n_samples <- 1e5 # Simulation of the distribution
+
+df_priors_dist <- MCMC_out_H_FWKe$Priors |> 
+  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+  rowwise() |> 
+  mutate(samples = case_when(
+    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+  )) |> 
+  unnest(samples)
+
+alpha_prior <- 0.5
+alpha_post <- 0.5
+col_prior <- Nord_snow[1]
+col_post <- col_IMD
+
+MCMC_out_H_FWKe$Chains_plot <- MCMC_out_H_FWKe$Chains |> 
+  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+
+p_post <- ggplot() +
+  
+  # Priors
+  stat_halfeye(
+    data = df_priors_dist,
+    aes(
+       x = samples,
+       ),
+    alpha = alpha_prior,
+    fill = col_prior,
+    color = col_prior,
+    normalize = "xy"
+    ) +
+  
+  # Posterior
+  stat_halfeye(
+    data = subset(MCMC_out_H_FWKe$Chains_plot, Nom %in% L_parameters_H_FWKe),
+    mapping = aes(
+      x=value
+    ),
+    fill = col_post,
+    color = col_post,
+    alpha = alpha_post,
+    normalize = "xy"
+  ) +
+  
+  facet_wrap(~Nom, scales = "free")+
+  labs(
+    title = "Posterior and prior distributions", 
+    x = "Parameter value", 
+    y = "Density"
+    ) +
+  theme_minimal()+
+  theme(
+    title=element_text(face="bold")
+  )
+
+p_post
+```
+
+```{r savepostH_FWKe, include = F}
+ggsave(
+  filename="H_FWKe_post.png", 
+  plot=p_post, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
 :::
 
 ## Predicted vs. Observed

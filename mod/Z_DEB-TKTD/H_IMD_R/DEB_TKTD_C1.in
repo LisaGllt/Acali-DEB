@@ -1,0 +1,668 @@
+MCMC( "DEB_TKTD_C1.out",  # output file
+      "",                # name of restart file
+      "",                # name of data file
+      300000, 0,             # iterations, print prediction flag
+      1, 10000,          # printing frequency, iters to print
+      3345);               # random seed
+
+Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
+    
+Level{ # Global
+    
+
+Distrib (nec,          LogUniform,                 0.001,     1000000);
+Distrib (b,            LogUniform,                0.000000000001,          10);
+
+# Calcul des vraissemblances
+Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);
+Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));
+
+Level{
+
+  ############## Experiments ###################
+  
+
+Experiment { # IMD_EC50_growth_Ctrl
+    Init = 1;
+    Ce0=0;
+    Winit=0.10092;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.10092, 0.21477, 0.41118);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C1
+    Init = 1;
+    Ce0=1.6;
+    Winit=0.1259;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.1259, 0.27896, 0.5296);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C2
+    Init = 1;
+    Ce0=5;
+    Winit=0.12678;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.12678, 0.24956, 0.4914);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C3
+    Init = 1;
+    Ce0=16;
+    Winit=0.12454;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.12454, 0.2374, 0.46274);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C4
+    Init = 1;
+    Ce0=50;
+    Winit=0.11418;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.11418, 0.23416, 0.3854);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C5
+    Init = 1;
+    Ce0=158;
+    Winit=0.098;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.098, 0.20912, 0.41106);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C6
+    Init = 1;
+    Ce0=280;
+    Winit=0.05484;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.05484, 0.11422, 0.28956);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C7
+    Init = 1;
+    Ce0=500;
+    Winit=0.08441;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.08441, 0.1127, 0.23355);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C8
+    Init = 1;
+    Ce0=890;
+    Winit=0.05622;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.05622, 0.0352, 0.0248);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C9
+    Init = 1;
+    Ce0=1581;
+    Winit=0.11834;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.11834, 0.07566, 0.0755);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_growth_C10
+    Init = 1;
+    Ce0=5000;
+    Winit=0.14148;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.14148, 0.05715, 0.0558);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+Experiment { # IMD_EC50_repro_Ctrl
+    Init = 2;
+    Ce0=0;
+    Winit=0.75083;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.75083, -1, 0.905665);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 15);
+}
+Experiment { # IMD_EC50_repro_C1
+    Init = 2;
+    Ce0=0.0016;
+    Winit=0.72012;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.72012, -1, 0.91086);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 17);
+}
+Experiment { # IMD_EC50_repro_C2
+    Init = 2;
+    Ce0=0.005;
+    Winit=0.76991;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.76991, -1, 0.95269);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 11.8);
+}
+Experiment { # IMD_EC50_repro_C3
+    Init = 2;
+    Ce0=0.016;
+    Winit=0.78241;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.78241, -1, 1.0313);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 14.4);
+}
+Experiment { # IMD_EC50_repro_C4
+    Init = 2;
+    Ce0=0.05;
+    Winit=0.72182;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.72182, -1, 0.94486);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 14.2);
+}
+Experiment { # IMD_EC50_repro_C5
+    Init = 2;
+    Ce0=0.158;
+    Winit=0.75544;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.75544, -1, 0.77879);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 12.6);
+}
+Experiment { # IMD_EC50_repro_C6
+    Init = 2;
+    Ce0=0.28;
+    Winit=0.68963;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.68963, -1, 0.85429);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 12);
+}
+Experiment { # IMD_EC50_repro_C7
+    Init = 2;
+    Ce0=0.5;
+    Winit=0.684895;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.684895, -1, 0.787735);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 7.8);
+}
+Experiment { # IMD_EC50_repro_C8
+    Init = 2;
+    Ce0=0.89;
+    Winit=0.63245;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.63245, -1, 0.51443);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 4);
+}
+Experiment { # IMD_EC50_repro_C9
+    Init = 2;
+    Ce0=1.581;
+    Winit=0.66219;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.66219, -1, 0.4056);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 0.2);
+}
+Experiment { # IMD_EC50_repro_C10
+    Init = 2;
+    Ce0=5;
+    Winit=0.70881;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14);
+    Data(Weight,0.70881, -1);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 0);
+}
+
+} # End
+} # End global
+
+End.

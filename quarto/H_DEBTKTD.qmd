@@ -305,188 +305,46 @@ df_data_fit_EPX <- f_import_data_DEBTKTD() |>
     .default = No_sim
   ))
 
-df_sim <- f_MCSim_read_sim(file.path(path_A_EPX_A, "sim.out"))
-
-
-pW <- ggplot()+
-  geom_point(
-    data = df_data_fit_EPX |> filter(Experiment_type == "Growth"),
-    aes(
-      x = Time,
-      y = Weight
-    )
-  )+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Weight
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-pR <- ggplot()+
-  geom_point(
-    data = df_data_fit_EPX |> filter(Experiment_type == "Growth"),
-    aes(
-      x = Time,
-      y = Reproduction
-    )
-  )+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Reproduction
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-p <- pW + pR
-
-
-{
-  df_sim <- f_MCSim_read_sim(file.path(path_A_EPX_A, "sim.out"))
-
-pS <- ggplot()+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Stress
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-pD <- ggplot()+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Damage
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-pCi <- ggplot()+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Ci
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-pCe <- ggplot()+
-  geom_line(
-    data = df_sim,
-    aes(
-      x = Time,
-      y = Ce
-    ),
-    color = "red"
-  )+
-  facet_wrap(~No_sim)
-
-
-p <- pS + pD + pCi
-}
-
 ```
 
 ```{r fit_A_EPX_A, message=F, warning=F}
 
 path_fig <- here::here("fig/DEBTKTD_Models")
-Molecule <- "EPX"
-df_data_fit_EPX <- f_import_data_DEBTKTD() |> filter(Molecule == Molecule)
+Molec <- "EPX"
+df_data_fit_EPX <- f_import_data_DEBTKTD() |> filter(Molecule == Molec)
 
 NbIter <- 30000
 OM_diff <- TRUE
-RTOL <- 1e-7
-ATOL <- 1e-6
+RTOL <- 1e-10
+ATOL <- 1e-9
+
+text_priors <- '
+Distrib (nec,          TruncNormal,  10000, 0.5,               1,     1000000);
+Distrib (b,            LogUniform,                0.000000000001,          10);
+
+# Calcul des vraissemblances
+Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
+
+text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
 
 ######## A_EPX_A ##############################################################
-seeds <- c(C1 = 3303, C2 = 3666, C3 = 2212)
-
-path_A_EPX_A <- here::here("mod/Z_DEB-TKTD/A_EPX_A")
-
-# Distrib (kr,           TruncNormal,           1,      0.2,  0.00001,     100000);
-
-text_priors <- '
-Distrib (nec,          TruncNormal,           1,      0.2,  0.01,     100);
-Distrib (b,            TruncNormal,           1,      0.2,  0.001,    100);
-
-# Calcul des vraissemblances
-Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
-
-text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
-Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
-
-f_In_TKTD_tot(path_A_EPX_A, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
+f_In_TKTD_tot(path_A_EPX_A, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## B_EPX_M ##############################################################
-seeds <- c(C1 = 3303, C2 = 3666, C3 = 2212)
-
-path_B_EPX_M <- here::here("mod/Z_DEB-TKTD/B_EPX_M")
-
-# Distrib (kr,           TruncNormal,           1,      0.2,  0.00001,     100000);
-
-text_priors <- '
-Distrib (nec,          TruncNormal,           1000,      0.2,  0.01,     100 000);
-Distrib (b,            TruncNormal,           1,      0.2,  0.001,    100);
-
-# Calcul des vraissemblances
-Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
-
-text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
-Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
-
-f_In_TKTD_tot(path_B_EPX_M, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+seeds <- c(C1 = 3345, C2 = 6636, C3 = 2212)
+f_In_TKTD_tot(path_B_EPX_M, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## C_EPX_G ##############################################################
-seeds <- c(C1 = 3303, C2 = 3666, C3 = 2212)
-
-path_C_EPX_G <- here::here("mod/Z_DEB-TKTD/C_EPX_G")
-
-# Distrib (kr,           TruncNormal,           1,      0.2,  0.00001,     100000);
-
-text_priors <- '
-Distrib (nec,          TruncNormal,           1,      0.2,  0.01,     100);
-Distrib (b,            TruncNormal,           1,      0.2,  0.001,    100);
-
-# Calcul des vraissemblances
-Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
-
-text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
-Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
-
-f_In_TKTD_tot(path_C_EPX_G, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
+f_In_TKTD_tot(path_C_EPX_G, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## D_EPX_R ##############################################################
-seeds <- c(C1 = 3303, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+f_In_TKTD_tot(path_D_EPX_R, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
-path_D_EPX_R <- here::here("mod/Z_DEB-TKTD/D_EPX_R")
-
-# Distrib (kr,           TruncNormal,           1,      0.2,  0.00001,     100000);
-
-text_priors <- '
-Distrib (nec,          TruncNormal,           1,      0.2,  0.01,     100);
-Distrib (b,            TruncNormal,           1,      0.2,  0.001,    100);
-
-# Calcul des vraissemblances
-Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
-
-text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
-Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
-
-f_In_TKTD_tot(path_D_EPX_R, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
-
+# ./mcsim.DEB-EPX DEB_TKTD_C1.in
 
 ```
 
@@ -584,8 +442,6 @@ Summary_res_D_EPX_R <-
   mutate(Model = "D_EPX_R")
 
 Summary_res_D_EPX_R
-
-
 
 list_models <- c("A_EPX_A", "B_EPX_M", "C_EPX_G", "D_EPX_R")
 df_LL_BIC <- data.frame(
@@ -1243,6 +1099,36 @@ f_In_Setpoint_full_TKTD(
   path_A_EPX_A, Molec, 
   l_param_name_A_EPX_A, step_sim, Endpoints_print
   )
+
+
+l_param_name_B_EPX_M <- names(Summary_res_B_EPX_M) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_B_EPX_M, Molec, 
+  l_param_name_B_EPX_M, step_sim, Endpoints_print
+  )
+
+l_param_name_C_EPX_G <- names(Summary_res_C_EPX_G) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_C_EPX_G, Molec, 
+  l_param_name_C_EPX_G, step_sim, Endpoints_print
+  )
+
+l_param_name_D_EPX_R <- names(Summary_res_D_EPX_R) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_D_EPX_R, Molec, 
+  l_param_name_D_EPX_R, step_sim, Endpoints_print
+  )
+
+
 ```
 
 ```{bash, eval=F, execute=F}
@@ -1264,7 +1150,33 @@ if (file.exists(file_rds_A_EPX_A)) {
   df_pred_full_A_EPX_A <- f_read_Setpoint_full_TKTD(path_A_EPX_A, Molec, select_times, step_sim)
 }
 
+file_rds_B_EPX_M <- file.path(path_B_EPX_M, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_B_EPX_M)) {
+  df_pred_full_B_EPX_M <- readRDS(file_rds_B_EPX_M)
+} else {
+  df_pred_full_B_EPX_M <- f_read_Setpoint_full_TKTD(path_B_EPX_M, Molec, select_times, step_sim)
+}
+
+file_rds_C_EPX_G <- file.path(path_C_EPX_G, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_C_EPX_G)) {
+  df_pred_full_C_EPX_G <- readRDS(file_rds_C_EPX_G)
+} else {
+  df_pred_full_C_EPX_G <- f_read_Setpoint_full_TKTD(path_C_EPX_G, Molec, select_times, step_sim)
+}
+
+file_rds_D_EPX_R <- file.path(path_D_EPX_R, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_EPX_R)) {
+  df_pred_full_D_EPX_R <- readRDS(file_rds_D_EPX_R)
+} else {
+  df_pred_full_D_EPX_R <- f_read_Setpoint_full_TKTD(path_D_EPX_R, Molec, select_times, step_sim)
+}
+
 ```
+
+## A_EPX_A
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -1406,18 +1318,2022 @@ col_experiment <- rep(col_exp1, 2)
   
   
 
-p <- pW + pR +
+pA <- pW + pR +
   plot_layout(guides = "collect") &
   guides(color = guide_legend("Experiments")) &
   theme(legend.position = "none")
 
-p
+pA
 ```
 
 ```{r savetrajWRA_EPX_A, include = F}
 ggsave(
   filename="A_EPX_A_trajWR.png", 
-  plot=p, 
+  plot=pA, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## B_EPX_M
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_B_EPX_M
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_B_EPX_M, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_B_EPX_M, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_B_EPX_M, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_B_EPX_M, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pB <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pB
+```
+
+```{r savetrajWRB_EPX_M, include = F}
+ggsave(
+  filename="B_EPX_M_trajWR.png", 
+  plot=pB, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## C_EPX_G
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_C_EPX_G
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_C_EPX_G, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_C_EPX_G, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_C_EPX_G, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_C_EPX_G, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pC <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pC
+```
+
+```{r savetrajWRC_EPX_G, include = F}
+ggsave(
+  filename="C_EPX_G_trajWR.png", 
+  plot=pC, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## D_EPX_R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_D_EPX_R
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_D_EPX_R, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_D_EPX_R, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_D_EPX_R, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_D_EPX_R, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_EPX,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pD <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pD
+```
+
+```{r savetrajWRD_EPX_R, include = F}
+ggsave(
+  filename="D_EPX_R_trajWR.png", 
+  plot=pD, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## Effect of IMD
+
+### Model fit
+
+```{r}
+Molec <- "IMD"
+path_fig <- here::here("fig/DEBTKTD_Models")
+
+path_E_IMD_A <- here::here("mod/Z_DEB-TKTD/E_IMD_A")
+path_F_IMD_M <- here::here("mod/Z_DEB-TKTD/F_IMD_M")
+path_G_IMD_G <- here::here("mod/Z_DEB-TKTD/G_IMD_G")
+path_H_IMD_R <- here::here("mod/Z_DEB-TKTD/H_IMD_R")
+
+df_data_fit_IMD <- f_import_data_DEBTKTD() |> 
+  filter(Molecule == Molec) |> 
+  mutate(No_sim = case_when(
+    Experiment_type == "Repro" ~ No_sim+9,
+    .default = No_sim
+  ))
+
+```
+
+```{r fit_E_IMD_A, message=F, warning=F}
+
+path_fig <- here::here("fig/DEBTKTD_Models")
+Molec <- "IMD"
+df_data_fit_IMD <- f_import_data_DEBTKTD() |> filter(Molecule == Molec)
+
+NbIter <- 300000
+OM_diff <- TRUE
+RTOL <- 1e-10
+ATOL <- 1e-9
+
+text_priors <- '
+Distrib (nec,          LogUniform,                 0.001,     1000000);
+Distrib (b,            LogUniform,                0.000000000001,          10);
+
+# Calcul des vraissemblances
+Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);'
+
+text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
+
+######## E_IMD_A ##############################################################
+seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
+f_In_TKTD_tot(path_E_IMD_A, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+
+######## F_IMD_M ##############################################################
+seeds <- c(C1 = 3345, C2 = 6636, C3 = 2212)
+f_In_TKTD_tot(path_F_IMD_M, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+
+######## G_IMD_G ##############################################################
+seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
+f_In_TKTD_tot(path_G_IMD_G, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+
+######## H_IMD_R ##############################################################
+seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+f_In_TKTD_tot(path_H_IMD_R, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+
+# ./mcsim.DEB-IMD DEB_TKTD_C1.in
+
+```
+
+### Estimates results
+
+```{r}
+n_data_Weight <- length(na.omit(df_data_fit_IMD$Weight))
+n_data_Reproduction <- length(na.omit(df_data_fit_IMD$Reproduction))
+n_data_fit <- n_data_Weight + n_data_Reproduction
+
+######### E_IMD_A ###############################################################
+
+MCMC_out_E_IMD_A <- f_MCSim(path_E_IMD_A)
+
+NC_E_IMD_A <- MCMC_out_E_IMD_A$NC
+Nb_param_E_IMD_A <- MCMC_out_E_IMD_A$Nb_param
+Nb_experiment_E_IMD_A <- MCMC_out_E_IMD_A$Nb_experiment
+Nb_iter_kept_E_IMD_A <- MCMC_out_E_IMD_A$Nb_iter_kept
+N_iter_setpoint_E_IMD_A <- MCMC_out_E_IMD_A$N_iter_setpoint
+L_parameters_E_IMD_A <- unique(MCMC_out_E_IMD_A$Priors$Nom)
+
+LL_E_IMD_A <- f_get_mode(MCMC_out_E_IMD_A$df_LnData$LnData)
+k_E_IMD_A <- Nb_param_E_IMD_A - 1 # On enlève le Sigma_W
+
+BIC_E_IMD_A <- -2*LL_E_IMD_A+k_E_IMD_A*log(n_data_fit)
+
+Summary_res_E_IMD_A <- 
+  as.data.frame(MCMC_out_E_IMD_A$Summary_res)[1:length(L_parameters_E_IMD_A)] |> 
+  mutate(Model = "E_IMD_A")
+
+Summary_res_E_IMD_A
+
+######### F_IMD_M ###############################################################
+
+MCMC_out_F_IMD_M <- f_MCSim(path_F_IMD_M)
+
+NC_F_IMD_M <- MCMC_out_F_IMD_M$NC
+Nb_param_F_IMD_M <- MCMC_out_F_IMD_M$Nb_param
+Nb_experiment_F_IMD_M <- MCMC_out_F_IMD_M$Nb_experiment
+Nb_iter_kept_F_IMD_M <- MCMC_out_F_IMD_M$Nb_iter_kept
+N_iter_setpoint_F_IMD_M <- MCMC_out_F_IMD_M$N_iter_setpoint
+L_parameters_F_IMD_M <- unique(MCMC_out_F_IMD_M$Priors$Nom)
+
+LL_F_IMD_M <- f_get_mode(MCMC_out_F_IMD_M$df_LnData$LnData)
+k_F_IMD_M <- Nb_param_F_IMD_M - 1 # On enlève le Sigma_W
+
+BIC_F_IMD_M <- -2*LL_F_IMD_M+k_F_IMD_M*log(n_data_fit)
+
+Summary_res_F_IMD_M <- 
+  as.data.frame(MCMC_out_F_IMD_M$Summary_res)[1:length(L_parameters_F_IMD_M)] |> 
+  mutate(Model = "F_IMD_M")
+
+Summary_res_F_IMD_M
+
+######### G_IMD_G ###############################################################
+
+MCMC_out_G_IMD_G <- f_MCSim(path_G_IMD_G)
+
+NC_G_IMD_G <- MCMC_out_G_IMD_G$NC
+Nb_param_G_IMD_G <- MCMC_out_G_IMD_G$Nb_param
+Nb_experiment_G_IMD_G <- MCMC_out_G_IMD_G$Nb_experiment
+Nb_iter_kept_G_IMD_G <- MCMC_out_G_IMD_G$Nb_iter_kept
+N_iter_setpoint_G_IMD_G <- MCMC_out_G_IMD_G$N_iter_setpoint
+L_parameters_G_IMD_G <- unique(MCMC_out_G_IMD_G$Priors$Nom)
+
+LL_G_IMD_G <- f_get_mode(MCMC_out_G_IMD_G$df_LnData$LnData)
+k_G_IMD_G <- Nb_param_G_IMD_G - 1 # On enlève le Sigma_W
+
+BIC_G_IMD_G <- -2*LL_G_IMD_G+k_G_IMD_G*log(n_data_fit)
+
+Summary_res_G_IMD_G <- 
+  as.data.frame(MCMC_out_G_IMD_G$Summary_res)[1:length(L_parameters_G_IMD_G)] |> 
+  mutate(Model = "G_IMD_G")
+
+Summary_res_G_IMD_G
+
+######### H_IMD_R ###############################################################
+
+MCMC_out_H_IMD_R <- f_MCSim(path_H_IMD_R)
+
+NC_H_IMD_R <- MCMC_out_H_IMD_R$NC
+Nb_param_H_IMD_R <- MCMC_out_H_IMD_R$Nb_param
+Nb_experiment_H_IMD_R <- MCMC_out_H_IMD_R$Nb_experiment
+Nb_iter_kept_H_IMD_R <- MCMC_out_H_IMD_R$Nb_iter_kept
+N_iter_setpoint_H_IMD_R <- MCMC_out_H_IMD_R$N_iter_setpoint
+L_parameters_H_IMD_R <- unique(MCMC_out_H_IMD_R$Priors$Nom)
+
+LL_H_IMD_R <- f_get_mode(MCMC_out_H_IMD_R$df_LnData$LnData)
+k_H_IMD_R <- Nb_param_H_IMD_R - 1 # On enlève le Sigma_W
+
+BIC_H_IMD_R <- -2*LL_H_IMD_R+k_H_IMD_R*log(n_data_fit)
+
+Summary_res_H_IMD_R <- 
+  as.data.frame(MCMC_out_H_IMD_R$Summary_res)[1:length(L_parameters_H_IMD_R)] |> 
+  mutate(Model = "H_IMD_R")
+
+Summary_res_H_IMD_R
+
+list_models <- c("E_IMD_A", "F_IMD_M", "G_IMD_G", "H_IMD_R")
+df_LL_BIC <- data.frame(
+  Model = list_models,
+  LL = round(unlist(mget(paste0("LL_", list_models))), 2),
+  BIC = round(unlist(mget(paste0("BIC_", list_models))), 2)
+)
+```
+
+```{r resall}
+#| tbl-cap: Estimation results from all models. 
+
+list_models <- c("E_IMD_A", "F_IMD_M", "G_IMD_G", "H_IMD_R")
+list_model_summary <- mget(paste0("Summary_res_", list_models))
+
+param_order <- c(
+  "nec", "b"
+)
+
+format_summary <- function(df) {
+  df %>%
+    rename_with(~ str_remove(., "\\.1\\.$")) %>%
+    rownames_to_column("stat") %>%
+    pivot_longer(
+      cols = -c(stat, Model),
+      names_to = "param",
+      values_to = "value"
+    ) %>%
+    pivot_wider(
+      names_from = stat,
+      values_from = value
+    ) %>%
+    mutate(
+      value = str_c(
+        round(Result_mode, 3),
+        " [", round(`2.5%`, 3),
+        " ; ", round(`97.5%`, 3), "]"
+      )
+    ) %>%
+    dplyr::select(Model, param, value) %>%
+    pivot_wider(
+      names_from = param,
+      values_from = value
+    )
+}
+
+df_result <- list_model_summary %>%
+  map(format_summary) %>%
+  bind_rows() %>%
+  dplyr::select(
+    Model,
+    any_of(param_order),
+    everything()
+  ) |> 
+  left_join(df_LL_BIC)
+
+df_result |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    ),
+  class="hover"
+  )
+```
+
+### Chains
+
+::: panel-tabset
+## E_IMD_A
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains_E_IMD_A
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out_E_IMD_A$Chains |> 
+      filter(Iteration !=1), 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r savechainsE_IMD_A, include = F}
+ggsave(
+  filename="E_IMD_A_chains.png", 
+  plot=p_chains, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+
+## F_IMD_M
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains_F_IMD_M
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out_F_IMD_M$Chains |> 
+      filter(Iteration !=1), 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r savechainsF_IMD_M, include = F}
+ggsave(
+  filename="F_IMD_M_chains.png", 
+  plot=p_chains, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+
+## G_IMD_G
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains_G_IMD_G
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out_G_IMD_G$Chains |> 
+      filter(Iteration !=1), 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r savechainsG_IMD_G, include = F}
+ggsave(
+  filename="G_IMD_G_chains.png", 
+  plot=p_chains, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+
+## H_IMD_R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains_H_IMD_R
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out_H_IMD_R$Chains |> 
+      filter(Iteration !=1), 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r savechainsH_IMD_R, include = F}
+ggsave(
+  filename="H_IMD_R_chains.png", 
+  plot=p_chains, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+:::
+
+### Likelihood
+
+```{r, message=F, warning=F, echo=F}
+#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
+#| label: fig-like_E_IMD_A
+#| fig-height: 8
+#| fig-width: 8
+
+p1 <- ggplot(
+  MCMC_out_E_IMD_A$df_LnPost_start |> 
+      filter(iteration !=1), 
+  aes(
+    x = iteration, 
+    y = LnPosterior, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = "First half iterations", 
+    y = "LnPosterior"
+    ) +
+  theme_minimal()
+
+p2 <- ggplot(
+  MCMC_out_E_IMD_A$df_LnPost |> 
+      filter(iteration !=1), 
+  aes(
+    x = iteration, 
+    y = LnPosterior, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = paste(MCMC_out_E_IMD_A$Nb_iter_kept, "last iterations"), 
+    y = "LnPosterior"
+    ) +
+  theme_minimal()
+
+p3 <- ggplot(
+  MCMC_out_E_IMD_A$df_Devc |> 
+      filter(iteration !=1), 
+  aes(
+    x = iteration, 
+    y = RatioDeviance, 
+    color = Chain
+    )
+  ) +
+  geom_line() +
+  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+  labs(
+    x = paste(MCMC_out_E_IMD_A$Nb_iter_kept, "last iterations"), 
+    y = "Ratio Deviance"
+    ) +
+  theme_minimal()
+
+p_LL <- p1 + p2 + p3 +
+  plot_layout(ncol=3, guides = "collect")
+p_LL
+
+```
+
+```{r saveLLE_IMD_A, include = F}
+ggsave(
+  filename="E_IMD_A_chainsLL.png", 
+  plot=p_LL, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
+
+### Posterior distributions
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_E_IMD_A
+#| fig-height: 8
+#| fig-width: 8
+
+n_samples <- 1e5 # Simulation of the distribution
+
+df_priors_dist <- MCMC_out_E_IMD_A$Priors |> 
+  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+  rowwise() |> 
+  mutate(samples = case_when(
+    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+  )) |> 
+  unnest(samples)
+
+alpha_prior <- 0.5
+alpha_post <- 0.5
+col_prior <- Nord_snow[1]
+col_post <- col_IMD
+
+MCMC_out_E_IMD_A$Chains_plot <- MCMC_out_E_IMD_A$Chains |> 
+  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+
+p_post <- ggplot() +
+  
+  # Priors
+  stat_halfeye(
+    data = df_priors_dist,
+    aes(
+       x = samples,
+       ),
+    alpha = alpha_prior,
+    fill = col_prior,
+    color = col_prior,
+    normalize = "xy"
+    ) +
+  
+  # Posterior
+  stat_halfeye(
+    data = subset(MCMC_out_E_IMD_A$Chains_plot, Nom %in% L_parameters_E_IMD_A),
+    mapping = aes(
+      x=value
+    ),
+    fill = col_post,
+    color = col_post,
+    alpha = alpha_post,
+    normalize = "xy"
+  ) +
+  
+  facet_wrap(~Nom, scales = "free")+
+  labs(
+    title = "Posterior and prior distributions", 
+    x = "Parameter value", 
+    y = "Density"
+    ) +
+  theme_minimal()+
+  theme(
+    title=element_text(face="bold")
+  )
+
+p_post
+```
+
+```{r savepostE_IMD_A, include = F}
+ggsave(
+  filename="E_IMD_A_post.png", 
+  plot=p_post, 
+  width=8, height = 8, 
+  path=path_fig
+  )
+```
+
+### Predicted vs. Obs
+
+```{r}
+l_param_name_E_IMD_A <- names(Summary_res_E_IMD_A) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.") 
+
+f_In_predobs_TKTD(path_E_IMD_A, Molec, l_param_name_E_IMD_A)
+```
+
+```{bash, eval=F, execute=F}
+for j in $(seq 1 18); do
+./mcsim.DEB-IMD DEB_setpoint_predobs_${j}.in
+done
+```
+
+```{r, results=F, message=F, warning=F}
+
+Nb_experiment <- 18
+
+df_data_obs_IMD <- df_data_fit_IMD |> 
+  mutate(
+    Weight_obs = Weight,
+    Reproduction_obs = Reproduction
+    ) |> 
+  dplyr::select(-c(Weight, Reproduction))
+
+######## E_IMD_A ###############################################################
+
+df_pred_E_IMD_A <- f_read_predobs(path_E_IMD_A, Nb_experiment, df_data_obs_IMD)
+
+df_pred_Weight_E_IMD_A <- subset(df_pred_E_IMD_A, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_E_IMD_A <- subset(df_pred_E_IMD_A, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_E_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Reproduction_E_IMD_A, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()
+
+df_predobs_Weight_E_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_E_IMD_A, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()
+
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_E_IMD_A
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+
+seq_line <- seq(0.05, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_E_IMD_A,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Condition
+    ),
+    alpha = 0.5
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(5, 30, 0.1)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_E_IMD_A,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Condition
+    ),
+    alpha = 0.5
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+```
+
+```{r savepredobsE_IMD_A, include = F}
+
+ggsave(
+  filename = "E_IMD_A_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+
+### Predicted trajectories for Weight and Reproduction
+
+```{r setpointfullin}
+
+Nb_experiment <- 18
+step_sim <- 0.05
+select_times <- seq(0,400, 0.1)
+
+Endpoints_print <- "Weight,
+    Reproduction"
+
+
+l_param_name_E_IMD_A <- names(Summary_res_E_IMD_A) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_E_IMD_A, Molec, 
+  l_param_name_E_IMD_A, step_sim, Endpoints_print
+  )
+
+
+l_param_name_F_IMD_M <- names(Summary_res_F_IMD_M) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_F_IMD_M, Molec, 
+  l_param_name_F_IMD_M, step_sim, Endpoints_print
+  )
+
+l_param_name_G_IMD_G <- names(Summary_res_G_IMD_G) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_G_IMD_G, Molec, 
+  l_param_name_G_IMD_G, step_sim, Endpoints_print
+  )
+
+l_param_name_H_IMD_R <- names(Summary_res_H_IMD_R) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_H_IMD_R, Molec, 
+  l_param_name_H_IMD_R, step_sim, Endpoints_print
+  )
+
+
+```
+
+```{bash, eval=F, execute=F}
+for j in $(seq 1 18); do
+./mcsim.DEB-IMD DEB_setpoint_full_${j}.in
+done
+```
+
+```{r, message = F, warning = F}
+
+width_plot <- 12
+height_plot <- 12
+
+file_rds_E_IMD_A <- file.path(path_E_IMD_A, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_E_IMD_A)) {
+  df_pred_full_E_IMD_A <- readRDS(file_rds_E_IMD_A)
+} else {
+  df_pred_full_E_IMD_A <- f_read_Setpoint_full_TKTD(path_E_IMD_A, Molec, select_times, step_sim)
+}
+
+file_rds_F_IMD_M <- file.path(path_F_IMD_M, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_F_IMD_M)) {
+  df_pred_full_F_IMD_M <- readRDS(file_rds_F_IMD_M)
+} else {
+  df_pred_full_F_IMD_M <- f_read_Setpoint_full_TKTD(path_F_IMD_M, Molec, select_times, step_sim)
+}
+
+file_rds_G_IMD_G <- file.path(path_G_IMD_G, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_G_IMD_G)) {
+  df_pred_full_G_IMD_G <- readRDS(file_rds_G_IMD_G)
+} else {
+  df_pred_full_G_IMD_G <- f_read_Setpoint_full_TKTD(path_G_IMD_G, Molec, select_times, step_sim)
+}
+
+file_rds_H_IMD_R <- file.path(path_H_IMD_R, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_H_IMD_R)) {
+  df_pred_full_H_IMD_R <- readRDS(file_rds_H_IMD_R)
+} else {
+  df_pred_full_H_IMD_R <- f_read_Setpoint_full_TKTD(path_H_IMD_R, Molec, select_times, step_sim)
+}
+
+```
+
+## E_IMD_A
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_E_IMD_A
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_E_IMD_A, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_E_IMD_A, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_E_IMD_A, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_E_IMD_A, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pA <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pA
+```
+
+```{r savetrajWRE_IMD_A, include = F}
+ggsave(
+  filename="E_IMD_A_trajWR.png", 
+  plot=pA, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## F_IMD_M
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_F_IMD_M
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_F_IMD_M, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_M, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_F_IMD_M, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_M, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pB <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pB
+```
+
+```{r savetrajWRF_IMD_M, include = F}
+ggsave(
+  filename="F_IMD_M_trajWR.png", 
+  plot=pB, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## G_IMD_G
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_G_IMD_G
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_G_IMD_G, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_G_IMD_G, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_G_IMD_G, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_G_IMD_G, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pC <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pC
+```
+
+```{r savetrajWRG_IMD_G, include = F}
+ggsave(
+  filename="G_IMD_G_trajWR.png", 
+  plot=pC, 
+  width=width_plot, height = height_plot, 
+  path=path_fig
+  )
+```
+
+## H_IMD_R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_H_IMD_R
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:8]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_H_IMD_R, Endpt == "Weight"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_H_IMD_R, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 1.1))+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    # geom_ribbon(
+    #   data = subset(df_pred_full_H_IMD_R, Endpt == "Reproduction"),
+    #   aes(
+    #     x = Time,
+    #     ymax = up,
+    #     ymin = low,
+    #     fill = ID_experiment
+    #   ),
+    #   alpha = alpha_ribbon
+    # )+
+    
+    geom_line(
+      data = subset(df_pred_full_H_IMD_R, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs_IMD,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col
+      )+
+    scale_y_continuous(limits = c(0, 20))+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+pD <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+pD
+```
+
+```{r savetrajWRH_IMD_R, include = F}
+ggsave(
+  filename="H_IMD_R_trajWR.png", 
+  plot=pD, 
   width=width_plot, height = height_plot, 
   path=path_fig
   )

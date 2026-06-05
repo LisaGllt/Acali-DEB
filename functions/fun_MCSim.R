@@ -481,7 +481,7 @@ f_In_experiments <- function(l_Experiments, Adult_alone){
       OM_soil = signif(OM_soil, 3),
       OM_horse = signif(OM_horse, 3)
     )  |> 
-    mutate(across(where(is.numeric), ~ replace_na(.x, -1)))
+    mutate(across(where(is.numeric), ~ replace_na(.x, -1))) 
   
   char_final <- ""
   
@@ -2498,7 +2498,8 @@ f_import_data_DEBTKTD <- function() {
       Weight = w/1000, # conversion in g
       Dose = Dose * 1000, # mg/kg to ng/g
     ) |> 
-    dplyr::select(-c(t,w, Date, Comments, ID_camp, ID))
+    dplyr::select(-c(t,w, Date, Comments, ID_camp, ID))|> 
+    mutate(Weight = ifelse(Weight == Inf, 0, Weight))
   
   df_data_EC50_growth_IMD_raw <- df_data_EC50_growth_raw |> 
     filter(Molec %in% c("IMD", "Ctrl_1", "Ctrl_2")) 
@@ -2564,7 +2565,8 @@ f_import_data_DEBTKTD <- function() {
         Time == 28 ~ Nb_cocoons
       )
     ) |> 
-    dplyr::select(-c(t,w_tot, Date, Comments, ID_camp, ID_cosm))
+    dplyr::select(-c(t,w_tot, Date, Comments, ID_camp, ID_cosm))|> 
+    mutate(Weight = ifelse(Weight == Inf, 0, Weight))
   
   df_time14 <- df_data_EC50_repro_raw |> 
     distinct(Molec, Dose, Condition) |> 

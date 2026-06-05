@@ -63,7 +63,7 @@ ggplot(
 # Homographie tq F(0)=0 et f(1)=1
 
 
-Slope <- 0.02
+Slope <- 0.08
 
 f_Hill <- function(x, EC, Slope){
   Y = x/(Slope * (1-x) + x)

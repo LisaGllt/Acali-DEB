@@ -132,6 +132,7 @@ line_width <- 1.1
 point_stroke <- 0.9
 alpha_line <- 0.7
 wrap_nb_col <- 2
+size_subtitle <- 8
 
 col_kappa <- c(Nord_frost[2], Nord_frost[4], Nord_frost[4])
 col_data <- Nord_polar[4]
@@ -174,12 +175,12 @@ p_XP11 <- ggplot()+
   )+
   
   scale_color_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
   scale_fill_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
@@ -191,12 +192,14 @@ p_XP11 <- ggplot()+
   labs(
     x = "Time (days)", 
     y = "Weight (g)",
-    title = ID_exp_plot
+    title = ID_exp_plot,
+    subtitle = "Food: 3 g/ind/14d\nSoil: 400 g | T: 15°C"
   )+
   
   theme_minimal()+
   theme(
     plot.title = element_text(face="bold", size = 10),
+    plot.subtitle = element_text(size = size_subtitle),
     legend.text = element_text(size = 11)
   )
 
@@ -239,12 +242,12 @@ p_XP41 <- ggplot()+
   )+
   
   scale_color_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
   scale_fill_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
@@ -256,12 +259,14 @@ p_XP41 <- ggplot()+
   labs(
     x = "Time (days)", 
     y = "Weight (g)",
-    title = ID_exp_plot
+    title = ID_exp_plot,
+    subtitle = "Food: 1 g/ind/14d\nSoil: 400 g | T: 15°C"
   )+
   
   theme_minimal()+
   theme(
     plot.title = element_text(face="bold", size = 10),
+    plot.subtitle = element_text(size = size_subtitle),
     legend.text = element_text(size = 11)
   )
 
@@ -303,12 +308,12 @@ p_D1 <- ggplot()+
   )+
   
   scale_color_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
   scale_fill_manual(
-    name = "Kappa for adults",
+    name = "Kappa\nfor adults",
     labels = expression(kappa[J], kappa[A]),
     values = col_kappa
   )+
@@ -320,12 +325,14 @@ p_D1 <- ggplot()+
   labs(
     x = "Time (days)", 
     y = "Weight (g)",
-    title = ID_exp_plot
+    title = ID_exp_plot,
+    subtitle = "Food: 3 g/ind/14d\nSoil: 200 g | T: 18°C"
   )+
   
   theme_minimal()+
   theme(
     plot.title = element_text(face="bold", size = 10),
+    plot.subtitle = element_text(size = size_subtitle),
     legend.text = element_text(size = 11)
   )
 

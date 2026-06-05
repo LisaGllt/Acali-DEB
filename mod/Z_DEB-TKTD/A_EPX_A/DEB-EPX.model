@@ -24,6 +24,11 @@ Outputs = {Energy,             # Energy in the reserve (J)
 		      Weight,
 		      kapreal,
           freal,
+          pM,
+          kJ_t,
+          g,
+          kapH_real,
+          kapR_real,
           Qf_soil,
           Qf_horse,
           OMsoil,
@@ -65,7 +70,7 @@ muOM = 11700;                 # Energy in 1 g of organic matter from horse dung 
 rOM_ClxHorse = 0.0195225;     # Ratio of energy in 1 g of OM from soil vs 1 g of OM from horse dung
 
 # Energy assimilation
-Fm = 0.779719;         # [F_m], max spec searching rate (g/d.g)
+Fm = 0.779719;          # [F_m], max spec searching rate (g/d.g)
 kapX = 0.258;           # digestion efficiency of food to reserve (-)
 pAm = 274.511;          # {p_Am}, spec assimilation flux (J/d.cm^2)
 r_pAm_pM = 0.61122;     # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
@@ -116,17 +121,9 @@ kperiph = 0.0001; # Second compartment dynamics (d-1)
 DT50 = 353.5;      # EPX Half-life in soil (days)
 
 # Effects
-kr;  # Damage reparation constant (d-1)
+kr = 1;  # Damage reparation constant (d-1)
 nec; # No-effect concentration for sublethal effects (ng/g)
 b;   # Tolerance concentration (ng/g)
-
-
-# pAm_real;
-# r_pAm_pM_real;
-# kJ_real;
-# Eg_real;
-# kapH_real;
-# kapR_real;
 
 Initialize{
 
@@ -189,43 +186,28 @@ Dynamics{
     
       s_f = b * ((D - nec) > 0 ? (D - nec) : 0);
       
-      # Assimilation costs
-        pAm_real = pAm * (1-s_f*bol_A);
-      
-      # Maintenance costs
-        r_pAm_pM_real = r_pAm_pM * (1+s_f*bol_M);
-        kJ_real = kJ * (1+s_f*bol_M);
-        
-      # Growth / Maturation costs
-        Eg_real = Eg * (1+s_f*bol_G);
-        kapH_real = kapH/(1+s_f*bol_G);
-      
-      # Reproduction costs
-        kapR_real = kapR/(1+s_f*bol_R);
-        
-      
     # Coefficient for temperature correction (Texp in °C)
     	sA  = exp(TA/Tref-TA/(Texp+273.15));
       srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
     	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
     	
     # Correction of coefficients depending on temperature
-      pAm_t  = pAm_real * Tc;        
+      pAm_t  = pAm * Tc;        
       v_t    = v   * Tc;
-      kJ_t   = kJ_real * Tc;
+      kJ_t   = kJ * Tc * (1+s_f*bol_M);
       
       dt(z) = (Eh >= Ehp ? 1 : 0);                                #(Model A)
       x = (z/tau > 1 ? 1 : z/tau);                                #(Model A)
       kapAreal = x * kapA + (1-x) * kapJ;                         #(Model A)
       kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ)); #(Model A)
 
-      pM = r_pAm_pM_real * pAm_real;
+      pM = r_pAm_pM * pAm * (1+s_f*bol_M);
       
     # Primary parameters          
-      Km   = pM / Eg_real ;
+      Km   = pM / (Eg * (1+s_f*bol_G)) ;
       Km_t = Km * Tc;
-      Em   = pAm_real / v ;
-      g    = Eg_real / (kapreal * Em);
+      Em   = pAm / v ;
+      g    = (Eg * (1+s_f*bol_G)) / (kapreal * Em);
       Lm   = (v / (Km*g));
       
     
@@ -267,7 +249,7 @@ Dynamics{
       
       # Functional response of the earthworm to organic matter (K model)
       X = Qf/(Qfmax);
-      freal = X/(K*(1-X)+X);
+      freal = X/(K*(1-X)+X) * ((1-s_f*bol_A) > 0 ? (1-s_f*bol_A) : 0);
       
     # Energy in the reserve (which cannot be negative)
     
@@ -277,17 +259,17 @@ Dynamics{
     # Structural length
     
       dt(L) = (v_t / (3 * ( ( (E/Em) + g) ) ) ) * ((E/Em) - (L/Lm));
-      
       Weight = pow(L,3)*dv + E*de; #(Model e)
 
     # Maturity
     
       pC       = ( (g * E ) / (g + (E/Em)) ) * ((v_t*pow(L,2)) + (Km_t*pow(L,3)));
       tmp_Eh   = ((1-kapreal) * pC) - (kJ_t* Eh);
-      dt(Eh)   = (Eh < Ehp ? tmp_Eh : 0)*kapH_real;
+      kapH_real = kapH/(1+s_f*bol_G);
+      dt(Eh)   = (Eh < Ehp ? tmp_Eh : 0) * kapH_real;
 
     # Reproduction
-    
+      kapR_real = kapR/(1+s_f*bol_R);
       tmp_R    = kapR_real * ( ((1-kapreal)*pC) - (kJ_t*Ehp));
   	  dt(R)    = (Eh >= Ehp ? tmp_R/(E_coc) : 0);
 

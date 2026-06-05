@@ -5,13 +5,13 @@ MCMC( "DEB_TKTD_C3.out",  # output file
       1, 10000,          # printing frequency, iters to print
       2212);               # random seed
 
-Integrate (Lsodes,  1e-07, 1e-06, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
+Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
 Level{ # Global
     
 
-Distrib (nec,          TruncNormal,           1000,      0.2,  0.01,     100000);
-Distrib (b,            TruncNormal,           1,      0.2,  0.001,    100);
+Distrib (nec,          TruncNormal,  10000, 0.5,               1,     1000000);
+Distrib (b,            LogUniform,                0.000000000001,          10);
 
 # Calcul des vraissemblances
 Distrib (Sigma_W, TruncNormal,  5, 1, 0.01, 100);
@@ -54,7 +54,7 @@ Experiment { # EPX_EC50_growth_Ctrl
 }
 Experiment { # EPX_EC50_growth_C1
     Init = 1;
-    Ce0=0.928;
+    Ce0=928;
     Winit=0.06558;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -83,7 +83,7 @@ Experiment { # EPX_EC50_growth_C1
 }
 Experiment { # EPX_EC50_growth_C2
     Init = 1;
-    Ce0=2;
+    Ce0=2000;
     Winit=0.0598;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -112,7 +112,7 @@ Experiment { # EPX_EC50_growth_C2
 }
 Experiment { # EPX_EC50_growth_C3
     Init = 1;
-    Ce0=4.3;
+    Ce0=4300;
     Winit=0.06414;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -141,7 +141,7 @@ Experiment { # EPX_EC50_growth_C3
 }
 Experiment { # EPX_EC50_growth_C4
     Init = 1;
-    Ce0=9.28;
+    Ce0=9280;
     Winit=0.06644;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -170,7 +170,7 @@ Experiment { # EPX_EC50_growth_C4
 }
 Experiment { # EPX_EC50_growth_C5
     Init = 1;
-    Ce0=20;
+    Ce0=20000;
     Winit=0.0673;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -199,7 +199,7 @@ Experiment { # EPX_EC50_growth_C5
 }
 Experiment { # EPX_EC50_growth_C6
     Init = 1;
-    Ce0=43.1;
+    Ce0=43100;
     Winit=0.07596;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -228,7 +228,7 @@ Experiment { # EPX_EC50_growth_C6
 }
 Experiment { # EPX_EC50_growth_C7
     Init = 1;
-    Ce0=92.8;
+    Ce0=92800;
     Winit=0.05734;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
@@ -257,7 +257,7 @@ Experiment { # EPX_EC50_growth_C7
 }
 Experiment { # EPX_EC50_growth_C8
     Init = 1;
-    Ce0=200;
+    Ce0=2e+05;
     Winit=0.05398;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;

@@ -66,27 +66,6 @@ The phylogenetic tree was realised thanks to maximum likelyhood bootstrap method
 
 *Aporrectodea caliginosa* is a cryptic species complex comprising three lineages. Our earthworm culture is known to include individuals from two closely related lineages (2 and 3). While these lineages could potentially exhibit differences in sensitivity, previous research on *Gammarus roeselii* has shown that tolerance within cryptic species complexes is not always lineage dependent [@kabus_2024].
 
-# Experiments
-
-The @tbl-SummaryXP presents the characteristics of each experiment used to calibrate the DEB model.
-
-| Reference | Experiment name | Soil in cosm | Food (g/ind/14d) | Density (#/cosm) | Temperature (°C) |
-|----|----|----|----|----|----|
-| @bart_2019 | XP1_1 | Closeaux soil (400 g, WHC 70%) | 3 | 1 | 15 |
-|  | X1_2 | Closeaux soil (400 g, WHC 70%) | 3 | 1 then 2 from day 112, 3 from day 210 and 6 from day 294 | 15 |
-|  | XP_3 | Closeaux soil (400 g, WHC 70%) | 0 but 3 at days 70, 84 and 140 | 1 | 15 |
-|  | XP4_1 | Closeaux soil (400 g, WHC 70%) | 1 | 1 | 15 |
-|  | XP4_2 | Closeaux soil (400 g, WHC 70%) | 1 | 1 then 2 from day 140, 3 from day 224 and 6 from day 322 | 15 |
-|  | XP5 | Closeaux soil (400 g, WHC 70%) | 1.5 | 1 | 15 |
-| @bart_2020 | Control individuals | Closeaux soil (400 g, WHC 70%) | 3 | 1 | 15 |
-| Present paper | D1 | Closeaux soil (200 g, WHC 70%) | 3 | 1 | 18 |
-|  | D2 | Closeaux soil (200 g, WHC 70%) | 1.5 | 2 | 18 |
-|  | D2b | Closeaux soil (200 g, WHC 70%) | 3 | 2 | 18 |
-|  | D5 | Closeaux soil (200 g, WHC 70%) | 0.6 | 5 | 18 |
-|  | D7 | Closeaux soil (200 g, WHC 70%) | 0.4 | 7 | 18 |
-
-: Summary of the experimental conditions and measured endpoints for each experiment used to calibrate the DEB model. The numbering for @bart_2019 follows that of the original publication. Control individuals from @bart_2020 include those from the XP2 experiment reported in @bart_2019. {#tbl-SummaryXP}
-
 # Models
 
 ## Model formulation
@@ -98,6 +77,7 @@ The @tbl-SummaryXP presents the characteristics of each experiment used to calib
 | **Environmental state variables** |  |  |
 | $OM_{horse}$ | Horse dung organic matter mass | $\mathrm{g_{OM}}$ |
 | $OM_{soil}$ | Soil organic matter mass | $\mathrm{g_{OM}}$ |
+| $Soil_{w, cosm}$ | Dry mass of soil in the cosm | $\mathrm{g_{soil}}$ |
 | **Organism state variables** |  |  |
 | $E$ | Energy reserve | $\mathrm{J}$ |
 | $E_h$ | Maturity | $\mathrm{J}$ |
@@ -116,7 +96,9 @@ The @tbl-SummaryXP presents the characteristics of each experiment used to calib
 | $\dot{p}_C$ | Flux of mobilized energy from reserve | $\mathrm{J.d^{-1}}$ |
 | $\dot{p}_R$ | Energy flux allocated to maturity / reproduction | $\mathrm{J.d^{-1}}$ |
 | $\dot{Q}_{f,max}$ | Maximum rate of energy ingested | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{matter}$ | Rate of matter ingestion | $\mathrm{J.d^{-1}}$ |
 | $\dot{Q}_f^{horse}$ | Rate of energy ingested through horse dung | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{soil}$ | Rate of energy ingested through soil | $\mathrm{J.d^{-1}}$ |
 
 : Model state and intermediate variables.
 
@@ -213,7 +195,11 @@ $$
 \begin{aligned}
 s_A &= \exp(\frac{T_A}{T_{ref}-\frac{T_A}{T_{exp}+273.15}})\\
 s_{rH} &= \frac{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{ref}+ 273.15})}{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{exp}+273.15})}\\
-T_c &= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 < T_{ref})\\ \\
+T_c &= 
+\begin{cases}
+\mathrm{if }\  T_{exp}+273.15 \geq T_{ref}, & s_A \\
+\mathrm{if }\  T_{exp} + 273.15 < T_{ref}, & s_{rH}
+\end{cases}\\ \\
 \{\dot p_{Am}\}_t &= \{\dot p_{Am}\}\ T_c\\
 [\dot p_{M,t}] &= [\dot p_{M}]\ T_c \\
 \nu_t &= \nu \ T_c \\
@@ -265,7 +251,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/A_FLYw_predobs.png)
 
-![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/A_FLYw_trajWR.png)
+![Observed and predicted growth and reproduction trajectories for each experiment. Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/A_FLYw_trajWR.png)
 
 ## Model B_FLYe
 
@@ -281,8 +267,6 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/C_CWYe_predobs.png)
 
-![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/C_CWYe_trajWR.png)
-
 ## Model D_CWKe
 
 ![Model chains.](../../fig/DEB_Models/D_CWKe_chains.png)
@@ -292,6 +276,8 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/D_CWKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/D_CWKe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment. Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/D_CWKe_trajWR.png)
 
 ## Model E_CLYe
 
@@ -313,29 +299,45 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/F_CLKe_trajWR.png)
 
+## Model G_FLKe
+
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/G_FLKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/G_FLKe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/G_FLKe_trajWR.png)
+
+## Model H_FWKe
+
+![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/H_FWKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
+
+![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/H_FWKe_predobs.png)
+
+![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/H_FWKe_trajWR.png)
+
 ::: landscape
 ## Summary
 
-| Parameter | A_FLYw | B_FLYe | C_CWYe | D_CWKe | E_CLYe | F_CLKe |
-|----|----|----|----|----|----|----|
-| $\{\dot p_{Am}\}$ | 256.6 \newline \[240.6 ; 276.3\] | 281.6 \newline \[230.0 ; 316.8\] | 291.3 \newline \[258.0 ; 353.0\] | 254.5 \newline \[230.0 ; 276.6\] | 111.1 \newline \[104.7 ; 175.1\] | 254.7 \newline \[233.5 ; 277.4\] |
-| $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 1.09 \newline \[0.99 ; 1.13\] | 0.17 \newline \[0.12 ; 0.19\] | 0.76 \newline \[0.65 ; 0.79\] | 0.755 \newline \[0.617 ; 0.896\] | 0.67 \newline \[0.43 ; 0.74\] | 0.68 \newline \[0.62 ; 0.76\] |
-| $\{\dot{F}_m\}$ or $[\dot{F}_m]$ | 0.17 \newline \[0.12 ; 0.47\] | 0.13 \newline \[0.11 ; 0.28\] | 0.38 \newline \[0.30 ; 0.64\] | 0.019 \newline \[0.005 ; 0.033\] | 0.05 \newline \[0.05 ; 0.48\] | 0.019 \newline \[0.010 ; 0.026\] |
-| $r_{OM}$ | 0.011 \newline \[0.004 ; 0.015\] | 0.004 \newline \[0.004 ; 0.012\] | 0.01 \newline \[0.007 ; 0.019\] | 0.005 \newline \[0.002 ; 0.011\] | 0.0004 \newline \[0.0003 ; 0.012\] | 0.007 \newline \[0.004 ; 0.011\] |
-| $K$ | NA | NA | NA | 0.014 \newline \[0.003 ; 0.035\] | NA | 0.05 \newline \[0.03 ; 0.08\] |
-| $v$ | 0.20 \newline \[0.16 ; 0.23\] | 0.19 \newline \[0.16 ; 0.23\] | 0.21 \newline \[0.17 ; 0.24\] | 0.22 \newline \[0.20 ; 0.26\] | 0.18 \newline \[0.15 ; 0.22\] | 0.23 \newline \[0.20 ; 0.26\] |
-| $\kappa$ | 0.63 \newline \[0.52 ; 0.74\] | 0.92 \newline \[0.86 ; 0.94\] | NA | NA | NA | NA |
-| $\kappa_J$ | NA | NA | 0.94 \newline \[0.91 ; 0.98\] | 0.98 \newline \[0.97 ; 0.99\] | 0.74 \newline \[0.60 ; 0.957\] | 0.98 \newline \[0.97 ; 0.99\] |
-| $\kappa_A$ | NA | NA | 0.60 \newline \[0.55 ; 0.77\] | 0.77 \newline \[0.66 ; 0.81\] | 0.61 \newline \[0.49 ; 0.79\] | 0.71 \newline \[0.65 ; 0.80\] |
-| $\tau$ | NA | NA | 7.1 \newline \[1.8 ; 15.3\] | 13.3 \newline \[6.4 ; 20.5\] | 6.8 \newline \[1.5 ; 15.0\] | 14.4 \newline \[5.3 ; 19.7\] |
-| $E_h^p$ | 24.5 \newline \[21.2 ; 29.0\] | 64.9 \newline \[41.5 ; 105.4\] | 52.1 \newline \[23.9 ; 87.7\] | 78.8 \newline \[51.2 ; 128.5\] | 36.5 \newline \[21.0 ; 73.8\] | 103.5 \newline \[55.6 ; 127.0\] |
-| $E_{coc}$ | 1.0 \newline \[1.0 ; 1.2\] | 4.7 \newline \[2.8 ; 7.6\] | 24.0 \newline \[12.5 ; 34.4\] | 46.9 \newline \[40.9 ; 63.7\] | 1.2 \newline \[1.0 ; 2.7\] | 56.2 \newline \[42.6 ; 63.8\] |
-| $d_V$ | 1.0 \newline \[0.9 ; 1.1\] | 1.1 \newline \[0.94 ; 1.2\] | 1.1 \newline \[1.0 ; 1.2\] | 1.1 \newline \[1.1 ; 1.2\] | 1.0 \newline \[0.9 ; 1.1\] | 1.2 \newline \[1.1 ; 1.3\] |
-| $d_E$ | NA | 1.1e-9 \[1.1e-9 ; 5.3e-7\] | 1.0e-9 \[1.2e-9 ; 3.4e-7\] | 1.7e-9 \[1.2e-9 ; 8.4e-6\] | 1.0e-9 \[1.4e-9 ; 7.9e-6\] | 1.6e-9 \[1.2e-9 ; 1.1e-6\] |
-| $w_E$ | 467.9 \newline \[249.3 ; 735.1\] | NA | NA | NA | NA | NA |
-| $\sigma_W$ | 0.16 \newline \[0.14 ; 0.19\] | 0.35 \newline \[0.31 ; 0.41\] | 0.32 \newline \[0.26 ; 0.37\] | 0.15 \newline \[0.12 ; 0.17\] | 0.64 \newline \[0.54 ; 0.69\] | 0.12 \newline \[0.11 ; 0.15\] |
-| Log-likelihood | -77.5 | -199.1 | -171.8 | -55.8 | -266.1 | -38.0 |
-| BIC | 211.2 | 454.5 | 411.1 | 184.7 | 599.7 | 149.2 |
+| Parameter | A_FLYw | B_FLYe | C_CWYe | D_CWKe | E_CLYe | F_CLKe | G_FLKe | H_FWKe |
+|----|----|----|----|----|----|----|----|----|
+| $\{\dot p_{Am}\}$ | 65.7 \newline [56.2 ; 104.8] | 40.0 \newline [40.0 ; 40.9] | 145.6 \newline [120.5 ; 179.4] | 274.5 \newline [245.7 ; 287.1] | 155.0 \newline [109.8 ; 171.0] | 256.9 \newline [229.9 ; 268.7] | 302.5 \newline [274.4 ; 329.2] | 281.3 \newline [253.5 ; 319.8] |
+| $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 0.94 \newline [0.79 ; 1.10] | 0.10 \newline [0.10 ; 0.14] | 0.75 \newline [0.63 ; 0.91] | 0.61 \newline [0.53 ; 0.66] | 0.75 \newline [0.63 ; 0.93] | 0.57 \newline [0.47 ; 0.59] | 0.84 \newline [0.81 ; 0.88] | 0.89 \newline [0.84 ; 0.92] |
+| $\{\dot{F}_m\}$ or $[\dot{F}_m]$ | 0.99 \newline [0.89 ; 1.00] | 1.00 \newline [0.99 ; 1.00] | 0.00012 \newline [0.00014 ; 0.91] | 0.78 \newline [0.28 ; 0.99] | 0.00021 \newline [0.00028 ; 0.99] | 0.87 \newline [0.42 ; 0.99] | 0.35 \newline [0.30 ; 0.99] | 0.55 \newline [0.22 ; 0.98] |
+| $r_{OM}$ | 0.300 \newline [0.266 ; 0.300] | 0.071 \newline [0.052 ; 0.093] | 0.00049 \newline [0.00025 ; 0.249] | 0.0195 \newline [0.0157 ; 0.0238] | 0.00018 \newline [0.00003 ; 0.270] | 0.0140 \newline [0.0114 ; 0.0183] | 0.0126 \newline [0.0081 ; 0.0206] | 0.0119 \newline [0.0029 ; 0.0197] |
+| $K$ | NA | NA | NA | 0.0087 \newline [0.0033 ; 0.0125] | NA | 0.0154 \newline [0.0075 ; 0.0207] | 0.0034 \newline [0.0027 ; 0.0110] | 0.0022 \newline [0.00087 ; 0.0051] |
+| $v$ | 0.183 \newline [0.149 ; 0.221] | 0.178 \newline [0.149 ; 0.222] | 0.0010 \newline [0.0010 ; 0.0012] | 0.245 \newline [0.212 ; 0.270] | 0.0010 \newline [0.0010 ; 0.0012] | 0.239 \newline [0.203 ; 0.262] | 0.232 \newline [0.211 ; 0.271] | 0.226 \newline [0.205 ; 0.267] |
+| $\kappa$ | 0.94 \newline [0.84 ; 1.00] | 0.17 \newline [0.05 ; 0.25] | NA | NA | NA | NA | 0.97 \newline [0.96 ; 0.98] | 0.97 \newline [0.96 ; 0.98] |
+| $\kappa_J$ | NA | NA | 0.81 \newline [0.73 ; 0.83] | 0.98 \newline [0.97 ; 0.99] | 0.80 \newline [0.71 ; 0.83] | 0.98 \newline [0.97 ; 0.98] | NA | NA |
+| $\kappa_A$ | NA | NA | 0.20 \newline [0.11 ; 0.26] | 0.65 \newline [0.57 ; 0.69] | 0.16 \newline [0.11 ; 0.24] | 0.65 \newline [0.54 ; 0.67] | NA | NA |
+| $\tau$ | NA | NA | 13.3 \newline [9.6 ; 21.7] | 11.5 \newline [5.6 ; 19.3] | 14.6 \newline [9.3 ; 21.5] | 13.0 \newline [7.3 ; 20.0] | NA | NA |
+| $E_h^p$ | 107.3 \newline [60.8 ; 138.8] | 30.4 \newline [27.3 ; 34.9] | 20.9 \newline [20.1 ; 30.7] | 90.9 \newline [54.6 ; 123.4] | 21.8 \newline [20.1 ; 34.6] | 88.6 \newline [63.3 ; 122.5] | 111.4 \newline [74.2 ; 147.8] | 110.5 \newline [76.9 ; 146.8] |
+| $E_{coc}$ | 30.0 \newline [18.6 ; 41.8] | 1.0 \newline [1.0 ; 1.0] | 5.9 \newline [4.3 ; 8.7] | 66.6 \newline [58.5 ; 75.1] | 7.1 \newline [4.3 ; 8.7] | 60.4 \newline [55.6 ; 70.9] | 6.3 \newline [3.5 ; 8.2] | 6.6 \newline [4.1 ; 9.3] |
+| $d_V$ | 0.99 \newline [0.90 ; 1.10] | 0.67 \newline [0.58 ; 0.75] | 0.92 \newline [0.86 ; 1.06] | 1.24 \newline [1.16 ; 1.33] | 0.99 \newline [0.86 ; 1.06] | 1.23 \newline [1.14 ; 1.31] | 1.15 \newline [1.04 ; 1.22] | 1.12 \newline [1.03 ; 1.20] |
+| $d_E$ | NA | 1.10e-09 \newline [1.13e-09 ; 7.84e-07] | 1.13e-09 \newline [1.04e-09 ; 1.23e-08] | 1.13e-09 \newline [1.13e-09 ; 6.15e-07] | 1.01e-09 \newline [1.04e-09 ; 1.57e-08] | 1.01e-09 \newline [1.18e-09 ; 1.12e-06] | 1.31e-09 \newline [1.18e-09 ; 8.64e-07] | 1.10e-09 \newline [1.22e-09 ; 8.41e-07] |
+| $w_E$ | 717.5 \newline [572.4 ; 989.6] | NA | NA | NA | NA | NA | NA | NA |
+| $\sigma_W$ | 0.33 \newline [0.29 ; 0.37] | 0.62 \newline [0.56 ; 0.70] | 0.63 \newline [0.56 ; 0.70] | 0.085 \newline [0.077 ; 0.101] | 0.60 \newline [0.56 ; 0.70] | 0.079 \newline [0.070 ; 0.090] | 0.13 \newline [0.11 ; 0.16] | 0.16 \newline [0.14 ; 0.20] |
+| Log-likelihood | -15758.95 | -433.65 | -272.6 | 23.49 | -272.01 | 39.6 | -17.32 | -61.96 |
+| BIC | 31574.14 | 923.53 | 612.69 | 26.14 | 611.5 | -6.09 | 96.5 | 185.79 |
 
 : Estimate summary of each models and their respective log-likelihood and BIC.
 :::
