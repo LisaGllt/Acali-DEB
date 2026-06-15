@@ -4,6 +4,7 @@ source(file = here::here("functions/fun.R"))
 source(file = here::here("functions/fun_MCSim.R"))
 f_load_libraries_colors()
 col_Molecule <- rev(col_Molecule)
+
 pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
 lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 ```
@@ -172,17 +173,17 @@ p <- pW + pR +
 ## Model fits
 
 ```{r writeIn, message=F, warning=F}
-NbIter <- 100000
+NbIter <- 200000
 OM_diff <- TRUE
 RTOL <- 1e-7
 ATOL <- 1e-6
 
 ######### A FLYw ###############################################################
 
-seeds <- c(C1 = 3933, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3333, C2 = 3666, C3 = 2212)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -204,10 +205,10 @@ f_In_tot(path_A_FLYw, l_Experiments_fit, Adults_alone,
 
 ######### B FLYe ###############################################################
 
-seeds <- c(C1 = 3313, C2 = 6611, C3 = 1212)
+seeds <- c(C1 = 3313, C2 = 5050, C3 = 6863)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -229,10 +230,10 @@ f_In_tot(path_B_FLYe, l_Experiments_fit, Adults_alone,
 
 ######### C CWYe ###############################################################
 
-seeds <- c(C1 = 3331, C2 = 6600, C3 = 4211)
+seeds <- c(C1 = 2291, C2 = 5005, C3 = 7007)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -259,7 +260,7 @@ f_In_tot(path_C_CWYe, l_Experiments_fit, Adults_alone,
 seeds <- c(C1 = 3320, C2 = 6636, C3 = 1283)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,      1);
+Distrib (Fm,           LogUniform,         0.0001,      10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -284,10 +285,10 @@ f_In_tot(path_D_CWKe, l_Experiments_fit, Adults_alone,
 
 ######### E CLYe ###############################################################
 
-seeds <- c(C1 = 3333, C2 = 7880, C3 = 1210)
+seeds <- c(C1 = 3300, C2 = 7880, C3 = 1210)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -314,7 +315,7 @@ f_In_tot(path_E_CLYe, l_Experiments_fit, Adults_alone,
 seeds <- c(C1 = 3030, C2 = 6646, C3 = 1212)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -342,7 +343,7 @@ f_In_tot(path_F_CLKe, l_Experiments_fit, Adults_alone,
 seeds <- c(C1 = 3133, C2 = 6666, C3 = 1212)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -368,7 +369,7 @@ f_In_tot(path_G_FLKe, l_Experiments_fit, Adults_alone,
 seeds <- c(C1 = 3133, C2 = 6666, C3 = 1212)
 
 text_priors <- '
-Distrib (Fm,           LogUniform,         0.0001,        1);
+Distrib (Fm,           LogUniform,         0.0001,        10);
 Distrib (pAm,          TruncNormal_cv,        100,      0.2,      40,    2000);
 Distrib (r_pAm_pM,     TruncNormal_cv,        0.8,      0.1,     0.1,       2);
 Distrib (v,            TruncNormal_cv,    0.18505,      0.1,   0.001,       2);
@@ -2014,6 +2015,45 @@ ipairs(
   )
 ```
 
+```{r, include = F}
+
+col_corr <- colorRampPalette(c(
+  "#BF616A",  # corrélations négatives
+  "white",
+  "#5E81AC"   # corrélations positives
+))(200)
+
+params_keep <- c("E_coc.1.", "Ehp.1.", "Fm.1.", "K.1.", "kapA.1.", "kapJ.1.", "pAm.1.", "r_pAm_pM.1.")
+
+df_corr_D <- cor(as.matrix(mcmc_list_corr_D_CWKe)[, params_keep])
+
+dimnames(df_corr_D) <- lapply(
+  dimnames(df_corr_D),
+  \(x) gsub("\\.1\\.$", "", x)
+)
+
+png(file.path(path_fig, "D_CWKe_corrplot_article.png"), width = 2000, height = 2000, res = 300)
+
+op <- par(font = 2)
+
+corrplot.mixed(
+  df_corr_D,
+  lower = "ellipse",
+  upper = "number",
+  tl.col = "#2E3440",
+  tl.cex = 0.6,
+  tl.pos = "d",
+  number.cex = 0.7,
+  tl.srt = 45,
+  lower.col = col_corr,
+  upper.col = col_corr
+)
+
+par(op)
+dev.off()
+
+```
+
 ## E_CLYe
 
 ```{r, echo=F, message=F, warning=F}
@@ -2300,7 +2340,7 @@ df_priors_dist <- MCMC_out_A_FLYw$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2359,6 +2399,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## B_FLYe
@@ -2378,7 +2419,7 @@ df_priors_dist <- MCMC_out_B_FLYe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2437,6 +2478,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## C_CWYe
@@ -2456,7 +2498,7 @@ df_priors_dist <- MCMC_out_C_CWYe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2515,6 +2557,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## D_CWKe
@@ -2534,7 +2577,7 @@ df_priors_dist <- MCMC_out_D_CWKe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2593,6 +2636,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## E_CLYe
@@ -2612,7 +2656,7 @@ df_priors_dist <- MCMC_out_E_CLYe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2671,6 +2715,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## F_CLKe
@@ -2690,7 +2735,7 @@ df_priors_dist <- MCMC_out_F_CLKe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2749,6 +2794,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## G_FLKe
@@ -2768,7 +2814,7 @@ df_priors_dist <- MCMC_out_G_FLKe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2827,6 +2873,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 
 ## H_FWKe
@@ -2846,7 +2893,7 @@ df_priors_dist <- MCMC_out_H_FWKe$Priors |>
     Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
     Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
     Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution %in% c("TruncNormal", "TruncNormal_cv") ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2))
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
   )) |> 
   unnest(samples)
 
@@ -2905,6 +2952,7 @@ ggsave(
   width=8, height = 8, 
   path=path_fig
   )
+
 ```
 :::
 
@@ -4827,6 +4875,7 @@ ggsave(
 ```{r setpointfullin}
 
 Nb_experiment <- 12
+lim_yrepro <- 100
 step_sim <- 0.05
 select_times <- seq(0,400, 0.1)
 
@@ -5123,7 +5172,7 @@ col_experiment <- c(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5146,6 +5195,7 @@ p
 ```
 
 ```{r savetrajWRA_FLYw, include = F}
+
 ggsave(
   filename="A_FLYw_trajWR.png", 
   plot=p, 
@@ -5153,6 +5203,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## B_FLYe
@@ -5284,7 +5335,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5314,6 +5365,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## C_CWYe
@@ -5410,7 +5462,6 @@ ggsave(
       ),
       alpha = alpha_ribbon
     )+
-    
     geom_line(
       data = subset(df_pred_full_C_CWYe, Endpt == "Reproduction"),
       aes(
@@ -5445,7 +5496,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5475,6 +5526,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## D_CWKe
@@ -5606,7 +5658,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5636,6 +5688,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## E_CLYe
@@ -5767,7 +5820,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5797,6 +5850,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## F_CLKe
@@ -5928,7 +5982,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -5958,6 +6012,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## G_FLKe
@@ -6089,7 +6144,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -6119,6 +6174,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 
 ## H_FWKe
@@ -6250,7 +6306,7 @@ ggsave(
     facet_wrap(
       ~ID_experiment, 
       ncol=wrap_nb_col,
-      scales = "free"
+      scales = "free_x"
       )+
     labs(
       x="Time (days)", 
@@ -6280,6 +6336,7 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
+
 ```
 :::
 
@@ -6407,7 +6464,7 @@ p_OM_food <- ggplot(
     x = "Time (days)",
     y = "OM in the cosm (g)"
   )+
-  lims(y = c(8,18))+
+  lims(y = c(0,18))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
@@ -6549,7 +6606,7 @@ p_OM_dens <- ggplot(
     x = "Time (days)",
     y = "OM in the cosm (g)"
   )+
-  lims(y = c(8,18))+
+  lims(y = c(0,18))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
@@ -6630,112 +6687,1024 @@ ggsave(
 ) 
 ```
 
+## Environmental conditions and model performance
+
+```{r}
+
+levels_Density_env <- c("1", "2", "5", "7", "Grouped\nafter puberty")
+col_Density_env <- c(rev(Nord_aurora[1:4]), Nord_aurora[5])
+
+levels_Food_env <- c("0.19 %", "0.22 %", "0.27 %", "0.34 %", "0.67 %", "1.3 %", "0 or 0.67 %")
+col_Food_env <- c(Nord_frost[2], rev(Nord_aurora[1:4]), Nord_aurora[5], Nord_polar[4])
+
+levels_T_env <- c("15°C", "18°C")
+col_T_env <- c(Nord_frost[3], Nord_aurora[1])
+
+df_Env_XP <- data.frame(
+  ID_experiment = l_Experiments_fit,
+  Density_env = c("1", "Grouped\nafter puberty", "1", "1", "Grouped\nafter puberty", 
+                  "1", "1", "1", "2", "2", "5", "7"),
+  Food_env = c("0.67 %", "0.67 %", "0 or 0.67 %",  "0.22 %", "0.22 %", "0.34 %", "0.67 %", "1.3 %", "0.67 %", "1.3 %", "0.27 %", "0.19 %"),
+  T_env = c("15°C", "15°C", "15°C", "15°C", "15°C", "15°C", "15°C", "18°C", "18°C", "18°C", "18°C", "18°C")
+) |> 
+  mutate(
+    Density_env = factor(Density_env, levels = levels_Density_env),
+    Food_env = factor(Food_env, levels = levels_Food_env),
+    T_env = factor(T_env, levels = levels_T_env)
+  )
+
+df_predobs_Reproduction_D_CWKe_plot <- df_predobs_Reproduction_D_CWKe |> 
+  left_join(df_Env_XP) |> 
+  mutate(
+    Density_env = case_when(
+      (ID_experiment == "Bart2019_XP1_2" & Time <= 84) ~ "1",
+      (ID_experiment == "Bart2019_XP4_2" & Time <= 112) ~ "1",
+      .default = Density_env
+    )
+  )
+
+df_predobs_Weight_D_CWKe_plot <- df_predobs_Weight_D_CWKe |> 
+  left_join(df_Env_XP) |> 
+  mutate(
+    Density_env = case_when(
+      (ID_experiment == "Bart2019_XP1_2" & Time <= 84) ~ "1",
+      (ID_experiment == "Bart2019_XP4_2" & Time <= 112) ~ "1",
+      .default = Density_env
+    )
+  )
+
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_D_Dens
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+
+seq_line <- seq(0.01, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W_Dens <- ggplot(
+  data = df_predobs_Weight_D_CWKe_plot,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x2, y=y2),
+  #   color = col_line2
+  #   )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x_2, y=y_2),
+  #   color = col_line2
+  #   )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Density_env
+    ),
+    alpha = 0.5
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "Density (#)",
+    values = col_Density_env
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.01, 100, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R_Dens <- ggplot(
+  data = df_predobs_Reproduction_D_CWKe_plot,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Density_env
+    ),
+    alpha = 0.5
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Density (#)",
+    values = col_Density_env
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()
+
+p_predobs_Density <- p_W_Dens + p_R_Dens +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs_Density
+
+```
+
+```{r savetrajWRD_CWKe_Dens, include = F}
+ggsave(
+  filename="D_CWKe_predobs_Density.png", 
+  plot=p_predobs_Density, 
+  width=8, 
+  height = 4, 
+  path=path_fig
+  )
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_D_Food
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+
+seq_line <- seq(0.01, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W_Food <- ggplot(
+  data = df_predobs_Weight_D_CWKe_plot,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x2, y=y2),
+  #   color = col_line2
+  #   )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x_2, y=y_2),
+  #   color = col_line2
+  #   )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Food_env
+    ),
+    alpha = 0.5
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "OM from horse\ndung (%/ind/14d)",
+    values = col_Food_env
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.01, 100, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R_Food <- ggplot(
+  data = df_predobs_Reproduction_D_CWKe_plot,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Food_env
+    ),
+    alpha = 0.5
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "OM from horse\ndung (%/ind/14d)",
+    values = col_Food_env
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()
+
+p_predobs_Food <- p_W_Food + p_R_Food +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs_Food
+
+```
+
+```{r savetrajWRD_CWKe_Food, include = F}
+ggsave(
+  filename="D_CWKe_predobs_Food.png", 
+  plot=p_predobs_Food, 
+  width=8, 
+  height = 4, 
+  path=path_fig
+  )
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_D_Temp
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+
+seq_line <- seq(0.01, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W_Temp <- ggplot(
+  data = df_predobs_Weight_D_CWKe_plot,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x2, y=y2),
+  #   color = col_line2
+  #   )+
+  # geom_line(
+  #   data=df_line,
+  #   mapping=aes(x=x_2, y=y_2),
+  #   color = col_line2
+  #   )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = T_env
+    ),
+    alpha = 0.5
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "Temperature (°C)",
+    values = col_T_env
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.01, 100, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R_Temp <- ggplot(
+  data = df_predobs_Reproduction_D_CWKe_plot,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = T_env
+    ),
+    alpha = 0.5
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Temperature (°C)",
+    values = col_T_env
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()
+
+p_predobs_Temp <- p_W_Temp + p_R_Temp +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs_Temp
+
+```
+
+```{r savetrajWRD_CWKe_Temp, include = F}
+ggsave(
+  filename="D_CWKe_predobs_Temp.png", 
+  plot=p_predobs_Temp, 
+  width=8, 
+  height = 4, 
+  path=path_fig
+  )
+```
+
+```{r, include = F}
+library(patchwork)
+
+row_temp <- p_W_Temp + p_R_Temp +
+  plot_layout(ncol = 2, guides = "collect") &
+  theme(legend.position = "right")
+
+row_dens <- p_W_Dens + p_R_Dens +
+  plot_layout(ncol = 2, guides = "collect") &
+  theme(legend.position = "right")
+
+row_food <- p_W_Food + p_R_Food +
+  plot_layout(ncol = 2, guides = "collect") &
+  theme(legend.position = "right")
+
+p <- 
+  wrap_elements(row_temp) /
+  wrap_elements(row_dens) /
+  wrap_elements(row_food) +
+  plot_annotation(tag_levels = "A")
+
+ggsave(
+  filename="D_CWKe_predobs_Cond_Env.png", 
+  plot=p, 
+  width=8, 
+  height = 10, 
+  path=path_fig
+  )
+
+p2 <- 
+  p_W_Temp /
+  p_W_Dens /
+  p_W_Food +
+  plot_annotation(tag_levels = "A")
+
+ggsave(
+  filename="D_CWKe_predobs_Cond_Env_W.png", 
+  plot=p2, 
+  width=5, 
+  height = 10, 
+  path=path_fig
+  )
+```
+
+```{r}
+
+df_predobs_Weight_D_CWKe_Fit <- df_predobs_Weight_D_CWKe_plot |> 
+  mutate(
+    Status = case_when(
+      ID_experiment == "Bart2019_XP1_1" ~ "J",
+      ID_experiment == "Bart2019_XP1_2" & Time <= 84 ~ "J",
+      ID_experiment == "Bart2019_XP1_2" & Time > 84 ~ "A",
+      ID_experiment == "Bart2019_XP3" ~ "J",
+      ID_experiment == "Bart2019_XP4_1" ~ "J",
+      ID_experiment == "Bart2019_XP4_2" & Time <= 112 ~ "J",
+      ID_experiment == "Bart2019_XP4_2" & Time > 112 ~ "A",
+      ID_experiment == "Bart2019_XP5" ~ "J",
+      ID_experiment == "Bart2020" ~ "J",
+      ID_experiment == "Gollot2026_dens_D1" ~ "J",
+      ID_experiment == "Gollot2026_dens_D2" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D2" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D2b" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D2b" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D5" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D5" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D7" ~ "J"
+    )
+  ) |> 
+  mutate(Status = factor(Status, levels = c("J", "A")))
+
+df_predobs_Weight_D_CWKe_Fit <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    )
+
+
+df_fold_D_Weight_Dens <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(Density_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Weight_Food <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(Food_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Weight_Temp <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(T_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+
+df_fold_D_Weight_Dens_Status <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(Density_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Weight_Food_Status <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(Food_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Weight_Temp_Status <- df_predobs_Weight_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
+    Residuals = predict.endpoint-Weight_obs
+    ) |> 
+  group_by(T_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+
+
+df_predobs_Reproduction_D_CWKe_Fit <- df_predobs_Reproduction_D_CWKe_plot |> 
+  mutate(
+    Status = case_when(
+      ID_experiment == "Bart2019_XP1_1" ~ "J",
+      ID_experiment == "Bart2019_XP1_2" & Time <= 84 ~ "J",
+      ID_experiment == "Bart2019_XP1_2" & Time > 84 ~ "A",
+      ID_experiment == "Bart2019_XP3" ~ "J",
+      ID_experiment == "Bart2019_XP4_1" ~ "J",
+      ID_experiment == "Bart2019_XP4_2" & Time <= 112 ~ "J",
+      ID_experiment == "Bart2019_XP4_2" & Time > 112 ~ "A",
+      ID_experiment == "Bart2019_XP5" ~ "J",
+      ID_experiment == "Bart2020" ~ "J",
+      ID_experiment == "Gollot2026_dens_D1" ~ "J",
+      ID_experiment == "Gollot2026_dens_D2" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D2" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D2b" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D2b" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D5" & Time <= 70 ~ "J",
+      ID_experiment == "Gollot2026_dens_D5" & Time > 70 ~ "A",
+      ID_experiment == "Gollot2026_dens_D7" ~ "J"
+    )
+  ) |> 
+  mutate(Status = factor(Status, levels = c("J", "A")))
+
+df_predobs_Reproduction_D_CWKe_Fit <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    )
+
+
+df_fold_D_Reproduction_Dens <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(Density_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Reproduction_Food <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(Food_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Reproduction_Temp <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(T_env) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+
+df_fold_D_Reproduction_Dens_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(Density_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Reproduction_Food_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(Food_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+df_fold_D_Reproduction_Temp_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
+  mutate(
+    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
+    Residuals = predict.endpoint-Reproduction_obs
+    ) |> 
+  group_by(T_env, Status) |> 
+  summarise(
+      Fold_mean = mean(Fold, na.rm = TRUE),
+      Bias = mean(Residuals, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+  ungroup()
+  
+```
+
+```{r}
+#| tbl-cap: Quality of fit and its bias according to experimental temperature.
+
+df_fold_D_Reproduction_Temp |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
+```{r}
+#| tbl-cap: Quality of fit and its bias according to the number of individuals in the cosm and their observed developmental status.
+
+df_fold_D_Reproduction_Dens_Status |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
+```{r}
+#| tbl-cap: Quality of fit and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
+
+df_fold_D_Reproduction_Food_Status |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
 ## Sensitivity analysis - CWKe
 
-```{r ASparam}
-# 
-# path_fig <- here::here("fig/AS")
-# 
-# seed       <- 361224
-# Sobol_type <- "Jansen"
-# Nb_sim     <- 30000 # (p + 2) * Nb_sim simulations
-# CV         <- 0.1
-# processors <- 2
-# Nboot      <- 1000 # nb replicat
-# NOut       <- 3    # number of outputs
-# 
-# l_params_median <- c(
-#   # Environment
-#   muOM = 11700, rOM_ClxHorse = 0.0051447,
-#   # Energy assimilation
-#   Fm = 0.0187644, kapX = 0.258, K = 0.0145154, pAm = 254.472, v = 0.224988, 
-#   kapJ  = 0.979406, kapA = 0.775049, tau = 13.2759,
-#   # Maintenance and growth
-#   r_pAm_pM = 0.75549700, Eg = 4183, dv = 1.13679, de = 1.658050e-09,         
-#   # Maturity
-#   kJ = 0.002793, Ehb = 0.5, Ehp = 78.804,
-#   # Reproduction
-#   E_coc = 46.9157, kapR = 0.475,   
-#   # Metabolic response to T
-#   TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15   
-# )
-# 
-# Sobol_design_T <- f_AS_Sobol_design(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, Nout, l_params_median, Temperature_bol = TRUE)
-# l_Sobol_param_T <- Sobol_design_T$Sobol_param
-# Sobol_info_T <- Sobol_design_T$Sobol
-# 
-# 
-# 
-# path_AS <- here::here("mod/X_AS")
-# file_rds_AS_T <- file.path(path_AS, paste0("df_Sobol_param_T.rds"))
-# 
-# if (file.exists(file_rds_AS_T)) {
-#   df_Sobol_param_T <- readRDS(file_rds_AS_T)
-# } else {
-#   # Long to generate
-#   df_Sobol_param_T <- do.call(rbind, lapply(l_Sobol_param_T, as.data.frame))
-#   df_Sobol_param_T <- cbind(id = seq_len(nrow(df_Sobol_param_T)), df_Sobol_param_T)
-#   saveRDS(df_Sobol_param_T, file_rds_AS_T)
-#   write.table(df_Sobol_param_T, file = here::here(paste0("mod/Z_AS/Param_sobol_", Sobol_type,"_T.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
-# }
-# 
-# # Withou temperature parameters
-# 
-# Sobol_design_noT <- f_AS_Sobol_design(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, Nout, l_params_median, Temperature_bol = FALSE)
-# l_Sobol_param_noT <- Sobol_design_T$Sobol_param
-# Sobol_info_noT <- Sobol_design_T$Sobol
-# 
-# file_rds_AS_noT <- file.path(path_AS, paste0("df_Sobol_param_noT.rds"))
-# 
-# if (file.exists(file_rds_AS_noT)) {
-#   df_Sobol_param_noT <- readRDS(file_rds_AS_noT)
-# } else {
-#   # Long to generate
-#   df_Sobol_param_noT <- do.call(rbind, lapply(l_Sobol_param_noT, as.data.frame))
-#   df_Sobol_param_noT <- cbind(id = seq_len(nrow(df_Sobol_param_noT)), df_Sobol_param_noT)
-#   saveRDS(df_Sobol_param_noT, file_rds_AS_noT)
-#   write.table(df_Sobol_param_noT, file = here::here(paste0("mod/Z_AS/Param_sobol_", Sobol_type,"_noT.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
-# }
-# 
-# # tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
-# 
-# # In the AS folder in the terminal :
-# # makemcsim DEBcali.model
-# # ./mcsim.DEBcali DEB_AS.in
+### With temperature parameters
+
+```{r ASparamT}
+path_fig <- here::here("fig/AS")
+path_AS <- here::here("mod/X_AS")
+
+seed       <- 361224
+Sobol_type <- "Jansen"
+Nb_sim     <- 30000 # (p + 2) * Nb_sim simulations 30000
+CV         <- 0.1 # 1000
+processors <- 2
+Nboot      <- 1000  # nb replicat
+
+l_params_median <- c(
+  # Environment
+  muOM = 11700, rOM_ClxHorse = 0.0204226,
+  # Energy assimilation
+  Fm = 6.92108, kapX = 0.258, K = 0.0778501, pAm = 259.032, v = 0.243464,
+  kapJ  = 0.978502, kapA = 0.643309, 
+  tau = 9.65631,
+  # Maintenance and growth
+  r_pAm_pM = 0.629551, Eg = 4183, dv = 1.21968, de = 1.122480e-09,
+  # Maturity
+  kJ = 0.002793, Ehb = 0.5, Ehp = 97.6156,
+  # Reproduction
+  E_coc = 68.4189, kapR = 0.475,
+  # Metabolic response to T
+  TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15
+)
+
+# With temperature parameters
+
+Sobol_design_T <- f_AS_Sobol_design(Sobol_type = Sobol_type, seed = seed, Nb_sim = Nb_sim, CV = CV, Processors = Processors, Nboot = Nboot, l_params_median = l_params_median, Temperature_bol = TRUE)
+l_Sobol_param_T <- Sobol_design_T$Sobol_param
+Sobol_info_T <- Sobol_design_T$Sobol
+
+file_rds_AS_T <- file.path(path_AS, paste0("df_Sobol_param_T.rds"))
+file_txt_AS_T <- here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type, "_T.txt"))
+
+if (file.exists(file_rds_AS_T)) {
+  df_Sobol_param_T <- readRDS(file_rds_AS_T)
+} else {
+  # Long to generate
+  # df_Sobol_param_T <- do.call(rbind, lapply(l_Sobol_param_T, as.data.frame))
+  # df_Sobol_param_T <- cbind(id = seq_len(nrow(df_Sobol_param_T)), df_Sobol_param_T)
+  # saveRDS(df_Sobol_param_T, file_rds_AS_T)
+  # write.table(df_Sobol_param_T, file = here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type,"_T.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
+  
+  library(data.table)
+
+  df_Sobol_param_T <- rbindlist(
+    l_Sobol_param_T,
+    use.names = TRUE,
+    fill = FALSE
+  )
+  
+  df_Sobol_param_T <- cbind(id = seq_len(nrow(df_Sobol_param_T)), df_Sobol_param_T)
+  
+  saveRDS(df_Sobol_param_T, file_rds_AS_T)
+  
+  fwrite(
+    df_Sobol_param_T,
+    file = file_txt_AS_T,
+    sep = "\t",
+    quote = FALSE
+  )
+
+}
+
+# tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
+
+# In the AS folder in the terminal :
+# makemcsim DEBcali.model
+# ./mcsim.DEBcali DEB_AS_T.in
 
 ```
 
 ```{r}
-# Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
-# 
-# path_AS <- here::here("mod/X_AS")
-# file_rds_AS_res_T <- file.path(path_AS, paste0("df_Sobol_results_T.rds"))
-# file_rds_AS_res_noT <- file.path(path_AS, paste0("df_Sobol_results_noT.rds"))
-# 
-# if (file.exists(file_rds_AS_res_T)) {
-#   df_Sobol_results_T <- readRDS(file_rds_AS_res_T)
-# } else {
-#   # Long to generate
-#   df_AS_sim_T <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,"_T.out"))) |>
-#   dplyr::select(-(1:(length(l_params_median)+1))) |>
-#   setNames(Names_AS_outputs)
-#   df_Sobol_results_T <- f_AS_Sobol_index(df_AS_sim_T, Sobol_info)
-#   saveRDS(df_Sobol_results_T, file_rds_AS_res_T)
-# }
-# 
-# if (file.exists(file_rds_AS_res_noT)) {
-#   df_Sobol_results_noT <- readRDS(file_rds_AS_res_noT)
-# } else {
-#   # Long to generate
-#   df_AS_sim_noT <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,"_noT.out"))) |>
-#   dplyr::select(-(1:(length(l_params_median)+1-4))) |>
-#   setNames(Names_AS_outputs)
-#   df_Sobol_results_noT <- f_AS_Sobol_index(df_AS_sim_noT, Sobol_info)
-#   saveRDS(df_Sobol_results_noT, file_rds_AS_res_noT)
-# }
-```
+l_sim_fail_T <- c(261497)
 
-### With temperature parameters
+Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
+
+path_AS <- here::here("mod/X_AS")
+file_rds_AS_res_T <- file.path(path_AS, paste0("df_Sobol_results_T.rds"))
+
+if (file.exists(file_rds_AS_res_T)) {
+  df_Sobol_results_T <- readRDS(file_rds_AS_res_T)
+} else {
+  # Long to generate
+  df_AS_sim_T <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,"_T.out"))) |>
+  dplyr::select(-(1:(length(l_params_median)+1))) |>
+  setNames(Names_AS_outputs)
+  df_Sobol_results_T <- f_AS_Sobol_index(df_AS_sim_T, Sobol_info_T, l_sim_fail_T)
+  saveRDS(df_Sobol_results_T, file_rds_AS_res_T)
+}
+
+
+df_Sobol_results_T <- df_Sobol_results_T |> 
+  mutate(
+    Variable = factor(Variable, Names_AS_outputs),
+    Variable_title = case_when(
+      Variable == "Energy_Adult" ~ "Energy - Adult stage",
+      Variable == "Energy_Juv" ~ "Energy - Juvenile stage",
+      Variable == "Weight_Adult" ~ "Weight - Adult stage",
+      Variable == "Weight_Juv" ~ "Weight - Juvenile stage",
+      Variable == "Maturity_Adult" ~ "Maturity - Adult stage",
+      Variable == "Maturity_Juv" ~ "Maturity - Juvenile stage",
+      Variable == "Reproduction" ~ "Reproduction",
+      Variable == "Organic_matter" ~ "Total organic matter in the cosm"
+    )
+  )
+
+```
 
 ```{r}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index.
@@ -6743,48 +7712,48 @@ ggsave(
 #| fig-height: 12
 #| fig-width: 12
 
-# p_TI_tot <- ggplot(
-#   df_Sobol_results_T, 
-#   aes(
-#     x = reorder(Parameter, TI), 
-#     y = TI
-#   )
-# ) +
-#   geom_col(
-#     aes(
-#       fill = Variable
-#     ),
-#     alpha = 0.7
-#   ) +
-#   coord_flip() +
-#   scale_fill_manual(
-#     values = rev(c(Nord_aurora, rev(Nord_frost))),
-#     name = "Endpoints"
-#   )+
-#   labs(
-#     title = "Sobol Sensitivity Analysis - Total Index",
-#     x = "Parameter",
-#     y = "Total Index",
-#     caption = paste0("n = ", Nb_sim)
-#   ) +
-#   #scale_y_log10()+
-#   theme_minimal() +
-#   theme(
-#     legend.position = "right",
-#     plot.title = element_text(face = "bold"),
-#     legend.title = element_text(face = "bold")
-#   )
-# 
-# p_TI_tot
+p_TI_tot <- ggplot(
+  df_Sobol_results_T,
+  aes(
+    x = reorder(Parameter, TI),
+    y = TI
+  )
+) +
+  geom_col(
+    aes(
+      fill = Variable_title
+    ),
+    alpha = 0.7
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = rev(c(Nord_aurora, rev(Nord_frost))),
+    name = "Endpoints"
+  )+
+  labs(
+    title = "Sobol Sensitivity Analysis - Total Index",
+    x = "Parameter",
+    y = "Total Index",
+    caption = paste0("Nsim = ", Nb_sim, " | Nboot = ", Nboot)
+  ) +
+  #scale_y_log10()+
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(face = "bold"),
+    legend.title = element_text(face = "bold")
+  )
+
+p_TI_tot
 ```
 
 ```{r, include=F}
-# ggsave(
-#   filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparam_T.png"),
-#   plot = p_TI_tot,
-#   width = 8, height = 8,
-#   path = path_fig
-# )
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparam_T.png"),
+  plot = p_TI_tot,
+  width = 8, height = 8,
+  path = path_fig
+)
 ```
 
 ```{r}
@@ -6792,84 +7761,286 @@ ggsave(
 #| label: fig-TItotpervarT
 #| fig-height: 12
 #| fig-width: 12
-# 
-# { 
-#   Color_AS <- rev(c(Nord_aurora, rev(Nord_frost)))
-#   size_title_facet <- 10
-#   size_axis_text_y <- 7
-#   for (i in 1:length(unique(df_Sobol_results_T$Variable))){
-#     
-#     Variable_i <- unique(df_Sobol_results_T$Variable)[i]
-#     
-#     if (i == 1){
-#       p1 <- ggplot(
-#         subset(df_Sobol_results_T, Variable == Variable_i), 
-#         aes(
-#           x = reorder(Parameter, TI), 
-#           y = TI
-#         )
-#       ) +
-#         geom_col(
-#           fill = Color_AS[i],
-#           alpha = 0.7
-#         ) +
-#         coord_flip() +
-#         labs(
-#           title = as.character(Variable_i),
-#           x = "Parameter",
-#           y = "Total Index"#,
-#           #caption = "Error bars = CI 95% | n = 1000"
-#         ) +
-#         theme_minimal() +
-#         theme(
-#           legend.position = "right",
-#           axis.text.y = element_text(size = size_axis_text_y),
-#           plot.title = element_text(face = "bold", size = size_title_facet),
-#           legend.title = element_text(face = "bold")
-#         )
-#     } else {
-#       p <- ggplot(
-#         subset(df_Sobol_results_T, Variable == Variable_i), 
-#         aes(
-#           x = reorder(Parameter, TI), 
-#           y = TI
-#         )
-#       ) +
-#         geom_col(
-#           fill = Color_AS[i],
-#           alpha = 0.7
-#         ) +
-#         coord_flip() +
-#         labs(
-#           title = as.character(Variable_i),
-#           x = "Parameter",
-#           y = "Total Index"#,
-#           #caption = "Error bars = CI 95% | n = 1000"
-#         ) +
-#         theme_minimal() +
-#         theme(
-#           legend.position = "right",
-#           axis.text.y = element_text(size = size_axis_text_y),
-#           plot.title = element_text(face = "bold", size = size_title_facet),
-#           legend.title = element_text(face = "bold")
-#         )
-#       p1 <- p1 + p
-#     }
-#   }
-#   
-#   p_TI_pervar <- p1 + plot_layout(ncol = 3) + 
-#     plot_annotation(
-#       title = "Sobol Sensitivity Analysis - Total Index",
-#       caption = paste0("n = ", Nb_sim),
-#       theme = theme(
-#         plot.title = element_text(size = 16, face = "bold"),
-#       )
-#     )
-#   p_TI_pervar
-# }
+
+{
+  Color_AS <- rev(c(Nord_aurora, rev(Nord_frost)))
+  size_title_facet <- 10
+  size_axis_text_y <- 7
+  for (i in 1:length(unique(df_Sobol_results_T$Variable))){
+
+    Variable_i <- Names_AS_outputs[i]
+    Variable_title_i <- (subset(df_Sobol_results_T, Variable == Variable_i))$Variable_title[1]
+
+    if (i == 1){
+      p1 <- ggplot(
+        subset(df_Sobol_results_T, Variable == Variable_i),
+        aes(
+          x = reorder(Parameter, TI),
+          y = TI
+        )
+      ) +
+        geom_col(
+          fill = Color_AS[i],
+          alpha = 0.7
+        ) +
+        coord_flip() +
+        labs(
+          title = as.character(Variable_title_i),
+          x = "Parameter",
+          y = "Total Index"#,
+          #caption = "Error bars = CI 95% | n = 1000"
+        ) +
+        theme_minimal() +
+        theme(
+          legend.position = "right",
+          axis.text.y = element_text(size = size_axis_text_y),
+          plot.title = element_text(face = "bold", size = size_title_facet),
+          legend.title = element_text(face = "bold")
+        )
+    } else {
+      p <- ggplot(
+        subset(df_Sobol_results_T, Variable == Variable_i),
+        aes(
+          x = reorder(Parameter, TI),
+          y = TI
+        )
+      ) +
+        geom_col(
+          fill = Color_AS[i],
+          alpha = 0.7
+        ) +
+        coord_flip() +
+        labs(
+          title = as.character(Variable_title_i),
+          x = "Parameter",
+          y = "Total Index"#,
+          #caption = "Error bars = CI 95% | n = 1000"
+        ) +
+        theme_minimal() +
+        theme(
+          legend.position = "right",
+          axis.text.y = element_text(size = size_axis_text_y),
+          plot.title = element_text(face = "bold", size = size_title_facet),
+          legend.title = element_text(face = "bold")
+        )
+      p1 <- p1 + p
+    }
+  }
+
+  p_TI_pervar <- p1 + plot_layout(ncol = 3) +
+    plot_annotation(
+      title = "Sobol Sensitivity Analysis - Total Index",
+      caption = paste0("Nsim = ", Nb_sim, " | Nboot = ", Nboot),
+      theme = theme(
+        plot.title = element_text(size = 16, face = "bold"),
+      )
+    )
+  p_TI_pervar
+}
+```
+
+```{r, include=F}
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparamendpoint_T.png"),
+  plot = p_TI_pervar,
+  width = 12, height = 12,
+  path = path_fig
+)
+```
+
+```{r}
+#| fig-cap: Sobol Sensitivity Analysis - Comparison TI & FOI.
+#| label: fig-TIFOIT
+#| fig-height: 12
+#| fig-width: 14
+
+df_Sobol_results_long_T <- df_Sobol_results_T %>%
+  pivot_longer(
+    cols = c(FOI, TI),
+    names_to = "Index_Type",
+    values_to = "Index_Value"
+  ) %>%
+  mutate(
+    # Ajouter les IC correspondants
+    IC_inf = ifelse(Index_Type == "FOI", FOI.borninf, TI.borninf),
+    IC_sup = ifelse(Index_Type == "FOI", FOI.bornsup, TI.bornsup)
+  )
+
+
+# Graphique comparatif
+p2 <- ggplot(
+  df_Sobol_results_long_T, 
+  aes(
+    x = reorder(Parameter, Index_Value), 
+    y = Index_Value, 
+    fill = Index_Type)
+) +
+  geom_col(
+    position = "dodge", 
+    alpha = 0.8
+  ) +
+  geom_errorbar(
+    aes(
+      ymin = IC_inf, 
+      ymax = IC_sup
+    ),
+    position = position_dodge(width = 0.8),
+    width = 0.25,
+    linewidth = 0.4,
+    color = Nord_polar[4]
+  ) +
+  coord_flip() +
+  facet_wrap(
+    ~Variable_title, 
+    ncol = 4,
+    scales = "free"
+  ) +
+  scale_fill_manual(
+    name = "Index type",
+    values = c("FOI" = "#5E81AC", "TI" = "#BF616A"),
+    labels = c("FOI" = "First order", "TI" = "Total")
+  ) +
+  labs(
+    title = "Comparison of sensitivity indexes",
+    x = "Parameter",
+    y = "Index value",
+    caption = paste0("Error bars = CI 95% | Nsim = ", Nb_sim, " | Nboot = ", Nboot)
+  ) +
+  theme_minimal()
+
+p2
+```
+
+```{r, include=F}
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_indexcomparison_T.png"),
+  plot = p2,
+  width = 14, height = 12,
+  path = path_fig
+)
 ```
 
 ### Without temperature parameters
+
+```{r ASparamnoT}
+
+path_fig <- here::here("fig/AS")
+path_AS <- here::here("mod/X_AS")
+
+seed       <- 361224
+Sobol_type <- "Jansen"
+Nb_sim     <- 30000 # (p + 2) * Nb_sim simulations 30000
+CV         <- 0.1 # 1000
+processors <- 2
+Nboot      <- 1000  # nb replicat
+
+l_params_median <- c(
+  # Environment
+  muOM = 11700, rOM_ClxHorse = 0.0204226,
+  # Energy assimilation
+  Fm = 6.92108, kapX = 0.258, K = 0.0778501, pAm = 259.032, v = 0.243464,
+  kapJ  = 0.978502, kapA = 0.643309, 
+  tau = 9.65631,
+  # Maintenance and growth
+  r_pAm_pM = 0.629551, Eg = 4183, dv = 1.21968, de = 1.122480e-09,
+  # Maturity
+  kJ = 0.002793, Ehb = 0.5, Ehp = 97.6156,
+  # Reproduction
+  E_coc = 68.4189, kapR = 0.475,
+  # Metabolic response to T
+  TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15
+)
+
+# Withou temperature parameters
+
+Sobol_design_noT <- f_AS_Sobol_design(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, l_params_median, Temperature_bol = FALSE)
+l_Sobol_param_noT <- Sobol_design_noT$Sobol_param
+Sobol_info_noT <- Sobol_design_noT$Sobol
+
+file_rds_AS_noT <- file.path(path_AS, paste0("df_Sobol_param_noT.rds"))
+file_txt_AS_noT <- here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type, "_noT.txt"))
+
+if (file.exists(file_rds_AS_noT)) {
+  df_Sobol_param_noT <- readRDS(file_rds_AS_noT)
+} else {
+  # Long to generate
+  # df_Sobol_param_noT <- do.call(rbind, lapply(l_Sobol_param_noT, as.data.frame))
+  # df_Sobol_param_noT <- cbind(id = seq_len(nrow(df_Sobol_param_noT)), df_Sobol_param_noT)
+  # saveRDS(df_Sobol_param_noT, file_rds_AS_noT)
+  # write.table(df_Sobol_param_noT, file = here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type,"_noT.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
+  
+  library(data.table)
+
+  df_Sobol_param_noT <- rbindlist(
+    l_Sobol_param_noT,
+    use.names = TRUE,
+    fill = FALSE
+  )
+  
+  df_Sobol_param_noT <- cbind(id = seq_len(nrow(df_Sobol_param_noT)), df_Sobol_param_noT)
+  
+  saveRDS(df_Sobol_param_noT, file_rds_AS_noT)
+  
+  fwrite(
+    df_Sobol_param_noT,
+    file = file_txt_AS_noT,
+    sep = "\t",
+    quote = FALSE
+  )
+
+}
+
+# tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
+
+# In the AS folder in the terminal :
+# makemcsim DEBcali.model
+# ./mcsim.DEBcali DEB_AS.in
+
+```
+
+```{r}
+
+
+l_sim_fail_noT <- c(20220, 27726, 
+                    110220, 272759, 281510, 
+                    320220, 327726, 350220, 357726, 391018, 
+                    470220, 477726, 
+                    500220, 507726, 530220, 537726, 590220, 597726, 
+                    620220, 627726)
+
+Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
+
+path_AS <- here::here("mod/X_AS")
+file_rds_AS_res_noT <- file.path(path_AS, paste0("df_Sobol_results_noT.rds"))
+
+if (file.exists(file_rds_AS_res_noT)) {
+  df_Sobol_results_noT <- readRDS(file_rds_AS_res_noT)
+} else {
+  # Long to generate
+  df_AS_sim_noT <- read_tsv(file.path(path_AS, paste0("Sobol_", Sobol_type,"_noT.out"))) |>
+  dplyr::select(-(1:(length(l_params_median)+1-4))) |>
+  setNames(Names_AS_outputs)
+  df_Sobol_results_noT <- f_AS_Sobol_index(df_AS_sim_noT, Sobol_info_noT, l_sim_fail_noT)
+  saveRDS(df_Sobol_results_noT, file_rds_AS_res_noT)
+}
+
+
+df_Sobol_results_noT <- df_Sobol_results_noT |> 
+  mutate(
+    Variable = factor(Variable, Names_AS_outputs),
+    Variable_title = case_when(
+      Variable == "Energy_Adult" ~ "Energy - Adult stage",
+      Variable == "Energy_Juv" ~ "Energy - Juvenile stage",
+      Variable == "Weight_Adult" ~ "Weight - Adult stage",
+      Variable == "Weight_Juv" ~ "Weight - Juvenile stage",
+      Variable == "Maturity_Adult" ~ "Maturity - Adult stage",
+      Variable == "Maturity_Juv" ~ "Maturity - Juvenile stage",
+      Variable == "Reproduction" ~ "Reproduction",
+      Variable == "Organic_matter" ~ "Total organic matter in the cosm"
+    )
+  )
+
+```
 
 ```{r}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index.
@@ -6877,48 +8048,49 @@ ggsave(
 #| fig-height: 12
 #| fig-width: 12
 
-# p_TI_tot <- ggplot(
-#   df_Sobol_results_noT, 
-#   aes(
-#     x = reorder(Parameter, TI), 
-#     y = TI
-#   )
-# ) +
-#   geom_col(
-#     aes(
-#       fill = Variable
-#     ),
-#     alpha = 0.7
-#   ) +
-#   coord_flip() +
-#   scale_fill_manual(
-#     values = rev(c(Nord_aurora, rev(Nord_frost))),
-#     name = "Endpoints"
-#   )+
-#   labs(
-#     title = "Sobol Sensitivity Analysis - Total Index",
-#     x = "Parameter",
-#     y = "Total Index",
-#     caption = paste0("n = ", Nb_sim)
-#   ) +
-#   #scale_y_log10()+
-#   theme_minimal() +
-#   theme(
-#     legend.position = "right",
-#     plot.title = element_text(face = "bold"),
-#     legend.title = element_text(face = "bold")
-#   )
-# 
-# p_TI_tot
+p_TI_tot <- ggplot(
+  df_Sobol_results_noT,
+  aes(
+    x = reorder(Parameter, TI),
+    y = TI
+  )
+) +
+  geom_col(
+    aes(
+      fill = Variable_title
+    ),
+    alpha = 0.7
+  ) +
+  coord_flip() +
+  scale_fill_manual(
+    values = rev(c(Nord_aurora, rev(Nord_frost))),
+    name = "Endpoints"
+  )+
+  labs(
+    title = "Sobol Sensitivity Analysis - Total Index",
+    x = "Parameter",
+    y = "Total Index",
+    caption = paste0("Nsim = ", Nb_sim, " | Nboot = ", 1000)
+  ) +
+  #scale_y_log10()+
+  theme_minimal() +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(face = "bold"),
+    legend.title = element_text(face = "bold")
+  )
+
+p_TI_tot
 ```
 
 ```{r, include=F}
-# ggsave(
-#   filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparam_noT.png"),
-#   plot = p_TI_tot,
-#   width = 8, height = 8,
-#   path = path_fig
-# )
+
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparam_noT.png"),
+  plot = p_TI_tot,
+  width = 8, height = 8,
+  path = path_fig
+)
 ```
 
 ```{r}
@@ -6927,78 +8099,160 @@ ggsave(
 #| fig-height: 12
 #| fig-width: 12
 
-# { 
-#   Color_AS <- rev(c(Nord_aurora, rev(Nord_frost)))
-#   size_title_facet <- 10
-#   size_axis_text_y <- 7
-#   for (i in 1:length(unique(df_Sobol_results_noT$Variable))){
-#     
-#     Variable_i <- unique(df_Sobol_results_noT$Variable)[i]
-#     
-#     if (i == 1){
-#       p1 <- ggplot(
-#         subset(df_Sobol_results_noT, Variable == Variable_i), 
-#         aes(
-#           x = reorder(Parameter, TI), 
-#           y = TI
-#         )
-#       ) +
-#         geom_col(
-#           fill = Color_AS[i],
-#           alpha = 0.7
-#         ) +
-#         coord_flip() +
-#         labs(
-#           title = as.character(Variable_i),
-#           x = "Parameter",
-#           y = "Total Index"#,
-#           #caption = "Error bars = CI 95% | n = 1000"
-#         ) +
-#         theme_minimal() +
-#         theme(
-#           legend.position = "right",
-#           axis.text.y = element_text(size = size_axis_text_y),
-#           plot.title = element_text(face = "bold", size = size_title_facet),
-#           legend.title = element_text(face = "bold")
-#         )
-#     } else {
-#       p <- ggplot(
-#         subset(df_Sobol_results_noT, Variable == Variable_i), 
-#         aes(
-#           x = reorder(Parameter, TI), 
-#           y = TI
-#         )
-#       ) +
-#         geom_col(
-#           fill = Color_AS[i],
-#           alpha = 0.7
-#         ) +
-#         coord_flip() +
-#         labs(
-#           title = as.character(Variable_i),
-#           x = "Parameter",
-#           y = "Total Index"#,
-#           #caption = "Error bars = CI 95% | n = 1000"
-#         ) +
-#         theme_minimal() +
-#         theme(
-#           legend.position = "right",
-#           axis.text.y = element_text(size = size_axis_text_y),
-#           plot.title = element_text(face = "bold", size = size_title_facet),
-#           legend.title = element_text(face = "bold")
-#         )
-#       p1 <- p1 + p
-#     }
-#   }
-#   
-#   p_TI_pervar <- p1 + plot_layout(ncol = 3) + 
-#     plot_annotation(
-#       title = "Sobol Sensitivity Analysis - Total Index",
-#       caption = paste0("n = ", Nb_sim),
-#       theme = theme(
-#         plot.title = element_text(size = 16, face = "bold"),
-#       )
-#     )
-#   p_TI_pervar
-# }
+{
+  Color_AS <- rev(c(Nord_aurora, rev(Nord_frost)))
+  size_title_facet <- 10
+  size_axis_text_y <- 7
+  for (i in 1:length(unique(df_Sobol_results_noT$Variable))){
+
+    Variable_i <- Names_AS_outputs[i]
+    Variable_title_i <- (subset(df_Sobol_results_noT, Variable == Variable_i))$Variable_title[1]
+
+    if (i == 1){
+      p1 <- ggplot(
+        subset(df_Sobol_results_noT, Variable == Variable_i),
+        aes(
+          x = reorder(Parameter, TI),
+          y = TI
+        )
+      ) +
+        geom_col(
+          fill = Color_AS[i],
+          alpha = 0.7
+        ) +
+        coord_flip() +
+        labs(
+          title = as.character(Variable_title_i),
+          x = "Parameter",
+          y = "Total Index"#,
+          #caption = "Error bars = CI 95% | n = 1000"
+        ) +
+        theme_minimal() +
+        theme(
+          legend.position = "right",
+          axis.text.y = element_text(size = size_axis_text_y),
+          plot.title = element_text(face = "bold", size = size_title_facet),
+          legend.title = element_text(face = "bold")
+        )
+    } else {
+      p <- ggplot(
+        subset(df_Sobol_results_noT, Variable == Variable_i),
+        aes(
+          x = reorder(Parameter, TI),
+          y = TI
+        )
+      ) +
+        geom_col(
+          fill = Color_AS[i],
+          alpha = 0.7
+        ) +
+        coord_flip() +
+        labs(
+          title = as.character(Variable_title_i),
+          x = "Parameter",
+          y = "Total Index"#,
+          #caption = "Error bars = CI 95% | n = 1000"
+        ) +
+        theme_minimal() +
+        theme(
+          legend.position = "right",
+          axis.text.y = element_text(size = size_axis_text_y),
+          plot.title = element_text(face = "bold", size = size_title_facet),
+          legend.title = element_text(face = "bold")
+        )
+      p1 <- p1 + p
+    }
+  }
+
+  p_TI_pervar <- p1 + plot_layout(ncol = 3) +
+    plot_annotation(
+      title = "Sobol Sensitivity Analysis - Total Index",
+      caption = paste0("Nsim = ", Nb_sim, " | Nboot = ", Nboot),
+      theme = theme(
+        plot.title = element_text(size = 16, face = "bold"),
+      )
+    )
+  p_TI_pervar
+}
+```
+
+```{r, include=F}
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_TotalIndex_perparamendpoint_noT.png"),
+  plot = p_TI_pervar,
+  width = 12, height = 12,
+  path = path_fig
+)
+```
+
+```{r}
+#| fig-cap: Sobol Sensitivity Analysis - Comparison TI & FOI.
+#| label: fig-TIFOI
+#| fig-height: 12
+#| fig-width: 14
+
+df_Sobol_results_long <- df_Sobol_results_noT %>%
+  pivot_longer(
+    cols = c(FOI, TI),
+    names_to = "Index_Type",
+    values_to = "Index_Value"
+  ) %>%
+  mutate(
+    # Ajouter les IC correspondants
+    IC_inf = ifelse(Index_Type == "FOI", FOI.borninf, TI.borninf),
+    IC_sup = ifelse(Index_Type == "FOI", FOI.bornsup, TI.bornsup)
+  )
+
+
+# Graphique comparatif
+p2 <- ggplot(
+  df_Sobol_results_long, 
+  aes(
+    x = reorder(Parameter, Index_Value), 
+    y = Index_Value, 
+    fill = Index_Type)
+) +
+  geom_col(
+    position = "dodge", 
+    alpha = 0.8
+  ) +
+  geom_errorbar(
+    aes(
+      ymin = IC_inf, 
+      ymax = IC_sup
+    ),
+    position = position_dodge(width = 0.8),
+    width = 0.25,
+    linewidth = 0.4,
+    color = Nord_polar[4]
+  ) +
+  coord_flip() +
+  facet_wrap(
+    ~Variable_title, 
+    ncol = 4,
+    scales = "free"
+  ) +
+  scale_fill_manual(
+    name = "Index type",
+    values = c("FOI" = "#5E81AC", "TI" = "#BF616A"),
+    labels = c("FOI" = "First order", "TI" = "Total")
+  ) +
+  labs(
+    title = "Comparison of sensitivity indexes",
+    x = "Parameter",
+    y = "Index value",
+    caption = paste0("Error bars = CI 95% | Nsim = ", Nb_sim, " | Nboot = ", Nboot)
+  ) +
+  theme_minimal()
+
+p2
+```
+
+```{r, include=F}
+ggsave(
+  filename = paste0("AS_Sobol",Sobol_type, Nb_sim,"_indexcomparison_noT.png"),
+  plot = p2,
+  width = 14, height = 12,
+  path = path_fig
+)
 ```

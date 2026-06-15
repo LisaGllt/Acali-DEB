@@ -40,6 +40,7 @@ colorspace
 IDPmisc
 ggforce
 GGally
+corrplot
 Rcpp
 brms
 StanHeaders
@@ -87,3 +88,4 @@ modelsummary
 plan
 latex2exp
 extrafont
+sensitivity

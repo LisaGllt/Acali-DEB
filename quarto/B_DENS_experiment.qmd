@@ -125,6 +125,24 @@ cat("Summary of initial weights : \n")
 summary(df_dens_t0$Weight)
 ```
 
+```{r}
+
+df_dens_t0 <- df_dens_t0 |> 
+  mutate(Condition_f = as.factor(Condition))
+
+# ANOVA
+mod_aov <- aov(Weight ~ Condition_f, data = df_dens_t0)
+summary(mod_aov)
+
+shapiro.test(residuals(mod_aov))
+leveneTest(Weight ~ Condition_f, data = df_dens_t0)
+
+dunnett_test <- glht(mod_aov, linfct = mcp(Condition_f = "Dunnett"))
+summary(dunnett_test)
+
+
+```
+
 ### Growth trajectories
 
 @fig-densgrowthtraj shows all data points collected during the experiment.

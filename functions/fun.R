@@ -41,6 +41,7 @@ f_load_libraries <- function(){
   library(IDPmisc)
   library(ggforce)
   library(GGally)
+  library(corrplot)
   
   # 📊 Statistical Modeling & Bayesian Analysis
   library(brms)        # Modélisation bayésienne avec Stan

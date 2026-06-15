@@ -1,5 +1,5 @@
 ---
-title: "Toward a Mechanistic DEB Model for *Aporrectodea caliginosa* - Linking Food Availability, Organic Matter Quality, and Energy Assimilation"
+title: "**Predicting Energy Assimilation from Resource Quantity and Quality**: A Mechanistic DEB Approach for Aporrectodea caliginosa"
 subtitle: "Supplementary information"
 lang: eng
 format:
@@ -320,24 +320,24 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 | Parameter | A_FLYw | B_FLYe | C_CWYe | D_CWKe | E_CLYe | F_CLKe | G_FLKe | H_FWKe |
 |----|----|----|----|----|----|----|----|----|
-| $\{\dot p_{Am}\}$ | 65.7 \newline [56.2 ; 104.8] | 40.0 \newline [40.0 ; 40.9] | 145.6 \newline [120.5 ; 179.4] | 274.5 \newline [245.7 ; 287.1] | 155.0 \newline [109.8 ; 171.0] | 256.9 \newline [229.9 ; 268.7] | 302.5 \newline [274.4 ; 329.2] | 281.3 \newline [253.5 ; 319.8] |
-| $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 0.94 \newline [0.79 ; 1.10] | 0.10 \newline [0.10 ; 0.14] | 0.75 \newline [0.63 ; 0.91] | 0.61 \newline [0.53 ; 0.66] | 0.75 \newline [0.63 ; 0.93] | 0.57 \newline [0.47 ; 0.59] | 0.84 \newline [0.81 ; 0.88] | 0.89 \newline [0.84 ; 0.92] |
-| $\{\dot{F}_m\}$ or $[\dot{F}_m]$ | 0.99 \newline [0.89 ; 1.00] | 1.00 \newline [0.99 ; 1.00] | 0.00012 \newline [0.00014 ; 0.91] | 0.78 \newline [0.28 ; 0.99] | 0.00021 \newline [0.00028 ; 0.99] | 0.87 \newline [0.42 ; 0.99] | 0.35 \newline [0.30 ; 0.99] | 0.55 \newline [0.22 ; 0.98] |
-| $r_{OM}$ | 0.300 \newline [0.266 ; 0.300] | 0.071 \newline [0.052 ; 0.093] | 0.00049 \newline [0.00025 ; 0.249] | 0.0195 \newline [0.0157 ; 0.0238] | 0.00018 \newline [0.00003 ; 0.270] | 0.0140 \newline [0.0114 ; 0.0183] | 0.0126 \newline [0.0081 ; 0.0206] | 0.0119 \newline [0.0029 ; 0.0197] |
-| $K$ | NA | NA | NA | 0.0087 \newline [0.0033 ; 0.0125] | NA | 0.0154 \newline [0.0075 ; 0.0207] | 0.0034 \newline [0.0027 ; 0.0110] | 0.0022 \newline [0.00087 ; 0.0051] |
-| $v$ | 0.183 \newline [0.149 ; 0.221] | 0.178 \newline [0.149 ; 0.222] | 0.0010 \newline [0.0010 ; 0.0012] | 0.245 \newline [0.212 ; 0.270] | 0.0010 \newline [0.0010 ; 0.0012] | 0.239 \newline [0.203 ; 0.262] | 0.232 \newline [0.211 ; 0.271] | 0.226 \newline [0.205 ; 0.267] |
-| $\kappa$ | 0.94 \newline [0.84 ; 1.00] | 0.17 \newline [0.05 ; 0.25] | NA | NA | NA | NA | 0.97 \newline [0.96 ; 0.98] | 0.97 \newline [0.96 ; 0.98] |
-| $\kappa_J$ | NA | NA | 0.81 \newline [0.73 ; 0.83] | 0.98 \newline [0.97 ; 0.99] | 0.80 \newline [0.71 ; 0.83] | 0.98 \newline [0.97 ; 0.98] | NA | NA |
-| $\kappa_A$ | NA | NA | 0.20 \newline [0.11 ; 0.26] | 0.65 \newline [0.57 ; 0.69] | 0.16 \newline [0.11 ; 0.24] | 0.65 \newline [0.54 ; 0.67] | NA | NA |
-| $\tau$ | NA | NA | 13.3 \newline [9.6 ; 21.7] | 11.5 \newline [5.6 ; 19.3] | 14.6 \newline [9.3 ; 21.5] | 13.0 \newline [7.3 ; 20.0] | NA | NA |
-| $E_h^p$ | 107.3 \newline [60.8 ; 138.8] | 30.4 \newline [27.3 ; 34.9] | 20.9 \newline [20.1 ; 30.7] | 90.9 \newline [54.6 ; 123.4] | 21.8 \newline [20.1 ; 34.6] | 88.6 \newline [63.3 ; 122.5] | 111.4 \newline [74.2 ; 147.8] | 110.5 \newline [76.9 ; 146.8] |
-| $E_{coc}$ | 30.0 \newline [18.6 ; 41.8] | 1.0 \newline [1.0 ; 1.0] | 5.9 \newline [4.3 ; 8.7] | 66.6 \newline [58.5 ; 75.1] | 7.1 \newline [4.3 ; 8.7] | 60.4 \newline [55.6 ; 70.9] | 6.3 \newline [3.5 ; 8.2] | 6.6 \newline [4.1 ; 9.3] |
-| $d_V$ | 0.99 \newline [0.90 ; 1.10] | 0.67 \newline [0.58 ; 0.75] | 0.92 \newline [0.86 ; 1.06] | 1.24 \newline [1.16 ; 1.33] | 0.99 \newline [0.86 ; 1.06] | 1.23 \newline [1.14 ; 1.31] | 1.15 \newline [1.04 ; 1.22] | 1.12 \newline [1.03 ; 1.20] |
-| $d_E$ | NA | 1.10e-09 \newline [1.13e-09 ; 7.84e-07] | 1.13e-09 \newline [1.04e-09 ; 1.23e-08] | 1.13e-09 \newline [1.13e-09 ; 6.15e-07] | 1.01e-09 \newline [1.04e-09 ; 1.57e-08] | 1.01e-09 \newline [1.18e-09 ; 1.12e-06] | 1.31e-09 \newline [1.18e-09 ; 8.64e-07] | 1.10e-09 \newline [1.22e-09 ; 8.41e-07] |
-| $w_E$ | 717.5 \newline [572.4 ; 989.6] | NA | NA | NA | NA | NA | NA | NA |
-| $\sigma_W$ | 0.33 \newline [0.29 ; 0.37] | 0.62 \newline [0.56 ; 0.70] | 0.63 \newline [0.56 ; 0.70] | 0.085 \newline [0.077 ; 0.101] | 0.60 \newline [0.56 ; 0.70] | 0.079 \newline [0.070 ; 0.090] | 0.13 \newline [0.11 ; 0.16] | 0.16 \newline [0.14 ; 0.20] |
-| Log-likelihood | -15758.95 | -433.65 | -272.6 | 23.49 | -272.01 | 39.6 | -17.32 | -61.96 |
-| BIC | 31574.14 | 923.53 | 612.69 | 26.14 | 611.5 | -6.09 | 96.5 | 185.79 |
+| $\{\dot p_{Am}\}$ | 215.8 \newline [207.6 ; 222.6] | 129.5 \newline [116.2 ; 155.3] | 52.0 \newline [49.9 ; 60.2] | 259.0 \newline [237.6 ; 280.0] | 135.3 \newline [109.0 ; 157.5] | 228.1 \newline [206.0 ; 245.5] | 297.3 \newline [268.2 ; 316.8] | 302.3 \newline [268.3 ; 329.4] |
+| $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 0.855 \newline [0.786 ; 0.879] | 0.655 \newline [0.451 ; 0.697] | 0.244 \newline [0.161 ; 0.359] | 0.630 \newline [0.548 ; 0.688] | 0.593 \newline [0.429 ; 0.695] | 0.550 \newline [0.444 ; 0.613] | 0.891 \newline [0.849 ; 0.919] | 0.917 \newline [0.865 ; 0.949] |
+| $\{\dot{F}_m\}$ or $[\dot{F}_m]$ | 9.992 \newline [9.85 ; 9.999] | 8.571 \newline [7.098 ; 9.907] | 9.978 \newline [9.55 ; 9.996] | 6.921 \newline [4.076 ; 8.939] | 9.007 \newline [6.712 ; 9.919] | 6.335 \newline [4.532 ; 7.937] | 8.832 \newline [6.803 ; 9.931] | 9.666 \newline [5.545 ; 9.956] |
+| $r_{OM}$ | 0.052 \newline [0.044 ; 0.061] | 0.000 \newline [0 ; 0.01] | 0.000 \newline [0 ; 0.047] | 0.020 \newline [0.017 ; 0.025] | 0.000 \newline [0 ; 0.009] | 0.015 \newline [0.012 ; 0.019] | 0.017 \newline [0.011 ; 0.025] | 0.021 \newline [0.011 ; 0.027] |
+| $K$ | NA | NA | NA | 0.078 \newline [0.047 ; 0.108] | NA | 0.138 \newline [0.099 ; 0.196] | 0.095 \newline [0.069 ; 0.140] | 0.058 \newline [0.028 ; 0.074] |
+| $v$ | 0.197 \newline [0.168 ; 0.236] | 0.181 \newline [0.149 ; 0.221] | 0.183 \newline [0.143 ; 0.221] | 0.243 \newline [0.208 ; 0.266] | 0.191 \newline [0.142 ; 0.217] | 0.226 \newline [0.199 ; 0.259] | 0.244 \newline [0.210 ; 0.270] | 0.252 \newline [0.211 ; 0.273] |
+| $\kappa$ | 0.663 \newline [0.601 ; 0.715] | 0.595 \newline [0.522 ; 0.749] | NA | NA | NA | NA | 0.983 \newline [0.968 ; 0.985] | 0.983 \newline [0.964 ; 0.987] |
+| $\kappa_J$ | NA | NA | 0.644 \newline [0.588 ; 0.690] | 0.979 \newline [0.969 ; 0.986] | 0.665 \newline [0.556 ; 0.824] | 0.974 \newline [0.966 ; 0.986] | NA | NA |
+| $\kappa_A$ | NA | NA | 0.037 \newline [0.008 ; 0.296] | 0.643 \newline [0.563 ; 0.703] | 0.698 \newline [0.535 ; 0.808] | 0.594 \newline [0.489 ; 0.656] | NA | NA |
+| $\tau$ | NA | NA | 6.57 \newline [0.81 ; 14.42] | 9.66 \newline [5.43 ; 19.19] | 6.20 \newline [1.25 ; 14.22] | 11.38 \newline [7.72 ; 20.94] | NA | NA |
+| $E_h^p$ | 20.08 \newline [20.01 ; 20.92] | 60.48 \newline [45.06 ; 73.77] | 20.54 \newline [20.04 ; 24.60] | 97.62 \newline [60.88 ; 133.57] | 58.90 \newline [32.12 ; 75.64] | 109.42 \newline [57.66 ; 131.18] | 94.81 \newline [78.21 ; 145.66] | 93.30 \newline [68.62 ; 147.29] |
+| $E_{coc}$ | 1.001 \newline [1.001 ; 1.097] | 1.055 \newline [1.009 ; 1.606] | 1.023 \newline [1.001 ; 1.103] | 68.42 \newline [58.39 ; 75.54] | 1.104 \newline [1.006 ; 1.936] | 65.34 \newline [57.72 ; 73.80] | 3.937 \newline [3.342 ; 7.589] | 4.082 \newline [3.161 ; 9.281] |
+| $d_V$ | 0.983 \newline [0.903 ; 1.099] | 0.993 \newline [0.910 ; 1.097] | 1.048 \newline [0.966 ; 1.162] | 1.220 \newline [1.147 ; 1.317] | 0.976 \newline [0.906 ; 1.103] | 1.223 \newline [1.138 ; 1.306] | 1.116 \newline [1.042 ; 1.224] | 1.119 \newline [1.040 ; 1.223] |
+| $d_E$ | NA | 1.2.e-9 \newline [1.3e-9 ; 4.1e-6] | 1.9e-9 \newline [1.0e-9 ; 8.6e-7] | 1.1e-9 \newline [1.1e-9 ; 5.7e-7] | 1.0e-9 \newline [1.2e-9 ; 3.5e-6] | 1.1e-9 \newline [1.3e-6 ; 1.4e-6] | 1.0e-9 \newline [1.2e-9 ; 1.0e-6] | 2.1e-9 \newline [1.2e-9 ; 7.6e-7] |
+| $w_E$ | 310.3 \newline [216.5 ; 383.8] | NA | NA | NA | NA | NA | NA | NA |
+| $\sigma_W$ | 0.183 \newline [0.164 ; 0.214] | 0.617 \newline [0.548 ; 0.691] | 0.610 \newline [0.551 ; 0.698] | 0.088 \newline [0.077 ; 0.100] | 0.588 \newline [0.545 ; 0.686] | 0.078 \newline [0.068 ; 0.089] | 0.125 \newline [0.110 ; 0.151] | 0.140 \newline [0.124 ; 0.178] |
+| Log-likelihood | -92.01 | -251.04 | -264.75 | 23.79 | -250.42 | 52.21 | -20.41 | -53.61 |
+| BIC | 240.26 | 558.33 | 596.99 | 25.54 | 568.33 | -31.31 | 102.69 | 169.09 |
 
 : Estimate summary of each models and their respective log-likelihood and BIC.
 :::
@@ -349,3 +349,60 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 ![Observed and predicted growth trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\kappa_A$, dark blue lines). Solid lines correspond to estimated model trajectories with transparent ribbons corresponding to the 95% credibilitty intervals. Transparent points represent observations from the juvenile stage, whereas filled points represent observations from the adult stage.](../../fig/DEB_Models/Y_IsolatedAdults_trajW.png){fig-scap="Observed and predicted growth trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\\kappa_A$, dark blue lines)."}
 
 ![Observed and predicted reproduction trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\kappa_A$, dark blue lines). Solid lines correspond to estimated model trajectories with transparent ribbons corresponding to the 95% credibilitty intervals. Transparent points represent observations from the juvenile stage, whereas filled points represent observations from the adult stage.](../../fig/DEB_Models/Y_IsolatedAdults_trajR.png){fig-scap="Observed and predicted reproduction trajectories for isolated adults simulated with the retained model (CWKe) under formulations with either a constant juvenile allocation fraction ($\\kappa_J$, light blue lines) or a transition toward an adult allocation fraction ($\\kappa_A$, dark blue lines)."}
+
+# Trends over environmental conditions
+
+### Trends over experimental conditions
+
+$$
+\begin{aligned}
+\text{Fold} = 
+\begin{cases}
+Y_{Observed} \geq Y_{Predicted}, &\frac{Y_{Observed}}{Y_{Predicted}} \\
+Y_{Observed} < Y_{Predicted}, &\frac{Y_{Predicted}}{Y_{Observed}}
+\end{cases}
+\end{aligned}
+$$
+
+| Experimental temperature (°C) | Mean fold for weight | Mean residual for weight |
+|----|----|----|
+| 15 | 1.21 | 0.00255 |
+| 18 | 1.28 | -0.0495 |
+
+: Quality of fit and its bias according to experimental temperature. {#tbl-chap3SIQualFitTemp}
+
+| Density (#/cosm) | Mean fold for weight | Mean residual for weight | Mean residual for reproduction |
+|----|----|----|----|
+| 1 | Juvenile | 1.24 | 0.00140 |
+| 2 | Juvenile | 1.30 | 0.0400 |
+| 2 | Adult | 1.14 | -0.0826 |
+| 5 | Juvenile | 1.39 | -0.0765 |
+| 5 | Adult | 1.25 | -0.153 |
+| 7 | Juvenile | 1.55 | -0.0711 |
+| Grouped after puberty | Adult | 1.12 | -0.00356 |
+
+: Quality of fit and its bias according to the number of individuals in the cosm and their observed developmental status. {#tbl-chap3SIQualFitDen}
+
+| OM from horse dung (%/ind/14 d) | Mean fold for weight | Mean residual for weight | Mean residual for reproduction |
+|----|----|----|----|
+| 0.19 | Juvenile | 1.55 | -0.0711 |
+| 0.22 | Juvenile | 1.38 | 0.0306 |
+| 0.22 | Adult | 1.13 | 0.0931 |
+| 0.27 | Juvenile | 1.39 | -0.0765 |
+| 0.27 | Adult | 1.25 | -0.153 |
+| 0.34 | Juvenile | 1.09 | -0.0123 |
+| 0.67 | Juvenile | 1.23 | -0.00205 |
+| 0.67 | Adult | 1.13 | -0.123 |
+| 1.3 | Juvenile | 1.28 | 0.0159 |
+| 1.3 | Adult | 1.09 | -0.000815 |
+| 0 or 0.67 | Juvenile | 1.19 | -0.00290 |
+
+: Quality of fit and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms. {#tbl-chap3SIQualFitFood}
+
+# Sensitivity analysis of best model
+
+![**Global Sobol sensitivity analysis of the retained DEB model including temperature-related parameters.** Total-order sensitivity indices are shown for body mass, reserve energy, maturity, reproduction, and total organic matter remaining in the cosm. Endpoints were evaluated at the juvenile stage ($t = 50$ days) and adult stage ($t = 140$ days) using the Gollot2026_D2 simulation scenario (two earthworm per cosm with moderate food). Higher indices indicate a greater contribution of the parameter, including both its direct effect and its interactions with other parameters. 30,000 simulations (Nsim) and 1,000 bootstrap replicates (Nboot) were used.](../../fig/AS/AS_SobolJansen30000_TotalIndex_perparamendpoint_noT.png){fig-scap="Global Sobol sensitivity analysis of the retained DEB model including temperature-related parameters."}
+
+![**Global Sobol sensitivity analysis of the retained DEB model excluding temperature-related parameters.** Total-order sensitivity indices are shown for body mass, reserve energy, maturity, reproduction, and total organic matter remaining in the cosm. Endpoints were evaluated at the juvenile stage ($t = 50$ days) and adult stage ($t = 140$ days) using the Gollot2026_D2 simulation scenario (two earthworm per cosm with moderate food). Excluding thermal parameters allowed the relative influence of physiological, ingestion-related, and allocation parameters to be examined independently of temperature correction. 30,000 simulations (Nsim) and 1,000 bootstrap replicates (Nboot) were used.](../../fig/AS/AS_SobolJansen30000_TotalIndex_perparamendpoint_noT.png){fig-scap="Global Sobol sensitivity analysis of the retained DEB model excluding temperature-related parameters."}
+
+![**Comparison of first-order and total-order Sobol sensitivity indices for the retained DEB model.** First-order indices represent the direct contribution of each parameter to output variance, whereas total-order indices include both direct effects and interactions with other parameters. Error bars represent 95% confidence intervals obtained from 1,000 bootstrap replicates (Nboot) and 30,000 simulations (Nsim).](../../fig/AS/AS_SobolJansen30000_indexcomparison_noT.png){fig-scap="Comparison of first-order and total-order Sobol sensitivity indices for the retained DEB model."}

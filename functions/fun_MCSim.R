@@ -2364,7 +2364,7 @@ f_MCSim_ind <- function(path_mod){
 }
 
 
-f_AS_Sobol_design <- function(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, Nout, l_params_median, Temperature_bol){
+f_AS_Sobol_design <- function(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, l_params_median, Temperature_bol){
   
   # Nb_sim : Number of simulations
   # Nboot : Number of replicates
@@ -2429,62 +2429,229 @@ f_AS_Sobol_design <- function(Sobol_type, seed, Nb_sim, CV, Processors, Nboot, N
   )
 }
 
-f_AS_Sobol_index <- function(df_AS_sim, Sobol_info){
+# f_AS_Sobol_index <- function(df_AS_sim, Sobol_info){
+#   
+#   df_AS_sim_mean <- df_AS_sim |> 
+#     summarise(
+#       across(
+#         .cols = is.numeric, 
+#         .fns = list(Mean = mean),
+#         na.rm = TRUE,
+#         .names = "{col}"
+#       )
+#     )
+#   
+#   df_AS_sim <- df_AS_sim |>
+#     mutate(
+#       Weight_Juv = as.numeric(Weight_Juv),
+#       across(
+#         c(
+#           Weight_Juv, Weight_Adult,
+#           Energy_Juv, Energy_Adult,
+#           Maturity_Juv, Maturity_Adult,
+#           Reproduction, Organic_matter
+#         ),
+#         ~ coalesce(.x, df_AS_sim_mean[[cur_column()]][1])
+#       )
+#     )
+#   
+#   # Sobol calculations
+#   
+#   Nb_out <- length(df_AS_sim)
+#   df_res <- data.frame()  # liste vide
+#   
+#   for (i in seq_along(df_AS_sim)) {
+#     
+#     Y <- dplyr::pull(df_AS_sim, i)
+#     tell(x = Sobol_info, y = Y, nboot =  Nboot, conf = 0.95)
+#     
+#     df_res_i <- data.frame(
+#       Variable = colnames(df_AS_sim)[i],
+#       FOI = Sobol_info$S[,1],
+#       FOI.borninf = Sobol_info$S[,4],
+#       FOI.bornsup = Sobol_info$S[,5],
+#       TI = Sobol_info$T[,1],
+#       TI.borninf = Sobol_info$T[,4],
+#       TI.bornsup = Sobol_info$T[,5]
+#     )
+#     
+#     df_res <- rbind(df_res, df_res_i)
+#   }
+#   
+#   df_res <- df_res %>%
+#     mutate(Parameter = rep(rownames(Sobol_info$S), Nb_out)) %>%
+#     arrange(desc(TI))
+#   
+#   return(df_res)
+# }
+
+f_AS_Sobol_index <- function(
+    df_AS_sim,
+    Sobol_info,
+    l_sim_fail = integer()
+) {
   
-  df_AS_sim_mean <- df_AS_sim |> 
-    summarise(
-      across(
-        .cols = is.numeric, 
-        .fns = list(Mean = mean),
-        na.rm = TRUE,
-        .names = "{col}"
-      )
-    )
+  # Dimensions du plan Jansen
+  n <- nrow(Sobol_info$X1)
+  p <- ncol(Sobol_info$X1)
   
-  df_AS_sim <- df_AS_sim |>
-    mutate(
-      Weight_Juv = as.numeric(Weight_Juv),
-      across(
-        c(
-          Weight_Juv, Weight_Adult,
-          Energy_Juv, Energy_Adult,
-          Maturity_Juv, Maturity_Adult,
-          Reproduction, Organic_matter
-        ),
-        ~ coalesce(.x, df_AS_sim_mean[[cur_column()]][1])
-      )
-    )
+  n_expected <- n * (p + 2L)
   
-  # Sobol calculations
+  # Numéros des simulations échouées
+  l_sim_fail <- sort(unique(as.integer(l_sim_fail)))
   
-  Nb_out <- length(df_AS_sim)
-  df_res <- data.frame()  # liste vide
-  
-  for (i in seq_along(df_AS_sim)) {
-    
-    Y <- dplyr::pull(df_AS_sim, i)
-    tell(x = Sobol_info, y = Y, nboot =  Nboot, conf = 0.95)
-    
-    df_res_i <- data.frame(
-      Variable = colnames(df_AS_sim)[i],
-      FOI = Sobol_info$S[,1],
-      FOI.borninf = Sobol_info$S[,4],
-      FOI.bornsup = Sobol_info$S[,5],
-      TI = Sobol_info$T[,1],
-      TI.borninf = Sobol_info$T[,4],
-      TI.bornsup = Sobol_info$T[,5]
-    )
-    
-    df_res <- rbind(df_res, df_res_i)
+  if (anyNA(l_sim_fail)) {
+    stop("l_sim_fail contains NA(s).")
   }
   
-  df_res <- df_res %>%
-    mutate(Parameter = rep(rownames(Sobol_info$S), Nb_out)) %>%
-    arrange(desc(TI))
+  if (any(l_sim_fail < 1L | l_sim_fail > n_expected)) {
+    stop(
+      "Numbers of l_sim_fail must be in the range 1 to ",
+      n_expected, "."
+    )
+  }
   
-  return(df_res)
+  if (nrow(df_AS_sim) + length(l_sim_fail) != n_expected) {
+    stop(
+      "Incoherence between outputs and l_sim_fail :\n",
+      "- Outputs expected : ", n_expected, "\n",
+      "- Outputs present : ", nrow(df_AS_sim), "\n",
+      "- Declared failed simulations : ", length(l_sim_fail)
+    )
+  }
+  
+  # Conversion des sorties en numérique
+  df_AS_sim <- df_AS_sim |>
+    mutate(
+      across(
+        everything(),
+        ~ suppressWarnings(as.numeric(.x))
+      )
+    )
+  
+  # Reconstruction du tableau complet avec NA aux positions échouées
+  Y_full <- matrix(
+    NA_real_,
+    nrow = n_expected,
+    ncol = ncol(df_AS_sim),
+    dimnames = list(NULL, names(df_AS_sim))
+  )
+  
+  positions_ok <- setdiff(
+    seq_len(n_expected),
+    l_sim_fail
+  )
+  
+  Y_full[positions_ok, ] <- as.matrix(df_AS_sim)
+  
+  # Ligne de base correspondant à chaque simulation échouée
+  # Exemple avec n = 30000 :
+  # 1, 30001, 60001... correspondent à la même ligne de base
+  base_rows_fail <- if (length(l_sim_fail) > 0L) {
+    sort(unique((l_sim_fail - 1L) %% n + 1L))
+  } else {
+    integer()
+  }
+  
+  base_rows_keep <- setdiff(
+    seq_len(n),
+    base_rows_fail
+  )
+  
+  # Positions à conserver dans chacun des p + 2 blocs
+  positions_keep <- unlist(
+    lapply(
+      0:(p + 1L),
+      function(block) block * n + base_rows_keep
+    ),
+    use.names = FALSE
+  )
+  
+  Y_reduced <- Y_full[
+    positions_keep,
+    ,
+    drop = FALSE
+  ]
+  
+  # Éventuels NA restants dans des sorties présentes
+  # Ils sont remplacés par la moyenne de la sortie concernée
+  for (j in seq_len(ncol(Y_reduced))) {
+    
+    bad <- !is.finite(Y_reduced[, j])
+    
+    if (all(bad)) {
+      stop(
+        "No finite value for the output ",
+        colnames(Y_reduced)[j], "."
+      )
+    }
+    
+    if (any(bad)) {
+      Y_reduced[bad, j] <- mean(
+        Y_reduced[!bad, j],
+        na.rm = TRUE
+      )
+    }
+  }
+  
+  # Reconstruction du plan Sobol avec les lignes complètes uniquement
+  Sobol_reduced <- sensitivity::soboljansen(
+    model = NULL,
+    X1 = Sobol_info$X1[
+      base_rows_keep,
+      ,
+      drop = FALSE
+    ],
+    X2 = Sobol_info$X2[
+      base_rows_keep,
+      ,
+      drop = FALSE
+    ],
+    nboot = Sobol_info$nboot,
+    conf = Sobol_info$conf
+  )
+  
+  message(
+    length(l_sim_fail), " Failed simulations ; ",
+    length(base_rows_fail), " Sobol lines deleted ; ",
+    length(base_rows_keep), " lines kept out of ", n, "."
+  )
+  
+  # Calcul des indices
+  Nb_out <- ncol(Y_reduced)
+  l_res <- vector("list", Nb_out)
+  
+  for (i in seq_len(Nb_out)) {
+    
+    Y <- Y_reduced[, i]
+    
+    # Copie indépendante pour chaque sortie
+    Sobol_i <- Sobol_reduced
+    
+    tell(
+      Sobol_i,
+      y = Y
+    )
+    
+    l_res[[i]] <- data.frame(
+      Variable = colnames(Y_reduced)[i],
+      Parameter = rownames(Sobol_i$S),
+      
+      FOI = Sobol_i$S[, 1],
+      FOI.borninf = Sobol_i$S[, 4],
+      FOI.bornsup = Sobol_i$S[, 5],
+      
+      TI = Sobol_i$T[, 1],
+      TI.borninf = Sobol_i$T[, 4],
+      TI.bornsup = Sobol_i$T[, 5]
+    )
+  }
+  
+  res <- dplyr::bind_rows(l_res) |>
+    arrange(Variable, desc(TI))
+  
+  return(res)
 }
-
 
 ## DEB-TKTD ----
 
@@ -2560,6 +2727,7 @@ f_import_data_DEBTKTD <- function() {
     mutate(
       Time = t,
       Weight = w_tot/Nb_ind/1000, # conversion in g
+      Dose = Dose * 1000, # mg/kg to ng/g
       Reproduction = case_when(
         Time == 0 ~ 0,
         Time == 28 ~ Nb_cocoons

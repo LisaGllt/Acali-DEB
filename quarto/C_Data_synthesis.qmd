@@ -646,7 +646,7 @@ df_XP3_mean <- df_XP3_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 3 from @bart_2019d.
+#| fig-cap: Experiment 3 from @bart_2019.
 #| label: fig-XP3_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -936,7 +936,7 @@ df_XP4_2_mean <- df_XP4_2_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 4_1 from @bart_2019d.
+#| fig-cap: Experiment 4_1 from @bart_2019.
 #| label: fig-XP4_1_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -1034,7 +1034,7 @@ p
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 4_2 from @bart_2019d.
+#| fig-cap: Experiment 4_2 from @bart_2019.
 #| label: fig-XP4_2_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -1196,7 +1196,7 @@ df_XP5_mean <- df_XP5_mean |>
 ```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Experiment 5 from @bart_2019d.
+#| fig-cap: Experiment 5 from @bart_2019.
 #| label: fig-XP5_mean
 #| fig-height: 8
 #| fig-width: 6
@@ -2081,4 +2081,4 @@ write.csv(df_DEB_mean,file = here::here("data/Data_DEB_mean.csv"))
 
 ## Usefull data from litterature
 
-An estimate of cocoon energy content was required to parameterize the reproduction in the DEB model for *A. caliginosa*. Direct measurements of cocoon energy density are not available for this species. We therefore relied on published calorimetric data for *Lumbricidae* reported by @cummins_1971, who measured the energy density of whole individuals (“entire animals of various stages”). Mean energy densities were 5,690 cal g⁻¹ dry weight (n = 3), corresponding to 19,098 J g-1 dry weight, and 782 cal g-1 wet weight (n = 1), corresponding to 3,268 J g-1 wet weight. Although these measurements were not performed on cocoons specifically, they provide an order-of-magnitude estimate for annelid biomass energy density. Assuming a mean cocoon fresh mass of 10 mg, this corresponds to an energy content of approximately 33 J per cocoon (based on wet weight energy density). Comparable energy densities have been reported for soil invertebrates in other calorimetric studies (e.g. @driver_1974, @eggleton_2004), supporting the use of this approximation for the model prior on the energy of an egg.
+An estimate of cocoon energy content was required to parameterize the reproduction in the DEB model for *A. caliginosa*. Direct measurements of cocoon energy density are not available for this species. We therefore relied on published calorimetric data for *Lumbricidae* reported by @cumminns_1971, who measured the energy density of whole individuals (“entire animals of various stages”). Mean energy densities were 5,690 cal g⁻¹ dry weight (n = 3), corresponding to 19,098 J g-1 dry weight, and 782 cal g-1 wet weight (n = 1), corresponding to 3,268 J g-1 wet weight. Although these measurements were not performed on cocoons specifically, they provide an order-of-magnitude estimate for annelid biomass energy density. Assuming a mean cocoon fresh mass of 10 mg, this corresponds to an energy content of approximately 33 J per cocoon (based on wet weight energy density). Comparable energy densities have been reported for soil invertebrates in other calorimetric studies (e.g. @driver_1974, @eggleton_2004), supporting the use of this approximation for the model prior on the energy of an egg.

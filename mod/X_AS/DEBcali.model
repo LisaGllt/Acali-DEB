@@ -61,7 +61,7 @@ K = 0.1;                # Slope of functional threshold (K model)
 kap = 0.4373;           # allocation fraction to soma (-)
 kapJ;                   # allocation fraction to soma for juveniles (-) (model A)
 kapA;                   # allocation fraction to soma for grouped adults (-) (model A)
-tau;                    # transition time between kapJ and kapA (d) (model A)
+tau = 9.65631;                    # transition time between kapJ and kapA (d) (model A)
 
 # Maintenance and growth
 pM = 1680.1;               # [p_M], vol-spec somatic maint (J/d.cm^3)
@@ -69,8 +69,8 @@ pT = 0;                    # {p_T}, surf-spec somatic maint (J/d.cm^2)
 Eg = 4183;  # 6880.33;     # [E_G], spec cost for structure (J/cm^3)
 Shape = 0.066193;          # shape coefficient (-)
 dv = 1;                    # Structure density (g/cm^3) (models w & e)
-wE;                        # Energy density of reserve (g/J) (model e)
-de = 27.24;                # Contribution of reserve to body weight (g/cm^3) (model w)
+wE;                        # Energy density of reserve (g/J) (model w)
+de = 27.24;                # Contribution of reserve to body weight (g/cm^3) (model e)
 wv = 6.72;                 # Contribution of water replacement to body fresh weight (g/cm^3) (model w)
 
 # Maturity
@@ -145,9 +145,9 @@ Dynamics{
       
       # kapreal = kap; #(Model F)
       
-      dt(z) = (Eh >= Ehp ? 1 : 0);                          #(Model A)
-      x = (z/tau > 1 ? 1 : z/tau);                            #(Model A)
-      kapAreal = x * kapA + (1-x) * kapJ;                      #(Model A)
+      dt(z) = (Eh >= Ehp ? 1 : 0);                                #(Model A)
+      x = (z/tau > 1 ? 1 : z/tau);                                #(Model A)
+      kapAreal = x * kapA + (1-x) * kapJ;                         #(Model A)
       kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ)); #(Model A)
 
       pM = r_pAm_pM * pAm;
@@ -171,9 +171,14 @@ Dynamics{
       # Type_Fm = pow(L,2); #(Model L)
       
       # Energy ingested by the earthworm per day (J/d)
-      Qf_soil_calc  = Fm * Type_Fm*(muOM * rOM_ClxHorse * OM_soil/Dens); 
-      Qf_horse_calc = Fm * Type_Fm*(muOM                * OM_horse/Dens);   
-      Qf_calc = Qf_soil_calc + Qf_horse_calc;
+      
+      Qfmatter = Fm * Type_Fm;                             # (g/d of matter)
+      QfOMsoil = Qfmatter * OM_soil/(Dens * WeightSoilCosm);   # (g/d of OM from soil)
+      QfOMhorse = Qfmatter * OM_horse/(Dens * WeightSoilCosm); # (g/d of OM from horse)
+      
+      Qf_soil_calc  = QfOMsoil  * muOM * rOM_ClxHorse;     # (J/d)
+      Qf_horse_calc = QfOMhorse * muOM;                    # (J/d)
+      Qf_calc = Qf_soil_calc + Qf_horse_calc;              # (J/d)
       
       # Because Qf cannot be superior to Qfmax :
       Qf_soil  = (Qf_calc > Qfmax ? (Qfmax*OM_soil  /(OM_soil + OM_horse)) : Qf_soil_calc);

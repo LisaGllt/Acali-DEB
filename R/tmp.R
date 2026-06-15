@@ -6,6 +6,154 @@ col_Molecule <- rev(col_Molecule)
 pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
 lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
+
+
+Molec <- "IMD"
+path_fig <- here::here("fig/DEBTKTD_Models")
+
+path_E_IMD_A <- here::here("mod/Z_DEB-TKTD/IMD/Test_IMD")
+
+df_data_fit_IMD <- f_import_data_DEBTKTD() |> 
+  filter(Molecule == Molec) |> 
+  mutate(No_sim = case_when(
+    Experiment_type == "Repro" ~ No_sim+11,
+    .default = No_sim
+  ))
+
+
+{
+df_sim <- f_MCSim_read_sim(file.path(path_E_IMD_A, "sim.out"))
+
+pW <- ggplot()+
+  geom_line(
+    data = df_sim,
+    aes(
+      x = Time, 
+      y = Weight
+    ),
+    color = Nord_frost[2]
+  )+
+  geom_point(
+    data = df_data_fit_IMD,
+    aes(
+      x = Time, 
+      y = Weight
+    )
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+pR <- ggplot()+
+  geom_line(
+    data = df_sim,
+    aes(
+      x = Time, 
+      y = Reproduction
+    ),
+    color = Nord_frost[2]
+  )+
+  geom_point(
+    data = df_data_fit_IMD,
+    aes(
+      x = Time, 
+      y = Reproduction
+    )
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+
+pS <- ggplot()+
+  geom_line(
+    data = df_sim,
+    aes(
+      x = Time,
+      y = Stress
+    ),
+    color = Nord_frost[2]
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+p <- pW + pR + pS
+p
+  }
+
+
+
+
+Molec <- "EPX"
+path_fig <- here::here("fig/DEBTKTD_Models")
+
+path_E_EPX_A <- here::here("mod/Z_DEB-TKTD/EPX/Test_EPX")
+
+df_data_fit_EPX <- f_import_data_DEBTKTD() |> 
+  filter(Molecule == Molec) |> 
+  mutate(No_sim = case_when(
+    Experiment_type == "Repro" ~ No_sim+9,
+    .default = No_sim
+  ))
+
+{
+  df_sim <- f_MCSim_read_sim(file.path(path_E_EPX_A, "sim.out"))
+  
+  pW <- ggplot()+
+    geom_line(
+      data = df_sim,
+      aes(
+        x = Time, 
+        y = Weight
+      ),
+      color = Nord_frost[2]
+    )+
+    geom_point(
+      data = df_data_fit_EPX,
+      aes(
+        x = Time, 
+        y = Weight
+      )
+    )+
+    facet_wrap(~No_sim)+
+    theme_minimal()
+  
+  pR <- ggplot()+
+    geom_line(
+      data = df_sim,
+      aes(
+        x = Time, 
+        y = Reproduction
+      ),
+      color = Nord_frost[2]
+    )+
+    geom_point(
+      data = df_data_fit_EPX,
+      aes(
+        x = Time, 
+        y = Reproduction
+      )
+    )+
+    facet_wrap(~No_sim)+
+    theme_minimal()
+
+  
+  pS <- ggplot()+
+    geom_line(
+      data = df_sim,
+      aes(
+        x = Time, 
+        y = Stress
+      ),
+      color = Nord_frost[2]
+    )+
+    facet_wrap(~No_sim)+
+    theme_minimal()
+p <- pW + pR + pS
+p
+  }
+
+
+
+# EPX -----
+
 Molec <- "EPX"
 path_fig <- here::here("fig/DEBTKTD_Models")
 
