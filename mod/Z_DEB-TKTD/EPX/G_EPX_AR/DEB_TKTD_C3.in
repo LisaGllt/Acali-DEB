@@ -3,19 +3,20 @@ MCMC( "DEB_TKTD_C3.out",  # output file
       "",                # name of data file
       30000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
-      2212);               # random seed
+      2112);               # random seed
 
 Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
 Level{ # Global
     
 
+
 Distrib (nec,          TruncNormal_cv,                50000,     0.5, 100, 10000000);
-Distrib (b,            LogUniform,                0.0000001,          1);
+Distrib (b,            LogUniform,                0.0000001,          0.01);
 
 # Calcul des vraissemblances
 Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);
-Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W); 
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));
 
 Level{

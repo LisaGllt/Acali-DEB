@@ -72,7 +72,7 @@ rOM_ClxHorse = 0.0204226;     # Ratio of energy in 1 g of OM from soil vs 1 g of
 # Energy assimilation
 Fm = 6.92108;          # [F_m], max spec searching rate (g/d.g)
 kapX = 0.258;           # digestion efficiency of food to reserve (-)
-pAm = 259.032;          # {p_Am}, spec assimilation flux (J/d.cm^2)
+pAm = 339.695;          # {p_Am}, spec assimilation flux (J/d.cm^2)
 r_pAm_pM = 0.629551;     # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
 v = 0.243464;           # energy conductance (cm/d)
 
@@ -95,7 +95,7 @@ Ehp = 97.6156;           # maturity at puberty (J)
 kapH = 1;               # maturation efficiency (-)
 
 # Reproduction
-E_coc = 68.4189;  # Energy in a cocoon (J)
+E_coc = 60.8397;  # Energy in a cocoon (J)
 kapR = 0.475;     # reproduction efficiency (-)
 
 # Metabolic response to T
@@ -122,10 +122,15 @@ DT50 = 353.5;      # EPX Half-life in soil (days)
 
 # Effects
 kr = 1;  # Damage reparation constant (d-1)
-nec; # No-effect concentration for sublethal effects (ng/g)
+nec = 10000; # No-effect concentration for sublethal effects (ng/g)
 b;   # Tolerance concentration (ng/g)
 
+#log_b;
+#b = exp(log_b);
+
 Initialize{
+
+      #b = exp(log_b);
 
       kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapA : kapJ)); #(Model C)
       

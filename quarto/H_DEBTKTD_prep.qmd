@@ -1,0 +1,556 @@
+```{r lib, include = F}
+library(here)
+source(file = here::here("functions/fun.R"))
+source(file = here::here("functions/fun_MCSim.R"))
+f_load_libraries_colors()
+col_Molecule <- rev(col_Molecule)
+pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
+lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
+```
+
+# DEB-TKTD - Data and adjustments
+
+## Available data
+
+```{r}
+Condition_order <- c("Ctrl", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10")
+
+df_data_EC50 <- f_import_data_DEBTKTD() |> 
+  mutate(
+    #Condition = fct_reorder(Condition, Dose)
+    Condition = fct_relevel(Condition, Condition_order)
+  ) |> 
+  filter(!(Experiment_type == "Repro" & Time == 14))
+
+pWg <- ggplot(
+    data = df_data_EC50 |> filter(Experiment_type == "Growth"),
+    aes(
+      x = Time,
+      y = Weight,
+      color = Molecule
+    )
+  )+
+  geom_point(alpha = 0.7)+
+  geom_line(alpha = 0.5)+
+  facet_wrap(~Condition)+
+  scale_color_manual(
+    values = col_Molecule
+  )+
+  theme_minimal()
+
+pWr <- ggplot(
+    data = df_data_EC50 |> filter(Experiment_type == "Repro"),
+    aes(
+      x = Time,
+      y = Weight,
+      color = Molecule
+    )
+  )+
+  geom_point(alpha = 0.7)+
+  geom_line(alpha = 0.5)+
+  facet_wrap(~Condition)+
+  scale_color_manual(
+    values = col_Molecule
+  )+
+  theme_minimal()
+
+pRr <- ggplot(
+    data = df_data_EC50 |> filter(Experiment_type == "Repro"),
+    aes(
+      x = Time,
+      y = Reproduction,
+      color = Molecule
+    )
+  )+
+  geom_point(alpha = 0.7)+
+  geom_line(alpha = 0.5)+
+  facet_wrap(~Condition)+
+  scale_color_manual(
+    values = col_Molecule
+  )+
+  theme_minimal()
+
+```
+
+```{r}
+
+# faire des panels
+pWg
+pWr
+pRr
+```
+
+## Relationship between W, E, and Eh for juveniles
+
+The juvenile growth experiments were conducted with juvenile individuals housed individually in cosms containing 200 g of Closeaux soil, maintained at 18°C, and fed 3 g of horse dung per individual every 14 days. Individuals were exposed to a range of concentrations of either imidacloprid or epoxiconazole. In the DEB-TKTD model, the initial maturity of these individuals must be specified, although it was not and can not be directly measured. We therefore used a proxy based on the relationship between predicted body mass and predicted maturity obtained from the DEB model for the Gollot2026_dens_D5 experiment, which was conducted under the same experimental conditions as the culture from which these earthworms came from.
+
+```{r}
+path_D_CWKe <- here::here("mod/D_DEB_CWKe/W_Eh_relationship")
+
+MCMC_out_D_CWKe <- f_MCSim(path_D_CWKe)
+L_parameters_D_CWKe <- unique(MCMC_out_D_CWKe$Priors$Nom)
+
+Summary_res_D_CWKe <- 
+  as.data.frame(MCMC_out_D_CWKe$Summary_res)[1:length(L_parameters_D_CWKe)] |> 
+  mutate(Model = "D_CWKe") 
+
+Nb_experiment <- 1
+step_sim <- 0.05
+select_times <- seq(0,400, 0.1)
+
+Endpoints_print <- "Weight,
+    Maturity,
+    Energy"
+
+l_Experiment_D5 <- c("Gollot2026_dens_D5")
+
+l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full(
+  path_D_CWKe, l_Experiment_D5, 
+  Adults_alone = FALSE, OM_diff = TRUE, 
+  l_param_name_D_CWKe, step_sim, Endpoints_print
+  )
+
+# ./mcsim.DEBcali DEB_setpoint_full_1.in
+
+
+file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_CWKe)) {
+  df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
+} else {
+  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, Adults_alone = FALSE, l_Experiment_D5, Nb_experiment, select_times, step_sim, bol_Eh = TRUE)
+}
+
+df_pred_full_D_CWKe_wide <- df_pred_full_D_CWKe |> 
+  pivot_wider(
+    id_cols = Time,
+    names_from = Endpt, 
+    values_from = predict.endpoint
+    )
+
+```
+
+```{r}
+mod_RWEh <- lm(
+  Maturity ~ Weight + I(Weight^2), 
+  data = df_pred_full_D_CWKe_wide |> filter(Weight < 0.5)
+  )
+summary(mod_RWEh)
+
+c <- coef(mod_RWEh)[["(Intercept)"]]
+b <- coef(mod_RWEh)[["Weight"]]
+a <- coef(mod_RWEh)[["I(Weight^2)"]]
+
+equation <- paste0(
+  "Maturity = ", round(a, 3), " Weight² + ",
+  round(b, 3), " Weight + ",
+  round(c, 3)
+)
+
+equation
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Relationship between weight and maturity in the Gollot2026_dens_D1 experiment.
+#| label: fig-RWEh
+#| fig-height: 4
+#| fig-width: 6
+
+df_pred_full_D_CWKe_wide <- df_pred_full_D_CWKe_wide |>
+  mutate(
+    Maturity_pred = predict(
+      mod_RWEh, 
+      newdata = df_pred_full_D_CWKe_wide
+      )
+    )
+
+col_mod <- Nord_frost[4]
+
+p <- ggplot() +
+  geom_line(
+    data = df_pred_full_D_CWKe_wide,
+    aes(
+      x = Weight,
+      y = Maturity
+    ),
+    linewidth = 2,
+    linetype = "dotted",
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_pred_full_D_CWKe_wide,
+    aes(
+      x = Weight,
+      y = Maturity_pred
+    ),
+    color = col_mod,
+    linewidth = 1
+  )+
+  labs(
+    x = "Weight (g)",
+    y = "Maturity (J)",
+    title = "Relationship between Weight and Maturity",
+    subtitle = equation,
+    caption = "Experiment : Gollot2026_dens_D5"
+  )+
+  theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(color = col_mod)
+  )
+
+p
+
+```
+
+As the initial weight in this dataset range from 0.055 to 0.141 g, a relationship established for weights under 0.5 g is enough.
+
+```{r}
+mod_RWEn <- lm(
+  Energy ~ Weight + I(Weight^2) + I(Weight^3), 
+  data = df_pred_full_D_CWKe_wide |> filter(Weight < 0.2 & Weight > 0.05)
+  )
+summary(mod_RWEn)
+coef(mod_RWEn)
+
+c <- coef(mod_RWEn)[["(Intercept)"]]
+b <- coef(mod_RWEn)[["Weight"]]
+a <- coef(mod_RWEn)[["I(Weight^2)"]]
+
+equation <- paste0(
+  "Energy = ", round(a, 3), " Weight² + ",
+  round(b, 3), " Weight + ",
+  round(c, 3)
+)
+
+equation
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Relationship between weight and maturity in the Gollot2026_dens_D1 experiment.
+#| label: fig-RWEh
+#| fig-height: 4
+#| fig-width: 6
+
+df_pred_full_D_CWKe_wide <- df_pred_full_D_CWKe_wide |>
+  mutate(
+    Energy_pred = predict(
+      mod_RWEn, 
+      newdata = df_pred_full_D_CWKe_wide
+      )
+    )
+
+col_mod <- Nord_frost[4]
+
+p <- ggplot() +
+  geom_line(
+    data = df_pred_full_D_CWKe_wide |> filter(Weight < 0.2 & Weight > 0.05),
+    aes(
+      x = Weight,
+      y = Energy
+    ),
+    linewidth = 2,
+    linetype = "dotted",
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_pred_full_D_CWKe_wide |> filter(Weight < 0.2 & Weight > 0.05),
+    aes(
+      x = Weight,
+      y = Energy_pred
+    ),
+    color = col_mod,
+    linewidth = 1
+  )+
+  labs(
+    x = "Weight (g)",
+    y = "Energy in the reserve (J)",
+    title = "Relationship between Weight and Energy",
+    subtitle = equation,
+    caption = "Experiment : Gollot2026_dens_D5"
+  )+
+  theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(color = col_mod)
+  )
+
+p
+
+```
+
+For the initialisation of the energy in the reserve, we assume individuals were well fed in the culture and therefore the energy can be assumed to equal Em at the start of the experiment.
+
+## Ajustment of the DEB model to the new population
+
+```{r}
+path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+
+df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))
+
+df_data_Ctrl <- f_import_data_DEBTKTD() |> 
+  filter(Condition == "Ctrl") |> 
+  mutate(
+    No_sim = case_when(
+      Molecule == "EPX" & Experiment_type == "Growth" ~ 1,
+      Molecule == "EPX" & Experiment_type == "Repro" ~ 2,
+      Molecule == "IMD" & Experiment_type == "Growth" ~ 3,
+      Molecule == "IMD" & Experiment_type == "Repro" ~ 4
+    )
+  )
+
+pW <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Weight
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_old_DEB,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_frost[3]
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+pR <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Reproduction
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_old_DEB,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_frost[3]
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+p <- pW + pR
+p
+
+```
+
+### Refit
+
+We readjust some DEB parameter to better estimate the control individuals from these experiments.
+
+```{r}
+path_fig <- here::here("fig/DEBTKTD_Models")
+
+MCMC_out_DEB_refit <- f_MCSim(path_DEB_refit)
+
+NC_DEB_refit <- MCMC_out_DEB_refit$NC
+Nb_param_DEB_refit <- MCMC_out_DEB_refit$Nb_param
+Nb_experiment_DEB_refit <- MCMC_out_DEB_refit$Nb_experiment
+Nb_iter_kept_DEB_refit <- MCMC_out_DEB_refit$Nb_iter_kept
+N_iter_setpoint_DEB_refit <- MCMC_out_DEB_refit$N_iter_setpoint
+L_parameters_DEB_refit <- unique(MCMC_out_DEB_refit$Priors$Nom)
+
+Summary_res_DEB_refit <- 
+  as.data.frame(MCMC_out_DEB_refit$Summary_res)[1:length(L_parameters_DEB_refit)] |> 
+  mutate(Model = "DEB_refit")
+
+Summary_res_DEB_refit
+
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| label: fig-chains_DEB_refit
+#| fig-height: 8
+#| fig-width: 8
+
+p_chains <-  
+  ggplot(
+    data = MCMC_out_DEB_refit$Chains |> 
+      filter(Iteration !=1), 
+    aes(
+      x = Iteration, 
+      y = value, 
+      color = as.factor(Chain), 
+      group = as.factor(Chain)
+      )
+  )+
+  geom_line(alpha=0.7)+
+  scale_y_log10()+
+  facet_wrap(~Parameter, scales = "free", ncol = 2)+
+  
+  scale_color_manual(name = "Chains", values = pal_chains)+
+  
+  theme_bw()+
+  theme(
+    legend.position = "right", 
+    title=element_text(size=12, face="plain"), 
+    axis.title.x = element_text(face="plain"),
+    strip.background = element_rect(fill="white")
+    )
+
+p_chains
+  
+```
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_DEB_refit
+#| fig-height: 6
+#| fig-width: 8
+
+n_samples <- 1e5 # Simulation of the distribution
+
+df_priors_dist <- MCMC_out_DEB_refit$Priors |> 
+  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+  rowwise() |> 
+  mutate(samples = case_when(
+    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
+  )) |> 
+  unnest(samples)
+
+alpha_prior <- 0.5
+alpha_post <- 0.5
+col_prior <- Nord_snow[1]
+col_post <- col_IMD
+
+MCMC_out_DEB_refit$Chains_plot <- MCMC_out_DEB_refit$Chains |> 
+  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+
+p_post <- ggplot() +
+  
+  # Priors
+  stat_halfeye(
+    data = df_priors_dist,
+    aes(
+       x = samples,
+       ),
+    alpha = alpha_prior,
+    fill = col_prior,
+    color = col_prior,
+    normalize = "xy"
+    ) +
+  
+  # Posterior
+  stat_halfeye(
+    data = subset(MCMC_out_DEB_refit$Chains_plot, Nom %in% L_parameters_DEB_refit),
+    mapping = aes(
+      x=value
+    ),
+    fill = col_post,
+    color = col_post,
+    alpha = alpha_post,
+    normalize = "xy"
+  ) +
+  
+  facet_wrap(~Nom, scales = "free")+
+  scale_x_log10()+
+  labs(
+    title = "Posterior and prior distributions", 
+    x = "Parameter value", 
+    y = "Density"
+    ) +
+  theme_minimal()+
+  theme(
+    title=element_text(face="bold")
+  )
+
+p_post
+```
+
+### Simulations
+
+```{r}
+path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+
+df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))
+df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))
+
+df_data_Ctrl <- f_import_data_DEBTKTD() |> 
+  filter(Condition == "Ctrl") |> 
+  mutate(
+    No_sim = case_when(
+      Molecule == "EPX" & Experiment_type == "Growth" ~ 1,
+      Molecule == "EPX" & Experiment_type == "Repro" ~ 2,
+      Molecule == "IMD" & Experiment_type == "Growth" ~ 3,
+      Molecule == "IMD" & Experiment_type == "Repro" ~ 4
+    )
+  )
+
+pW <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Weight
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_old_DEB,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_frost[2]
+  )+
+  geom_line(
+    data = df_sim_new_DEB,
+    aes(
+      x = Time,
+      y = Weight
+    ),
+    color = Nord_frost[4]
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+pR <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Reproduction
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_old_DEB,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_frost[2]
+  )+
+  geom_line(
+    data = df_sim_new_DEB,
+    aes(
+      x = Time,
+      y = Reproduction
+    ),
+    color = Nord_frost[4]
+  )+
+  facet_wrap(~No_sim)+
+  theme_minimal()
+
+p <- pW + pR
+p
+
+```

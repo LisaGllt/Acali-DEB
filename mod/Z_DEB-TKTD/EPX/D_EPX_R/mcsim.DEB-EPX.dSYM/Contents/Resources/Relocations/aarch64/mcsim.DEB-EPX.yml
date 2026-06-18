@@ -2,17 +2,17 @@
 triple:          'arm64-apple-darwin'
 binary-path:     mcsim.DEB-EPX
 relocations:
-  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _InitModel, symObjAddr: 0x0, symBinAddr: 0x100002E78, symSize: 0x584 }
-  - { offsetInCU: 0x3F, offset: 0x3F, size: 0x8, addend: 0x0, symName: _szModelDescFilename, symObjAddr: 0xEE0, symBinAddr: 0x100008000, symSize: 0x0 }
-  - { offsetInCU: 0x6E, offset: 0x6E, size: 0x8, addend: 0x0, symName: _szModelSourceFilename, symObjAddr: 0xEEE, symBinAddr: 0x10000800E, symSize: 0x0 }
-  - { offsetInCU: 0x8F, offset: 0x8F, size: 0x8, addend: 0x0, symName: _szModelGenAndVersion, symObjAddr: 0xEF6, symBinAddr: 0x100008016, symSize: 0x0 }
-  - { offsetInCU: 0xB0, offset: 0xB0, size: 0x8, addend: 0x0, symName: _vnStates, symObjAddr: 0xF04, symBinAddr: 0x100008024, symSize: 0x0 }
-  - { offsetInCU: 0xCC, offset: 0xCC, size: 0x8, addend: 0x0, symName: _vnOutputs, symObjAddr: 0xF08, symBinAddr: 0x100008028, symSize: 0x0 }
-  - { offsetInCU: 0xE1, offset: 0xE1, size: 0x8, addend: 0x0, symName: _vnModelVars, symObjAddr: 0xF0C, symBinAddr: 0x10000802C, symSize: 0x0 }
-  - { offsetInCU: 0xF6, offset: 0xF6, size: 0x8, addend: 0x0, symName: _vnInputs, symObjAddr: 0xF10, symBinAddr: 0x100008030, symSize: 0x0 }
-  - { offsetInCU: 0x10B, offset: 0x10B, size: 0x8, addend: 0x0, symName: _vnParms, symObjAddr: 0xF14, symBinAddr: 0x100008034, symSize: 0x0 }
-  - { offsetInCU: 0x121, offset: 0x121, size: 0x8, addend: 0x0, symName: _bDelays, symObjAddr: 0x4718, symBinAddr: 0x100008848, symSize: 0x0 }
-  - { offsetInCU: 0x142, offset: 0x142, size: 0x8, addend: 0x0, symName: _vrgvmGlo, symObjAddr: 0xF18, symBinAddr: 0x100008038, symSize: 0x0 }
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _InitModel, symObjAddr: 0x0, symBinAddr: 0x100002E70, symSize: 0x58C }
+  - { offsetInCU: 0x3F, offset: 0x3F, size: 0x8, addend: 0x0, symName: _szModelDescFilename, symObjAddr: 0xEE8, symBinAddr: 0x100008000, symSize: 0x0 }
+  - { offsetInCU: 0x6E, offset: 0x6E, size: 0x8, addend: 0x0, symName: _szModelSourceFilename, symObjAddr: 0xEF6, symBinAddr: 0x10000800E, symSize: 0x0 }
+  - { offsetInCU: 0x8F, offset: 0x8F, size: 0x8, addend: 0x0, symName: _szModelGenAndVersion, symObjAddr: 0xEFE, symBinAddr: 0x100008016, symSize: 0x0 }
+  - { offsetInCU: 0xB0, offset: 0xB0, size: 0x8, addend: 0x0, symName: _vnStates, symObjAddr: 0xF0C, symBinAddr: 0x100008024, symSize: 0x0 }
+  - { offsetInCU: 0xCC, offset: 0xCC, size: 0x8, addend: 0x0, symName: _vnOutputs, symObjAddr: 0xF10, symBinAddr: 0x100008028, symSize: 0x0 }
+  - { offsetInCU: 0xE1, offset: 0xE1, size: 0x8, addend: 0x0, symName: _vnModelVars, symObjAddr: 0xF14, symBinAddr: 0x10000802C, symSize: 0x0 }
+  - { offsetInCU: 0xF6, offset: 0xF6, size: 0x8, addend: 0x0, symName: _vnInputs, symObjAddr: 0xF18, symBinAddr: 0x100008030, symSize: 0x0 }
+  - { offsetInCU: 0x10B, offset: 0x10B, size: 0x8, addend: 0x0, symName: _vnParms, symObjAddr: 0xF1C, symBinAddr: 0x100008034, symSize: 0x0 }
+  - { offsetInCU: 0x121, offset: 0x121, size: 0x8, addend: 0x0, symName: _bDelays, symObjAddr: 0x4748, symBinAddr: 0x100008848, symSize: 0x0 }
+  - { offsetInCU: 0x142, offset: 0x142, size: 0x8, addend: 0x0, symName: _vrgvmGlo, symObjAddr: 0xF20, symBinAddr: 0x100008038, symSize: 0x0 }
   - { offsetInCU: 0x1DF, offset: 0x1DF, size: 0x8, addend: 0x0, symName: _vrgModelVars, symBinAddr: 0x1000091D0, symSize: 0x0 }
   - { offsetInCU: 0x207, offset: 0x207, size: 0x8, addend: 0x0, symName: _vrgInputs, symBinAddr: 0x100008990, symSize: 0x0 }
   - { offsetInCU: 0x381, offset: 0x381, size: 0x8, addend: 0x0, symName: _Sigma_W, symBinAddr: 0x1000088A0, symSize: 0x0 }
@@ -55,9 +55,9 @@ relocations:
   - { offsetInCU: 0x69F, offset: 0x69F, size: 0x8, addend: 0x0, symName: _kr, symBinAddr: 0x100008940, symSize: 0x0 }
   - { offsetInCU: 0x6B5, offset: 0x6B5, size: 0x8, addend: 0x0, symName: _nec, symBinAddr: 0x100008958, symSize: 0x0 }
   - { offsetInCU: 0x6CB, offset: 0x6CB, size: 0x8, addend: 0x0, symName: _b, symBinAddr: 0x1000088C8, symSize: 0x0 }
-  - { offsetInCU: 0x6D4, offset: 0x6D4, size: 0x8, addend: 0x0, symName: _InitModel, symObjAddr: 0x0, symBinAddr: 0x100002E78, symSize: 0x584 }
-  - { offsetInCU: 0x6EA, offset: 0x6EA, size: 0x8, addend: 0x0, symName: _CalcDeriv, symObjAddr: 0x584, symBinAddr: 0x1000033FC, symSize: 0x5E0 }
-  - { offsetInCU: 0x907, offset: 0x907, size: 0x8, addend: 0x0, symName: _ScaleModel, symObjAddr: 0xB64, symBinAddr: 0x1000039DC, symSize: 0x2C4 }
-  - { offsetInCU: 0x9C6, offset: 0x9C6, size: 0x8, addend: 0x0, symName: _CalcJacob, symObjAddr: 0xE28, symBinAddr: 0x100003CA0, symSize: 0x4 }
-  - { offsetInCU: 0xA15, offset: 0xA15, size: 0x8, addend: 0x0, symName: _CalcOutputs, symObjAddr: 0xE2C, symBinAddr: 0x100003CA4, symSize: 0xB0 }
+  - { offsetInCU: 0x6D4, offset: 0x6D4, size: 0x8, addend: 0x0, symName: _InitModel, symObjAddr: 0x0, symBinAddr: 0x100002E70, symSize: 0x58C }
+  - { offsetInCU: 0x6EA, offset: 0x6EA, size: 0x8, addend: 0x0, symName: _CalcDeriv, symObjAddr: 0x58C, symBinAddr: 0x1000033FC, symSize: 0x5E0 }
+  - { offsetInCU: 0x907, offset: 0x907, size: 0x8, addend: 0x0, symName: _ScaleModel, symObjAddr: 0xB6C, symBinAddr: 0x1000039DC, symSize: 0x2C4 }
+  - { offsetInCU: 0x9C6, offset: 0x9C6, size: 0x8, addend: 0x0, symName: _CalcJacob, symObjAddr: 0xE30, symBinAddr: 0x100003CA0, symSize: 0x4 }
+  - { offsetInCU: 0xA15, offset: 0xA15, size: 0x8, addend: 0x0, symName: _CalcOutputs, symObjAddr: 0xE34, symBinAddr: 0x100003CA4, symSize: 0xB0 }
 ...

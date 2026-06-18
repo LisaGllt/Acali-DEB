@@ -6,8 +6,8 @@ Integrate(Lsodes, 1E-9, 1E-10, 1);
 ########## Experiments ################################################
 
 kr = 1;
-nec = 10000;
-b = 0.000001;
+nec = 43637.4;
+b = 2.681570e-06;
 
 Simulation { # EPX_EC50_growth_Ctrl
     Init = 1;

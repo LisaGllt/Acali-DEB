@@ -7325,9 +7325,26 @@ ggsave(
   )
 ```
 
+### Tables
+
 ```{r}
 
-df_predobs_Weight_D_CWKe_Fit <- df_predobs_Weight_D_CWKe_plot |> 
+f_Quality_fit <- function(df, group){
+  df_res <- df |> 
+    group_by(across(all_of(group))) |> 
+    summarise(
+        Fold_mean = mean(Fold, na.rm = TRUE),
+        Bias = mean(Residuals, na.rm = TRUE),
+        Mean_relative_error = mean(Relative_error, na.rm = TRUE),
+        Mean_LogPredObs = mean(LogPredObs, na.rm = TRUE),
+        .groups = "drop"
+      ) |> 
+    ungroup() |> 
+    mutate(Mean_PredObs = exp(Mean_LogPredObs))
+}
+
+f_Experiment_Conditions <- function(df){
+  df_res <- df |> 
   mutate(
     Status = case_when(
       ID_experiment == "Bart2019_XP1_1" ~ "J",
@@ -7350,206 +7367,93 @@ df_predobs_Weight_D_CWKe_Fit <- df_predobs_Weight_D_CWKe_plot |>
     )
   ) |> 
   mutate(Status = factor(Status, levels = c("J", "A")))
+  
+  return(df_res)
+}
+
+df_predobs_Weight_D_CWKe_Fit <- f_Experiment_Conditions(df_predobs_Weight_D_CWKe_plot)
 
 df_predobs_Weight_D_CWKe_Fit <- df_predobs_Weight_D_CWKe_Fit |> 
   mutate(
     Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
+    Residuals = predict.endpoint-Weight_obs,
+    Relative_error = (predict.endpoint-Weight_obs)/Weight_obs,
+    LogPredObs = log(predict.endpoint/Weight_obs)
     )
 
+df_fold_D_Weight_Dens <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, "Density_env")
+df_fold_D_Weight_Food <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, "Food_env")
+df_fold_D_Weight_Temp <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, "T_env")
 
-df_fold_D_Weight_Dens <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(Density_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Weight_Food <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(Food_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Weight_Temp <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(T_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-
-df_fold_D_Weight_Dens_Status <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(Density_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Weight_Food_Status <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(Food_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Weight_Temp_Status <- df_predobs_Weight_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Weight_obs, predict.endpoint/Weight_obs, Weight_obs/predict.endpoint),
-    Residuals = predict.endpoint-Weight_obs
-    ) |> 
-  group_by(T_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
+df_fold_D_Weight_Dens_Status <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, c("Density_env", "Status"))
+df_fold_D_Weight_Food_Status <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, c("Food_env", "Status"))
+df_fold_D_Weight_Temp_Status <- f_Quality_fit(df_predobs_Weight_D_CWKe_Fit, c("T_env", "Status"))
 
 
-df_predobs_Reproduction_D_CWKe_Fit <- df_predobs_Reproduction_D_CWKe_plot |> 
-  mutate(
-    Status = case_when(
-      ID_experiment == "Bart2019_XP1_1" ~ "J",
-      ID_experiment == "Bart2019_XP1_2" & Time <= 84 ~ "J",
-      ID_experiment == "Bart2019_XP1_2" & Time > 84 ~ "A",
-      ID_experiment == "Bart2019_XP3" ~ "J",
-      ID_experiment == "Bart2019_XP4_1" ~ "J",
-      ID_experiment == "Bart2019_XP4_2" & Time <= 112 ~ "J",
-      ID_experiment == "Bart2019_XP4_2" & Time > 112 ~ "A",
-      ID_experiment == "Bart2019_XP5" ~ "J",
-      ID_experiment == "Bart2020" ~ "J",
-      ID_experiment == "Gollot2026_dens_D1" ~ "J",
-      ID_experiment == "Gollot2026_dens_D2" & Time <= 70 ~ "J",
-      ID_experiment == "Gollot2026_dens_D2" & Time > 70 ~ "A",
-      ID_experiment == "Gollot2026_dens_D2b" & Time <= 70 ~ "J",
-      ID_experiment == "Gollot2026_dens_D2b" & Time > 70 ~ "A",
-      ID_experiment == "Gollot2026_dens_D5" & Time <= 70 ~ "J",
-      ID_experiment == "Gollot2026_dens_D5" & Time > 70 ~ "A",
-      ID_experiment == "Gollot2026_dens_D7" ~ "J"
-    )
-  ) |> 
-  mutate(Status = factor(Status, levels = c("J", "A")))
+df_predobs_Reproduction_D_CWKe_Fit <- f_Experiment_Conditions(df_predobs_Reproduction_D_CWKe_plot)
 
 df_predobs_Reproduction_D_CWKe_Fit <- df_predobs_Reproduction_D_CWKe_Fit |> 
   mutate(
     Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
+    Residuals = predict.endpoint-Reproduction_obs,
+    Relative_error = (predict.endpoint-Reproduction_obs)/Reproduction_obs,
+    LogPredObs = log(predict.endpoint/Reproduction_obs)
     )
 
+df_fold_D_Reproduction_Dens <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Density_env")
+df_fold_D_Reproduction_Food <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Food_env")
+df_fold_D_Reproduction_Temp <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Density_env")
 
-df_fold_D_Reproduction_Dens <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(Density_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Reproduction_Food <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(Food_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Reproduction_Temp <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(T_env) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-
-df_fold_D_Reproduction_Dens_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(Density_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Reproduction_Food_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(Food_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
-  
-df_fold_D_Reproduction_Temp_Status <- df_predobs_Reproduction_D_CWKe_Fit |> 
-  mutate(
-    Fold = ifelse(predict.endpoint > Reproduction_obs, predict.endpoint/Reproduction_obs, Reproduction_obs/predict.endpoint),
-    Residuals = predict.endpoint-Reproduction_obs
-    ) |> 
-  group_by(T_env, Status) |> 
-  summarise(
-      Fold_mean = mean(Fold, na.rm = TRUE),
-      Bias = mean(Residuals, na.rm = TRUE),
-      .groups = "drop"
-    ) |> 
-  ungroup()
+df_fold_D_Reproduction_Dens_Status <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, c("Density_env", "Status"))
+df_fold_D_Reproduction_Food_Status <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, c("Food_env", "Status"))
+df_fold_D_Reproduction_Temp_Status <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, c("T_env", "Status"))
   
 ```
 
 ```{r}
-#| tbl-cap: Quality of fit and its bias according to experimental temperature.
+#| tbl-cap: Quality of fit for weight and its bias according to experimental temperature.
+
+df_fold_D_Weight_Temp |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
+```{r}
+#| tbl-cap: Quality of fit for weight and its bias according to the number of individuals in the cosm and their observed developmental status.
+
+df_fold_D_Weight_Dens_Status |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
+```{r}
+#| tbl-cap: Quality of fit for weight and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
+
+df_fold_D_Weight_Food_Status |> datatable(
+  options = list(
+    dom = 't',
+    autoWidth = TRUE,
+    columnDefs = list(
+      list(className = 'dt-left', targets = "_all")
+      )
+    )
+  )
+```
+
+```{r}
+#| tbl-cap: Quality of fit for reproduction and its bias according to experimental temperature.
 
 df_fold_D_Reproduction_Temp |> datatable(
   options = list(
@@ -7563,7 +7467,7 @@ df_fold_D_Reproduction_Temp |> datatable(
 ```
 
 ```{r}
-#| tbl-cap: Quality of fit and its bias according to the number of individuals in the cosm and their observed developmental status.
+#| tbl-cap: Quality of fit for reproduction and its bias according to the number of individuals in the cosm and their observed developmental status.
 
 df_fold_D_Reproduction_Dens_Status |> datatable(
   options = list(
@@ -7577,7 +7481,7 @@ df_fold_D_Reproduction_Dens_Status |> datatable(
 ```
 
 ```{r}
-#| tbl-cap: Quality of fit and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
+#| tbl-cap: Quality of fit for reproduction and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
 
 df_fold_D_Reproduction_Food_Status |> datatable(
   options = list(

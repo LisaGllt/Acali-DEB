@@ -1,0 +1,39 @@
+#### DEB TKTD A. caliginosa
+#===============================================
+
+SetPoints("DEB_setpoint_predobs_22.out", "tab_setpoint.out", 0,nec, b, Sigma_W);
+
+Integrate(Lsodes, 1E-6, 1E-6, 1);
+
+########## Experiments ################################################
+
+Simulation { # IMD_EC50_repro_C10
+    Init = 2;
+    Ce0=5000;
+    Winit=0.70881;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    Print(Weight,0, 14, 28);
+    Print(Reproduction,0, 14, 28);
+}
+
+  End.

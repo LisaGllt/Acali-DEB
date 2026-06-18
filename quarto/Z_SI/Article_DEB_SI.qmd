@@ -352,8 +352,6 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 # Trends over environmental conditions
 
-### Trends over experimental conditions
-
 $$
 \begin{aligned}
 \text{Fold} = 
@@ -364,40 +362,75 @@ Y_{Observed} < Y_{Predicted}, &\frac{Y_{Predicted}}{Y_{Observed}}
 \end{aligned}
 $$
 
-| Experimental temperature (°C) | Mean fold for weight | Mean residual for weight |
-|----|----|----|
-| 15 | 1.21 | 0.00255 |
-| 18 | 1.28 | -0.0495 |
-
-: Quality of fit and its bias according to experimental temperature. {#tbl-chap3SIQualFitTemp}
-
-| Density (#/cosm) | Mean fold for weight | Mean residual for weight | Mean residual for reproduction |
+| Experimental temperature (°C) | Mean fold | Mean Log(Pred./Obs.) | exp(Mean Log(Pred./Obs.)) |
 |----|----|----|----|
-| 1 | Juvenile | 1.24 | 0.00140 |
-| 2 | Juvenile | 1.30 | 0.0400 |
-| 2 | Adult | 1.14 | -0.0826 |
-| 5 | Juvenile | 1.39 | -0.0765 |
-| 5 | Adult | 1.25 | -0.153 |
-| 7 | Juvenile | 1.55 | -0.0711 |
-| Grouped after puberty | Adult | 1.12 | -0.00356 |
+| 15 | 1.21 | 0.10 | 1.11 |
+| 18 | 1.28 | -0.08 | 0.92 |
 
-: Quality of fit and its bias according to the number of individuals in the cosm and their observed developmental status. {#tbl-chap3SIQualFitDen}
+: Quality of fit for weight and its bias according to experimental temperature. {#tbl-chap3SIQualFitTemp}
 
-| OM from horse dung (%/ind/14 d) | Mean fold for weight | Mean residual for weight | Mean residual for reproduction |
-|----|----|----|----|
-| 0.19 | Juvenile | 1.55 | -0.0711 |
-| 0.22 | Juvenile | 1.38 | 0.0306 |
-| 0.22 | Adult | 1.13 | 0.0931 |
-| 0.27 | Juvenile | 1.39 | -0.0765 |
-| 0.27 | Adult | 1.25 | -0.153 |
-| 0.34 | Juvenile | 1.09 | -0.0123 |
-| 0.67 | Juvenile | 1.23 | -0.00205 |
-| 0.67 | Adult | 1.13 | -0.123 |
-| 1.3 | Juvenile | 1.28 | 0.0159 |
-| 1.3 | Adult | 1.09 | -0.000815 |
-| 0 or 0.67 | Juvenile | 1.19 | -0.00290 |
+| Experimental temperature (°C) | Mean residual |
+|-------------------------------|---------------|
+| 15                            | 0.0587        |
+| 18                            | 1.24          |
 
-: Quality of fit and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms. {#tbl-chap3SIQualFitFood}
+: Quality of fit for reproduction and its bias according to experimental temperature. {#tbl-chap3SIQualFitTempR}
+
+| Density (#/cosm) | Status | Mean fold | Mean Log (Pred./Obs.) | exp(Mean Log(Pred./Obs.)) |
+|----|----|----|----|----|
+| 1 | Juvenile | 1.24 | 0.13 | 1.13 |
+| 2 | Juvenile | 1.30 | 0.24 | **1.27** |
+| 2 | Adult | 1.14 | -0.08 | 0.92 |
+| 5 | Juvenile | 1.39 | -0.33 | **0.72** |
+| 5 | Adult | 1.25 | -0.22 | **0.80** |
+| 7 | Juvenile | 1.55 | -0.44 | **0.64** |
+| Grouped after puberty | Adult | 1.12 | 0.01 | 1.01 |
+
+: Quality of fit for weight and its bias according to the number of individuals in the cosm and their observed developmental status. {#tbl-chap3SIQualFitDens}
+
+| Density (#/cosm)      | Status   | Mean residual |
+|-----------------------|----------|---------------|
+| 1                     | Juvenile | 0.00000       |
+| 2                     | Juvenile | 0.00000       |
+| 2                     | Adult    | 6.05          |
+| 5                     | Juvenile | 0.00000       |
+| 5                     | Adult    | -1.79         |
+| 7                     | Juvenile | 0.00000       |
+| Grouped after puberty | Adult    | 0.197         |
+
+: Quality of fit for reproduction and its bias according to the number of individuals in the cosm and their observed developmental status. {#tbl-chap3SIQualFitDensR}
+
+| OM from horse dung (%/ind/14 d) | Status | Mean fold | Mean Log(Pred./Obs.) | exp(Mean Log(Pred./Obs.)) |
+|----|----|----|----|----|
+| 0.19 | Juvenile | 1.55 | -0.44 | **0.64** |
+| 0.22 | Juvenile | 1.38 | 0.24 | **1.34** |
+| 0.22 | Adult | 1.13 | 0.120 | 1.13 |
+| 0.27 | Juvenile | 1.39 | -0.33 | **0.72** |
+| 0.27 | Adult | 1.25 | -0.22 | **0.80** |
+| 0.34 | Juvenile | 1.09 | -0.02 | 0.98 |
+| 0.67 | Juvenile | 1.23 | 0.10 | 1.11 |
+| 0.67 | Adult | 1.13 | -0.12 | 0.89 |
+| 1.3 | Juvenile | 1.28 | 0.16 | **1.18** |
+| 1.3 | Adult | 1.09 | 0.003 | 1.00 |
+| 0 or 0.67 | Juvenile | 1.19 | 0.09 | 1.10 |
+
+: Quality of fit for weight and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms. {#tbl-chap3SIQualFitFood}
+
+| OM from horse dung (%/ind/14 d) | Status   | Mean residual |
+|---------------------------------|----------|---------------|
+| 0.19                            | Juvenile | 0.000001      |
+| 0.22                            | Juvenile | 0.000001      |
+| 0.22                            | Adult    | 3.49          |
+| 0.27                            | Juvenile | 0.000001      |
+| 0.27                            | Adult    | -1.79         |
+| 0.34                            | Juvenile | 0.000001      |
+| 0.67                            | Juvenile | 0.000001      |
+| 0.67                            | Adult    | -2.50         |
+| 1.3                             | Juvenile | 0.000001      |
+| 1.3                             | Adult    | 11.6          |
+| 0 or 0.67                       | Juvenile | 0.000001      |
+
+: Quality of fit for reproduction and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms. {#tbl-chap3SIQualFitFoodR}
 
 # Sensitivity analysis of best model
 

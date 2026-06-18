@@ -84,7 +84,7 @@ p
 Molec <- "EPX"
 path_fig <- here::here("fig/DEBTKTD_Models")
 
-path_E_EPX_A <- here::here("mod/Z_DEB-TKTD/EPX/Test_EPX")
+path_EPX_Test <- here::here("mod/Z_DEB-TKTD/EPX/Test_EPX")
 
 df_data_fit_EPX <- f_import_data_DEBTKTD() |> 
   filter(Molecule == Molec) |> 
@@ -94,7 +94,7 @@ df_data_fit_EPX <- f_import_data_DEBTKTD() |>
   ))
 
 {
-  df_sim <- f_MCSim_read_sim(file.path(path_E_EPX_A, "sim.out"))
+  df_sim <- f_MCSim_read_sim(file.path(path_EPX_Test, "sim.out"))
   
   pW <- ggplot()+
     geom_line(

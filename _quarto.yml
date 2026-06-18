@@ -30,12 +30,20 @@ book:
   chapters:
     - index.qmd
     - quarto/A_Earthworm_culture.qmd
-    - quarto/B_DENS_experiment.qmd
-    - quarto/C_Data_synthesis.qmd
-    - quarto/D_Model_formulations.qmd
-    - quarto/E_Model_comparison.qmd
-    - quarto/F_IsolatedAdults.qmd
-    - quarto/G_Conclusion.qmd
+    - part: quarto/DEB.qmd
+      chapters:
+       - quarto/B_DENS_experiment.qmd
+       - quarto/C_Data_synthesis.qmd
+       - quarto/D_Model_formulations.qmd
+       - quarto/E_Model_comparison.qmd
+       - quarto/F_IsolatedAdults.qmd
+       - quarto/G_Conclusion.qmd
+    - part: DEB-TKTD.qmd
+      chapters:
+        - quarto/H_DEBTKTD_prep.qmd
+        - quarto/I_DEBTKTD_EPX.qmd
+        - quarto/J_DEBTKTD_IMD.qmd
+    
     #- quarto/references.qmd
   navbar:
     right:

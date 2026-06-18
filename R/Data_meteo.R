@@ -41,7 +41,29 @@ meteo <- import_isd_hourly(
 # 4) Garder seulement la température
 temp <- meteo %>%
   dplyr::select(date, station = code, site = station, latitude, longitude, air_temp) %>%
-  filter(!is.na(air_temp))
+  filter(!is.na(air_temp)) |> 
+  mutate(month_day = format(date, "%y-%m-%d"))
 
 head(temp)
 summary(temp$air_temp)
+
+start_date <- as.Date("24-01-01")
+
+df_temp_sum <- temp |> 
+  group_by(month_day, .drop = TRUE) |> 
+  mutate(
+    air_temp_mean_day = mean(air_temp, na.rm=TRUE)
+  ) |> 
+ungroup() |> 
+  dplyr::select(c(month_day, air_temp_mean_day)) |> 
+  unique() |> 
+  mutate(
+    Time = round(as.numeric(difftime(month_day, start_date, units = "days")))
+  )
+
+
+
+
+
+
+

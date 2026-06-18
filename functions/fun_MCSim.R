@@ -3496,3 +3496,227 @@ f_read_Setpoint_full_TKTD <- function(file_path, Molec, select_times, step_sim, 
   
   return(df_pred_full)
 }
+
+f_get_temperatures_Closeaux <- function(Year, Start_day, Sim_duration){
+  
+  token_NOAA <- "ZFyQJPeWOXcEbvwIDWBvVJmfyoVPoTll"
+  library(worldmet)
+  library(lubridate)
+  
+  # Meadow location
+  lat <- 48.8
+  lon <- 2.083333
+  
+  # 1) Find closest station
+  stations <- import_isd_stations(
+    lat = lat,
+    lon = lon,
+    n_max = 10
+  )
+  
+  # 2) Take closest station
+  station_code <- stations$code[1]
+  station_name <- stations$station[1]
+  
+  print(paste0("Station : ", station_name, " (Code : ", station_code, ")"))
+  
+  # 3) Get hourly temperature measurement for (a) given year(s)
+  meteo <- import_isd_hourly(
+    code = station_code,
+    year = Year # Year can be a list of year
+  )
+  
+  # 4) Keep only temperature
+  temp <- meteo %>%
+    dplyr::select(date, station = code, site = station, latitude, longitude, air_temp) %>%
+    filter(!is.na(air_temp)) |> 
+    mutate(month_day = format(date, "%y-%m-%d"))
+  
+  df_temp_sum <- temp |> 
+    group_by(month_day, .drop = TRUE) |> 
+    mutate(
+      air_temp_mean_day = round(mean(air_temp, na.rm=TRUE),1)
+    ) |> 
+    ungroup() |> 
+    dplyr::select(c(month_day, air_temp_mean_day)) |> 
+    unique() |> 
+    mutate(
+      Time = round(as.numeric(difftime(month_day, Start_day, units = "days")))
+    ) |> 
+    filter((Time >= 0) & (Time <= Sim_duration))
+  
+  return(df_temp_sum)
+}
+
+f_In_sim_predictions <- function(file_path, Year, Start_day, Sim_duration, l_concentrations, bol_degradation, step_sim, No_scenario){
+  
+  # bol_degradation : 0 if no degradtion ; 1 if degradation
+  
+  WeightSoilCosm <- 10000
+  Per_OM_soil <- 0.0326
+  Per_OM_horse <- 1/400 # As if there is 1g of horse dung in a 400 g cosm
+  
+  df_temp_sim <- f_get_temperatures_Closeaux(Year, Start_day, Sim_duration)
+  
+  text_end <- '
+End.'
+  
+  text_init <- "    Init = 1;"
+  text_Winit <- "    Winit=0.0124;" # Initial weight of the controls in chap 5 (12.4 mg)
+  text_dens <- "    Dens = 3;"
+  text_Ci0 <- "     Ci0 = 0;"
+  text_WeightSoilCosm <- paste0("   WeightSoilCosm =", WeightSoilCosm, ";")
+  OMsoil0 <- WeightSoilCosm * Per_OM_soil
+  OMhorse0 <- WeightSoilCosm * Per_OM_horse
+  text_OMsoil_init<- paste0("   OM_soil_t0=", OMsoil0, ";")
+  text_OMhorse_init <- paste0("   OM_horse_t0=", OMhorse0, ";")
+  text_bol_degradation <- paste0("    bol_degradation = ", bol_degradation, ";") 
+  
+  char_Temp_t <- df_temp_sim |> pull(Time) |>  paste(collapse = ", ")
+  char_Temp <- df_temp_sim |> pull(air_temp_mean_day) |>  paste(collapse = ", ")
+  
+  text_OM_temp <- paste("    Texp=NDoses(", 
+                        length(df_temp_sim$Time), ",\n                          ", 
+                        char_Temp,",\n                          ", 
+                        char_Temp_t, ");", sep="")
+  text_basis <- paste(
+    text_init,
+    text_Winit,
+    text_OMhorse_init,
+    text_OMsoil_init,
+    text_WeightSoilCosm,
+    text_dens,
+    text_Ci0,
+    text_bol_degradation,
+    text_OM_temp,
+    sep="\n"
+  )
+  
+  text_sim <- paste0("    PrintStep(Weight, Reproduction, Organic_matter, Stress, Ce,0,", Sim_duration, ", ", step_sim, ");")
+  
+  for (i in 1:length(l_concentrations)) {
+    
+    text_start <- paste0('#### DEB TKTD A. caliginosa
+#===============================================
+
+SetPoints("DEB_IMD_prediction_', No_scenario, "_", i, '.out", "tab_setpoint.out", 0, nec, b, Sigma_W);
+
+Integrate(Lsodes, 1E-10, 1E-8, 1);
+
+########## Experiments ################################################')
+    
+    text_Ce0 <- paste0("    Ce0 = ", l_concentrations[i], ";")
+    
+    char_i <- paste(
+      paste("Simulation { #", i), 
+      
+      text_basis,
+      text_Ce0,
+      text_sim,
+      
+      paste("}"),
+      sep="\n"
+      
+    )
+    
+    Text_final_i <- paste(text_start, char_i, text_end, sep="\n")
+    
+    writeLines(
+      Text_final_i,
+      here::here(file_path, paste0("DEB_IMD_prediction_", No_scenario, "_", i, ".in"))
+    )
+  }
+  
+}
+
+
+f_Read_fichier <- function(fichier){
+  contenu_raw <- readBin(
+    fichier,
+    what = "raw",
+    n = file.info(fichier)$size
+  )
+  
+  contenu <- rawToChar(contenu_raw)
+  contenu <- gsub("\r\n|\r", "\n", contenu)
+  
+  fichier_temp <- tempfile(fileext = ".out")
+  on.exit(unlink(fichier_temp))
+  
+  writeBin(
+    charToRaw(contenu),
+    fichier_temp
+  )
+  
+  res <- readr::read_tsv(
+    fichier_temp,
+    show_col_types = FALSE,
+    progress = FALSE
+  )
+  return(res)
+}
+
+
+f_Read_predictions <- function(file_path, No_scenario, l_concentrations, Sim_duration, step_sim){
+  
+  df_pred_full <- NULL
+  
+  for (i in 1:length(l_concentrations)){
+    
+    fichier <- file.path(file_path, paste0("DEB_IMD_prediction_", No_scenario,"_", i, ".out"))
+  
+    Sim.Res.Exp_i <- f_Read_fichier(fichier)
+    
+      Nom_Endpoints = c("Weight", "Reproduction", "Organic_matter", "Stress", "Ce")
+      Nsortie = 5
+    
+    Time_pred <- seq(0, Sim_duration, step_sim) # !!!
+    
+    MPV = IC_min = IC_max = Endpoint = index = NULL
+    
+    for (j in 1:length(Nom_Endpoints)){
+      
+      index = grep(paste0("^",Nom_Endpoints[j],"_") , colnames(Sim.Res.Exp_i), fixed=FALSE)
+      
+      Data_sim = as.matrix( Sim.Res.Exp_i[ , index] )
+      
+      MPV    = c(   MPV,  as.numeric( Data_sim[nrow(Data_sim), ] ) )
+      IC_min = c(IC_min,  apply(Data_sim, 2, quantile,  0.025, na.rm=TRUE) )
+      IC_max = c(IC_max,  apply(Data_sim, 2, quantile,  0.975, na.rm=TRUE) ) 
+      
+      Endpoint = c(Endpoint, rep(Nom_Endpoints[j], ncol(Data_sim)))
+    }
+    
+    df_pred_i <- data.frame(
+      predict.endpoint = MPV,
+      Time    = rep(Time_pred, Nsortie),
+      low     = IC_min,
+      up      = IC_max,
+      Endpt   = Endpoint
+    )
+    
+    df_pred_i <- df_pred_i %>%
+      mutate(
+        predict.endpoint = case_when(
+          ( predict.endpoint <= 5e-6 & Endpt == "Reproduction") ~ 0,
+          .default = predict.endpoint
+        ),
+        Ce = l_concentrations[i]
+      )
+    
+    df_pred_full <- rbind(df_pred_full, df_pred_i)
+  }
+  
+  saveRDS(df_pred_full, file.path(file_path, paste0("df_sim_", No_scenario, ".rds")))
+  
+  return(df_pred_full)
+  
+}
+
+
+
+
+
+
+
+
