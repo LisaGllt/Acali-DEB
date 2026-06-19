@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>3&nbsp; DENS experiment - Impact of density and food quantity – **Linking physiological processes to life-history traits** : a bioenergetic approach based on DEB theory</title>
+<title>3&nbsp; DENS experiment - Impact of density and food quantity – **Linking physiological processes to life-history traits and toxic effects**: a bioenergetic approach based on DEB theory</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -54,7 +54,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -113,6 +133,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
 <script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -124,7 +173,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
-    <span class="navbar-title"><strong>Linking physiological processes to life-history traits</strong> : a bioenergetic approach based on DEB theory</span>
+    <span class="navbar-title"><strong>Linking physiological processes to life-history traits and toxic effects</strong>: a bioenergetic approach based on DEB theory</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -149,7 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../quarto/B_DENS_experiment.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">DENS experiment - Impact of density and food quantity</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../quarto/B_DENS_experiment.html">DEB</a></li><li class="breadcrumb-item"><a href="../quarto/B_DENS_experiment.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">DENS experiment - Impact of density and food quantity</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -173,40 +222,92 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Earthworms and pesticides</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">DEB</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/B_DENS_experiment.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">DENS experiment - Impact of density and food quantity</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/C_Data_synthesis.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Synthesis of available data</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/D_Model_formulations.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model formulation</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/E_Model_comparison.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Model comparison</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/F_IsolatedAdults.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Case of isolated adults</span></span></a>
   </div>
 </li>
-        <li class="sidebar-item">
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../quarto/G_Conclusion.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Conclusion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Discussion &amp; Conclusion</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">DEB-TKTD</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../quarto/H_DEBTKTD_prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Data and adjustments</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../quarto/I_DEBTKTD_EPX.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Epoxiconazole</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../quarto/J_DEBTKTD_IMD.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Imidacloprid</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../quarto/K_Discussion_Conclusion.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Discussion &amp; Conclusions</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../quarto/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
   </div>
 </li>
     </ul>
@@ -219,7 +320,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#protocol" id="toc-protocol" class="nav-link active" data-scroll-target="#protocol"><span class="header-section-number">3.1</span> Protocol</a></li>
+  <li><a href="#protocol" id="toc-protocol" class="nav-link active" data-scroll-target="#protocol"><span class="header-section-number">3.1</span> Protocol</a>
+  <ul class="collapse">
+  <li><a href="#earthworms-and-soil" id="toc-earthworms-and-soil" class="nav-link" data-scroll-target="#earthworms-and-soil"><span class="header-section-number">3.1.1</span> Earthworms and soil</a></li>
+  <li><a href="#population-density-experiment" id="toc-population-density-experiment" class="nav-link" data-scroll-target="#population-density-experiment"><span class="header-section-number">3.1.2</span> Population density experiment</a></li>
+  </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results"><span class="header-section-number">3.2</span> Results</a>
   <ul class="collapse">
   <li><a href="#initial-conditions" id="toc-initial-conditions" class="nav-link" data-scroll-target="#initial-conditions"><span class="header-section-number">3.2.1</span> Initial conditions</a></li>
@@ -235,14 +340,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#juvenile-growth-rate-1" id="toc-juvenile-growth-rate-1" class="nav-link" data-scroll-target="#juvenile-growth-rate-1"><span class="header-section-number">3.4.1</span> Juvenile growth rate</a></li>
   <li><a href="#cocoon-production-1" id="toc-cocoon-production-1" class="nav-link" data-scroll-target="#cocoon-production-1"><span class="header-section-number">3.4.2</span> Cocoon production</a></li>
   </ul></li>
-  <li><a href="#summary-figures" id="toc-summary-figures" class="nav-link" data-scroll-target="#summary-figures"><span class="header-section-number">3.5</span> Summary figures</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"><span class="header-section-number">3.5</span> Summary</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../quarto/B_DENS_experiment.html">DEB</a></li><li class="breadcrumb-item"><a href="../quarto/B_DENS_experiment.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">DENS experiment - Impact of density and food quantity</span></a></li></ol></nav>
 <div class="quarto-title">
 <div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">DENS experiment - Impact of density and food quantity</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
 </div>
@@ -263,16 +368,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="protocol" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="protocol"><span class="header-section-number">3.1</span> Protocol</h2>
-<p>Synchronized newly hatched earthworms are put in cosms with 200 g of Closeaux soil with a WHC of 70%. They are fed every 14 days and the soil is renewed every 28 days. Soil humidity is checked every week. Earthworms are weighted every 14 days. Once at least one earthworm is adult, cocoons produced are retrieved every 28 days when changing the soil.</p>
-<p>Conditions :</p>
-<ul>
-<li>D1 : One earthworm per cosm | Food = 3 g/14 days</li>
-<li>D2 : 2 earthworms per cosm | Food = 3 g/14 days</li>
-<li>D2b : 2 earthworms per cosm | Food = 6 g/14 days</li>
-<li>D5 : 5 earthworms per cosm | Food = 3 g/14 days</li>
-<li>D7 : 7 earthworms per cosm | Food = 3 g/14 days</li>
-</ul>
-<p>Some earthworm died in the first 14 days of the experiment. Another batch of earthworms were then started 28 days after the first one.</p>
+<section id="earthworms-and-soil" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="earthworms-and-soil"><span class="header-section-number">3.1.1</span> Earthworms and soil</h3>
+<p>Earthworms used in the original experiment of this study originated from a laboratory culture established from individuals collected between late 2023 and early 2024 in a permanent grassland located in Versailles (48°48′ N, 2°5′ E). The site has been free of pesticide applications for over three decades. Specimens were identified under a binocular microscope following standard taxonomic keys. The culture was maintained at 18 °C in 1 L vessels, with groups of five individuals per vessel. The rearing substrate consisted of loamy soil sampled from the same meadow and identical to that used in <span class="citation" data-cites="bart_2019">Bart (<a href="references.html#ref-bart_2019" role="doc-biblioref">2019</a>)</span> and <span class="citation" data-cites="bart_2020">Bart et al. (<a href="references.html#ref-bart_2020" role="doc-biblioref">2020</a>)</span>, according to the texture classification of the Food and Agriculture Organization (FAO), to reproduce conditions close to those of the native habitat. The soil contained 3.26% organic matter (dry weight basis; see Supplementary Information Table S1.1 for soil characteristics). Soil was collected from the 0-20 cm layer, air-dried, and sieved to &lt; 2 mm. Moisture was maintained at 60-70% of the soil’s water-holding capacity (WHC). Earthworms were fed monthly with approximately 6 g (dry weight) of horse dung per group of five individuals, adjusted to 60–80% WHC. The dung was collected long after any veterinary deworming treatment, frozen and thawed twice, and then ground to &lt; 1 mm following the procedure of <span class="citation" data-cites="lowe_2005">Lowe &amp; Butt (<a href="references.html#ref-lowe_2005" role="doc-biblioref">2005</a>)</span>. As recommended by <span class="citation" data-cites="bart_2018">Bart (<a href="references.html#ref-bart_2018" role="doc-biblioref">2018</a>)</span>, ten field-collected individuals were barcoded to verify lineage composition; results indicated two genetic lineages within <em>A. caliginosa</em>. To limit potential age-related variation in reproductive performance <span class="citation" data-cites="hartenstein_1979">Hartenstein et al. (<a href="references.html#ref-hartenstein_1979" role="doc-biblioref">1979</a>)</span>, individuals used in each reproduction test were less than two months apart in age.</p>
+<p>To obtain age-synchronized cohorts, cocoons were retrieved from the breeding containers and then incubated at 18 °C in Petri dishes lined with moistened filter paper. Newly hatched juveniles were collected daily and transferred to soil stored at 4 °C to slow down their development until the start of the experiment. This procedure ensured that all hatchlings were at a comparable developmental stage at the experiment’s onset and allowed for random assignment of individuals to experimental groups.</p>
+</section>
+<section id="population-density-experiment" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="population-density-experiment"><span class="header-section-number">3.1.2</span> Population density experiment</h3>
+<p>To assess the effect of density on earthworm growth and reproduction from the newly hatched juvenile stage to the adult stage, four cosm densities were tested: 1, 2, 5, and 7 individuals per cosm, each in four replicates (hereafter D1, D2, D5, and D7). An additional treatment (D2b) was included to evaluate the effect of food availability independently of density. For each replicate, the corresponding number of earthworms was placed in a cosm consisting of a plastic vessel (11 × 7.7 × 4.5 cm) containing the equivalent of 200 g dry soil humidified at WHC 70%. All cosms were maintained at 18 °C. Each cosm received the equivalent of 3 g of dry horse dung humidified at WHC 70% as food every 14 days, which corresponds to <em>ad libitum</em> conditions for a single earthworm (D1). In the D2b condition, this amount was doubled (6 g every 14 days). Soil was renewed every 28 days. Earthworms were weighed every 14 days, and soil moisture was checked and adjusted weekly. Once earthworms reached adulthood, cocoons were collected every 28 days during soil renewal by wet-sieving the soil through a 1-mm mesh, following <span class="citation" data-cites="bart_2018a">Bart et al. (<a href="references.html#ref-bart_2018a" role="doc-biblioref">2018</a>)</span>.</p>
+<p>Statistical analyses were performed to evaluate the effect of population density on juvenile growth and reproductive output. Initial body mass was first compared among density treatments to verify the homogeneity of individuals at the beginning of the experiment. Individual juvenile growth rates were then estimated. Individual juvenile growth rates were then estimated using a linear regression on the weight (<span class="math inline">\(W\)</span>) through an allometric relationship with a 1/3 power scaling <span class="citation" data-cites="gollot_2025">(<a href="references.html#ref-gollot_2025" role="doc-biblioref">Gollot et al., 2025</a>)</span>. For each individual, a linear regression of structural length against time was then fitted, and the slope of this regression was used as an individual estimate of juvenile growth rate. The effect of population density on juvenile growth rate was tested using a one-way analysis of variance (ANOVA), with density treatment as a fixed factor. When a significant density effect was detected, pairwise comparisons between density treatments were performed using Tukey post hoc test. Reproductive output was analysed at the replicate level and compared among density treatments using the same statistical framework. Pairwise comparisons between the remaining density treatments were performed using Tukey post hoc tests.</p>
+</section>
 </section>
 <section id="results" class="level2" data-number="3.2">
 <h2 data-number="3.2" class="anchored" data-anchor-id="results"><span class="header-section-number">3.2</span> Results</h2>
@@ -1124,8 +1229,8 @@ Figure&nbsp;3.7: Reproduction rates of earthworms per food condition (density = 
 </div>
 </section>
 </section>
-<section id="summary-figures" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="summary-figures"><span class="header-section-number">3.5</span> Summary figures</h2>
+<section id="summary" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="summary"><span class="header-section-number">3.5</span> Summary</h2>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1330,10 +1435,37 @@ Figure&nbsp;3.9: Comparison of growth curves and cumulative reproduction of eart
 </div>
 </div>
 </div>
+<p>A total of 516 body-mass measurements and 64 reproduction measurements were collected over the 154-day monitoring period. Initial body mass was homogeneous across treatments (median = 10.4 mg, Q1 = 8.7 mg, Q3 = 11.7 mg). Growth rates of each individual were estimated using a linear regression on the structural length of the earthworm (<span class="math inline">\(L=W^{1/3}\)</span>) which is related to the weight (<span class="math inline">\(W\)</span>) through an allometric relationship with a 1/3 power scaling <span class="citation" data-cites="gollot_2025">(<a href="references.html#ref-gollot_2025" role="doc-biblioref">Gollot et al., 2025</a>)</span>. A significant effect of density on juvenile growth rate was detected (ANOVA, <span class="math inline">\(p\)</span> = 0.02). However, post hoc comparisons (Tukey test) revealed that only the contrast between the two extremes of population densities was statistically significant (densities of 1 vs.&nbsp;7 individuals per cosm, <span class="math inline">\(p\)</span> = 0.016). No individual reached maturity at the highest population density and we were not able to keep population density constant due to mortality. As a result we excluded this treatment from the statistical analysis of reproduction data. A possible decrease in reproduction with population density was detected (-43% between density 2 and density 5) with high inter-replicate variability (Tukey test : <span class="math inline">\(p\)</span> = 0.051, Figure 1).</p>
+<p>At the highest density (D7), one individual died in each replicate at different times (days 14, 28, 56, 70, and 84 depending on the replicate). The remaining individuals (<span class="math inline">\(n\)</span> = 6 per replicate) survived until the end of the experiment (154 days). These replicates were excluded from the main analysis due to uncertainty regarding the exact timing of mortality.</p>
+<p>Only two replicates yielded reproduction data in the D2b condition (density 2 with increased food supply), and these displayed contrasting dynamics. One replicate was monitored until day 154, whereas the second stopped at day 84, resulting in a visible discontinuity in cumulative reproduction after this time point. Prior to day 84, increasing food availability at constant density (D2b) resulted in only limited decreases in growth and similar reproduction compared with D2.</p>
+<p>Overall, both growth and reproduction tends to decrease with increasing density.</p>
 
 
 <!-- -->
 
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list" style="display: none">
+<div id="ref-bart_2018" class="csl-entry" role="listitem">
+Bart, S. (2018). <em><span>Impacts comportementaux, démographiques et fonctionnels des pesticides sur des annélides oligochètes du sol</span></em> [PhD thesis]. Université Paris-Saclay.
+</div>
+<div id="ref-bart_2019" class="csl-entry" role="listitem">
+Bart, S. (2019). Towards a better understanding of the life cycle of the earthworm <span>Aporrectodea</span> caliginosa: <span>New</span> data and energy-based modelling. <em>Pedobiologia</em>, <em>77</em>, 150592. <a href="https://doi.org/10.1016/j.pedobi.2019.150592">https://doi.org/10.1016/j.pedobi.2019.150592</a>
+</div>
+<div id="ref-bart_2018a" class="csl-entry" role="listitem">
+Bart, S., Amossé, J., Lowe, C. N., Mougin, C., Péry, A. R. R., &amp; Pelosi, C. (2018). Aporrectodea caliginosa, a relevant earthworm species for a posteriori pesticide risk assessment: Current knowledge and recommendations for culture and experimental design. <em>Environmental Science and Pollution Research</em>, <em>25</em>(34), 33867–33881. <a href="https://doi.org/10.1007/s11356-018-2579-9">https://doi.org/10.1007/s11356-018-2579-9</a>
+</div>
+<div id="ref-bart_2020" class="csl-entry" role="listitem">
+Bart, S., Pelosi, C., Nélieu, S., Lamy, I., &amp; Péry, A. R. R. (2020). An energy-based model to analyze growth data of earthworms exposed to two fungicides. <em>Environmental Science and Pollution Research</em>, <em>27</em>(1), 741–750. <a href="https://doi.org/10.1007/s11356-019-06985-z">https://doi.org/10.1007/s11356-019-06985-z</a>
+</div>
+<div id="ref-gollot_2025" class="csl-entry" role="listitem">
+Gollot, L., Beaudouin, R., Mathieu, J., Faburé, J., &amp; Royauté, R. (2025). Uncovering <span>Hidden Sensitivity</span>: <span>Inter-Individual Growth Variation</span> in <span>Earthworms Under Fungicide Exposure</span>. <em>Environmental Toxicology and Chemistry</em>. <a href="https://doi.org/10.1093/etojnl/vgaf292">https://doi.org/10.1093/etojnl/vgaf292</a>
+</div>
+<div id="ref-hartenstein_1979" class="csl-entry" role="listitem">
+Hartenstein, R., Neuhauser, E. F., &amp; Kaplan, D. L. (1979). Reproductive potential of the earthworm <span>Eisenia</span> foetida. <em>Oecologia</em>, <em>43</em>(3), 329–340. <a href="https://doi.org/10.1007/BF00344959">https://doi.org/10.1007/BF00344959</a>
+</div>
+<div id="ref-lowe_2005" class="csl-entry" role="listitem">
+Lowe, C. N., &amp; Butt, K. R. (2005). Culture techniques for soil dwelling earthworms: <span>A</span> review. <em>Pedobiologia</em>, <em>49</em>(5), 401–413. <a href="https://doi.org/10.1016/j.pedobi.2005.04.005">https://doi.org/10.1016/j.pedobi.2005.04.005</a>
+</div>
+</div>
 </section>
 
 </main> <!-- /main -->
@@ -1872,17 +2004,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Protocol</span></span>
 <span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>Synchronized newly hatched earthworms are put in cosms with 200 g of Closeaux soil with a WHC of 70%. They are fed every 14 days and the soil is renewed every 28 days. Soil humidity is checked every week. Earthworms are weighted every 14 days. Once at least one earthworm is adult, cocoons produced are retrieved every 28 days when changing the soil.</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a><span class="fu">### Earthworms and soil</span></span>
 <span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>Conditions :</span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a>Earthworms used in the original experiment of this study originated from a laboratory culture established from individuals collected between late 2023 and early 2024 in a permanent grassland located in Versailles (48°48′ N, 2°5′ E). The site has been free of pesticide applications for over three decades. Specimens were identified under a binocular microscope following standard taxonomic keys. The culture was maintained at 18 °C in 1 L vessels, with groups of five individuals per vessel. The rearing substrate consisted of loamy soil sampled from the same meadow and identical to that used in @bart_2019 and @bart_2020, according to the texture classification of the Food and Agriculture Organization (FAO), to reproduce conditions close to those of the native habitat. The soil contained 3.26% organic matter (dry weight basis; see Supplementary Information Table S1.1 for soil characteristics). Soil was collected from the 0-20 cm layer, air-dried, and sieved to <span class="sc">\&lt;</span> 2 mm. Moisture was maintained at 60-70% of the soil’s water-holding capacity (WHC). Earthworms were fed monthly with approximately 6 g (dry weight) of horse dung per group of five individuals, adjusted to 60–80% WHC. The dung was collected long after any veterinary deworming treatment, frozen and thawed twice, and then ground to <span class="sc">\&lt;</span> 1 mm following the procedure of @lowe_2005. As recommended by @bart_2018, ten field-collected individuals were barcoded to verify lineage composition; results indicated two genetic lineages within *A. caliginosa*. To limit potential age-related variation in reproductive performance @hartenstein_1979, individuals used in each reproduction test were less than two months apart in age.</span>
 <span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>D1 : One earthworm per cosm \| Food = 3 g/14 days</span>
-<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>D2 : 2 earthworms per cosm \| Food = 3 g/14 days</span>
-<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>D2b : 2 earthworms per cosm \| Food = 6 g/14 days</span>
-<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>D5 : 5 earthworms per cosm \| Food = 3 g/14 days</span>
-<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>D7 : 7 earthworms per cosm \| Food = 3 g/14 days</span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>To obtain age-synchronized cohorts, cocoons were retrieved from the breeding containers and then incubated at 18 °C in Petri dishes lined with moistened filter paper. Newly hatched juveniles were collected daily and transferred to soil stored at 4 °C to slow down their development until the start of the experiment. This procedure ensured that all hatchlings were at a comparable developmental stage at the experiment’s onset and allowed for random assignment of individuals to experimental groups.</span>
+<span id="cb51-20"><a href="#cb51-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-21"><a href="#cb51-21" aria-hidden="true" tabindex="-1"></a><span class="fu">### Population density experiment</span></span>
+<span id="cb51-22"><a href="#cb51-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-23"><a href="#cb51-23" aria-hidden="true" tabindex="-1"></a>To assess the effect of density on earthworm growth and reproduction from the newly hatched juvenile stage to the adult stage, four cosm densities were tested: 1, 2, 5, and 7 individuals per cosm, each in four replicates (hereafter D1, D2, D5, and D7). An additional treatment (D2b) was included to evaluate the effect of food availability independently of density. For each replicate, the corresponding number of earthworms was placed in a cosm consisting of a plastic vessel (11 × 7.7 × 4.5 cm) containing the equivalent of 200 g dry soil humidified at WHC 70%. All cosms were maintained at 18 °C. Each cosm received the equivalent of 3 g of dry horse dung humidified at WHC 70% as food every 14 days, which corresponds to *ad libitum* conditions for a single earthworm (D1). In the D2b condition, this amount was doubled (6 g every 14 days). Soil was renewed every 28 days. Earthworms were weighed every 14 days, and soil moisture was checked and adjusted weekly. Once earthworms reached adulthood, cocoons were collected every 28 days during soil renewal by wet-sieving the soil through a 1-mm mesh, following @bart_2018a.</span>
 <span id="cb51-24"><a href="#cb51-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>Some earthworm died in the first 14 days of the experiment. Another batch of earthworms were then started 28 days after the first one.</span>
+<span id="cb51-25"><a href="#cb51-25" aria-hidden="true" tabindex="-1"></a>Statistical analyses were performed to evaluate the effect of population density on juvenile growth and reproductive output. Initial body mass was first compared among density treatments to verify the homogeneity of individuals at the beginning of the experiment. Individual juvenile growth rates were then estimated. Individual juvenile growth rates were then estimated using a linear regression on the weight ($W$) through an allometric relationship with a 1/3 power scaling <span class="co">[</span><span class="ot">@gollot_2025</span><span class="co">]</span>. For each individual, a linear regression of structural length against time was then fitted, and the slope of this regression was used as an individual estimate of juvenile growth rate. The effect of population density on juvenile growth rate was tested using a one-way analysis of variance (ANOVA), with density treatment as a fixed factor. When a significant density effect was detected, pairwise comparisons between density treatments were performed using Tukey post hoc test. Reproductive output was analysed at the replicate level and compared among density treatments using the same statistical framework. Pairwise comparisons between the remaining density treatments were performed using Tukey post hoc tests.</span>
 <span id="cb51-26"><a href="#cb51-26" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-27"><a href="#cb51-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## Results</span></span>
 <span id="cb51-28"><a href="#cb51-28" aria-hidden="true" tabindex="-1"></a></span>
@@ -2471,7 +2603,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-623"><a href="#cb51-623" aria-hidden="true" tabindex="-1"></a><span class="in">p</span></span>
 <span id="cb51-624"><a href="#cb51-624" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb51-625"><a href="#cb51-625" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb51-626"><a href="#cb51-626" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary figures</span></span>
+<span id="cb51-626"><a href="#cb51-626" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
 <span id="cb51-627"><a href="#cb51-627" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-630"><a href="#cb51-630" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb51-631"><a href="#cb51-631" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: Growth curves and cumulative reproduction of earthworms across density treatments (cosm densities of 1, 2, 5, and 7 individuals). Small points correspond to the mean weight of earthworm at the replicate level, bigger plain squares correspond to the mean weight at the condition level.</span></span>
@@ -2677,6 +2809,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb51-833"><a href="#cb51-833" aria-hidden="true" tabindex="-1"></a><span class="in">  path = path_fig</span></span>
 <span id="cb51-834"><a href="#cb51-834" aria-hidden="true" tabindex="-1"></a><span class="in">)</span></span>
 <span id="cb51-835"><a href="#cb51-835" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb51-836"><a href="#cb51-836" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-837"><a href="#cb51-837" aria-hidden="true" tabindex="-1"></a>A total of 516 body-mass measurements and 64 reproduction measurements were collected over the 154-day monitoring period. Initial body mass was homogeneous across treatments (median = 10.4 mg, Q1 = 8.7 mg, Q3 = 11.7 mg). Growth rates of each individual were estimated using a linear regression on the structural length of the earthworm ($L=W^{1/3}$) which is related to the weight ($W$) through an allometric relationship with a 1/3 power scaling <span class="co">[</span><span class="ot">@gollot_2025</span><span class="co">]</span>. A significant effect of density on juvenile growth rate was detected (ANOVA, $p$ = 0.02). However, post hoc comparisons (Tukey test) revealed that only the contrast between the two extremes of population densities was statistically significant (densities of 1 vs. 7 individuals per cosm, $p$ = 0.016). No individual reached maturity at the highest population density and we were not able to keep population density constant due to mortality. As a result we excluded this treatment from the statistical analysis of reproduction data. A possible decrease in reproduction with population density was detected (-43% between density 2 and density 5) with high inter-replicate variability (Tukey test : $p$ = 0.051, Figure 1).</span>
+<span id="cb51-838"><a href="#cb51-838" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-839"><a href="#cb51-839" aria-hidden="true" tabindex="-1"></a>At the highest density (D7), one individual died in each replicate at different times (days 14, 28, 56, 70, and 84 depending on the replicate). The remaining individuals ($n$ = 6 per replicate) survived until the end of the experiment (154 days). These replicates were excluded from the main analysis due to uncertainty regarding the exact timing of mortality.</span>
+<span id="cb51-840"><a href="#cb51-840" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-841"><a href="#cb51-841" aria-hidden="true" tabindex="-1"></a>Only two replicates yielded reproduction data in the D2b condition (density 2 with increased food supply), and these displayed contrasting dynamics. One replicate was monitored until day 154, whereas the second stopped at day 84, resulting in a visible discontinuity in cumulative reproduction after this time point. Prior to day 84, increasing food availability at constant density (D2b) resulted in only limited decreases in growth and similar reproduction compared with D2.</span>
+<span id="cb51-842"><a href="#cb51-842" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-843"><a href="#cb51-843" aria-hidden="true" tabindex="-1"></a>Overall, both growth and reproduction tends to decrease with increasing density.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

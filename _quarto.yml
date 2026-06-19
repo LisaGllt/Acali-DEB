@@ -2,7 +2,7 @@ project:
   type: book
 
 book:
-  title: "**Linking physiological processes to life-history traits** : a bioenergetic approach based on DEB theory"
+  title: "**Linking physiological processes to life-history traits and toxic effects**: a bioenergetic approach based on DEB theory"
   subtitle: "Git repository"
   author:
     - name: "Lisa Gollot"
@@ -30,7 +30,7 @@ book:
   chapters:
     - index.qmd
     - quarto/A_Earthworm_culture.qmd
-    - part: quarto/DEB.qmd
+    - part: DEB
       chapters:
        - quarto/B_DENS_experiment.qmd
        - quarto/C_Data_synthesis.qmd
@@ -38,13 +38,14 @@ book:
        - quarto/E_Model_comparison.qmd
        - quarto/F_IsolatedAdults.qmd
        - quarto/G_Conclusion.qmd
-    - part: DEB-TKTD.qmd
+    - part: DEB-TKTD
       chapters:
         - quarto/H_DEBTKTD_prep.qmd
         - quarto/I_DEBTKTD_EPX.qmd
         - quarto/J_DEBTKTD_IMD.qmd
+        - quarto/K_Discussion_Conclusion.qmd
     
-    #- quarto/references.qmd
+    - quarto/references.qmd
   navbar:
     right:
       - icon: github

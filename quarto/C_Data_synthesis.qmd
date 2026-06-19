@@ -4,7 +4,7 @@ source(file=here::here("functions/fun.R"))
 f_load_libraries_colors()
 ```
 
-# Synthesis of available data
+# Synthesis of available data {#sec-DataSynth}
 
 ## Data obtained during Sylvain Bart PhD
 
@@ -1325,13 +1325,6 @@ p <- p_XP1_1_w +
 
 xmax <- 370
 
-pal_XP <- c(
-  Nord_aurora[1], Nord_aurora[1], 
-  Nord_polar[1],
-  Nord_aurora[2], Nord_aurora[2], 
-  Nord_aurora[3]
-  )
-
 p_XP_w <- ggplot()+
   # XP1 1
   geom_line(
@@ -1340,7 +1333,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha=0.5
   )+
   geom_point(
@@ -1350,7 +1343,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha = 0.5
   )+
   geom_point(
@@ -1361,7 +1354,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[1]
+    color = Nord_aurora[1]
   )+
   # XP1 2
   geom_line(
@@ -1370,7 +1363,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha=0.5
   )+
   geom_point(
@@ -1380,7 +1373,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha = 0.5
   )+
   geom_point(
@@ -1391,7 +1384,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[1]
+    color = Nord_aurora[1]
   )+
   # XP2
   geom_line(
@@ -1400,7 +1393,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[2],
+    color = Nord_aurora[4],
     alpha=0.5
   )+
   geom_point(
@@ -1410,7 +1403,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[2],
+    color = Nord_aurora[4],
     alpha = 0.5
   )+
   geom_point(
@@ -1421,7 +1414,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[2]
+    color = Nord_aurora[4]
   )+
   # XP3
   geom_line(
@@ -1430,7 +1423,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[3],
+    color = Nord_polar[4],
     alpha=0.5
   )+
   geom_point(
@@ -1440,7 +1433,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[3],
+    color = Nord_polar[4],
     alpha = 0.5
   )+
   geom_point(
@@ -1451,7 +1444,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[3]
+    color = Nord_polar[4]
   )+
   # XP4 1
   geom_line(
@@ -1460,7 +1453,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha=0.5
   )+
   geom_point(
@@ -1470,7 +1463,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha = 0.5
   )+
   geom_point(
@@ -1481,7 +1474,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[4]
+    color = Nord_aurora[2]
   )+
   # XP4 2
   geom_line(
@@ -1490,7 +1483,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha=0.5
   )+
   geom_point(
@@ -1500,7 +1493,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha = 0.5
   )+
   geom_point(
@@ -1511,7 +1504,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[4]
+    color = Nord_aurora[2]
   )+
   # XP5
   geom_line(
@@ -1520,7 +1513,7 @@ p_XP_w <- ggplot()+
       x = Time,
       y = Weight
     ),
-    color = pal_XP[5],
+    color = Nord_aurora[3],
     alpha=0.5
   )+
   geom_point(
@@ -1530,7 +1523,7 @@ p_XP_w <- ggplot()+
         y = Weight,
         group = ID_cosm
       ),
-    color = pal_XP[5],
+    color = Nord_aurora[3],
     alpha = 0.5
   )+
   geom_point(
@@ -1541,7 +1534,7 @@ p_XP_w <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[5]
+    color = Nord_aurora[3]
   )+
   labs(
     x = "Time (days)",
@@ -1562,7 +1555,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha=0.5
   )+
   geom_point(
@@ -1572,7 +1565,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha = 0.5
   )+
   geom_point(
@@ -1583,7 +1576,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[1]
+    color = Nord_aurora[1]
   )+
   # XP1 2
   geom_line(
@@ -1592,7 +1585,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha=0.5
   )+
   geom_point(
@@ -1602,7 +1595,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[1],
+    color = Nord_aurora[1],
     alpha = 0.5
   )+
   geom_point(
@@ -1613,7 +1606,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[1]
+    color = Nord_aurora[1]
   )+
   # XP2
   geom_line(
@@ -1622,7 +1615,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[2],
+    color = Nord_aurora[4],
     alpha=0.5
   )+
   geom_point(
@@ -1632,7 +1625,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[2],
+    color = Nord_aurora[4],
     alpha = 0.5
   )+
   geom_point(
@@ -1643,7 +1636,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[2]
+    color = Nord_aurora[4]
   )+
   # XP3
   geom_line(
@@ -1652,7 +1645,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[3],
+    color = Nord_polar[4],
     alpha=0.5
   )+
   geom_point(
@@ -1662,7 +1655,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[3],
+    color = Nord_polar[4],
     alpha = 0.5
   )+
   geom_point(
@@ -1673,7 +1666,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[3]
+    color = Nord_polar[4]
   )+
   # XP4 1
   geom_line(
@@ -1682,7 +1675,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha=0.5
   )+
   geom_point(
@@ -1692,7 +1685,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha = 0.5
   )+
   geom_point(
@@ -1703,7 +1696,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[4]
+    color = Nord_aurora[2]
   )+
   # XP4 2
   geom_line(
@@ -1712,7 +1705,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha=0.5
   )+
   geom_point(
@@ -1722,7 +1715,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[4],
+    color = Nord_aurora[2],
     alpha = 0.5
   )+
   geom_point(
@@ -1733,7 +1726,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[4]
+    color = Nord_aurora[2]
   )+
   # XP5
   geom_line(
@@ -1742,7 +1735,7 @@ p_XP_r <- ggplot()+
       x = Time,
       y = Reproduction
     ),
-    color = pal_XP[5],
+    color = Nord_aurora[3],
     alpha=0.5
   )+
   geom_point(
@@ -1752,7 +1745,7 @@ p_XP_r <- ggplot()+
         y = Reproduction,
         group = ID_cosm
       ),
-    color = pal_XP[5],
+    color = Nord_aurora[3],
     alpha = 0.5
   )+
   geom_point(
@@ -1763,7 +1756,7 @@ p_XP_r <- ggplot()+
     ),
     size = 3,
     alpha = 1,
-    color = pal_XP[5]
+    color = Nord_aurora[3]
   )+
   labs(
     x = "Time (days)",
@@ -1846,6 +1839,8 @@ df_Bart2020_mean <- df_Bart2020_mean |>
 ### Experiment 1 - Growth in LUFA soil
 
 Growth of 30 earthworms in LUFA 2.4 soil at 70% of WHC fed with 3 g/ind/14 days (milled at \< 0.5 mm). Earthworms were individually placed in small High Density PolyEthylene vessels (5 cm x 5∅ cm) with 50 g of soil (dry weight).
+
+(Not used in the end because of the different soil used here).
 
 ```{r lufa, warning=F, message=F}
 df_Gollot2026_lufa <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Gollot2026_lufa")|> 

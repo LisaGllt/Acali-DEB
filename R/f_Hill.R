@@ -65,8 +65,13 @@ ggplot(
 
 Slope <- 0.08
 
-f_Hill <- function(x, EC, Slope){
+f_K <- function(x, Slope){
   Y = x/(Slope * (1-x) + x)
+  return(Y)
+}
+
+f_Y <- function(x){
+  Y = x/(1 + x)
   return(Y)
 }
 
@@ -74,19 +79,30 @@ df <- data.frame(
   x = seq(0,1,0.001)
 ) |> 
   mutate(
-    y = f_Hill(x, EC, Slope)
+    y_K = f_K(x, Slope),
+    y_Y = f_Y(2*x)
   )
-
 
 ggplot(
   data = df,
   aes(
-    x = x,
-    y = y
+    x = x
   )
 ) +
-  geom_line() +
+  geom_line(
+    aes(
+      y = y_K
+    ),
+    color = Nord_frost[4]
+  ) +
+  geom_line(
+    aes(
+      y = y_Y
+    ),
+    color = Nord_frost[2]
+  ) +
   #scale_x_log10()+
+  labs(x = "X", y = "f")+
   theme_minimal()
 
 

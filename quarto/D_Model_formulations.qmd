@@ -94,183 +94,173 @@ With :
 
 **Effect of temperature on rates**
 
-\$\$
-
+$$
 \begin{aligned}
 s_A &= \exp(\frac{T_A}{T_{ref}-\frac{T_A}{T_{exp}+273.15}})\\
 s_{rH} &= \frac{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{ref}+ 273.15})}{1 + \exp (\frac{T_A^H}{T^H}-\frac{T_A^H}{T_{exp}+273.15})}\\
 T_c &= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 < T_{ref})\\ \\
-
 \{\dot p_{Am}\}_t &= \{\dot p_{Am}\}\ T_c\\
 [\dot p_{M,t}] &= [\dot p_{M}]\ T_c \\
 \nu_t &= \nu \ T_c \\
 \dot k_{J,t} &= \dot k_{J} \ T_c
 \end{aligned}
-
-\$\$
-
-## Energy assimilation in the case of earthworms
-
-$$
-\dot Q_{f,max} = \frac{\{\dot p_{Am}\}_t\ L^2}{\kappa_X}
 $$
 
-With :
+## Tested model formulations
 
--   $\dot Q_{f,max}$ : Maximal rate of energy ingested by the earthworm ($J.d^{-1}$)
--   $\{\dot p_{Am}\}_t$ : Surface-area-specific maximum assimilation rate at temperature $T_{exp}$ ($J.d^{-1}.cm^{-2}$)
--   $L$ : Structural volumetric length ($cm$)
--   $\kappa_X$ : Fraction of food energy fixed in reserve (digestion efficiency) (-)
+Our model formulation is based on the standard DEB model [@kooijman_2009a], using the extended model developed by @gergs_2022 as a starting point. Model notation and terminology follow the conventions defined in standard DEB theory [@kooijman_2009a]. The standard DEB model describes four primary state variables at the individual level of the earthworm : (i) Structural length $L$; (ii) Energy of the reserve, $E$; (iii) Maturity, $E_h$; and (iv) Reproduction, $R$, corresponding to the cumulated number of offspring produced by the individual. Environmental state variables are also taken into account as inputs (temperature, organic matter content). Model parameters are detailed in @tbl-chap3Param, while state and intermediate variables are listed in @tbl-art4ModStateVar.
+
+Several alternative model formulations were evaluated to test key biological assumptions.
+
+Our primary objective was to mechanistically link the quantity and quality of available organic matter to the functional response ($f$). Organic matter from soil and horse dung were treated separately due to differences in quality and bioavailability. Horse dung was assumed to contain 90% organic matter with an energy density of 3100 kcal/kg (13 000 J/g, $\mu_{OM}$) [@chastain_2022; @sahu_2016]. In contrast, soil organic matter was assumed to provide less usable energy. To account for this difference, a scaling factor ($r_{OM}$) was introduced to relate the energy content of soil organic matter to that of horse dung.
+
+The ingestion rate was formulated as a function of the maximum surface-area-specific searching rate, $\{\dot{F}_m\}$, or the maximum mass-specific searching rate, $[\dot{F}_m]$, individual size, organic matter availability, and population density (@eq-chap3Assim). Specifically, the ingested energy depends on structural size or structural mass, the quantities of soil and horse organic matter in the cosm ($OM{soil}$, $OM_{horse}$ in $\mathrm{g_{OM}}$), their respective energetic contributions, and the number of individuals ($Nb_{ind}$).
 
 $$
 \begin{aligned}
-\dot Q_{f,soil} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
-\dot Q_{f,horse} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}}) \\
+\dot Q_f^{matter} &= \{\dot{F}_m\}\ L^2  & (\text{version L}) \\
+\dot Q_f^{matter} &= [\dot{F}_m]\ d_V L^3 & (\text{version W}) \\ \\
+\dot Q_{f}^{soil} &= \dot Q_f^{matter} \times \frac{OM_{soil}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM}\ r_{OM}\\
+\dot Q_{f}^{horse} &= \dot Q_f^{matter} \times \frac{OM_{horse}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM} \\ \\
 \dot Q_{f,tot} &= \dot Q_{f,horse} + \dot Q_{f,soil}
 \end{aligned}
-$$
+$$ {#eq-chap3Assim}
 
-With :
-
--   $\dot Q_{f,soil}$ : Rate of energy ingested from the organic matter in the soil by the earthworm ($J.d^{-1}$)
--   $\dot Q_{f,horse}$ : Rate of energy ingested from the organic matter in the horse dung by the earthworm ($J.d^{-1}$)
--   $\dot Q_{f,tot}$ : Rate of energy ingested from organic matter by the earthworm ($J.d^{-1}$)
--   $[\dot{F}_m]$ : Maximum volume-specific searching rate ($g.d^{-1}.cm^{-3}$)
--   $W_w$ : Wet weight of the earthworm ($g$)
--   $\mu_{OM}$ : Horse dung organic matter energy content ($J.g^{-1}$)
--   $r_{OM}^{clx, horse}$ : Ratio between soil organic matter energy content and horse dung organic matter energy content (-)
--   $OM_{soil}$ : Organic matter from soil in a cosm (g)
--   $OM_{horse}$ : Organic matter from horse dung in a cosm (g)
--   $Nb_{ind}$ : Number of individual in the cosm (#)
+Consumption by individuals was explicitly incorporated into the temporal dynamics of organic matter in the cosm with the calculation of the rates of consumption of horse dung and soil organic matter ($\dot{OM}_{out}^{horse}$ and $\dot{OM}_{out}^{soil}$ in $\mathrm{g_{OM}.d^{-1}}$) (@eq-chap3OMdyn).
 
 $$
 \begin{aligned}
-\dot{OM}_{out}^{soil} &= \frac{\dot Q_{f,soil}}{\mu_{OM}\ r_{OM}^{clx, horse}}\ Nb_{ind} \\
-\dot{OM}_{out}^{horse} &= \frac{\dot Q_{f,horse}}{\mu_{OM}} \ Nb_{ind}
+\frac{\mathrm d OM_{soil}}{\mathrm d t} &= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ Nb_{ind}\\
+\frac{\mathrm d OM_{horse}}{\mathrm d t} &= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ Nb_{ind}
 \end{aligned}
-$$
+$$ {#eq-chap3OMdyn}
 
-With :
-
--   $\dot{OM}_{out}^{soil}$ : Rate of consumption of soil organic matter by all earthworms of the cosm ($g.d^{-1}$)
--   $\dot{OM}_{out}^{horse}$ : Rate of consumption of horse dung organic matter by all earthworms of the cosm ($g.d^{-1}$)
-
-$$
-f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
-$$
-
-With :
-
--   $f$ : Functional response to organic matter (-)
-
-## Different model versions tested
-
-### Relationship of wet weight to structural length
-
-In the standard DEB model, reserve is proportional to structure under constant food condition. As it is not the case in the different experiment of this study (especially bart2019_XP3), we considered another equation where reserve is independent to structure.
+The functional response ($f$) was derived as a saturating function of the ratio between ingested energy and maximal ingestion capacity. Within the DEB framework, $f$ represents the degree to which food availability limits assimilation, ranging from food limitation ($f \approx 0$) to *ad libitum* conditions ($f \approx 1$). A saturating relationship was therefore used to reflect the progressive increase in assimilated energy as ingestion approaches the maximal capacity of the organism. Two alternative formulations were tested (@eq-chap3funres): (i) a classical hyperbolic response, commonly used in DEB applications, in which $f = 0.5$ when ingested energy reaches half of its maximum value, and (ii) a normalized hyperbolic formulation constraining $f$ between 0 and 1 such that $f = 1$ when ingestion reaches its maximal value. This formulation allows maximal ingestion to correspond biologically to *ad libitum* feeding conditions, where additional food no longer increases assimilation and life-history performance.
 
 $$
 \begin{aligned}
-\text{Model w:}\\
-&W_w = L^3\left(d_V + \frac{E}{E_m} w_E\right) \ \text{(DEB-std)}\\ \\
-\text{Model e:}\\
-&W_w = L^3\ d_V + E\ d_E
+f &= \frac{X}{1+X} &\text{with }\  X &= \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} &\text{(version Y)} \\
+f &= \frac{X}{K\ (1-X)+X} &\text{with }\  X &= \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} &\text{(version K)}
 \end{aligned}
-$$
+$$ {#eq-chap3funres}
 
-### Soil ingestion
-
-Ingestion is often considered to be proportional to the structural surface of the individual (L$^2$, model L) but we tested the possibility of it being proportional to structural volume and therefore to weight (L$^3$, model W).
+Reserve mobilization, growth, maturation, and reproduction follow standard DEB equations with temperature correction. A baseline formulation assuming a fixed allocation fraction throughout the life cycle was considered (equation version F), consistent with the standard DEB $\kappa$-rule. In addition, we introduced a model variant with a context-dependent allocation rule for $\kappa$ to account for reproductive opportunities (equation version C, @eq-chap3kappaC). Specifically, energy allocation shifts when individuals reach maturity (at time $t_p$), reflecting the biological constraint that reproduction requires the presence of conspecifics. This transition can occur progressively over a characteristic timescale $\tau$.
 
 $$
 \begin{aligned}
-\text{Model L:}\\
-\dot Q_{f,soil} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
-\dot Q_{f,horse} &= [\dot{F}_m]\ L^2 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}}) \\ \\
-\text{Model W:}\\
-\dot Q_{f,soil} &= [\dot{F}_m]\ L^3 \times (\mu_{OM}\ r_{OM}^{clx, horse}\ \frac{OM_{soil}}{Nb_{ind}}) \\
-\dot Q_{f,horse} &= [\dot{F}_m]\ L^3 \times (\mu_{OM}\ \frac{OM_{horse}}{Nb_{ind}})
-\end{aligned}
-$$
-
-### Functional response to organic matter
-
-**Hyperbolic function (Model Y)**
-
-$$
-f=\frac{X}{X+1}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} 
-$$
-
-**Normalized hyperbolic function reaching 1 at maximum ingestion (Model K)**
-
-$$
-f=\frac{X}{K(1-X)+X}, \ \ \text{with }\ X = \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} 
-$$
-
-```{r}
-#| fig-cap: Aspect of the two tested functional response functions.
-#| label: fig-functionalresponse
-#| fig-height: 4
-#| fig-width: 6
-
-K <- 0.006
-x_hy <- seq(0,1,0.01)
-x_hi <- seq(0,1,0.01)
-
-f_hyperbolic <- function(x){
-  res <- 2*x/(1+2*x)
-  return(res)
-}
-
-f_hill <- function(x, Slope){
-  res <- x/(K*(1-x) + x)
-  return(res)
-}
-
-y_hy <- f_hyperbolic(x_hy)
-y_hi <- f_hill(x_hi, Slope)
-
-df <- data.frame(
-  x = c(x_hy, x_hi),
-  y = c(y_hy, y_hi),
-  Type = c(rep("Hyperbolic", length(x_hy)), rep("Normalized hyperbolic", length(x_hi)))
-)
-
-p <- ggplot(
-  data = df,
-  aes(
-    x=x,
-    y=y,
-    color = Type
-  )
-)+
-  geom_line()+
-  labs(x = "Qf/Qfmax", y = "f")+
-  scale_color_manual(values = c(Nord_frost[2], Nord_frost[4]))+
-  theme_minimal()
-p
-
-```
-
-### Change in kappa
-
-The standard DEB model supposes a fixed $\kappa$ throughout the organism life (model F). But because of the observations of a switch in growth when earthworms are adult and able to reproduce with another individual, we tested a switch in energy allocation when earthworms are adults and not alone in a cosm, and therefore able to reproduce (model S).
-
-$$
-\begin{aligned}
-{\text{Model F: }}\\ &\kappa_{\text{real}} = \kappa \\ \\
-{\text{Model C: }}\\ 
-& x = 
+x &= 
 \begin{cases}
-E_h < E_h^p, & 0 \\
-E_h \geq E_h^p, &\min \left(1,\frac{t-t_p}{\tau}\right)
-\end{cases}\\
-&\kappa_{A,real} = (1-x)\ \kappa_J + x\ \kappa_A \\
-&\kappa_{real} = 
-\begin{cases}
-E_h < E_h^p, & \kappa_J  & (\text{Juveniles})\\
-E_h \geq E_h^p\ \&\ Nb_{ind} = 1, & \kappa_J & (\text{Adult alone})\\
-E_h \geq E_h^p\ \&\ Nb_{ind} > 1, & \kappa_{A,real} & (\text{Grouped adults})
-\end{cases}
+\text{if } E_h < E_h^p, & 0 \\
+\text{if } E_h \geq E_h^p, & \min \left( 1, \frac{t-t_p}{\tau}\right)
+\end{cases} \\
+\kappa_{real} &= (1-x)\kappa_J + x\ \kappa_A
 \end{aligned}
+$$ {#eq-chap3kappaC}
+
+Finally, two alternative formulations were considered to relate structural size ($L$) to fresh body mass ($W_W$), reflecting different assumptions regarding reserve ($E$) contribution to total body weight. In the first formulation, reserve contribution was assumed proportional to structural size, consistent with the weak homeostasis assumption of DEB theory, whereby reserve covaries with structure. In the second formulation, reserve contribution was represented independently of structural size, allowing fresh body mass to vary according to reserve dynamics independently of structural growth (@eq-chap3RLW).
+
 $$
+\begin{aligned}
+W_W &= L^3 \left( d_V + \frac{E}{E_m} w_E \right) & \text{(version w)} \\
+W_W &= L^3 \ d_V + E\ d_E  & \text{(version e)}
+\end{aligned}
+$$ {#eq-chap3RLW}
+
+\noindent with $d_V$ the density of structure (g.cm$^{-3}$), $d_E$ the density of reserve (g.J$^{-1}$), $w_E$ the Contribution of reserve to body weight (g.cm$^{-3}$) and $E_m$ the maximum reserve (J).
+
+Models are designated with a combination of letters corresponding to the different variants of equations.
+
+| Symbol | Description | Unit | Value |
+|----|----|----|----|
+| $\{\dot p_{Am}\}$ | Surface area-specific maximum assimilation rate | $\mathrm{J.d^{-1}.cm^{-2}}$ | 259.0 \[237.6 ; 280.0\] |
+| $[\dot{F}_m]$ | Structure mass-specific maximum searching rate | $\mathrm{g.d^{-1}.g^{-3}}$ | 6.9 \[4.1 ; 8.9\] |
+| $\kappa_X$ | Fraction of food energy fixed in reserve (digestion efficiency) | \- | 0.258\* [@whalen_1999] |
+| $K$ | Slope of the normalized hyperbolic functional response | \- | 0.08 \[0.05 ; 0.11\] |
+| $\dot \nu$ | Energy conductance | $\mathrm{cm.d^{-1}}$ | 0.24 \[0.21 ; 0.27\] |
+| $\kappa_{J}$ | Apparent allocation fraction to soma during the juvenile stage | \- | 0.98 \[0.97 ; 0.99\] |
+| $\kappa_{A}$ | Apparent allocation fraction to soma during the adult stage when individuals are grouped | \- | 0.64 \[0.56 ; 0.70\] |
+| $\tau$ | Transition time between $\kappa_{J}$ and $\kappa_{A}$ | $\mathrm{d}$ |  9.6 \[5.4 ; 19.2\] |
+| $\kappa_{R}$ | Fraction of reproduction energy fixed in eggs (reproduction efficiency) | \- | 0.475\* [@gergs_2022] |
+| $\left[ \dot p_M \right]$ | Volume-specific somatic maintenance rate | $\mathrm{J.d^{-1}.cm^{-3}}$ | 163.1 \[130.2 ; 192.5\] |
+| $\left \{ \dot p_T \right \}$ | Surface area-specific somatic maintenance rate | $\mathrm{J.d^{-1}.cm^{-3}}$ | 0\* [@gergs_2022] |
+| $\dot k_J$ | Maturity maintenance rate coefficient | $\mathrm{d^{-1}}$ | 0.002793\* <br> [@gergs_2022] |
+| $\left[ \dot E_G \right]$ | Volume-specific costs of structure | $\mathrm{J.cm^{-3}}$ | 4183\* \newline (standard value) |
+| $E_h^b$ | Maturity at birth | $\mathrm{J}$ | 0.5\* |
+| $E_h^p$ | Maturity at puberty | $\mathrm{J}$ | 97.6 \[60.8 ; 133.6\] |
+| $E_{coc}$ | Energy in a cocoon | $\mathrm{J}$ | 68.4 \[58.4 ; 75.5\] |
+| $d_V$ | Density of structure | $\mathrm{g.cm^{-3}}$ | 1.22 \[1.15 ; 1.33\] |
+| $d_E$ | Density of reserve | $\mathrm{g.J^{-1}}$ | 1.1e-9 \[1.1e-9 ; 5.7e-7\] |
+|  | *Soil organic matter parameters* |  |  |
+| $\mu_{OM}$ | Soil organic matter energy content | $\mathrm{J.g^{-1}}$ | 11700\* |
+| $r_{OM}$ | Fraction of energy in soil compared to horse dung organic matter | \- | 0.020 \[0.017 ; 0.027\] |
+|  | *Metabolic response to temperature* |  |  |
+| $T_A^H$ | Arrhenius temperature for upper boundary | K | 28750\* <br> [@gergs_2022] |
+| $T^H$ | Upper boundary | K | 293.2\* <br> [@gergs_2022] |
+| $T_A$ | Arrhenius temperature | K | 7976\* <br> [@gergs_2022] |
+| $T_{\mathrm{ref}}$ | Reference temperature | K | 293.15 <br> [@gergs_2022] |
+
+: **Parameter description and their estimated values for the best-performing model.** Results are expressed as the modes of the distributions and their respective credibility interval (95%). Fixed parameters are indicated with an asterisque. {#tbl-chap3Param}
+
+| Symbol | Description | Unit |
+|:---|:---|:--:|
+| **Environmental state variables** |  |  |
+| $OM_{horse}$ | Horse dung organic matter mass | $\mathrm{g_{OM}}$ |
+| $OM_{soil}$ | Soil organic matter mass | $\mathrm{g_{OM}}$ |
+| $Soil_{w, cosm}$ | Dry mass of soil in the cosm | $\mathrm{g_{soil}}$ |
+| **Organism state variables** |  |  |
+| $E$ | Energy reserve | $\mathrm{J}$ |
+| $E_h$ | Maturity | $\mathrm{J}$ |
+| $L$ | Volumetric structural length | $\mathrm{cm}$ |
+| $R$ | Cumulated reproduction | $\#$ |
+| $W_w$ | Wet weight | $\mathrm{g}$ |
+| **Intermediate variables** |  |  |
+| $E_m$ | $\displaystyle \frac{\left\{\dot{p}_{Am}\right\}}{v}$ | $\mathrm{J.cm^{-1}}$ |
+| $f$ | Scaled functional response | $-$ |
+| $g$ | $\displaystyle \frac{[E_G]}{\kappa_{real} E_m}$ | $\mathrm{cm^{-2}}$ |
+| $K_m$ | $\displaystyle \frac{\left[\dot{p}_M\right]_t}{[E_G]}$ | $\mathrm{d^{-1}}$ |
+| $\kappa_{real}$ | Allocation fraction to soma | $-$ |
+| $L_m$ | $\displaystyle \frac{v_t}{K_m g}$ | $\mathrm{cm}$ |
+| $\dot{OM}_{out}^{horse}$ | Rate of consumption of horse dung organic matter | $\mathrm{g_{OM}.d^{-1}}$ |
+| $\dot{OM}_{out}^{soil}$ | Rate of consumption of soil organic matter | $\mathrm{g_{OM}.d^{-1}}$ |
+| $\dot{p}_C$ | Flux of mobilized energy from reserve | $\mathrm{J.d^{-1}}$ |
+| $\dot{p}_R$ | Energy flux allocated to maturity / reproduction | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_{f,max}$ | Maximum rate of energy ingested | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{matter}$ | Rate of matter ingestion | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{horse}$ | Rate of energy ingested through horse dung | $\mathrm{J.d^{-1}}$ |
+| $\dot{Q}_f^{soil}$ | Rate of energy ingested through soil | $\mathrm{J.d^{-1}}$ |
+
+: **Model state and intermediate variables.** {#tbl-art4ModStateVar tbl-pos="H"}
+
+## Model parametrization and calibration
+
+The DEB model was calibrated and evaluated using both literature datasets and the new density experiment conducted in this study. Together, these datasets cover multiple life stages and experimental conditions, including isolated individuals, grouped adults, and juveniles reared under different density and food availability conditions. The main characteristics of each dataset, including density treatment and feeding conditions are summarized in @tbl-chap3XP (more detail @sec-DataSynth). This combination of datasets provides complementary information for characterizing growth, maturation, and reproduction processes across a range of environmental conditions (temperature, feeding, population density).
+
+| Source | Experiment name | T <br> (°C) | Humidity (%WHC) | Soil quantity (g) | Added horse dung (g/ind/14d) | Ind./Cosm | Development stage | Sample size |
+|----|----|----|----|----|----|----|----|----|
+| Bart et al. <br> (2019) | XP1_1 | 15 | 70 | 400 | 3 | 1 | Juveniles to adults | 3 individuals |
+|  | XP1_2 | 15 | 70 | 400 | 3 | 1 then grouped\*\* | Juveniles to grouped adults | 6 individuals |
+|  | XP3 |  |  |  | Varying \newline (0 or 3)\* | 1 | Juveniles | 5 individuals |
+|  | XP4_1 |  |  |  | 1 | 1 | Juveniles to adults | 2 individuals |
+|  | XP4_2 |  |  |  | 1 | 1 then grouped\*\* | Juveniles to grouped adults | 6 individuals |
+|  | XP5 |  |  |  | 1.5 | 1 | Juveniles | 5 individuals |
+| Bart et al. <br> (2020) | Control \newline individuals | 15 | 70 | 400 | 3 | 1 | Juveniles | 91 between 0–42 days then 7 individuals |
+| Gollot et al. <br> (2026) | D1 | 18 | 70 | 200 | 3 | 1 | Juveniles to adults | 4 replicates |
+|  | D2 <br> (limiting food) |  |  |  | 1.5 | 2 | Juveniles to adults | 4 replicates |
+|  | D2b <br> (*ad libitum*) |  |  |  | 3 | 2 | Juveniles to adults | 2 replicates |
+|  | D5 |  |  |  | 0.6 | 5 | Juveniles to adults | 4 replicates |
+|  | D7 |  |  |  | 0.43 | 7 | Juveniles | 3 replicates |
+
+: **Summary of the experimental conditions for each experiment used to calibrate the DEB model.** The experiment numbering for Bart et al. (2019) follows that of the original publication. In experiments XP1 and XP4, individuals were either maintained in isolation throughout the experiment ou grouped only after puberty was detected. These experiments were therefore split into separate datasets to distinguish isolated individuals from individuals grouped at the adult stage (1: isolated; 2: grouped after puberty). Control individuals from Bart et al. (2020) include those from the XP2 experiment reported in Bart (2019). WHC: Water Holding Capacity. \newline \* 3 g/ind are given days 70, 84 and 140.\
+\newline \*\* Earthworms are first put individually in cosms before being grouped when adults. They are first grouped by 2 for 98 days then by 3 for 84 days then by 6. {#tbl-chap3XP}
+
+Model calibration was performed exclusively using datasets corresponding to juvenile individuals and adults maintained in groups. Data from isolated adults were excluded from the calibration procedure because reproduction cannot occur in the absence of mating partners, potentially affecting energy allocation patterns and biasing the estimation of reproductive parameters.
+
+Model parameters were estimated within a Bayesian framework using largely weakly informative priors, while incorporating more constrained priors for parameters with available biological or physiological knowledge. The full set of prior distributions is detailed in @sec-DEB. The models were implemented in the MCSim environment. Parameter inference was performed using Bayesian numerical calibration following @bois_2009. Likelihood functions were defined assuming normally distributed errors for body weight and Poisson-distributed counts for reproduction. Markov Chain Monte Carlo (MCMC) simulations were run with 3 chains for 100,000 iterations to approximate posterior distributions of model parameters which were estimated from the last 10,000 iterations of the MCMC chains. The point estimates correspond to the posterior distributions mode.
+
+Model comparison was based on the Bayesian Information Criterion (BIC), which balances goodness-of-fit and model complexity by penalizing models with a higher number of parameters, but also on the RMSE of each experiment. In addition, to investigate whether model performance and prediction bias varied across experimental conditions, predicted-observed relationships were examined according to temperature, density, food availability, and developmental stage.
+
+A global sensitivity analysis was conducted on the best-performing model using the Sobol method with the Jansen estimator, implemented in the “sensitivity” R package [@ioss_2026]. Two complementary analyses were performed: one including the parameters governing temperature dependence and one excluding them, in order to distinguish the contribution of thermal correction from that of the remaining physiological and environmental parameters. Parameter values were varied independently within ±10% of their posterior estimates to quantify their relative influence on model outputs.
+
+The sensitivity analysis was based on simulations of the Gollot2026_D2 experiment, in which two earthworms were maintained per cosm under moderate food availability. Body mass, reserve energy, and maturity were evaluated at both the juvenile stage ($t = 50$ days) and the adult stage ($t = 140$ days). Reproductive output at $t = 140$ days and the total amount of organic matter remaining in the cosm at $t = 50$ days were also included as endpoints. These endpoints were selected to characterize parameter influence on energy acquisition, individual state, life-history transitions, and reproductive performance at contrasting developmental stages.
+
+Finally, the case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood ($\kappa_J$), and (ii) introducing a transition toward the adult allocation fraction ($\kappa_A$) after maturation, as implemented for grouped adults.

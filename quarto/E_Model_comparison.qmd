@@ -9,7 +9,7 @@ pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
 lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 ```
 
-# Model comparison
+# Model comparison {#sec-DEB}
 
 ## Data importation
 
@@ -574,6 +574,7 @@ df_LL_BIC <- data.frame(
 
 ```{r resall}
 #| tbl-cap: Estimation results from all models. 
+#| label: tbl-ResModels
 
 list_models <- c("A_FLYw", "B_FLYe", "C_CWYe", "D_CWKe", "E_CLYe", "F_CLKe", "G_FLKe", "H_FWKe")
 list_model_summary <- mget(paste0("Summary_res_", list_models))
@@ -638,36 +639,12 @@ df_result |> datatable(
 ## A_FLYw
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_A_FLYw
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_A_FLYw$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_A_FLYw)
 p_chains
   
 ```
@@ -684,36 +661,12 @@ ggsave(
 ## B_FLYe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_B_FLYe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_B_FLYe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_B_FLYe)
 p_chains
   
 ```
@@ -730,36 +683,12 @@ ggsave(
 ## C_CWYe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_C_CWYe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_C_CWYe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_C_CWYe)
 p_chains
   
 ```
@@ -776,36 +705,12 @@ ggsave(
 ## D_CWKe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_D_CWKe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_D_CWKe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_D_CWKe)
 p_chains
   
 ```
@@ -822,36 +727,12 @@ ggsave(
 ## E_CLYe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_E_CLYe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_E_CLYe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_E_CLYe)
 p_chains
   
 ```
@@ -868,36 +749,12 @@ ggsave(
 ## F_CLKe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_F_CLKe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_F_CLKe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_F_CLKe)
 p_chains
   
 ```
@@ -914,36 +771,12 @@ ggsave(
 ## G_FLKe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_G_FLKe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_G_FLKe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_G_FLKe)
 p_chains
   
 ```
@@ -960,36 +793,12 @@ ggsave(
 ## H_FWKe
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
+#| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_H_FWKe
 #| fig-height: 8
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_H_FWKe$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_H_FWKe)
 p_chains
   
 ```
@@ -1015,59 +824,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_A_FLYw$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_A_FLYw$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_A_FLYw$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_A_FLYw$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_A_FLYw$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_FLYw)
 p_LL
 
 ```
@@ -1089,59 +846,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_B_FLYe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_B_FLYe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_B_FLYe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_B_FLYe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_B_FLYe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_B_FLYe)
 p_LL
 
 ```
@@ -1163,59 +868,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_C_CWYe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_C_CWYe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_C_CWYe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_C_CWYe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_C_CWYe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_C_CWYe)
 p_LL
 
 ```
@@ -1237,59 +890,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_D_CWKe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_D_CWKe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_D_CWKe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_D_CWKe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_D_CWKe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_D_CWKe)
 p_LL
 
 ```
@@ -1311,59 +912,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_E_CLYe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_E_CLYe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_E_CLYe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_E_CLYe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_E_CLYe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_E_CLYe)
 p_LL
 
 ```
@@ -1385,59 +934,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_F_CLKe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_F_CLKe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_F_CLKe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_F_CLKe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_F_CLKe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_F_CLKe)
 p_LL
 
 ```
@@ -1459,59 +956,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_G_FLKe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_G_FLKe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_G_FLKe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_G_FLKe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_G_FLKe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_G_FLKe)
 p_LL
 
 ```
@@ -1533,59 +978,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-p1 <- ggplot(
-  MCMC_out_H_FWKe$df_LnPost_start |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = "First half iterations", 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p2 <- ggplot(
-  MCMC_out_H_FWKe$df_LnPost |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = LnPosterior, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_H_FWKe$Nb_iter_kept, "last iterations"), 
-    y = "LnPosterior"
-    ) +
-  theme_minimal()
-
-p3 <- ggplot(
-  MCMC_out_H_FWKe$df_Devc |> 
-      filter(iteration !=1), 
-  aes(
-    x = iteration, 
-    y = RatioDeviance, 
-    color = Chain
-    )
-  ) +
-  geom_line() +
-  scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
-  labs(
-    x = paste(MCMC_out_H_FWKe$Nb_iter_kept, "last iterations"), 
-    y = "Ratio Deviance"
-    ) +
-  theme_minimal()
-
-p_LL <- p1 + p2 + p3 +
-  plot_layout(ncol=3, guides = "collect")
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_H_FWKe)
 p_LL
 
 ```
@@ -1602,154 +995,6 @@ ggsave(
 
 ## Chains convergence
 
-```{r, echo=F, message=F, warning=F}
-
-####### A_FLYw #################################################################
-
-# Large format per chain
-mcmc_list_A_FLYw <- lapply(
-  split(
-    MCMC_out_A_FLYw$Chains, 
-    MCMC_out_A_FLYw$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_A_FLYw <- as.mcmc.list(mcmc_list_A_FLYw)
-
-####### B_FLYe #################################################################
-
-# Large format per chain
-mcmc_list_B_FLYe <- lapply(
-  split(
-    MCMC_out_B_FLYe$Chains, 
-    MCMC_out_B_FLYe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_B_FLYe <- as.mcmc.list(mcmc_list_B_FLYe)
-
-####### C_CWYe #################################################################
-
-# Large format per chain
-mcmc_list_C_CWYe <- lapply(
-  split(
-    MCMC_out_C_CWYe$Chains, 
-    MCMC_out_C_CWYe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_C_CWYe <- as.mcmc.list(mcmc_list_C_CWYe)
-
-####### D_CWKe #################################################################
-
-# Large format per chain
-mcmc_list_D_CWKe <- lapply(
-  split(
-    MCMC_out_D_CWKe$Chains, 
-    MCMC_out_D_CWKe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_D_CWKe <- as.mcmc.list(mcmc_list_D_CWKe)
-
-####### E_CLYe #################################################################
-
-# Large format per chain
-mcmc_list_E_CLYe <- lapply(
-  split(
-    MCMC_out_E_CLYe$Chains, 
-    MCMC_out_E_CLYe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_E_CLYe <- as.mcmc.list(mcmc_list_E_CLYe)
-
-####### F_CLKe #################################################################
-
-# Large format per chain
-mcmc_list_F_CLKe <- lapply(
-  split(
-    MCMC_out_F_CLKe$Chains, 
-    MCMC_out_F_CLKe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_F_CLKe <- as.mcmc.list(mcmc_list_F_CLKe)
-
-####### G_FLKe #################################################################
-
-# Large format per chain
-mcmc_list_G_FLKe <- lapply(
-  split(
-    MCMC_out_G_FLKe$Chains, 
-    MCMC_out_G_FLKe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_G_FLKe <- as.mcmc.list(mcmc_list_G_FLKe)
-
-####### H_FWKe #################################################################
-
-# Large format per chain
-mcmc_list_H_FWKe <- lapply(
-  split(
-    MCMC_out_H_FWKe$Chains, 
-    MCMC_out_H_FWKe$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_H_FWKe <- as.mcmc.list(mcmc_list_H_FWKe)
-
-```
-
 ::: panel-tabset
 ## A_FLYw
 
@@ -1759,26 +1004,8 @@ mcmc_list_H_FWKe <- as.mcmc.list(mcmc_list_H_FWKe)
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_A_FLYw,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_A_FLYw, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_A_FLYw)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1787,34 +1014,9 @@ mcmc_list_H_FWKe <- as.mcmc.list(mcmc_list_H_FWKe)
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_A_FLYw <- mcmc.list(
-  lapply(mcmc_list_A_FLYw, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/A_FLYw_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_A_FLYw, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/A_FLYw_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/A_FLYw_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_A_FLYw), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_A_FLYw), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ## B_FLYe
@@ -1825,26 +1027,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_B_FLYe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_B_FLYe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_B_FLYe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1853,34 +1037,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_B_FLYe <- mcmc.list(
-  lapply(mcmc_list_B_FLYe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/B_FLYe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_B_FLYe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/B_FLYe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/B_FLYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_B_FLYe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_B_FLYe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ## C_CWYe
@@ -1891,26 +1050,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_C_CWYe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_C_CWYe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_C_CWYe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1919,34 +1060,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_C_CWYe <- mcmc.list(
-  lapply(mcmc_list_C_CWYe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/C_CWYe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_C_CWYe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/C_CWYe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/C_CWYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_C_CWYe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_C_CWYe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ## D_CWKe
@@ -1957,26 +1073,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_D_CWKe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_D_CWKe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_D_CWKe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1985,34 +1083,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_D_CWKe <- mcmc.list(
-  lapply(mcmc_list_D_CWKe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/D_CWKe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_D_CWKe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/D_CWKe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/D_CWKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_D_CWKe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_D_CWKe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ```{r, include = F}
@@ -2024,6 +1097,8 @@ col_corr <- colorRampPalette(c(
 ))(200)
 
 params_keep <- c("E_coc.1.", "Ehp.1.", "Fm.1.", "K.1.", "kapA.1.", "kapJ.1.", "pAm.1.", "r_pAm_pM.1.")
+
+mcmc_list_corr_D_CWKe <- f_mcmc_list_corr(MCMC_out_D_CWKe)
 
 df_corr_D <- cor(as.matrix(mcmc_list_corr_D_CWKe)[, params_keep])
 
@@ -2062,26 +1137,8 @@ dev.off()
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_E_CLYe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_E_CLYe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_E_CLYe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -2090,34 +1147,8 @@ dev.off()
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_E_CLYe <- mcmc.list(
-  lapply(mcmc_list_E_CLYe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
-
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/E_CLYe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/E_CLYe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_E_CLYe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_E_CLYe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
+file_rds <- here::here("fig/DEBTKTD_Models/E_CLYe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_E_CLYe, file_rds)
 
 ```
 
@@ -2129,26 +1160,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_F_CLKe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_F_CLKe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_F_CLKe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -2157,34 +1170,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_F_CLKe <- mcmc.list(
-  lapply(mcmc_list_F_CLKe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/F_CLKe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_F_CLKe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/F_CLKe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/F_CLKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_F_CLKe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_F_CLKe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ## G_FLKe
@@ -2195,26 +1183,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_G_FLKe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_G_FLKe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_G_FLKe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -2223,34 +1193,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_G_FLKe <- mcmc.list(
-  lapply(mcmc_list_G_FLKe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/G_FLKe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_G_FLKe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/G_FLKe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/G_FLKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_G_FLKe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_G_FLKe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 
 ## H_FWKe
@@ -2261,26 +1206,8 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_H_FWKe,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_H_FWKe, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_H_FWKe)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -2289,34 +1216,9 @@ ipairs(
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_H_FWKe <- mcmc.list(
-  lapply(mcmc_list_H_FWKe, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
-)
+file_rds <- here::here("fig/DEBTKTD_Models/H_FWKe_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_H_FWKe, file_rds)
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/H_FWKe_ipairs_plot.png")
-
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/H_FWKe_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_H_FWKe), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
-
-ipairs(
-  as.matrix(mcmc_list_corr_H_FWKe), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
 ```
 :::
 
@@ -2331,64 +1233,7 @@ ipairs(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_A_FLYw$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_A_FLYw$Chains_plot <- MCMC_out_A_FLYw$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_A_FLYw$Chains_plot, Nom %in% L_parameters_A_FLYw),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_A_FLYw)
 p_post
 ```
 
@@ -2410,64 +1255,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_B_FLYe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_B_FLYe$Chains_plot <- MCMC_out_B_FLYe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_B_FLYe$Chains_plot, Nom %in% L_parameters_B_FLYe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_B_FLYe)
 p_post
 ```
 
@@ -2489,64 +1277,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_C_CWYe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_C_CWYe$Chains_plot <- MCMC_out_C_CWYe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_C_CWYe$Chains_plot, Nom %in% L_parameters_C_CWYe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_C_CWYe)
 p_post
 ```
 
@@ -2568,64 +1299,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_D_CWKe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_D_CWKe$Chains_plot <- MCMC_out_D_CWKe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_D_CWKe$Chains_plot, Nom %in% L_parameters_D_CWKe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_D_CWKe)
 p_post
 ```
 
@@ -2647,64 +1321,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_E_CLYe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_E_CLYe$Chains_plot <- MCMC_out_E_CLYe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_E_CLYe$Chains_plot, Nom %in% L_parameters_E_CLYe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_E_CLYe)
 p_post
 ```
 
@@ -2726,64 +1343,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_F_CLKe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_F_CLKe$Chains_plot <- MCMC_out_F_CLKe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_F_CLKe$Chains_plot, Nom %in% L_parameters_F_CLKe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_F_CLKe)
 p_post
 ```
 
@@ -2805,64 +1365,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_G_FLKe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_G_FLKe$Chains_plot <- MCMC_out_G_FLKe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_G_FLKe$Chains_plot, Nom %in% L_parameters_G_FLKe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_G_FLKe)
 p_post
 ```
 
@@ -2884,64 +1387,7 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_H_FWKe$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_H_FWKe$Chains_plot <- MCMC_out_H_FWKe$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_H_FWKe$Chains_plot, Nom %in% L_parameters_H_FWKe),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_H_FWKe)
 p_post
 ```
 
@@ -6340,9 +4786,23 @@ ggsave(
 ```
 :::
 
+Calibration of all tested model formulations was achieved using three MCMC chains. Convergence diagnostics indicated satisfactory mixing and convergence overall, with chains converging toward similar posterior distributions and Gelman–Rubin statistics close to 1 ($\hat{R}$). However, for some model formulations, posterior estimates of specific parameters approached the upper or lower bounds of their biologically constrained priors, suggesting limited parameter identifiability or weak support for these formulations. Model comparison based on BIC revealed substantial differences among formulations (@tbl-ResModels).
+
+The two best-supported models shared three common characteristics: (i) a progressive change in energy allocation after maturation (C), (ii) a normalized hyperbolic functional response (K), and (iii) a formulation in which reserve contribution to fresh body mass was independent of structural size (e). The only difference between these two formulations concerned the scaling of the maximum searching rate, which was either structural-mass-specific (W) or surface-area-specific (L) : model W.K.C.e (BIC = 25.5) and model L.K.C.e (BIC = -31.3). whereas all other formulations had considerably higher BIC values (103-597).
+
+Models assuming a fixed allocation rule throughout the life cycle (F) systematically resulted in poorer fits. Similarly, models using the classical hyperbolic formulation for the functional response (Y) showed much higher BIC values than those using the normalized formulation (K). In practice, these formulations systematically failed to reproduce observed growth trajectories, with predicted assimilation remaining insufficient to sustain realistic growth across experiments. Models assuming reserve contribution proportional to structure (w) also performed less well than formulations assuming reserve independence (e) (see Supplementary information Section S2).
+
+Although the two best models had substantially different BIC values ($\Delta$BIC = 56.8), both provided qualitatively similar predictions for most datasets. However, they greatly differed for the key experiment Bart2019_XP3, where earthworms were alternately fed with soil only and soil supplemented with horse dung. The model with a structural-mass-specific maximum searching rate (W.K.C.e) reproduced the observed growth trajectory more accurately during the final phase of the experiment. This difference was reflected by a lower weight RMSE for the W.K.C.e compared with L.K.C.e (0.039 vs. 0.067, respectively). Consequently, despite a higher overall BIC, only W.K.C.e was retained for subsequent analyses because it provided a substantially better fit for Bart2019_XP3 while producing similar fits for the other experiments (@fig-pred_D_CWKe & fig-pred_F_CLKe).
+
+Parameter estimates for the retained model are presented in @tbl-ResModels. Parameter values were generally consistent between W.K.C.e and L.K.C.e, with as expected, the main differences concerning the ingestion-related parameters $[\dot{F}_m]$, $\{\dot{F}_m\}$ and $K$. For both formulations, posterior estimates of the maximum searching rate approached the upper bound of the prior distribution.
+
+Although the retained model adequately reproduced the main growth and reproduction trajectories across experiments (W.K.C.e), some condition-specific deviations remained. For body mass, grouped individuals under low-food conditions (Bart2019_XP4_2) showed an overestimation of the adult plateau, whereas the adult plateau was well estimated for grouped individuals under high-food conditions (Bart2019_XP1_2). In the density experiments at densities 2 and 5 (Gollot2026_D2 and Gollot2026_D5), the transition between juvenile growth and the adult plateau remained more abrupt in simulations than in observations, despite the introduction of a progressive allocation transition over the timescale parameter ($\tau$). In contrast, this transition was more accurately reproduced for individuals at density 2 with increased food supply (Gollot2026_D2b). Finally, the timing of maturation was overestimated in the density 5 condition (Gollot2026_D5).
+
+For reproduction, the main deviations also corresponded to specific experimental conditions rather than to a general model bias. For grouped individuals under low-food conditions (Bart2019_XP4_2), observed reproduction decreased when density increased from three to six individuals per cosm, whereas the model predicted similar reproductive outputs between the two conditions. For individuals at density 2 with increased food supply (Gollot2026_D2b), reproductive output was overestimated, with observed reproduction remaining substantially lower than predicted by the model.
+
 ## Organic matter dynamic and functional response
 
-```{r}
+```{r, warning=F, message=F}
 path_D_OM <- here::here("mod/D_DEB_CWKe/Dens_D2_D2b_f_OM")
 
 MCMC_out_D_OM <- f_MCSim(path_D_OM)
@@ -6393,7 +4853,7 @@ df_pred_full_D_OM_wide <- df_pred_full_D_OM |>
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Predicted function response and organic matter dynamic.
 #| label: fig-OMdynFood
 #| fig-height: 8
@@ -6546,7 +5006,7 @@ ggsave(
 ) 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Predicted function response and organic matter dynamic.
 #| label: fig-OMdynDens
 #| fig-height: 6
@@ -6689,7 +5149,7 @@ ggsave(
 
 ## Environmental conditions and model performance
 
-```{r}
+```{r, warning=F, message=F}
 
 levels_Density_env <- c("1", "2", "5", "7", "Grouped\nafter puberty")
 col_Density_env <- c(rev(Nord_aurora[1:4]), Nord_aurora[5])
@@ -7325,9 +5785,7 @@ ggsave(
   )
 ```
 
-### Tables
-
-```{r}
+```{r, warning=F, message=F}
 
 f_Quality_fit <- function(df, group){
   df_res <- df |> 
@@ -7410,7 +5868,7 @@ df_fold_D_Reproduction_Temp_Status <- f_Quality_fit(df_predobs_Reproduction_D_CW
   
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for weight and its bias according to experimental temperature.
 
 df_fold_D_Weight_Temp |> datatable(
@@ -7424,7 +5882,7 @@ df_fold_D_Weight_Temp |> datatable(
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for weight and its bias according to the number of individuals in the cosm and their observed developmental status.
 
 df_fold_D_Weight_Dens_Status |> datatable(
@@ -7438,7 +5896,7 @@ df_fold_D_Weight_Dens_Status |> datatable(
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for weight and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
 
 df_fold_D_Weight_Food_Status |> datatable(
@@ -7452,7 +5910,7 @@ df_fold_D_Weight_Food_Status |> datatable(
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for reproduction and its bias according to experimental temperature.
 
 df_fold_D_Reproduction_Temp |> datatable(
@@ -7466,7 +5924,7 @@ df_fold_D_Reproduction_Temp |> datatable(
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for reproduction and its bias according to the number of individuals in the cosm and their observed developmental status.
 
 df_fold_D_Reproduction_Dens_Status |> datatable(
@@ -7480,7 +5938,7 @@ df_fold_D_Reproduction_Dens_Status |> datatable(
   )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| tbl-cap: Quality of fit for reproduction and its bias according to percentage of organic matter (OM) from horse dung given every 14 days per individual and the observed developmental status of earthworms.
 
 df_fold_D_Reproduction_Food_Status |> datatable(
@@ -7494,11 +5952,19 @@ df_fold_D_Reproduction_Food_Status |> datatable(
   )
 ```
 
+The predicted-observed analysis highlighted condition-specific patterns in model fit and prediction bias. These comparisons remain descriptive because the experimental factors were not orthogonal, particularly density and per-capita food availability.
+
+For body mass, fit quality was similar between temperatures, with mean fold values of 1.21 at 15 °C and 1.28 at 18 °C. The exponentiated mean log predicted-to-observed ratios were also close to 1 at both temperatures (1.11 and 0.92, respectively), providing no clear evidence of a marked temperature-specific bias. The higher reproduction residual observed at 18 °C was mainly driven by individuals at density 2 with increased food supply (Gollot2026_D2b) and therefore reflected a condition-specific overestimation rather than a general temperature effect.
+
+For juveniles, fit quality decreased as density increased and per-capita food availability declined, with mean fold values ranging from 1.24 at density 1 to 1.55 at density 7. Negative mean log predicted-to-observed ratios at densities 5 and 7, and under the lowest food input, indicated a tendency to underestimate juvenile body mass under the most limiting conditions. Adult body mass was also underestimated at densities 2 and 5, whereas individuals grouped after puberty were accurately reproduced, with a mean fold of 1.12 and a mean log predicted-to-observed ratio close to zero.
+
+Reproduction showed greater condition-specific variation than body mass, with both over- and underestimation across adult density and feeding treatments. The strongest overestimation occurred for individuals at density 2 with increased food supply (Gollot2026_D2b), which also corresponded to the highest per-capita food input. Overall, model deviations were associated with combinations of density, food availability, developmental stage, and experiment-specific conditions rather than with a single environmental factor.
+
 ## Sensitivity analysis - CWKe
 
 ### With temperature parameters
 
-```{r ASparamT}
+```{r ASparamT, warning=F, message=F}
 path_fig <- here::here("fig/AS")
 path_AS <- here::here("mod/X_AS")
 
@@ -7538,11 +6004,6 @@ file_txt_AS_T <- here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type, "_T.txt"
 if (file.exists(file_rds_AS_T)) {
   df_Sobol_param_T <- readRDS(file_rds_AS_T)
 } else {
-  # Long to generate
-  # df_Sobol_param_T <- do.call(rbind, lapply(l_Sobol_param_T, as.data.frame))
-  # df_Sobol_param_T <- cbind(id = seq_len(nrow(df_Sobol_param_T)), df_Sobol_param_T)
-  # saveRDS(df_Sobol_param_T, file_rds_AS_T)
-  # write.table(df_Sobol_param_T, file = here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type,"_T.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
   
   library(data.table)
 
@@ -7565,15 +6026,13 @@ if (file.exists(file_rds_AS_T)) {
 
 }
 
-# tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
-
 # In the AS folder in the terminal :
 # makemcsim DEBcali.model
 # ./mcsim.DEBcali DEB_AS_T.in
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 l_sim_fail_T <- c(261497)
 
 Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
@@ -7610,7 +6069,7 @@ df_Sobol_results_T <- df_Sobol_results_T |>
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index.
 #| label: fig-TItotT
 #| fig-height: 12
@@ -7660,7 +6119,7 @@ ggsave(
 )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index per variable.
 #| label: fig-TItotpervarT
 #| fig-height: 12
@@ -7752,7 +6211,7 @@ ggsave(
 )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Comparison TI & FOI.
 #| label: fig-TIFOIT
 #| fig-height: 12
@@ -7826,7 +6285,7 @@ ggsave(
 
 ### Without temperature parameters
 
-```{r ASparamnoT}
+```{r ASparamnoT, warning=F, message=F}
 
 path_fig <- here::here("fig/AS")
 path_AS <- here::here("mod/X_AS")
@@ -7867,11 +6326,6 @@ file_txt_AS_noT <- here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type, "_noT.
 if (file.exists(file_rds_AS_noT)) {
   df_Sobol_param_noT <- readRDS(file_rds_AS_noT)
 } else {
-  # Long to generate
-  # df_Sobol_param_noT <- do.call(rbind, lapply(l_Sobol_param_noT, as.data.frame))
-  # df_Sobol_param_noT <- cbind(id = seq_len(nrow(df_Sobol_param_noT)), df_Sobol_param_noT)
-  # saveRDS(df_Sobol_param_noT, file_rds_AS_noT)
-  # write.table(df_Sobol_param_noT, file = here::here(paste0("mod/X_AS/Param_sobol_", Sobol_type,"_noT.txt")), sep = "\t", row.names = FALSE, quote = FALSE)
   
   library(data.table)
 
@@ -7894,15 +6348,13 @@ if (file.exists(file_rds_AS_noT)) {
 
 }
 
-# tmp <- read.table(here::here(paste0("mod/FINAL/Z_AS/Param_sobol_", Sobol_type,".txt")), sep = "\t")
-
 # In the AS folder in the terminal :
 # makemcsim DEBcali.model
 # ./mcsim.DEBcali DEB_AS.in
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 
 
 l_sim_fail_noT <- c(20220, 27726, 
@@ -7946,7 +6398,7 @@ df_Sobol_results_noT <- df_Sobol_results_noT |>
 
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index.
 #| label: fig-TItotnoT
 #| fig-height: 12
@@ -7997,7 +6449,7 @@ ggsave(
 )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Total Index per variable.
 #| label: fig-TItotpervarnoT
 #| fig-height: 12
@@ -8089,7 +6541,7 @@ ggsave(
 )
 ```
 
-```{r}
+```{r, warning=F, message=F}
 #| fig-cap: Sobol Sensitivity Analysis - Comparison TI & FOI.
 #| label: fig-TIFOI
 #| fig-height: 12
@@ -8160,3 +6612,7 @@ ggsave(
   path = path_fig
 )
 ```
+
+The global sensitivity analysis revealed that model outputs were strongly influenced by the parameters governing temperature correction when these were included in the analysis. The reference temperature ($T_{\mathrm{ref}}$) was the main driver of body mass, reserve energy, reproduction, and organic matter dynamics, while ($T_H$) also contributed substantially. Maturity-related endpoints were primarily controlled by the juvenile allocation fraction ($\kappa_J$). Differences between first-order and total-order indices indicated substantial interactions between temperature correction, energy allocation, and other physiological processes.
+
+When temperature-related parameters were excluded, the sensitivity patterns became more process-specific. Body mass, maturity, and reproduction were mainly governed by ($\kappa_J$), whereas reserve energy was primarily influenced by the energy conductance ($\nu$) and the maximum assimilation rate ($\{\dot{p}_{Am}\}$). Organic matter remaining in the cosm was influenced by several ingestion- and assimilation-related parameters, particularly ($[\dot{F}_m]$), ($\kappa_X$), ($\mu_{OM}$), and ($d_V$). These results highlight the central role of temperature correction and energy allocation in model predictions, while also showing that environmental resource dynamics depend on a broader set of interacting processes.

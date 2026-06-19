@@ -2,6 +2,14 @@
 
 ## Abstract
 
+Earthworms are key ecosystem engineers whose life-history traits are strongly influenced by environmental conditions and chemical stress. Mechanistic models are therefore needed to integrate these multiple drivers and predict organism responses under realistic exposure scenarios. In this study, we first developed a Dynamic Energy Budget (DEB) model for *Aporrectodea caliginosa* describing the effects of food availability, population density, and adult isolation on growth, maturation, and reproduction, and subsequently extended this model into a DEB–Toxicokinetic–Toxicodynamic (DEB-TKTD) framework to characterize the effects of imidacloprid and epoxiconazole.
+
+The baseline DEB model was calibrated using literature data and a new density experiment initiated at the juvenile stage. Alternative formulations were compared regarding food acquisition, reserve contribution to fresh body mass, and post-maturation energy allocation. The best-supported formulations combined a progressive change in energy allocation after maturation, a normalized hyperbolic functional response, and a weak contribution of reserves to fresh body mass. Density-dependent reductions in juvenile growth were largely explained by lower food acquisition per individual, while simulations of isolated adults suggested that reproductive energy may be partly redirected toward somatic processes when mating opportunities are absent.
+
+The DEB model was then coupled with previously calibrated two-compartment toxicokinetic models and toxicity data for juvenile growth, adult growth, and reproduction. Toxicodynamic parameters and alternative physiological modes of action were estimated independently for both pesticides. Imidacloprid effects were best described by a combined reduction in assimilation and growth, whereas reduced assimilation alone provided the most parsimonious explanation for epoxiconazole toxicity. Estimated internal tolerance concentrations were substantially lower for imidacloprid than for epoxiconazole, consistently with its greater toxicity across life-history endpoints. The models captured the overall concentration-dependent responses, although systematic deviations remained at high imidacloprid and mortality were not fully represented.
+
+By linking environmental conditions, internal exposure, energetic processes, and life-history responses within a unified framework, this study provides a mechanistic basis for predicting pesticide effects in earthworms and supports future applications to chemical mixtures and multiple environmental stressors.
+
 ## Preliminary information about this study
 
 This study is part of the french [ANR project EEWORM](https://eeworm-website-eeworm-28029feb17f172b5d59fe25680d42ab1a87633fff.pages-forge.inrae.fr).

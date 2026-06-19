@@ -3,7 +3,7 @@ MCMC( "DEB_TKTD_C2.out",  # output file
       "",                # name of data file
       30000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
-      1069);               # random seed
+      3666);               # random seed
 
 Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     

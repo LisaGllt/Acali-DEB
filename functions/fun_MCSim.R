@@ -3714,9 +3714,277 @@ f_Read_predictions <- function(file_path, No_scenario, l_concentrations, Sim_dur
 }
 
 
+# Plots ----
+
+f_Plot_MCMC_Chains <- function(
+  df, 
+  bol_log = TRUE
+) {
+  
+  pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
+  
+  p_chains <-  
+    ggplot(
+      data = df$Chains |> 
+        filter(Iteration !=1), 
+      aes(
+        x = Iteration, 
+        y = value, 
+        color = as.factor(Chain), 
+        group = as.factor(Chain)
+      )
+    )+
+    geom_line(alpha=0.7)+
+    facet_wrap(~Parameter, scales = "free", ncol = 2)+
+    
+    scale_color_manual(name = "Chains", values = pal_chains)+
+    
+    theme_bw()+
+    theme(
+      legend.position = "right", 
+      title=element_text(size=12, face="plain"), 
+      axis.title.x = element_text(face="plain"),
+      strip.background = element_rect(fill="white")
+    )
+  
+  if(bol_log == TRUE){
+    p_chains <- p_chains + scale_y_log10()
+  }
+  
+  return(p_chains)
+  
+}
+
+f_Plots_MCMC_Likelihood <- function(df) {
+  
+  pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
+  lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
+  
+  p1 <- ggplot(
+    df$df_LnPost_start |> 
+      filter(iteration !=1), 
+    aes(
+      x = iteration, 
+      y = LnPosterior, 
+      color = Chain
+    )
+  ) +
+    geom_line() +
+    scale_y_log10()+
+    scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+    labs(
+      x = "First half iterations", 
+      y = "LnPosterior"
+    ) +
+    theme_minimal()
+  
+  p2 <- ggplot(
+    df$df_LnPost |> 
+      filter(iteration !=1), 
+    aes(
+      x = iteration, 
+      y = LnPosterior, 
+      color = Chain
+    )
+  ) +
+    geom_line() +
+    scale_y_log10()+
+    scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+    labs(
+      x = paste(df$Nb_iter_kept, "last iterations"), 
+      y = "LnPosterior"
+    ) +
+    theme_minimal()
+  
+  p3 <- ggplot(
+    df$df_Devc |> 
+      filter(iteration !=1), 
+    aes(
+      x = iteration, 
+      y = RatioDeviance, 
+      color = Chain
+    )
+  ) +
+    geom_line() +
+    scale_y_log10()+
+    scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
+    labs(
+      x = paste(df$Nb_iter_kept, "last iterations"), 
+      y = "Ratio Deviance"
+    ) +
+    theme_minimal()
+  
+  p_LL <- p1 + p2 + p3 +
+    plot_layout(ncol=3, guides = "collect")
+  
+  return(p_LL)
+  
+}
 
 
+f_Plot_Convergence <- function(df){
+  # Large format per chain
+  mcmc_list_df <- lapply(
+    split(
+      df$Chains, 
+      df$Chains$Chain
+    ),
+    function(d) {
+      wide <- d %>%
+        dplyr::select(Iteration, Parameter, value) %>%
+        pivot_wider(names_from = Parameter, values_from = value) %>%
+        arrange(Iteration)
+      mcmc(as.matrix(wide[,-1]))
+    })
+  
+  mcmc_list_df <- as.mcmc.list(mcmc_list_df)
+  
+  par(mfrow=c(1,3))
+  
+  gelman.plot(mcmc_list_df,
+              bin.width = 10,      # Number of observations per segment,
+              # first segment --> at least 50 iterations.
+              max.bins = 50,       # Maximum number of bins, excluding the last one
+              confidence = 0.95,   # Coverage probability of confidence interval.
+              transform = FALSE,   # improve the normality of the distribution
+              autoburnin=TRUE)     # Remove first half of sequence
+  
+  gelman <- gelman.diag(
+    mcmc_list_df, 
+    confidence = 0.95, 
+    transform=FALSE, 
+    autoburnin=TRUE, 
+    multivariate=TRUE
+  )
+  
+  return(gelman)
+}
 
+f_mcmc_list_corr <- function(df) {
+  
+  mcmc_list_df <- lapply(
+    split(
+      df$Chains, 
+      df$Chains$Chain
+    ),
+    function(d) {
+      wide <- d %>%
+        dplyr::select(Iteration, Parameter, value) %>%
+        pivot_wider(names_from = Parameter, values_from = value) %>%
+        arrange(Iteration)
+      mcmc(as.matrix(wide[,-1]))
+    })
+  
+  mcmc_list_df <- as.mcmc.list(mcmc_list_df)
+  
+  mcmc_list_corr_df <- mcmc.list(
+    lapply(mcmc_list_df, function(x) {
+      mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
+    })
+  )
+  return(mcmc_list_corr_df)
+}
 
+f_Plot_ipairs <- function(df, file_rds) {
+  
+  mcmc_list_corr_df <- f_mcmc_list_corr(df)
+  
+  colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
+  
+  if (!file.exists(file_rds)) {
+    
+    png(file_rds, width = 3000, height = 3000, res = 300)
+    
+    ipairs(
+      as.matrix(mcmc_list_corr_df), 
+      colramp = colramp_aurora, 
+      pixs=0.25, 
+      cex.diag = 0.5
+    )
+    dev.off()
+  }
+  
+  ipairs(
+    as.matrix(mcmc_list_corr_df), 
+    colramp = colramp_aurora, 
+    pixs=0.25, 
+    cex.diag = 0.5
+  )
+}
 
+f_Get_Prior_distrib <- function(df){
+  
+  n_samples <- 1e5 # Simulation of the distribution
+  
+  df_priors_dist <- df$Priors |> 
+    dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
+    rowwise() |> 
+    mutate(samples = case_when(
+      Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
+      Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
+      Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
+      Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
+    )) |> 
+    unnest(samples)
+  
+  return(df_priors_dist)
+}
 
+f_Plot_Posteriors <- function(df, bol_log = TRUE){
+  
+  L_parameters_df <- unique(df$Priors$Nom)
+  
+  df_priors_dist <- f_Get_Prior_distrib(df)
+  
+  alpha_prior <- 0.5
+  alpha_post <- 0.5
+  col_prior <- Nord_snow[1]
+  col_post <- col_IMD
+  
+  df$Chains_plot <- df$Chains |> 
+    mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
+  
+  p_post <- ggplot() +
+    
+    # Priors
+    stat_halfeye(
+      data = df_priors_dist,
+      aes(
+        x = samples,
+      ),
+      alpha = alpha_prior,
+      fill = col_prior,
+      color = col_prior,
+      normalize = "xy"
+    ) +
+    
+    # Posterior
+    stat_halfeye(
+      data = subset(df$Chains_plot, Nom %in% L_parameters_df),
+      mapping = aes(
+        x=value
+      ),
+      fill = col_post,
+      color = col_post,
+      alpha = alpha_post,
+      normalize = "xy"
+    ) +
+    
+    facet_wrap(~Nom, scales = "free")+
+    labs(
+      title = "Posterior and prior distributions", 
+      x = "Parameter value", 
+      y = "Density"
+    ) +
+    theme_minimal()+
+    theme(
+      title=element_text(face="bold")
+    )
+  
+  if (bol_log ==TRUE) {
+    p_post <- p_post + scale_x_log10()
+  }
+  
+  return(p_post)
+  
+}

@@ -245,7 +245,7 @@ For the maximum ingestion rate, we imposed a biologically realistic constraint b
 
 An estimate of cocoon energy content was required to parameterize reproduction in the DEB model for *Aporrectodea caliginosa*. As no direct measurements are available for this species, we relied on published calorimetric data for *Lumbricidae* reported by @cumminns_1971, who measured the energy density of whole individuals across developmental stages. Reported mean energy densities were 5,690 cal.g$^{-1}$ dry weight ($n = 3$), corresponding to 19,098 J.g$^{-1}$, and 782 cal.g$^{-1}$ wet weight ($n = 1$), corresponding to 3,268 J.g$^{-1}$. Although these measurements do not specifically target cocoons, they provide a reasonable order-of-magnitude estimate for annelid biomass. Assuming a mean cocoon fresh mass of 10 mg, this yields an approximate energy content of 33 J per cocoon. Comparable values have been reported for soil invertebrates in other calorimetric studies (e.g., @driver_1974; @eggleton_2004), supporting the use of this approximation as a prior for egg energy content.
 
-## Model A_FLYw
+## Model L.Y.F.w
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/A_FLYw_post.png) {fig-scap="Estimated posterior distributions for each parameter."}
 
@@ -253,7 +253,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment. Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/A_FLYw_trajWR.png)
 
-## Model B_FLYe
+## Model L.Y.F.e
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/B_FLYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
@@ -261,13 +261,13 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/B_FLYe_trajWR.png)
 
-## Model C_CWYe
+## Model W.Y.C.e
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/C_CWYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
 ![Predicted versus observed values of weight and reproduction. Points are colored by experimental conditions. Grey and light-grey lines represent the 2-folds and 5-fold changes, respectively. The bold black line represents the identity line.](../../fig/DEB_Models/C_CWYe_predobs.png)
 
-## Model D_CWKe
+## Model W.K.C.e
 
 ![Model chains.](../../fig/DEB_Models/D_CWKe_chains.png)
 
@@ -279,7 +279,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment. Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/D_CWKe_trajWR.png)
 
-## Model E_CLYe
+## Model L.Y.C.e
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/E_CLYe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
@@ -287,7 +287,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/E_CLYe_trajWR.png)
 
-## Model F_CLKe
+## Model L.K.C.e
 
 ![Model chains.](../../fig/DEB_Models/F_CLKe_chains.png)
 
@@ -299,7 +299,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/F_CLKe_trajWR.png)
 
-## Model G_FLKe
+## Model L.K.F.e
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/G_FLKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
@@ -307,7 +307,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 
 ![Observed and predicted growth and reproduction trajectories for each experiment . Points represent observed data, solid lines represent estimated model trajectories, and ribbons indicate the 95% credibility intervals.](../../fig/DEB_Models/G_FLKe_trajWR.png)
 
-## Model H_FWKe
+## Model W.K.F.e
 
 ![Estimated posterior distributions for each parameter. Prior and posterior distributions are represented in light and dark blue, respectively.](../../fig/DEB_Models/H_FWKe_post.png){fig-scap="Estimated posterior distributions for each parameter."}
 
@@ -318,7 +318,7 @@ An estimate of cocoon energy content was required to parameterize reproduction i
 ::: landscape
 ## Summary
 
-| Parameter | A_FLYw | B_FLYe | C_CWYe | D_CWKe | E_CLYe | F_CLKe | G_FLKe | H_FWKe |
+| Parameter | L.Y.F.w | L.Y.F.e | W.Y.C.e | W.K.C.e | L.Y.C.e | L.K.C.e | L.K.F.e | W.K.F.e |
 |----|----|----|----|----|----|----|----|----|
 | $\{\dot p_{Am}\}$ | 215.8 \newline [207.6 ; 222.6] | 129.5 \newline [116.2 ; 155.3] | 52.0 \newline [49.9 ; 60.2] | 259.0 \newline [237.6 ; 280.0] | 135.3 \newline [109.0 ; 157.5] | 228.1 \newline [206.0 ; 245.5] | 297.3 \newline [268.2 ; 316.8] | 302.3 \newline [268.3 ; 329.4] |
 | $[\dot{p}_M]/\{\dot p_{Am}\}$ ratio | 0.855 \newline [0.786 ; 0.879] | 0.655 \newline [0.451 ; 0.697] | 0.244 \newline [0.161 ; 0.359] | 0.630 \newline [0.548 ; 0.688] | 0.593 \newline [0.429 ; 0.695] | 0.550 \newline [0.444 ; 0.613] | 0.891 \newline [0.849 ; 0.919] | 0.917 \newline [0.865 ; 0.949] |
