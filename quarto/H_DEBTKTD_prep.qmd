@@ -591,11 +591,11 @@ As the initial weight in this dataset range from 0.055 to 0.141 g, a relationshi
 
 For the initialisation of the energy in the reserve, we assume individuals were well fed in the culture and therefore the energy can be assumed to equal Em at the start of the experiment.
 
-### Re-estimations of $\{\dot{p}_{Am}\}$ and $E_{coc}$
+### Re-estimations of $\{\dot{p}_{Am}\}$, $E_{coc}$ and $\kappa_A$
 
-Although the structure of the baseline DEB model and most physiological parameters are retained from the previous calibration, two parameters must be re-estimated to account for potential physiological differences between the source population used to develop the initial DEB model and the earthworms used in the present toxicity experiments. The maximum surface-area-specific assimilation rate, $\{\dot{p}_{Am}\}$, and the energy content of a cocoon, $E_{coc}$, are fitted to the control data from the juvenile growth and adult growth and reproduction experiments. All other DEB parameters are fixed to the posterior mode values obtained from the initial DEB model.
+Before estimating toxicodynamic parameters, the baseline DEB model was evaluated against the control data from the juvenile growth, adult growth, and reproduction experiments. This preliminary step was used to account for possible physiological differences between the earthworms used in the toxicity experiments and the populations included in the original DEB calibration. When systematic discrepancies were identified between control observations and model predictions, selected DEB parameters associated with the affected biological process were allowed to vary, while the model structure and all remaining physiological parameters were retained from the original calibration. Candidate parameters were selected according to their mechanistic relationship with the response requiring adjustment, in order to limit the number of re-estimated parameters and preserve identifiability. All other DEB parameters were fixed to the posterior mode values obtained from the initial DEB model.
 
-For both parameters, prior distributions are defined within $\pm 20%$ of the values estimated in the initial DEB calibration. Parameter estimation is performed using three independent MCMC chains of 30,000 iterations, of which the final 10,000 iterations are retained to characterize the posterior distributions. The posterior mode estimates of $\{\dot{p}_{Am}\}$ and $E_{coc}$ are subsequently fixed during the estimation of the toxicodynamic parameters.
+Prior distributions were defined within $\pm 30\%$ of the values estimated in the initial DEB calibration. Parameter estimation was performed using Bayesian inference implemented in MCSim [@bois_2009] and using three independent MCMC chains of 30,000 iterations, of which the final 10,000 iterations were retained to characterize the posterior distributions. The posterior mode estimates of $\{\dot{p}_{Am}\}$ and $E_{coc}$ were subsequently fixed during the estimation of the toxicodynamic parameters.
 
 ```{r, warning=F, message=F}
 path_fig <- here::here("fig/DEBTKTD_Models")
@@ -618,129 +618,87 @@ Summary_res_DEB_refit
 
 ```
 
-Re-estimation of the two DEB parameters against the control data resultes in a marked increase in the maximum surface-area-specific assimilation rate, $\{\dot{p}_{Am}\}$, whereas the estimated cocoon energy content, $E_{coc}$, remaines close to its original value. The posterior mode of $\{\dot{p}_{Am}\}$ increases from 259.0 \[237.6; 280.0\] J$\cdot$cm$^{-2}\cdot$d$^{-1}$ in the original DEB calibration to 339.7 \[282.8; 388.4\] J$\cdot$cm$^{-2}\cdot$d$^{-1}$ after recalibration. The limited overlap between the two credible intervals indicates a higher assimilation capacity for the population used in the toxicity experiments than predicted from the original DEB parameterization.
-
-In contrast, the posterior mode of $E_{coc}$ decreases only slightly, from 68.4 J \[58.4; 75.5\] to 60.8 J \[45.3; 82.7\]. The broad overlap between the credible intervals indicates that the new estimate remaines consistent with the value obtained from the original DEB calibration.
-
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the first iteration and the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_DEB_refit
 #| fig-height: 4
 #| fig-width: 8
 
-p_chains <-  
-  ggplot(
-    data = MCMC_out_DEB_refit$Chains |> 
-      filter(Iteration !=1), 
-    aes(
-      x = Iteration, 
-      y = value, 
-      color = as.factor(Chain), 
-      group = as.factor(Chain)
-      )
-  )+
-  geom_line(alpha=0.7)+
-  scale_y_log10()+
-  facet_wrap(~Parameter, scales = "free", ncol = 2)+
-  
-  scale_color_manual(name = "Chains", values = pal_chains)+
-  
-  theme_bw()+
-  theme(
-    legend.position = "right", 
-    title=element_text(size=12, face="plain"), 
-    axis.title.x = element_text(face="plain"),
-    strip.background = element_rect(fill="white")
-    )
-
+p_chains <- f_Plot_MCMC_Chains(MCMC_out_DEB_refit)
 p_chains
   
 ```
 
-```{r, echo=F, message = F, warning = F}
-
-####### DEB_refit #################################################################
-
-# Large format per chain
-mcmc_list_DEB_refit <- lapply(
-  split(
-    MCMC_out_DEB_refit$Chains, 
-    MCMC_out_DEB_refit$Chains$Chain
-    ),
-  function(d) {
-    wide <- d %>%
-      dplyr::select(Iteration, Parameter, value) %>%
-      pivot_wider(names_from = Parameter, values_from = value) %>%
-      arrange(Iteration)
-   mcmc(as.matrix(wide[,-1]))
-})
-
-mcmc_list_DEB_refit <- as.mcmc.list(mcmc_list_DEB_refit)
-
+```{r savechainsDEBrefit, include = F}
+ggsave(
+  filename="DEB_refit_chains.png", 
+  plot=p_chains, 
+  width=8, height = 4, 
+  path=path_fig
+  )
 ```
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
 #| label: fig-chainsconvergence_DEB_refit
-#| fig-height: 5
-#| fig-width: 5
+#| fig-height: 8
+#| fig-width: 8
 
-  par(mfrow=c(1,3))
-
-  gelman.plot(mcmc_list_DEB_refit,
-            bin.width = 10,      # Number of observations per segment,
-            # first segment --> at least 50 iterations.
-            max.bins = 50,       # Maximum number of bins, excluding the last one
-            confidence = 0.95,   # Coverage probability of confidence interval.
-            transform = FALSE,   # improve the normality of the distribution
-            autoburnin=TRUE)     # Remove first half of sequence
-
-  
-  gelman <- gelman.diag(
-    mcmc_list_DEB_refit, 
-    confidence = 0.95, 
-    transform=FALSE, 
-    autoburnin=TRUE, 
-    multivariate=TRUE
-    )
-  
-  print(gelman)
+gelman <- f_Plot_Convergence(MCMC_out_DEB_refit)
+print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
 #| fig-cap: Parameter correlations.
-#| label: fig-corr_DEB_refitpairs
+#| label: fig-corrDEBrefitipairs
 #| fig-height: 5
 #| fig-width: 6
 
-mcmc_list_corr_DEB_refit <- mcmc.list(
-  lapply(mcmc_list_DEB_refit, function(x) {
-    mcmc(as.matrix(x)[-1, , drop = FALSE])  # <- reconvertir en mcmc
-  })
+file_rds <- here::here("fig/DEBTKTD_Models/DEB_refit_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_DEB_refit, file_rds, 1)
+
+```
+
+```{r, include = F}
+
+col_corr <- colorRampPalette(c(
+  "#BF616A",  # corrélations négatives
+  "white",
+  "#5E81AC"   # corrélations positives
+))(200)
+
+params_keep <- c("pAm.1.", "E_coc.1.", "kapA.1.")
+
+mcmc_list_corr_DEB_refit <- f_mcmc_list_corr(MCMC_out_DEB_refit)
+
+df_corr_DEB_refit <- cor(as.matrix(mcmc_list_corr_DEB_refit)[, params_keep])
+
+dimnames(df_corr_DEB_refit) <- lapply(
+  dimnames(df_corr_DEB_refit),
+  \(x) gsub("\\.1\\.$", "", x)
 )
 
-colramp_aurora <- colorRampPalette(rev(Nord_aurora[1:4]))
-file_rds <- here::here("fig/DEB_Models/DEB_refit_ipairs_plot.png")
+png(file.path(path_fig, "DEB_refit_corrplot_article.png"), width = 2000, height = 2000, res = 300)
 
-if (!file.exists(file_rds)) {
-  
-  png(here::here("fig/DEB_Models/DEB_refit_ipairs_plot.png"), width = 3000, height = 3000, res = 300)
-  
-  ipairs(
-    as.matrix(mcmc_list_corr_DEB_refit), 
-    colramp = colramp_aurora, 
-    pixs=0.25, 
-    cex.diag = 0.5
-    )
-  dev.off()
-}
+op <- par(font = 2)
 
-ipairs(
-  as.matrix(mcmc_list_corr_DEB_refit), 
-  colramp = colramp_aurora, 
-  pixs=0.25, 
-  cex.diag = 0.5
-  )
+corrplot.mixed(
+  df_corr_DEB_refit,
+  lower = "ellipse",
+  upper = "number",
+  tl.col = "#2E3440",
+  tl.cex = 0.6,
+  tl.pos = "d",
+  number.cex = 0.7,
+  tl.srt = 45,
+  lower.col = col_corr,
+  upper.col = col_corr
+)
+
+par(op)
+
+dev.off()
+
 ```
 
 The joint posterior distributions and MCMC trajectories showes no apparent correlation between $\{\dot{p}_{Am}\}$ and $E_{coc}$, suggesting that the two parameters were independently identifiable from the control growth and reproduction data.
@@ -751,72 +709,224 @@ The joint posterior distributions and MCMC trajectories showes no apparent corre
 #| fig-height: 6
 #| fig-width: 8
 
-n_samples <- 1e5 # Simulation of the distribution
-
-df_priors_dist <- MCMC_out_DEB_refit$Priors |> 
-  dplyr::select(Nom, Distribution, P1, P2, P3, P4) |> 
-  rowwise() |> 
-  mutate(samples = case_when(
-    Distribution == "Uniform" ~ list(runif(n_samples, min = P1, max = P2)),
-    Distribution == "Normal" ~ list(rnorm(n_samples, mean = P1, sd = P2)),
-    Distribution == "LogUniform" ~ list(exp(runif(n_samples, min = log(P1), max = log(P2)))),
-    Distribution == "TruncNormal" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2)),     Distribution == "TruncNormal_cv" ~ list(rtruncnorm(n_samples, a = P3, b = P4, mean = P1, sd = P2*P1))
-  )) |> 
-  unnest(samples)
-
-alpha_prior <- 0.5
-alpha_post <- 0.5
-col_prior <- Nord_snow[1]
-col_post <- col_IMD
-
-MCMC_out_DEB_refit$Chains_plot <- MCMC_out_DEB_refit$Chains |> 
-  mutate(Nom = str_remove(Parameter, "\\.\\d+\\.$")) 
-
-p_post <- ggplot() +
-  
-  # Priors
-  stat_halfeye(
-    data = df_priors_dist,
-    aes(
-       x = samples,
-       ),
-    alpha = alpha_prior,
-    fill = col_prior,
-    color = col_prior,
-    normalize = "xy"
-    ) +
-  
-  # Posterior
-  stat_halfeye(
-    data = subset(MCMC_out_DEB_refit$Chains_plot, Nom %in% L_parameters_DEB_refit),
-    mapping = aes(
-      x=value
-    ),
-    fill = col_post,
-    color = col_post,
-    alpha = alpha_post,
-    normalize = "xy"
-  ) +
-  
-  facet_wrap(~Nom, scales = "free")+
-  scale_x_log10()+
-  labs(
-    title = "Posterior and prior distributions", 
-    x = "Parameter value", 
-    y = "Density"
-    ) +
-  theme_minimal()+
-  theme(
-    title=element_text(face="bold")
-  )
-
+p_post <- f_Plot_Posteriors(MCMC_out_DEB_refit)
 p_post
 ```
 
-Compared with simulations based on the original parameter values, trajectories generated using the recalibrated parameters provide a better description of the observed control growth and reproduction patterns (@fig-refit). The posterior median estimates obtained from this recalibration are therefore retained and fixed for the subsequent toxicodynamic analyses.
+```{r savepostDEBrefit, include = F}
+ggsave(
+  filename="DEB_refit_post.png", 
+  plot=p_post, 
+  width=8, height = 6, 
+  path=path_fig
+  )
+```
+
+```{r}
+path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+df_tab_setpoint_old_raw <- f_Read_fichier2(file.path(path_DEB_refit, "tab_setpoint_old_raw.out"))
+
+df_tab_setpoint_old <- df_tab_setpoint_old_raw |> 
+  dplyr::select(c("pAm.1.", "kapA.1.", "E_coc.1.")) |> 
+  mutate(
+    Iter = dplyr::row_number(), .before = 1
+  )
+
+entete <- paste(names(df_tab_setpoint_old)[-1], collapse = " ")
+
+lignes <- apply(
+  df_tab_setpoint_old,
+  1,
+  function(x) paste(x, collapse = " ")
+)
+
+writeLines(
+  c(entete, lignes),
+  con = file.path(path_DEB_refit, "tab_setpoint_old.out"),
+  useBytes = TRUE
+)
+
+```
+
+```{r}
+
+step_sim <- 0.05
+max_time <- 28
+
+df_pred_old <- f_Read_setpoint_DEB_refit(path_DEB_refit, step_sim, max_time, "old")
+df_pred_new <- f_Read_setpoint_DEB_refit(path_DEB_refit, step_sim, max_time, "new")
+
+df_pred_old_G <- df_pred_old   |> 
+  filter(Endpt == "Weight") |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Juveniles controles",
+      No_sim == 2 ~ "Adult controles",
+    ), c("Juveniles controles", "Adult controles")),
+    DEB_type = "Old"
+  )
+
+df_pred_new_G <- df_pred_new |> 
+  filter(Endpt == "Weight") |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Juveniles controles",
+      No_sim == 2 ~ "Adult controles",
+    ), c("Juveniles controles", "Adult controles")),
+    DEB_type = "New"
+  )
+
+df_pred_old_R <- df_pred_old   |> 
+  filter(Endpt == "Reproduction") |> 
+  filter(No_sim == 2) |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Juveniles controles",
+      No_sim == 2 ~ "Adult controles",
+    ), c("Juveniles controles", "Adult controles")),
+    DEB_type = "Old"
+  )
+df_pred_new_R <- df_pred_new   |> 
+  filter(Endpt == "Reproduction") |> 
+  filter(No_sim == 2) |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Juveniles controles",
+      No_sim == 2 ~ "Adult controles",
+    ), c("Juveniles controles", "Adult controles")),
+    DEB_type = "New"
+  )
+
+df_pred_G <- rbind(df_pred_old_G, df_pred_new_G)
+df_pred_R <- rbind(df_pred_old_R, df_pred_new_R)
+
+
+df_data_Ctrl <- f_import_data_DEBTKTD() |> 
+  filter(Condition == "Ctrl" & Molecule == "IMD") |> 
+  mutate(
+    No_sim = case_when(
+      Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
+      Molecule == "IMD" & Experiment_type == "Repro" ~ 2
+    )
+  )  |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Juveniles controles",
+      No_sim == 2 ~ "Adult controles",
+    ), c("Juveniles controles", "Adult controles"))
+  )
+
+```
 
 ```{r, warning=F, message=F}
-#| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the maximum surface-area-specific assimilation rate $\{\dot{p}_{Am}\}$ and cocoon energy content $E_{coc}$.
+#| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the allocation energy fraction to soma in adults ($\kappa_A$).
+#| label: fig-refitrib
+#| fig-height: 4
+#| fig-width: 8
+
+alpha_ribbon <- 0.2
+
+pW <- ggplot()+
+  
+  geom_ribbon(
+      data = df_pred_G,
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = DEB_type
+      ),
+      alpha = alpha_ribbon
+    )+
+  
+  geom_line(
+    data = df_pred_G,
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = DEB_type
+    )
+  )+
+  
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Weight
+    ),
+    color = Nord_polar[1]
+  )+
+  
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  facet_wrap(~Name_experiment)+
+  labs(x = "Time (days)", y = "Weight (g)")+
+  theme_minimal()+
+  theme(
+    strip.text = element_text(face="bold")
+  )
+
+pR <- ggplot()+
+  
+  geom_ribbon(
+      data = df_pred_R,
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = DEB_type
+      ),
+      alpha = alpha_ribbon
+    )+
+  
+  geom_line(
+    data = df_pred_R,
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = DEB_type
+    )
+  )+
+  
+  geom_point(
+    data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
+    aes(
+      x = Time, 
+      y = Reproduction
+    ),
+    color = Nord_polar[1]
+  )+
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  facet_wrap(~Name_experiment)+
+  labs(x = "Time (days)", y = "Reproduction (#)")+
+  theme_minimal()+
+  theme(
+    strip.text = element_text(face="bold")
+  )
+
+p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
+p
+
+```
+
+```{r saveRefit, include = F}
+ggsave(
+  filename="DEB_refit.png", 
+  plot=p, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
+
+Predictions obtained with the original DEB parameterization showed a slight underestimation of both juvenile and adult growth, together with an overestimation of cocoon production (@fig-refitrib). To improve the description of the control trajectories before estimating toxicodynamic effects, three DEB parameters were therefore re-estimated: the maximum surface-area-specific assimilation rate, $\{\dot{p}_{Am}\}$, the cocoon energy content, $E_{coc}$, and the adult allocation fraction, $\kappa_A$.
+
+The posterior mode of $\{\dot{p}_{Am}\}$ increased from 259.0 \[237.6; 280.0\] to 292.8 \[238.2; 323.5\] J$\cdot$cm$^{-2}\cdot$d$^{-1}$, while $E_{coc}$ increased from 68.4 \[58.4; 75.5\] to 79.5 \[53.2; 114.2\] J. The posterior mode of $\kappa_A$ also increased slightly, from 0.64 \[0.56; 0.70\] to 0.67 \[0.64; 0.73\]. The substantial overlap between the original and recalibrated credible intervals indicates that the updated estimates remained broadly consistent with the initial DEB parameterization. The posterior correlation between the parameters was weak, indicating that the parameters were estimated independently (@fig-corrDEBrefitipairs).
+
+Using the recalibrated parameter values improved the agreement between predicted and observed juvenile and adult growth trajectories. Reproduction was also more closely reproduced than with the original parameterization, although cocoon production remained slightly overestimated. The posterior mode estimates of $\{\dot{p}_{Am}\}$, $E_{coc}$, and $\kappa_A$ were therefore retained and fixed for all subsequent DEB-TKTD analyses.
+
+```{r, include = F, warning=F, message=F}
+#| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the allocation energy fraction to soma in adults ($\kappa_A$).
 #| label: fig-refit
 #| fig-height: 4
 #| fig-width: 8
@@ -844,11 +954,11 @@ df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))  |>
 df_sim_DEB <- rbind(df_sim_old_DEB, df_sim_new_DEB)
 
 df_data_Ctrl <- f_import_data_DEBTKTD() |> 
-  filter(Condition == "Ctrl" & Molecule == "EPX") |> 
+  filter(Condition == "Ctrl" & Molecule == "IMD") |> 
   mutate(
     No_sim = case_when(
-      Molecule == "EPX" & Experiment_type == "Growth" ~ 1,
-      Molecule == "EPX" & Experiment_type == "Repro" ~ 2
+      Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
+      Molecule == "IMD" & Experiment_type == "Repro" ~ 2
     )
   )  |> 
   mutate(
@@ -884,7 +994,7 @@ pW <- ggplot()+
 
 pR <- ggplot()+
   geom_point(
-    data = df_data_Ctrl,
+    data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
     aes(
       x = Time, 
       y = Reproduction
@@ -892,7 +1002,7 @@ pR <- ggplot()+
     color = Nord_polar[1]
   )+
   geom_line(
-    data = df_sim_DEB,
+    data = df_sim_DEB |> filter(Name_experiment == "Adult controles"),
     aes(
       x = Time,
       y = Reproduction,
@@ -906,18 +1016,9 @@ pR <- ggplot()+
     strip.text = element_text(face="bold")
   )
 
-p <- pW + pR + plot_layout(ncol = 2, guides = "collect")
+p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
 p
 
-```
-
-```{r saveRefit, include = F}
-ggsave(
-  filename="DEB_refit.png", 
-  plot=p, 
-  width=8, height = 4, 
-  path=path_fig
-  )
 ```
 
 ## Construction of the DEB-TKTD models
@@ -937,7 +1038,7 @@ Toxicodynamic processes is modeled following a standard DEB-TKTD formulation in 
 $$
 \begin{aligned}
 \frac{\mathrm d D}{\mathrm d t} &= k_r (C_{\mathrm{int}} - D) \\ \\
-s &= b(D−z)
+s &= b(D−c_0)
 \end{aligned}
 $$ {#eq-chap4TKTD}
 
@@ -947,8 +1048,10 @@ $$ {#eq-chap4TKTD}
 -   $D$ : the internal damage scaled in the same unit as $C_{\mathrm{int}}$,
 -   $k_r$ : Recuperation or repair constant of damage.\$,
 -   $s$ : the stress factor,
--   $b$ : damage sensitivity,
--   $z$ : the tolerance concentration.
+-   $b$ : damage sensitivity ($b = 1/c_T$ with $c_T$ the tolerance concentration),
+-   $c_0$ : the no-effect concentration.
+
+To reduce parameter identifiability issues, the damage recovery constant ($k_r$) was fixed to 1, so that damage instantaneously followed the internal concentration ($D=C_{\mathrm{int}}$).
 
 For each pesticide, multiple physiological modes of action (pMoA) are evaluated individually by allowing toxic stress to alter different DEB processes, including assimilation, maintenance, growth, maturation, and reproduction (@tbl-chap4pMoA).
 
@@ -964,7 +1067,7 @@ For each pesticide, multiple physiological modes of action (pMoA) are evaluated 
 | Reproduction costs | $\kappa_R$: Reproduction efficiency | $\kappa_R \rightarrow \kappa_R/(1+s)$ |
 | Embryo damage | $\kappa_R$: Reproduction efficiency | $\kappa_R \rightarrow \exp(-s)\kappa_R$ |
 
-: **Accounting for the different possible physiological modes of action in a DEB model.** The stress factor $s$ is defined as a linear threshold damage function based on a no-effect concentration (NEC), whose inverse slope is commonly referred to as the tolerance concentration [@kooijman_2009b]. Adapted from Table 2 in @jager_2023. {#tbl-chap4pMoA}
+: **Accounting for the different possible physiological modes of action in a DEB model.** The stress factor $s$ is defined as a linear threshold damage function based on a no-effect concentration ($c_0$), whose inverse slope is commonly referred to as the tolerance concentration ($c_T$) [@kooijman_2009b]. Adapted from Table 2 in @jager_2023. {#tbl-chap4pMoA}
 
 Candidate pMoAs are first evaluated independently for each compound and subsequently combined for the most supported hypotheses. Competing models are compared using the Bayesian Information Criterion (BIC), allowing comparison among alternative physiological hypotheses while penalizing model complexity.
 

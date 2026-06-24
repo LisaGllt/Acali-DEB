@@ -72,14 +72,14 @@ rOM_ClxHorse = 0.0204226;     # Ratio of energy in 1 g of OM from soil vs 1 g of
 # Energy assimilation
 Fm = 6.92108;          # [F_m], max spec searching rate (g/d.g)
 kapX = 0.258;           # digestion efficiency of food to reserve (-)
-pAm = 339.695;          # {p_Am}, spec assimilation flux (J/d.cm^2)
+pAm = 292.845;          # {p_Am}, spec assimilation flux (J/d.cm^2)
 r_pAm_pM = 0.629551;     # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
 v = 0.243464;           # energy conductance (cm/d)
 
 K = 0.0778501;          # Slope of functional threshold (K model)
 
 kapJ = 0.978502;        # allocation fraction to soma for juveniles (-) (model C)
-kapA = 0.643309;        # allocation fraction to soma for grouped adults (-) (model C)
+kapA = 0.674956;        # allocation fraction to soma for grouped adults (-) (model C)
 tau = 9.65631;          # transition time between kapJ and kapA (d) (model C)
 
 # Maintenance and growth
@@ -95,7 +95,7 @@ Ehp = 97.6156;           # maturity at puberty (J)
 kapH = 1;               # maturation efficiency (-)
 
 # Reproduction
-E_coc = 60.83979;  # Energy in a cocoon (J)
+E_coc = 79.5353;  # Energy in a cocoon (J)
 kapR = 0.475;     # reproduction efficiency (-)
 
 # Metabolic response to T
@@ -203,7 +203,7 @@ Dynamics{
       dt(z) = (Eh >= Ehp ? 1 : 0);                                #(Model A)
       x = (z/tau > 1 ? 1 : z/tau);                                #(Model A)
       kapAreal = x * kapA + (1-x) * kapJ;                         #(Model A)
-      kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ)); #(Model A)
+      kapreal = (Init == 2 ? kapA : (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ))); #(Model A)
 
       pM = r_pAm_pM * pAm * (1+s_f*bol_M);
       

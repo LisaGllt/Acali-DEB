@@ -1,0 +1,139 @@
+```{r lib, include = F}
+library(here)
+source(file = here::here("functions/fun.R"))
+source(file = here::here("functions/fun_MCSim.R"))
+f_load_libraries_colors()
+col_Molecule <- rev(col_Molecule)
+
+pal_chains <- c(Nord_aurora, Nord_frost, Nord_polar)
+lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
+```
+
+# Mixture of Epoxiconazole & Imidacloprid
+
+## Single substances
+
+```{r}
+
+path_MIX <- here::here("mod/Z_DEB-TKTD/MIX")
+
+step_sim <- 0.01
+Endpoints_print <- "Weight, Reproduction"
+
+f_In_predobs_TKTD_MIX(
+  path_MIX,
+  ""
+  )
+```
+
+```{r, warning=F, message=F}
+#| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the allocation energy fraction to soma in adults ($\kappa_A$).
+#| label: fig-refit
+#| fig-height: 4
+#| fig-width: 8
+
+
+path_DEB_refit <- here::here("mod/Z_DEB-TKTD/MIX/Ctrl")
+
+df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))  |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Controles",
+    ), c("Controles")),
+    DEB_type = "Old"
+  )
+df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))  |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Controles",
+    ), c("Controles")),
+    DEB_type = "New"
+  )
+
+df_sim_DEB <- rbind(df_sim_old_DEB, df_sim_new_DEB)
+
+df_data_Ctrl <- f_import_data_DEBTKTD_MIX() |> 
+  filter(Condition == "N0") |> 
+  mutate(
+    No_sim = 1
+  )  |> 
+  mutate(
+    Name_experiment = factor(case_when(
+      No_sim == 1 ~ "Controles",
+    ), c("Controles")),
+  )
+
+pW <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Weight
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_DEB,
+    aes(
+      x = Time,
+      y = Weight,
+      color = DEB_type
+    )
+  )+
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  theme_minimal()+
+  theme(
+    strip.text = element_text(face="bold")
+  )
+
+pR <- ggplot()+
+  geom_point(
+    data = df_data_Ctrl,
+    aes(
+      x = Time, 
+      y = Reproduction
+    ),
+    color = Nord_polar[1]
+  )+
+  geom_line(
+    data = df_sim_DEB,
+    aes(
+      x = Time,
+      y = Reproduction,
+      color = DEB_type
+    )
+  )+
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  theme_minimal()+
+  theme(
+    strip.text = element_text(face="bold")
+  )
+
+pkap <- ggplot()+
+  geom_line(
+    data = df_sim_DEB,
+    aes(
+      x = Time,
+      y = kapreal,
+      color = DEB_type
+    )
+  )+
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+  theme_minimal()+
+  theme(
+    strip.text = element_text(face="bold")
+  )
+
+p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
+p
+
+```
+
+```{r saveRefit, include = F}
+ggsave(
+  filename="DEB_refit.png", 
+  plot=p, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```

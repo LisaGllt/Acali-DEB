@@ -4863,6 +4863,7 @@ col_D2 <- Nord_polar[1]
 col_D2b <- Nord_polar[4]
 type_D2b <- "solid"
 type_D2 <- "dotted"
+
 line_width <- 0.6
 font_size <- 10
 t_max <- 155

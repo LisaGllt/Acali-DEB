@@ -1,0 +1,39 @@
+#### DEB A. caliginosa
+#===============================================
+
+SetPoints("DEB_setpoint_full_new_1.out", "tab_setpoint.out", 0,pAm, E_coc, kapA);
+
+Integrate(Lsodes, 1E-5, 1E-6, 1);
+
+########## Experiments ################################################
+
+Simulation { # IMD_EC50_growth_Ctrl
+    Init = 1;
+    Winit=0.10092;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction,
+				0, 28, 0.05);
+}
+
+  End.

@@ -2694,7 +2694,7 @@ f_import_data_DEBTKTD <- function() {
     )
   
   df_data_EC50_growth_EPX_raw <- df_data_EC50_growth_raw |> 
-    filter(Molec %in% c("EPX", "Ctrl_2")) 
+    filter(Molec %in% c("EPX", "Ctrl_1", "Ctrl_2")) 
   
   df_data_EC50_growth_EPX <- df_data_EC50_growth_EPX_raw |> 
     group_by(Condition, Time, Dose, Soil_w) |> 
@@ -2730,7 +2730,7 @@ f_import_data_DEBTKTD <- function() {
       Dose = Dose * 1000, # mg/kg to ng/g
       Reproduction = case_when(
         Time == 0 ~ 0,
-        Time == 28 ~ Nb_cocoons
+        Time == 28 ~ Nb_cocoons/2
       )
     ) |> 
     dplyr::select(-c(t,w_tot, Date, Comments, ID_camp, ID_cosm))|> 
@@ -2780,7 +2780,7 @@ f_import_data_DEBTKTD <- function() {
     )
   
   df_data_EC50_repro_EPX_raw <- df_data_EC50_repro_raw |> 
-    filter(Molec %in% c("EPX", "Ctrl_2"))
+    filter(Molec %in% c("EPX", "Ctrl_1", "Ctrl_2"))
   
   df_data_EC50_repro_EPX <- df_data_EC50_repro_EPX_raw |> 
     group_by(Condition, Time, Dose, Soil_w) |> 
@@ -2814,6 +2814,99 @@ f_import_data_DEBTKTD <- function() {
   return(df_results)
   
 }
+
+f_import_data_DEBTKTD_MIX <- function() {
+  
+  # EC50 Growth
+  
+  df_data_MIX_growth_raw <- read_excel(here::here("data/Data_expe_raw/Data_Mix.xlsx"), sheet = "ReproSpring2025weight") |> 
+    mutate(
+      Time = t,
+      Weight = as.numeric(w)/1000, # conversion in g
+      Dose_IMD = Dose_IMD * 1000, # mg/kg to ng/g
+      Dose_EPX = Dose_EPX * 1000 # mg/kg to ng/g
+    ) |> 
+    dplyr::select(-c(t,w, Date, ID_cosm, ID, Color, Lot, Nb_rep, No_vdt, Box, ID_camp))|> 
+    mutate(Weight = ifelse(Weight == Inf, 0, Weight))
+  
+  df_data_MIX_growth <- df_data_MIX_growth_raw |> 
+    group_by(Ratio, Line, Time, Dose_IMD, Dose_EPX) |>
+    summarise(
+      Weight = mean(Weight, na.rm = TRUE),
+      .groups = "drop"
+    ) |> 
+    arrange(Ratio, Line, Time) |> 
+    mutate(
+      Condition = paste0(Ratio, Line),
+      ID_experiment = paste0("MIX_", Condition),
+      Environment = case_when(
+        Time %in% c(0,28) ~ "Soil_change",
+        Time == 14 ~ "Food"
+      ),
+      OM_soil = 6.52, # 0.0326 gOM/gsoil x 200 gsoil
+      OM_horse = 2.7*2, # 0.9 x 3 g/ind/14d
+      Density = 2,
+      Texp = 18,
+      Soil_w = 200,
+      No_sim = match(Condition, Condition),
+      Reproduction = 0
+    )
+  
+  # MIX Reproduction
+  
+  df_data_MIX_repro_raw <- read_excel(here::here("data/Data_expe_raw/Data_Mix.xlsx"), sheet = "ReproSpring2025coc") |> 
+    mutate(
+      Time = t,
+      Reproduction_28 = case_when(
+        Time == 0 ~ 0,
+        Time == 28 ~ Nb_cocoons/2
+      ),
+      Condition = paste0(Ratio, Line)
+    ) |> 
+    dplyr::select(Time, Reproduction_28, Condition) 
+  
+  df_data_MIX_repro <- df_data_MIX_repro_raw |> 
+    group_by(Condition, Time) |> 
+    summarise(
+      Reproduction_28 = mean(Reproduction_28, na.rm=TRUE),
+      .groups = "drop"
+    )
+  
+  df_time14 <- df_data_MIX_growth |> 
+    distinct(Condition) |> 
+    mutate(
+      Time = 14,
+      Nb_ind = 2,
+      Status = "A",
+      Weight = NA_real_,
+      Reproduction = NA_real_,
+      OM_soil = 6.52,
+      OM_horse = 5.4,
+      Texp = 18,
+      Environment = "Food",
+      Soil_w = 200, 
+      ID_experiment = paste0("MIX_", Condition)
+    )
+  
+  df_tot <- df_data_MIX_growth |> 
+    left_join(df_data_MIX_repro) |> 
+    mutate(
+      Reproduction = case_when(
+        Time == 28 ~ Reproduction_28,
+        .default = Reproduction
+      )
+      ) |> 
+    dplyr::select(-c(Reproduction_28)) 
+  
+  df_results <- bind_rows(
+      df_tot,
+      df_time14
+    ) 
+  
+  return(df_results)
+  
+}
+
 
 f_In_experiments_TKTD <- function(Molec){
   
@@ -2998,6 +3091,227 @@ f_In_experiments_TKTD <- function(Molec){
     
   }
   return(char_final)
+}
+
+f_In_experiments_TKTD_MIX <- function(){
+  
+  df_data <- f_import_data_DEBTKTD_MIX()
+  
+  char_final <- ""
+  
+  for (ID_i in unique(df_data$ID_experiment)) {
+    
+    
+    df_data_i <- df_data |> filter(ID_experiment == ID_i)
+    
+    # t0 = début manip 
+    # W = W0 manip
+    # Eh = Estimation par rapport à W0 (faire graph a partir DEB normal)
+    # R = 0
+    
+    ################### Data on juvenile growth 
+    
+    # Weight data (remove Weigth(t=0))
+    df_Ww_i <- df_data_i |> 
+      arrange(Time) |>                    
+      filter(row_number() == 1 | Weight != lag(Weight))
+    
+    char_tW <- df_Ww_i |> pull(Time)   |>  paste(collapse = ", ") # Time in days
+    char_Ww <- df_Ww_i |> pull(Weight) |>  paste(collapse = ", ") # Weight (g)
+    
+    # Reproduction data
+    df_R_i <- df_data_i |> 
+      arrange(Time) 
+    
+    char_tR <- df_R_i |> pull(Time)         |>  paste(collapse = ", ") # Time in days
+    char_R  <- df_R_i |> pull(Reproduction) |>  paste(collapse = ", ") # Cumulated reproduction (#)
+    
+    # Soil OM data
+    df_OM_soil_i <- df_data_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_soil, Environment) |> 
+      filter(Environment == "Soil_change") 
+    
+    char_Replace_tOM_soil <- df_OM_soil_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Replace_OM_soil  <- df_OM_soil_i |> pull(OM_soil) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Replace_soil <- paste(rep("Replace, ", length(df_OM_soil_i$Time)), collapse = "")
+    
+    # Horse OM data
+    df_OM_horse_Replace_i <- df_data_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_horse, Environment) |> 
+      filter(Environment == "Soil_change") 
+    
+    char_Replace_tOM_horse <- df_OM_horse_Replace_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Replace_OM_horse  <- df_OM_horse_Replace_i |> pull(OM_horse) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Replace_horse <- paste(rep("Replace, ", length(df_OM_horse_Replace_i$Time)), collapse = "")
+    
+    df_OM_horse_Add_i <- df_data_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_horse, Environment) |> 
+      filter(Environment == "Food") 
+    
+    char_Add_tOM_horse <- df_OM_horse_Add_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Add_OM_horse  <- df_OM_horse_Add_i |> pull(OM_horse) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Add_horse <- paste(rep("Add, ", length(df_OM_horse_Add_i$Time)), collapse = "")
+    
+    # Soil quantity in cosm (g)
+    df_Soilw_i <- df_data_i |> 
+      arrange(Time) |>                    
+      filter(row_number() == 1 | Soil_w != lag(Soil_w))
+    
+    char_tsoilw <- df_Soilw_i |> pull(Time)   |>  paste(collapse = ", ") # Time in days
+    char_soilw  <- df_Soilw_i |> pull(Soil_w) |>  paste(collapse = ", ") # Nb individual in a cosm
+    
+    # Density data
+    df_density_i <- df_data_i |> 
+      arrange(Time) |>                    
+      filter(row_number() == 1 | Density != lag(Density))
+    
+    char_tdensity <- df_density_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_density  <- df_density_i |> pull(Density) |>  paste(collapse = ", ") # Nb individual in a cosm
+    
+    # MCSim syntaxe
+    
+
+      Init_i <- 2
+    
+    text_init <- paste("    Init = ", Init_i, ";", sep="") # Init = 1 for juveniles and 2 for adults
+    text_Ce0 <- paste("    Ce0=", subset(df_data_i, Time==0)$Dose, ";", sep="")
+    
+    text_Winit <- paste("    Winit=", subset(df_data_i, Time==0)$Weight, ";", sep="")
+    
+    text_OM_soil_init <- paste("    OM_soil_t0=", subset(df_data_i, Time==0)$OM_soil, ";", sep="")
+    text_OM_horse_init <- paste("    OM_horse_t0=", subset(df_data_i, Time==0)$OM_horse, ";", sep="")
+    
+    text_Ww <- paste(
+      paste("    Print(Weight,", char_tW, ");" , sep=""),
+      paste("    Data(Weight,", char_Ww,  ");" , sep=""), 
+      sep = "\n"
+    )
+    
+    text_R <- paste(
+      paste("    Print(Reproduction,", char_tR, ");" , sep=""),
+      paste("    Data(Reproduction,", char_R,  ");" , sep=""), 
+      sep = "\n")
+    
+    
+    text_OM_soil_Replace <- paste("    OM_soil_replace=Events(OM_soil,\n                          ", 
+                                  length(df_OM_soil_i$Time), ",\n                          ", 
+                                  char_Replace_tOM_soil,",\n                          ", 
+                                  char_Replace_soil, "\n                           ",
+                                  char_Replace_OM_soil, ");", sep="")
+    
+    
+    
+    text_OM_horse_Replace <- paste("    OM_horse_replace=Events(OM_horse,\n                           ", 
+                                   length(df_OM_horse_Replace_i$Time), ",\n                           ", 
+                                   char_Replace_tOM_horse,",\n                           ", 
+                                   char_Replace_horse, "\n                            ",
+                                   char_Replace_OM_horse, ");", sep="")
+    
+    text_OM_horse_Add <- paste("    OM_horse_add=Events(OM_horse,\n                           ", 
+                               length(df_OM_horse_Add_i$Time), ",\n                           ", 
+                               char_Add_tOM_horse,",\n                           ", 
+                               char_Add_horse, "\n                            ",
+                               char_Add_OM_horse, ");", sep="")
+    
+    
+    text_OM_final <- paste(
+      text_OM_soil_Replace,
+      text_OM_horse_Replace,
+      text_OM_horse_Add,
+      sep="\n"
+    )
+    
+    if(length(df_density_i$Density) == 1){
+      text_density <- paste("    Dens=",char_density, ";", sep="")
+    }else{
+      text_density <- paste("    Dens=NDoses(", 
+                            length(df_density_i$Time), ",\n                ", 
+                            char_density,",\n                ", 
+                            char_tdensity, ");", sep="")
+    }
+    
+    if (length(df_Soilw_i$Time)==1) {
+      text_WeightSoilCosm <- paste0("    WeightSoilCosm = ", df_Soilw_i$Soil_w,";")
+    }else {
+      text_WeightSoilCosm <- paste("    WeightSoilCosm=NDoses(", 
+                                   length(df_Soilw_i$Time), ",\n                ", 
+                                   char_soilw,",\n                ", 
+                                   char_tsoilw, ");", sep="")
+    }
+    
+    text_Texp <- paste("    Texp=",subset(df_data_i, Time==0)$Texp, ";", sep="")
+    
+    
+    char_i <- paste(
+      paste("Experiment { #", ID_i), 
+      
+      text_init,
+      text_Ce0,
+      text_Winit,
+      text_WeightSoilCosm,
+      text_OM_soil_init,
+      text_OM_horse_init,
+      text_Texp,
+      text_density,
+      text_OM_final,
+      text_Ww,
+      text_R,
+      
+      paste("}"),
+      sep="\n"
+      
+    )
+    
+    
+    char_final <- paste(char_final, char_i, sep="\n")
+    
+  }
+  return(char_final)
+}
+
+f_In_TKTD_tot <- function(file_path, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
+    
+    text_Level_global <- 
+      'Level{ # Global
+    '
+    
+    text_Level_exp <- '
+Level{
+
+  ############## Experiments ###################
+  '
+    
+    text_experiment <- f_In_experiments_TKTD(Molecule)
+    
+    text_end <- '
+} # End
+} # End global
+
+End.'
+    
+    # .in generation and saving
+    for (id in names(seeds)) {
+      text_start <- f_create_mcmc_block(paste0("DEB_TKTD_", id), seeds[[id]], NbIter, RTOL, ATOL)
+      
+      text_full <- paste(
+        text_start,
+        text_Level_global,
+        text_priors,
+        text_likelihood,
+        text_Level_exp,
+        text_experiment,
+        text_end,
+        sep = "\n"
+      )
+      
+      writeLines(
+        text_full,
+        here::here(file_path, paste0("DEB_TKTD_", id, ".in"))
+      )
+    }
 }
 
 f_In_TKTD_tot <- function(file_path, Molecule, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL) {
@@ -3238,6 +3552,200 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
   } # End for loop
   
 }
+
+f_In_predobs_TKTD_MIX <- function(file_path, l_param_name){
+  
+  
+  df_data <- f_import_data_DEBTKTD_MIX() |> 
+    mutate(across(where(is.numeric), ~ replace_na(.x, -1)))
+  
+  compteur_exp <- 0 
+  
+  for(ID_experiment_i in unique(df_data$ID_experiment)){
+    text_full_i <- ""
+    char_i <- ""
+    compteur_exp <- compteur_exp + 1
+    
+    text_start <- paste0('#### DEB TKTD A. caliginosa
+#===============================================
+
+SetPoints("DEB_setpoint_predobs_', compteur_exp, '.out", "tab_setpoint.out", 0,', l_param_name|>  paste(collapse = ", "),');
+
+Integrate(Lsodes, 1E-6, 1E-6, 1);
+
+########## Experiments ################################################
+')
+    
+    text_end <- "
+  End."
+    
+    # Data corresponding to this experiment
+    df_DEB_i <- subset(df_data, ID_experiment == ID_experiment_i)
+    
+    Time_sim_i <- max(df_DEB_i$Time)
+    
+    # Soil OM data
+    df_OM_soil_i <- df_DEB_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_soil, Environment) |> 
+      filter(Environment == "Soil_change") 
+    
+    char_Replace_tOM_soil <- df_OM_soil_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Replace_OM_soil  <- df_OM_soil_i |> pull(OM_soil) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Replace_soil <- paste(rep("Replace, ", length(df_OM_soil_i$Time)), collapse = "")
+    
+    df_OM_horse_Replace_i <- df_DEB_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_horse, Environment) |> 
+      filter(Environment == "Soil_change") 
+    
+    char_Replace_tOM_horse <- df_OM_horse_Replace_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Replace_OM_horse  <- df_OM_horse_Replace_i |> pull(OM_horse) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Replace_horse <- paste(rep("Replace, ", length(df_OM_horse_Replace_i$Time)), collapse = "")
+    
+    df_OM_horse_Add_i <- df_DEB_i |> 
+      arrange(Time) |>  
+      dplyr::select(Time, OM_horse, Environment) |> 
+      filter(Environment == "Food") 
+    
+    char_Add_tOM_horse <- df_OM_horse_Add_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_Add_OM_horse  <- df_OM_horse_Add_i |> pull(OM_horse) |>  paste(collapse = ", ") # OM in horse available for one earthworm (%)
+    char_Add_horse <- paste(rep("Add, ", length(df_OM_horse_Add_i$Time)), collapse = "")
+    
+    # Soil quantity in cosm (g)
+    df_Soilw_i <- df_DEB_i |> 
+      arrange(Time) |>                    
+      filter(row_number() == 1 | Soil_w != lag(Soil_w))
+    
+    char_tsoilw <- df_Soilw_i |> pull(Time)   |>  paste(collapse = ", ") # Time in days
+    char_soilw  <- df_Soilw_i |> pull(Soil_w) |>  paste(collapse = ", ") # Nb individual in a cosm
+    
+    # Density data
+    df_density_i <- df_DEB_i |> 
+      arrange(Time) |>                    
+      filter(row_number() == 1 | Density != lag(Density))
+    
+    char_tdensity <- df_density_i |> pull(Time)    |>  paste(collapse = ", ") # Time in days
+    char_density  <- df_density_i |> pull(Density) |>  paste(collapse = ", ") # Nb individual in a cosm
+    
+    # MCSim syntaxe
+    
+
+      Init_i <- 2
+    
+    text_init <- paste("    Init = ", Init_i, ";", sep="") # Init = 1 for juveniles and 2 for adults
+    text_Ce0_IMD <- paste("    Ce0_IMD=", subset(df_DEB_i, Time==0)$Dose_IMD, ";", sep="")
+    text_Ce0_EPX <- paste("    Ce0_EPX=", subset(df_DEB_i, Time==0)$Dose_EPX, ";", sep="")
+    
+    text_Winit <- paste("    Winit=", subset(df_DEB_i, Time==0)$Weight, ";", sep="")
+    
+    text_OM_soil_init <- paste("    OM_soil_t0=", subset(df_DEB_i, Time==0)$OM_soil, ";", sep="")
+    text_OM_horse_init <- paste("    OM_horse_t0=", subset(df_DEB_i, Time==0)$OM_horse, ";", sep="")
+    
+    
+    text_OM_soil_Replace <- paste("    OM_soil_replace=Events(OM_soil,\n                          ", 
+                                  length(df_OM_soil_i$Time), ",\n                          ", 
+                                  char_Replace_tOM_soil,",\n                          ", 
+                                  char_Replace_soil, "\n                           ",
+                                  char_Replace_OM_soil, ");", sep="")
+    
+    
+    
+    text_OM_horse_Replace <- paste("    OM_horse_replace=Events(OM_horse,\n                           ", 
+                                   length(df_OM_horse_Replace_i$Time), ",\n                           ", 
+                                   char_Replace_tOM_horse,",\n                           ", 
+                                   char_Replace_horse, "\n                            ",
+                                   char_Replace_OM_horse, ");", sep="")
+    
+    text_OM_horse_Add <- paste("    OM_horse_add=Events(OM_horse,\n                           ", 
+                               length(df_OM_horse_Add_i$Time), ",\n                           ", 
+                               char_Add_tOM_horse,",\n                           ", 
+                               char_Add_horse, "\n                            ",
+                               char_Add_OM_horse, ");
+                               ", sep="")
+    
+    
+    
+    
+    text_OM_final <- paste(
+      text_OM_soil_Replace,
+      text_OM_horse_Replace,
+      text_OM_horse_Add,
+      sep="\n"
+    )
+    
+    if(length(df_density_i$Density) == 1){
+      text_density <- paste("    Dens=",char_density, ";", sep="")
+    }else{
+      text_density <- paste("    Dens=NDoses(", 
+                            length(df_density_i$Time), ",\n                ", 
+                            char_density,",\n                ", 
+                            char_tdensity, ");", sep="")
+    }
+    
+    if (length(df_Soilw_i$Time)==1) {
+      text_WeightSoilCosm <- paste0("    WeightSoilCosm = ", df_Soilw_i$Soil_w,";")
+    }else {
+      text_WeightSoilCosm <- paste("    WeightSoilCosm=NDoses(", 
+                                   length(df_Soilw_i$Time), ",\n                ", 
+                                   char_soilw,",\n                ", 
+                                   char_tsoilw, ");", sep="")
+    }
+    
+    text_Texp <- paste("    Texp=",subset(df_DEB_i, Time==0)$Texp, ";", sep="")
+    
+    
+    # Weight data times
+    df_Ww_i <- df_DEB_i |> 
+      arrange(Time)             
+    char_tW <- df_Ww_i |> pull(Time)   |>  paste(collapse = ", ") # Time in days
+    # Reproduction data times
+    df_R_i <- df_DEB_i |> 
+      arrange(Time)
+    char_tR <- df_R_i |> pull(Time)         |>  paste(collapse = ", ") # Time in days
+    
+    text_print <- paste0(
+      "    Print(Weight,", char_tW, ");
+    Print(Reproduction,", char_tR,");"
+    )
+    
+    
+    char_i <- paste(
+      paste("Simulation { #", ID_experiment_i), 
+      
+      text_init,
+      text_Ce0_IMD,
+      text_Ce0_EPX,
+      text_Winit,
+      text_WeightSoilCosm,
+      text_OM_soil_init,
+      text_OM_horse_init,
+      text_Texp,
+      text_density,
+      text_OM_final,
+      text_print,
+      
+      paste("}"),
+      sep="\n"
+      
+    )
+    
+    text_full_i <- paste(
+      text_start,
+      char_i,
+      text_end,
+      sep = "\n"
+    )
+    
+    writeLines(
+      text_full_i,
+      here::here(file_path, paste0("DEB_setpoint_predobs_",compteur_exp,".in"))
+    )
+    
+  } # End for loop
+  
+}
+
 
 f_In_Setpoint_full_TKTD <- function(file_path, Molec, l_param_name, step_sim, Endpoints_print){
   
@@ -3656,6 +4164,38 @@ f_Read_fichier <- function(fichier){
   return(res)
 }
 
+f_Read_fichier2 <- function(fichier) {
+  contenu_raw <- readBin(
+    fichier,
+    what = "raw",
+    n = file.info(fichier)$size
+  )
+  
+  contenu <- rawToChar(contenu_raw)
+  contenu <- gsub("\r\n|\r", "\n", contenu)
+  
+  # Ajout du nom de la première colonne
+  contenu <- sub(
+    "^",
+    "Iter ",
+    contenu
+  )
+  
+  fichier_temp <- tempfile(fileext = ".out")
+  on.exit(unlink(fichier_temp), add = TRUE)
+  
+  writeBin(
+    charToRaw(contenu),
+    fichier_temp
+  )
+  
+  res <- readr::read_table(
+    fichier_temp,
+    show_col_types = FALSE,
+    progress = FALSE
+  )
+  return(res)
+}
 
 f_Read_predictions <- function(file_path, No_scenario, l_concentrations, Sim_duration, step_sim){
   
@@ -3711,6 +4251,68 @@ f_Read_predictions <- function(file_path, No_scenario, l_concentrations, Sim_dur
   
   return(df_pred_full)
   
+}
+
+
+f_Read_setpoint_DEB_refit <- function(file_path, step_sim, max_time, DEB_type) {
+
+  
+  df_pred_full <- NULL
+  
+  for (i in c(1,2)){
+    
+    Sim.Res.Exp_i <- readr::read_tsv(
+      file.path(file_path, paste0("DEB_setpoint_full_", DEB_type, "_", i, ".out"))
+    ) |>
+      dplyr::mutate(No_sim = i) |> 
+      dplyr::select(where(~ !all(is.na(.x))))
+    
+    Nom_Endpoints = c("Weight", "Reproduction")
+    Nsortie = 2
+    
+    
+    Time_pred <- seq(0, max_time, step_sim) # !!!
+    
+    
+    MPV = IC_min = IC_max = Endpoint = index = NULL
+    
+    for (j in 1:length(Nom_Endpoints)){
+      
+      index = grep(paste0("^",Nom_Endpoints[j],"_") , colnames(Sim.Res.Exp_i), fixed=FALSE)
+      
+      
+      Data_sim = as.matrix( Sim.Res.Exp_i[ , index] )
+      
+      MPV    = c(   MPV,  as.numeric( Data_sim[nrow(Data_sim), ] ) )
+      IC_min = c(IC_min,  apply(Data_sim, 2, quantile,  0.025, na.rm=TRUE) )
+      IC_max = c(IC_max,  apply(Data_sim, 2, quantile,  0.975, na.rm=TRUE) ) 
+      
+      Endpoint = c(Endpoint, rep(Nom_Endpoints[j], ncol(Data_sim)))
+    }
+    
+    df_pred_i <- data.frame(
+      predict.endpoint = MPV,
+      Time    = rep(Time_pred, Nsortie),
+      low     = IC_min,
+      up      = IC_max,
+      Endpt   = Endpoint
+    )
+    
+    df_pred_i <- df_pred_i %>%
+      mutate(
+        predict.endpoint = case_when(
+          ( predict.endpoint <= 5e-6 & Endpt == "Reproduction") ~ 0,
+          .default = predict.endpoint
+        ),
+        No_sim = i
+      )
+    
+    df_pred_full <- rbind(df_pred_full, df_pred_i)
+  }
+
+saveRDS(df_pred_full, file.path(file_path, paste0("Sim.Res.Exp.full_", DEB_type, ".rds")))
+        
+return(df_pred_full)
 }
 
 
@@ -3885,7 +4487,7 @@ f_mcmc_list_corr <- function(df) {
   return(mcmc_list_corr_df)
 }
 
-f_Plot_ipairs <- function(df, file_rds) {
+f_Plot_ipairs <- function(df, file_rds, size_label = 0.5) {
   
   mcmc_list_corr_df <- f_mcmc_list_corr(df)
   
@@ -3899,7 +4501,7 @@ f_Plot_ipairs <- function(df, file_rds) {
       as.matrix(mcmc_list_corr_df), 
       colramp = colramp_aurora, 
       pixs=0.25, 
-      cex.diag = 0.5
+      cex.diag = size_label
     )
     dev.off()
   }

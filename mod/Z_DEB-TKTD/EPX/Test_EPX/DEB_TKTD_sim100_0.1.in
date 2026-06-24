@@ -1,0 +1,53 @@
+#### DEB-TKTD A. caliginosa | Epoxiconazole
+#===============================================
+
+Integrate(Lsodes, 1E-9, 1E-10, 1);
+
+########## Experiments ################################################
+
+kr = 1;
+nec = 100;
+b = 0.1;
+
+Simulation { # EPX_EC50_growth_C8
+    Init = 1;
+    Ce0=200;
+    Winit=0.05398;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction,
+    freal,
+    pM,
+    kJ_t,
+    g,
+    kapH_real,
+    kapR_real,
+    Ce,
+    Ci,
+    Damage,
+    Stress,
+				0, 28, 0.05);
+}
+
+
+End.

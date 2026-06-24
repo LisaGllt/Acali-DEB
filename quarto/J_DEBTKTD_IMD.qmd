@@ -91,7 +91,7 @@ seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
 f_In_TKTD_tot(path_D_IMD_R, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## E_IMD_AM ##############################################################
-seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3345, C2 = 6666, C3 = 2112)
 f_In_TKTD_tot(path_E_IMD_AM, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## F_IMD_AG ##############################################################
@@ -107,7 +107,7 @@ seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
 f_In_TKTD_tot(path_H_IMD_MG, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## I_IMD_MR ##############################################################
-seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3345, C2 = 6666, C3 = 2222)
 f_In_TKTD_tot(path_I_IMD_MR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## J_IMD_GR ##############################################################
@@ -343,6 +343,8 @@ Summary_res_J_IMD_GR <-
   as.data.frame(MCMC_out_J_IMD_GR$Summary_res)[1:length(L_parameters_J_IMD_GR)] |> 
   mutate(Model = "J_IMD_GR")
 
+
+
 list_models <- c("A_IMD_A", "B_IMD_M", "C_IMD_G", "D_IMD_R", "E_IMD_AM", "F_IMD_AG", "G_IMD_AR", "H_IMD_MG", "I_IMD_MR", "J_IMD_GR")
 
 
@@ -415,9 +417,9 @@ df_result |> datatable(
   )
 ```
 
-For imidacloprid, comparison of the candidate physiological modes of action showes that models involving reduced assimilation receives the strongest support within the DEB-TKTD framework (@tbl-IMDTKTDres). The lowest BIC is obtained for the combined assimilation and growth pMoA (BIC = -49.1), followed by the assimilation-only model (BIC = -42.5). The resulting difference ($\Delta\mathrm{BIC}=6.6$) provides clear support for the combined formulation, although the assimilation-only model remained the second-best candidate. In contrast, models affecting maintenance, reproduction, or growth alone are less supported. Overall, these results indicate that imidacloprid effects are best represented by impaired energy assimilation combined with a direct effect on growth processes, rather than by a direct alteration of maintenance or reproductive allocation.
+For imidacloprid, comparison of the candidate physiological modes of action showed that the best-supported model combined effects on assimilation and growth (@tbl-IMDTKTDres). This formulation had the lowest BIC (BIC = -64.7), followed by the growth and reproduction model (BIC = -60.7; $\Delta\mathrm{BIC}=4.0$) and the assimilation and reproduction model (BIC = -57.1; $\Delta\mathrm{BIC}=7.6$). The assimilation-only formulation received substantially less support (BIC = -49.7; $\Delta\mathrm{BIC}=15.0$). These results provide clear support for the combined assimilation and growth pMoA, while the growth and reproduction formulation remained a plausible, although less supported, alternative. Overall, imidacloprid effects were best represented by impaired energy assimilation combined with a direct effect on growth, rather than by reduced assimilation alone or by effects restricted to maintenance or reproduction.
 
-The selected assimilation and growth model estimates a tolerance concentration ($z$) of 1016 ng g$^{-1}$ (internal concentration), with a 95% credible interval of 682-1431 ng$\cdot$g$^{-1}$. The stress slope parameter ($b$) is estimated at $9.0 \times 10^{-4}$ g$\cdot$ng$^{-1}$, with a 95% credible interval of $5.0 \times 10^{-4}$ to $2.6 \times 10^{-3}$ g$\cdot$ng$^{-1}$. The broader relative uncertainty associated with $b$ indicates that the increase in stress above the tolerance concentration is less precisely estimated than the threshold itself.
+The selected assimilation and growth model estimated a no-effect concentration ($c_0$) of 1,122 \[893 ; 1,511\] ng$\cdot$g$^{-1}$ (internal concentration) and a stress slope parameter ($b$) of 0.014 \[0.011 ; 8.1\] g$\cdot$ng$^{-1}$. The broader relative uncertainty associated with $b$ indicates that the increase in stress above the no-effect concentration was less precisely estimated than the threshold itself.
 
 ## Chains
 
@@ -427,7 +429,7 @@ The selected assimilation and growth model estimates a tolerance concentration (
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_A_IMD_A
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_A_IMD_A)
@@ -439,7 +441,7 @@ p_chains
 ggsave(
   filename="A_IMD_A_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -449,7 +451,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_B_IMD_M
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_B_IMD_M)
@@ -461,7 +463,7 @@ p_chains
 ggsave(
   filename="B_IMD_M_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -471,7 +473,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_C_IMD_G
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_C_IMD_G)
@@ -483,7 +485,7 @@ p_chains
 ggsave(
   filename="C_IMD_G_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -493,7 +495,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_D_IMD_R
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_D_IMD_R)
@@ -505,7 +507,7 @@ p_chains
 ggsave(
   filename="D_IMD_R_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -515,7 +517,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_E_IMD_AM
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_E_IMD_AM)
@@ -527,7 +529,7 @@ p_chains
 ggsave(
   filename="E_IMD_AM_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -537,7 +539,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_F_IMD_AG
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_F_IMD_AG)
@@ -549,7 +551,7 @@ p_chains
 ggsave(
   filename="F_IMD_AG_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -559,7 +561,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_G_IMD_AR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_G_IMD_AR)
@@ -571,7 +573,7 @@ p_chains
 ggsave(
   filename="G_IMD_AR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -581,7 +583,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_H_IMD_MG
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_H_IMD_MG)
@@ -593,7 +595,7 @@ p_chains
 ggsave(
   filename="H_IMD_MG_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -603,7 +605,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_I_IMD_MR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_I_IMD_MR)
@@ -615,7 +617,7 @@ p_chains
 ggsave(
   filename="I_IMD_MR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -625,7 +627,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_J_IMD_GR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_J_IMD_GR)
@@ -637,7 +639,7 @@ p_chains
 ggsave(
   filename="J_IMD_GR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -646,35 +648,13 @@ ggsave(
 ## Likelihood
 
 ::: panel-tabset
-## A
-
-```{r, message=F, warning=F, echo=F}
-#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_A_IMD_A
-#| fig-height: 8
-#| fig-width: 8
-
-p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_IMD_A)
-p_LL
-
-```
-
-```{r saveLLA_IMD_A, include = F}
-ggsave(
-  filename="A_IMD_A_chainsLL.png", 
-  plot=p_LL, 
-  width=8, height = 4, 
-  path=path_fig
-  )
-```
-
 ## A & G
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_F_IMD_AG
 #| fig-height: 8
-#| fig-width: 8
+#| fig-width: 4
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_F_IMD_AG)
 p_LL
@@ -689,34 +669,33 @@ ggsave(
   path=path_fig
   )
 ```
+
+## A
+
+```{r, message=F, warning=F, echo=F}
+#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
+#| label: fig-like_A_IMD_A
+#| fig-height: 8
+#| fig-width: 4
+
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_IMD_A)
+p_LL
+
+```
+
+```{r saveLLA_IMD_A, include = F}
+ggsave(
+  filename="A_IMD_A_chainsLL.png", 
+  plot=p_LL, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
 :::
 
 ## Chains convergence
 
 ::: panel-tabset
-## A
-
-```{r, echo=F, message=F, warning=F}
-#| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_A_IMD_A
-#| fig-height: 8
-#| fig-width: 8
-
-gelman <- f_Plot_Convergence(MCMC_out_A_IMD_A)
-print(gelman)
-```
-
-```{r corr, message=F, warning=F}
-#| fig-cap: Parameter correlations.
-#| label: fig-corr_A_IMD_A
-#| fig-height: 5
-#| fig-width: 6
-
-file_rds <- here::here("fig/DEBTKTD_Models/A_IMD_A_ipairs_plot.png")
-f_Plot_ipairs(MCMC_out_A_IMD_A, file_rds)
-
-```
-
 ## A & G
 
 ```{r, echo=F, message=F, warning=F}
@@ -736,6 +715,7 @@ print(gelman)
 #| fig-width: 6
 
 file_rds <- here::here("fig/DEBTKTD_Models/F_IMD_AG_ipairs_plot.png")
+
 f_Plot_ipairs(MCMC_out_F_IMD_AG, file_rds)
 
 ```
@@ -777,41 +757,88 @@ corrplot.mixed(
 )
 
 par(op)
+
+dev.off()
+
+```
+
+## A
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Chains convergence.
+#| label: fig-chainsconvergence_A_IMD_A
+#| fig-height: 8
+#| fig-width: 8
+
+gelman <- f_Plot_Convergence(MCMC_out_A_IMD_A)
+print(gelman)
+```
+
+```{r corr, message=F, warning=F}
+#| fig-cap: Parameter correlations.
+#| label: fig-corr_A_IMD_A
+#| fig-height: 5
+#| fig-width: 6
+
+file_rds <- here::here("fig/DEBTKTD_Models/A_IMD_A_ipairs_plot.png")
+f_Plot_ipairs(MCMC_out_A_IMD_A, file_rds)
+
+```
+
+```{r, include = F}
+
+col_corr <- colorRampPalette(c(
+  "#BF616A",  # corrélations négatives
+  "white",
+  "#5E81AC"   # corrélations positives
+))(200)
+
+params_keep <- c("nec.1.", "b.1.")
+
+mcmc_list_corr_A_IMD_A <- f_mcmc_list_corr(MCMC_out_A_IMD_A)
+
+df_corr_A_IMD_A <- cor(as.matrix(mcmc_list_corr_A_IMD_A)[, params_keep])
+
+dimnames(df_corr_A_IMD_A) <- lapply(
+  dimnames(df_corr_A_IMD_A),
+  \(x) gsub("\\.1\\.$", "", x)
+)
+
+png(file.path(path_fig, "A_IMD_A_corrplot_article.png"), width = 2000, height = 2000, res = 300)
+
+op <- par(font = 2)
+
+corrplot.mixed(
+  df_corr_A_IMD_A,
+  lower = "ellipse",
+  upper = "number",
+  tl.col = "#2E3440",
+  tl.cex = 0.6,
+  tl.pos = "d",
+  number.cex = 0.7,
+  tl.srt = 45,
+  lower.col = col_corr,
+  upper.col = col_corr
+)
+
+par(op)
+
 dev.off()
 
 ```
 :::
 
+The posterior correlation between ($c_0$) and ($b$) was negligible for imidacloprid ($r=0.02$), indicating that the two toxicodynamic parameters were estimated largely independently (@fig-corr_F_IMD_AG).
+
 ## Posterior distributions
 
 ::: panel-tabset
-## A
-
-```{r, echo=F, message=F, warning=F}
-#| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_A_IMD_A
-#| fig-height: 8
-#| fig-width: 8
-
-p_post <- f_Plot_Posteriors(MCMC_out_A_IMD_A)
-p_post
-```
-
-```{r savepostA_IMD_A, include = F}
-ggsave(
-  filename="A_IMD_A_post.png", 
-  plot=p_post, 
-  width=8, height = 8, 
-  path=path_fig
-  )
-```
-
 ## A & G
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
 #| label: fig-post_F_IMD_AG
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_post <- f_Plot_Posteriors(MCMC_out_F_IMD_AG)
@@ -822,7 +849,28 @@ p_post
 ggsave(
   filename="F_IMD_AG_post.png", 
   plot=p_post, 
-  width=8, height = 8, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
+
+## A
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_A_IMD_A
+#| fig-height: 4
+#| fig-width: 8
+
+p_post <- f_Plot_Posteriors(MCMC_out_A_IMD_A)
+p_post
+```
+
+```{r savepostA_IMD_A, include = F}
+ggsave(
+  filename="A_IMD_A_post.png", 
+  plot=p_post, 
+  width=8, height = 4, 
   path=path_fig
   )
 
@@ -832,24 +880,18 @@ ggsave(
 ## Predicted vs. Obs
 
 ```{r}
-l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_A_IMD_A, Molec, l_param_name_A_IMD_A)
-
-
 l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.") 
 
 f_In_predobs_TKTD(path_F_IMD_AG, Molec, l_param_name_F_IMD_AG)
 
-l_param_name_G_IMD_AR <- names(Summary_res_G_IMD_AR) |>
+
+l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.") 
 
-f_In_predobs_TKTD(path_G_IMD_AR, Molec, l_param_name_G_IMD_AR)
+f_In_predobs_TKTD(path_A_IMD_A, Molec, l_param_name_A_IMD_A)
 
 ```
 
@@ -870,25 +912,10 @@ df_data_obs_IMD <- df_data_fit_IMD |>
     ) |> 
   dplyr::select(-c(Weight, Reproduction))
 
-######## A_IMD_A ###############################################################
-
-df_pred_A_IMD_A <- f_read_predobs(path_A_IMD_A, Nb_experiment, df_data_obs_IMD)
-
-df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
-
-df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
-
+Condition_order <- c(
+  "Control", "C1", "C2", "C3", "C4", "C5",
+  "C6", "C7", "C8", "C9", "C10"
+)
 
 ######## F_IMD_AG ###############################################################
 
@@ -898,203 +925,48 @@ df_pred_Weight_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Weight" & Time !=0
 df_pred_Reproduction_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Reproduction" & Time !=0)
 
 df_predobs_Reproduction_F_IMD_AG <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
+  filter(Time !=0 & Reproduction_obs !=0) |>
   left_join(df_pred_Reproduction_F_IMD_AG, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
 
 df_predobs_Weight_F_IMD_AG <- df_data_obs_IMD |> 
   filter(Time !=0) |>
   left_join(df_pred_Weight_F_IMD_AG, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+
+######## A_IMD_A ###############################################################
+
+df_pred_A_IMD_A <- f_read_predobs(path_A_IMD_A, Nb_experiment, df_data_obs_IMD)
+
+df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0 & Reproduction_obs !=0) |>
+  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
 
 ```
 
 ::: panel-tabset
-## A
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_A_IMD_A
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:8]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_A_IMD_A,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.5
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(5, 30, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_A_IMD_A,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.5
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsA_IMD_A, include = F}
-
-ggsave(
-  filename = "A_IMD_A_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
-
 ## A & G
 
 ```{r, message=F, warning=F}
@@ -1111,7 +983,7 @@ col_line1 <- Nord_polar[4]
 col_line2 <- Nord_snow[1]
 
 col_exp1 <- c(
-  rev(nord("aurora", 12)[1:8]),
+  rev(nord("aurora", 12)[1:11]),
   Nord_aurora[4]
 )
 
@@ -1170,7 +1042,7 @@ p_W <- ggplot(
       ymax = up,
     color = Condition
     ),
-    alpha = 0.5
+    alpha = 0.7
   )+
   scale_x_log10(
     labels = scales::label_number()
@@ -1191,7 +1063,7 @@ p_W <- ggplot(
 fact_1 <- 2
 fact_2 <- 5
 
-seq_line <- seq(5, 30, 0.1)
+seq_line <- seq(0.1, 15, 0.1)
 
 df_line <- data.frame(
   x1  = seq_line,
@@ -1243,7 +1115,7 @@ p_R <- ggplot(
       ymax = up,
       color = Condition
     ),
-    alpha = 0.5
+    alpha = 0.7
   )+
   labs(
     x = "Observed reproduction (#)",
@@ -1259,7 +1131,10 @@ p_R <- ggplot(
   scale_y_log10(
    labels = scales::label_number()
     )+
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
 
 p_predobs <- p_W + p_R +plot_layout(guides="collect") +
   plot_annotation(tag_levels = "A")
@@ -1272,6 +1147,191 @@ p_predobs
 
 ggsave(
   filename = "F_IMD_AG_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+
+## A
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_A_IMD_A
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:11]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+
+seq_line <- seq(0.05, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_A_IMD_A,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Condition
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.1, 15, 0.1)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_A_IMD_A,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Condition
+    ),
+    alpha = 0.7
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+```
+
+```{r savepredobsA_IMD_A, include = F}
+ggsave(
+  filename = "A_IMD_A_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
@@ -1290,6 +1350,15 @@ select_times <- seq(0,400, 0.1)
 Endpoints_print <- "Weight,
     Reproduction"
 
+l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_F_IMD_AG, Molec, 
+  l_param_name_F_IMD_AG, step_sim, Endpoints_print
+  )
+
 
 l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
   head(-1) |>
@@ -1298,16 +1367,6 @@ l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
 f_In_Setpoint_full_TKTD(
   path_A_IMD_A, Molec, 
   l_param_name_A_IMD_A, step_sim, Endpoints_print
-  )
-
-
-l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full_TKTD(
-  path_F_IMD_AG, Molec, 
-  l_param_name_F_IMD_AG, step_sim, Endpoints_print
   )
 
 ```
@@ -1323,14 +1382,6 @@ done
 width_plot <- 12
 height_plot <- 12
 
-file_rds_A_IMD_A <- file.path(path_A_IMD_A, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_A_IMD_A)) {
-  df_pred_full_A_IMD_A <- readRDS(file_rds_A_IMD_A)
-} else {
-  df_pred_full_A_IMD_A <- f_read_Setpoint_full_TKTD(path_A_IMD_A, Molec, select_times, step_sim)
-}
-
 file_rds_F_IMD_AG <- file.path(path_F_IMD_AG, paste0("Sim.Res.Exp.full.rds"))
 
 if (file.exists(file_rds_F_IMD_AG)) {
@@ -1339,11 +1390,19 @@ if (file.exists(file_rds_F_IMD_AG)) {
   df_pred_full_F_IMD_AG <- f_read_Setpoint_full_TKTD(path_F_IMD_AG, Molec, select_times, step_sim)
 }
 
+file_rds_A_IMD_A <- file.path(path_A_IMD_A, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_A_IMD_A)) {
+  df_pred_full_A_IMD_A <- readRDS(file_rds_A_IMD_A)
+} else {
+  df_pred_full_A_IMD_A <- f_read_Setpoint_full_TKTD(path_A_IMD_A, Molec, select_times, step_sim)
+}
+
 ######### Plot preparation #####################################################
 
 Condition_order <- c(
   "Control", "C1", "C2", "C3", "C4", "C5",
-  "C6", "C7", "C8"
+  "C6", "C7", "C8", "C9", "C10"
 )
 
 df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |> 
@@ -1404,6 +1463,31 @@ df_data_obs_IMD_R <- df_data_obs_IMD |>
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
+
+######### F_IMD_AG ############################################################
+df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG |> 
+  left_join(
+    df_Exp_type_Dose_Condition_G,
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG |> 
+  left_join(
+    df_Exp_type_Dose_Condition_R,
+    by = c("ID_experiment")
+  ) |> 
+  filter(Experiment_type == "Repro") |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
+  )
+
 ######### A_IMD_A ############################################################
 df_pred_full_A_IMD_A_plot_G <- df_pred_full_A_IMD_A |> 
   left_join(
@@ -1428,33 +1512,244 @@ df_pred_full_A_IMD_A_plot_R <- df_pred_full_A_IMD_A |>
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
-######### A_IMD_A ############################################################
-df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG |> 
-  left_join(
-    df_Exp_type_Dose_Condition_G,
-    by = c("ID_experiment")
-  ) |> 
-  mutate(
-    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
-    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
-  )
-
-df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG |> 
-  left_join(
-    df_Exp_type_Dose_Condition_R,
-    by = c("ID_experiment")
-  ) |> 
-  filter(Experiment_type == "Repro") |> 
-  mutate(
-    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
-    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
-  )
-
 ```
 
 ::: panel-tabset
+## A & G
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_F_IMD_AGsummary
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
+  
+col_exp1 <- c(
+  Nord_aurora[4],
+  rev(nord("aurora", 12)[1:10])
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW_G <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Effect of imidacloprid on juvenile growth"
+    )+
+    theme_minimal()+
+    lims(y=c(0, max_WG))+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+  
+  pW_R <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Effect of imidacloprid on adult growth"
+    )+
+    theme_minimal()+
+    lims(y=c(0, max_WR))+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+  
+   pR_R <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Cumulated reproduction (#)",
+      title ="Effect of imidacloprid on reproduction"
+    )+
+    theme_minimal()+
+     lims(y = c(0,max_RR))+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+p_WR_R <- pW_R + pR_R 
+
+p_WR_summary <- pW_G + pW_R + pR_R +
+  plot_layout(ncol=3)
+p_WR_summary
+
+```
+
+```{r savetrajWRF_IMD_AG_summary, include = F}
+ggsave(
+  filename="F_IMD_AG_trajWR_G.png", 
+  plot=pW_G, 
+  width=6, height = 6, 
+  path=path_fig
+  )
+
+ggsave(
+  filename="F_IMD_AG_trajWR_R.png", 
+  plot=p_WR_R, 
+  width=12, height = 6, 
+  path=path_fig
+  )
+ggsave(
+  filename="F_IMD_AG_trajWR_summary.png", 
+  plot=p_WR_summary, 
+  width=12, height = 9, 
+  path=path_fig
+  )
+```
+
 ## A
 
 ```{r, echo=F, message=F, warning=F}
@@ -1660,6 +1955,7 @@ p_WR_summary <- pW_G + pW_R + pR_R +
   plot_layout(ncol=3)
 p_WR_summary
 
+
 ```
 
 ```{r savetrajWRA_IMD_A_summary, include = F}
@@ -1683,28 +1979,98 @@ ggsave(
   path=path_fig
   )
 ```
+:::
 
-## A & G
+Overall, the selected DEB-TKTD model captured the main concentration-response patterns observed for juvenile growth, adult growth, and reproduction (@fig-pred_F_IMD_AGsummary & @fig-predobs_F_IMD_AG). It reproduced the general decline in life-history performance with increasing imidacloprid exposure, supporting a physiological mode of action involving both reduced assimilation and altered growth processes.
 
-```{r, echo=F, message=F, warning=F}
+Nevertheless, some systematic deviations remained across the exposure gradient. The model overestimated the effect on juvenile growth at intermediate imidacloprid concentrations (0.158 and 0.5 mg$\cdot$kg$^{-1}$) resulting in predicted values below the observations. Reproduction was similarly underestimated over this intermediate concentration range. At the highest concentrations, between 1.6 and 5 mg$\cdot$kg$^{-1}$, the model moderately underestimated the effect on growth and cocoon production.
+
+## Summary
+
+```{r, message=F, warning=F}
+IMD_low_doses <- c(0, 1.6, 5, 16, 50)
+IMD_int_doses <- c(158, 280, 500)
+IMD_high_doses <- c(890, 1581, 5000)
+
+Dose_level_levels <- c("Low doses", "Intermediate doses", "High doses")
+
+
+df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG_plot_G |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% IMD_low_doses ~ "Low doses",
+      Dose %in% IMD_int_doses ~ "Intermediate doses",
+      Dose %in% IMD_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_data_obs_IMD_G <- df_data_obs_IMD_G |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% IMD_low_doses ~ "Low doses",
+      Dose %in% IMD_int_doses ~ "Intermediate doses",
+      Dose %in% IMD_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG_plot_R |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% IMD_low_doses ~ "Low doses",
+      Dose %in% IMD_int_doses ~ "Intermediate doses",
+      Dose %in% IMD_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_data_obs_IMD_R <- df_data_obs_IMD_R |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% IMD_low_doses ~ "Low doses",
+      Dose %in% IMD_int_doses ~ "Intermediate doses",
+      Dose %in% IMD_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+```
+
+```{r, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
-#| label: fig-pred_F_IMD_AGsummary
-#| fig-height: 18
+#| label: fig-pred_F_IMD_AG_summary_article
+#| fig-height: 10
 #| fig-width: 12
 
 # Plot
   alpha_ribbon <- 0.15
+  alpha_point <- 0.9
   line_width <- 1.1
   point_stroke <- 0.9
   alpha_line <- 0.7
-  wrap_nb_col <- 2
+  wrap_nb_col <- 1
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
   
-col_exp1 <- c(
-  Nord_aurora[4],
-  rev(nord("aurora", 12)[1:10])
+
+col_experiment <- c(
+  
+  # Control + low doses
+  "#4C566A", # Control
+  "#DDE8D3",
+  "#A3BE8C",
+  "#879F72",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
 )
 
-col_experiment <- rep(col_exp1, 2)
   
   pW_G <- ggplot()+
 
@@ -1738,31 +2104,32 @@ col_experiment <- rep(col_exp1, 2)
           y = Weight_obs, 
           color = ID_experiment  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
       x="Time (days)", 
       y = "Weight (g)",
-      title ="Effect of epoxiconazole on juvenile growth"
+      title ="Effect of imidacloprid on juvenile growth"
     )+
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
+    legend.position = "none",
+    strip.text = element_blank()
   )
   
   pW_R <- ggplot()+
@@ -1797,26 +2164,26 @@ col_experiment <- rep(col_exp1, 2)
           y = Weight_obs, 
           color = ID_experiment  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
       x="Time (days)", 
       y = "Weight (g)",
-      title ="Effect of epoxiconazole on adult growth"
+      title ="Effect of imidacloprid on adult growth"
     )+
     theme_minimal()+
   theme(
@@ -1832,7 +2199,7 @@ col_experiment <- rep(col_exp1, 2)
         x = Time,
         ymax = up,
         ymin = low,
-        fill = ID_experiment
+        fill = Facet_label
       ),
       alpha = alpha_ribbon
     )+
@@ -1842,7 +2209,7 @@ col_experiment <- rep(col_exp1, 2)
       aes(
         x = Time,
         y = predict.endpoint,
-        color = ID_experiment
+        color = Facet_label
       ),
       linewidth = line_width,
       alpha = alpha_line
@@ -1854,67 +2221,50 @@ col_experiment <- rep(col_exp1, 2)
         aes(  
           x = Time, 
           y = Reproduction_obs, 
-          color = ID_experiment  
+          color = Facet_label  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Conditions",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Conditions",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
       x="Time (days)", 
       y = "Cumulated reproduction (#)",
-      title ="Effect of epoxiconazole on reproduction"
+      title ="Effect of imidacloprid on reproduction"
     )+
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
+    legend.title = element_text(face = "bold"),
+    strip.text = element_blank()
   )
 
 p_WR_R <- pW_R + pR_R 
 
 p_WR_summary <- pW_G + pW_R + pR_R +
   plot_layout(ncol=3)
+
 p_WR_summary
 
-
 ```
 
-```{r savetrajWRF_IMD_AG_summary, include = F}
+```{r savetrajWRF_IMD_AG_article, include = F}
 ggsave(
-  filename="F_IMD_AG_trajWR_G.png", 
-  plot=pW_G, 
-  width=6, height = 6, 
-  path=path_fig
-  )
-
-ggsave(
-  filename="F_IMD_AG_trajWR_R.png", 
-  plot=p_WR_R, 
-  width=12, height = 6, 
-  path=path_fig
-  )
-ggsave(
-  filename="F_IMD_AG_trajWR_summary.png", 
+  filename="F_IMD_AG_trajWR_article.png", 
   plot=p_WR_summary, 
-  width=12, height = 9, 
+  width=12, height = 8, 
   path=path_fig
   )
 ```
-:::
-
-Overall, the selected DEB-TKTD model captures the main concentration-response patterns observed for juvenile growth, adult growth, and reproduction (@fig-pred_F_IMD_AGsummary). It reproduces the general decline in life-history performance with increasing imidacloprid exposure, supporting a physiological mode of action involving both reduced assimilation and altered growth processes.
-
-Nevertheless, systematic deviations remaines across the exposure gradient. For both juvenile and adult growth, the model tends to overestimate imidacloprid effects at intermediate external concentrations, approximately between 0.158 and 0.5 mg$\cdot$kg$^{-1}$, resulting in predicted growth values below the observations. Conversely, the model underestimates effects at the highest concentrations, particularly above 0.89 mg$\cdot$kg$^{-1}$, and consequently predicts higher growth than observed. A similar pattern is observed for reproduction, with effects being overestimated at intermediate concentrations and underestimated at the highest concentrations.

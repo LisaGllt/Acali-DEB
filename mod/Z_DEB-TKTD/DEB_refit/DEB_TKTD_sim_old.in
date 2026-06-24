@@ -5,9 +5,9 @@ Integrate(Lsodes, 1E-9, 1E-10, 1);
 
 ########## Experiments ################################################
 
-Simulation { # EPX_EC50_growth_Ctrl
+Simulation { # IMD_EC50_growth_Ctrl
     Init = 1;
-    Winit=0.07212;
+    Winit=0.10092;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -35,9 +35,9 @@ Simulation { # EPX_EC50_growth_Ctrl
 }
 
 
-Simulation { # EPX_EC50_repro_Ctrl
+Simulation { # IMD_EC50_repro_Ctrl
     Init = 2;
-    Winit=0.76124;
+    Winit=0.75083;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;

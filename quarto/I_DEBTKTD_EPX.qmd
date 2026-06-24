@@ -31,13 +31,6 @@ path_H_EPX_MG <- here::here("mod/Z_DEB-TKTD/EPX/H_EPX_MG")
 path_I_EPX_MR <- here::here("mod/Z_DEB-TKTD/EPX/I_EPX_MR")
 path_J_EPX_GR <- here::here("mod/Z_DEB-TKTD/EPX/J_EPX_GR")
 
-# 3 pMoA
-# path_K_EPX_AMG <- here::here("mod/Z_DEB-TKTD/EPX/K_EPX_AMG")
-# path_L_EPX_AMR <- here::here("mod/Z_DEB-TKTD/EPX/L_EPX_AMR")
-# path_M_EPX_AGR <- here::here("mod/Z_DEB-TKTD/EPX/M_EPX_AGR")
-# path_N_EPX_MGR <- here::here("mod/Z_DEB-TKTD/EPX/N_EPX_MGR")
-
-
 df_data_fit_EPX <- f_import_data_DEBTKTD() |> 
   filter(Molecule == Molec) |> 
   mutate(No_sim = case_when(
@@ -87,7 +80,7 @@ seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
 f_In_TKTD_tot(path_D_EPX_R, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## E_EPX_AM ##############################################################
-seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3345, C2 = 6666, C3 = 2112)
 f_In_TKTD_tot(path_E_EPX_AM, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## F_EPX_AG ##############################################################
@@ -103,28 +96,12 @@ seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
 f_In_TKTD_tot(path_H_EPX_MG, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## I_EPX_MR ##############################################################
-seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
+seeds <- c(C1 = 3345, C2 = 6666, C3 = 2222)
 f_In_TKTD_tot(path_I_EPX_MR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 ######## J_EPX_GR ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
 f_In_TKTD_tot(path_J_EPX_GR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
-
-# ######## K_EPX_AMG ##############################################################
-# seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-# f_In_TKTD_tot(path_K_EPX_AMG, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
-# 
-# ######## L_EPX_AMR ##############################################################
-# seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-# f_In_TKTD_tot(path_L_EPX_AMR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
-# 
-# ######## M_EPX_AGR ##############################################################
-# seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-# f_In_TKTD_tot(path_M_EPX_AGR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
-# 
-# ######## N_EPX_MGR ##############################################################
-# seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-# f_In_TKTD_tot(path_N_EPX_MGR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
 
 # ./mcsim.DEB-EPX DEB_TKTD_C1.in
 
@@ -352,8 +329,6 @@ Summary_res_J_EPX_GR <-
   as.data.frame(MCMC_out_J_EPX_GR$Summary_res)[1:length(L_parameters_J_EPX_GR)] |>
   mutate(Model = "J_EPX_GR")
 
-#Summary_res_D_EPX_R
-
 list_models <- c("A_EPX_A", "B_EPX_M", "C_EPX_G", "D_EPX_R", 
                  "E_EPX_AM", "F_EPX_AG", "G_EPX_AR", "H_EPX_MG", "I_EPX_MR", "J_EPX_GR")
 df_LL_BIC <- data.frame(
@@ -433,9 +408,9 @@ df_result |> datatable(
   )
 ```
 
-For epoxiconazole, comparison of the candidate physiological modes of action shows that the three best-supported models all involve reduced assimilation (@tbl-ResEPX ). The lowest BIC is obtained for the combined assimilation and growth pMoA (BIC = -93.3), followed closely by the assimilation and reproduction model (BIC = -92.6) and the assimilation-only model (BIC = -92.4). The corresponding BIC differences are small ($\Delta\mathrm{BIC}<1$), indicating that the three formulations receive essentially equivalent support from the data. Because the addition of direct effects on growth or reproduction do not substantially improve model performance, the assimilation-only formulation is retained as the most parsimonious model.
+For epoxiconazole, comparison of the candidate physiological modes of action did not clearly discriminate among the three best-supported formulations (@tbl-ResEPX). The lowest BIC was obtained for the assimilation and reproduction pMoA (BIC = -84.5), closely followed by the growth and reproduction model (BIC = -84.4; $\Delta\mathrm{BIC}=0.1$) and the assimilation and growth model (BIC = -83.7; $\Delta\mathrm{BIC}=0.8$). These three formulations therefore received essentially equivalent support from the data. The assimilation-only model also remained plausible (BIC = -83.3; $\Delta\mathrm{BIC}=1.2$), whereas models combining maintenance with reproduction or assimilation received less support, with BIC values of -81.5 and -80.7, respectively. Although the assimilation and reproduction formulation had the lowest BIC and was retained for subsequent analyses, its advantage over the other best-performing models was marginal. The available data therefore support several alternative representations of epoxiconazole effects and do not allow a clear distinction between direct effects on assimilation, growth, and reproduction.
 
-The selected assimilation model estimated a tolerance concentration ($z$) of 43,637. ng g(\^{-1}) internal concentration, with a 95% credible interval of 11,231-88,457 ng$\cdot$g$^{-1}$. The stress slope parameter ($b$) was estimated at $2.68 \times 10^{-6}$ ng$\cdot$g$^{-1}$, with a 95% credible interval of $1.56 \times 10^{-6}$ to $4.89 \times 10^{-6}$ g$\cdot$ng$^{-1}$. The wide credible interval around $z$ indicates substantial uncertainty in the internal concentration at which toxic stress begins, whereas the stress slope was estimated more precisely.
+The selected assimilation and reproduction model estimated a no-effect concentration ($c_0$) of 47,992 \[15,105; 100,090\] ng$\cdot$g$^{-1}$ internal concentration and a stress slope parameter ($b$) of $2.4 \times 10^{-6}$ \[$9.7 \times 10^{-7}$ ; $5.5 \times 10^{-6}$\] g$\cdot$ng$^{-1}$. The broad credible interval around $c_0$ indicates substantial uncertainty in the internal concentration at which toxic stress begins. Although $b$ was comparatively better constrained, its credible interval also indicates uncertainty in the subsequent increase in stress above the no-effect concentration.
 
 ### Chains
 
@@ -447,7 +422,7 @@ Chains are plotted for all models.
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_A_EPX_A
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_A_EPX_A)
@@ -459,7 +434,7 @@ p_chains
 ggsave(
   filename="A_EPX_A_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -469,7 +444,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_B_EPX_M
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_B_EPX_M)
@@ -481,7 +456,7 @@ p_chains
 ggsave(
   filename="B_EPX_M_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -491,7 +466,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_C_EPX_G
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_C_EPX_G)
@@ -503,7 +478,7 @@ p_chains
 ggsave(
   filename="C_EPX_G_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -513,7 +488,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_D_EPX_R
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_D_EPX_R)
@@ -525,7 +500,7 @@ p_chains
 ggsave(
   filename="D_EPX_R_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -535,7 +510,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_E_EPX_AM
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_E_EPX_AM)
@@ -547,7 +522,7 @@ p_chains
 ggsave(
   filename="E_EPX_AM_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -557,7 +532,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_F_EPX_AG
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_F_EPX_AG)
@@ -569,7 +544,7 @@ p_chains
 ggsave(
   filename="F_EPX_AG_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -579,7 +554,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_G_EPX_AR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_G_EPX_AR)
@@ -591,7 +566,7 @@ p_chains
 ggsave(
   filename="G_EPX_AR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -601,7 +576,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_H_EPX_MG
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_H_EPX_MG)
@@ -613,7 +588,7 @@ p_chains
 ggsave(
   filename="H_EPX_MG_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -623,7 +598,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_I_EPX_MR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_I_EPX_MR)
@@ -635,7 +610,7 @@ p_chains
 ggsave(
   filename="I_EPX_MR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -645,7 +620,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
 #| label: fig-chains_J_EPX_GR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_J_EPX_GR)
@@ -657,7 +632,7 @@ p_chains
 ggsave(
   filename="J_EPX_GR_chains.png", 
   plot=p_chains, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
@@ -666,6 +641,29 @@ ggsave(
 ### Likelihood
 
 ::: panel-tabset
+## A & R
+
+```{r, message=F, warning=F, echo=F}
+#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
+#| label: fig-like_G_EPX_AR
+#| fig-height: 8
+#| fig-width: 8
+
+
+p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_G_EPX_AR)
+p_LL
+
+```
+
+```{r saveLLG_EPX_AR, include = F}
+ggsave(
+  filename="G_EPX_AR_chainsLL.png", 
+  plot=p_LL, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
+
 ## A
 
 ```{r, message=F, warning=F, echo=F}
@@ -674,10 +672,8 @@ ggsave(
 #| fig-height: 8
 #| fig-width: 8
 
-
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_EPX_A)
 p_LL
-
 ```
 
 ```{r saveLLA_EPX_A, include = F}
@@ -688,32 +684,77 @@ ggsave(
   path=path_fig
   )
 ```
-
-## A & G
-
-```{r, message=F, warning=F, echo=F}
-#| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
-#| label: fig-like_F_EPX_AG
-#| fig-height: 8
-#| fig-width: 8
-
-p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_F_EPX_AG)
-p_LL
-```
-
-```{r saveLLF_EPX_AG, include = F}
-ggsave(
-  filename="F_EPX_AG_chainsLL.png", 
-  plot=p_LL, 
-  width=8, height = 4, 
-  path=path_fig
-  )
-```
 :::
 
 ## Chains convergence
 
 ::: panel-tabset
+## A & R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Chains convergence.
+#| label: fig-chainsconvergence_G_EPX_AR
+#| fig-height: 8
+#| fig-width: 8
+
+gelman <- f_Plot_Convergence(MCMC_out_G_EPX_AR)
+print(gelman)
+```
+
+```{r corr, message=F, warning=F}
+#| fig-cap: Parameter correlations.
+#| label: fig-corr_G_EPX_AR
+#| fig-height: 5
+#| fig-width: 6
+
+file_rds <- here::here("fig/DEBTKTD_Models/G_EPX_AR_ipairs_plot.png")
+
+f_Plot_ipairs(MCMC_out_G_EPX_AR, file_rds)
+
+```
+
+```{r, include = F}
+
+col_corr <- colorRampPalette(c(
+  "#BF616A",  # corrélations négatives
+  "white",
+  "#5E81AC"   # corrélations positives
+))(200)
+
+params_keep <- c("nec.1.", "b.1.")
+
+mcmc_list_corr_G_EPX_AR <- f_mcmc_list_corr(MCMC_out_G_EPX_AR)
+
+df_corr_G_EPX_AR <- cor(as.matrix(mcmc_list_corr_G_EPX_AR)[, params_keep])
+
+dimnames(df_corr_G_EPX_AR) <- lapply(
+  dimnames(df_corr_G_EPX_AR),
+  \(x) gsub("\\.1\\.$", "", x)
+)
+
+png(file.path(path_fig, "G_EPX_AR_corrplot_article.png"), width = 2000, height = 2000, res = 300)
+
+op <- par(font = 2)
+
+corrplot.mixed(
+  df_corr_G_EPX_AR,
+  lower = "ellipse",
+  upper = "number",
+  tl.col = "#2E3440",
+  tl.cex = 0.6,
+  tl.pos = "d",
+  number.cex = 0.7,
+  tl.srt = 45,
+  lower.col = col_corr,
+  upper.col = col_corr
+)
+
+par(op)
+
+dev.off()
+
+```
+
 ## A
 
 ```{r, echo=F, message=F, warning=F}
@@ -733,83 +774,43 @@ print(gelman)
 #| fig-width: 6
 
 file_rds <- here::here("fig/DEBTKTD_Models/A_EPX_A_ipairs_plot.png")
+
 f_Plot_ipairs(MCMC_out_A_EPX_A, file_rds)
-
-```
-
-```{r, include = F}
-
-col_corr <- colorRampPalette(c(
-  "#BF616A",  # corrélations négatives
-  "white",
-  "#5E81AC"   # corrélations positives
-))(200)
-
-params_keep <- c("nec.1.", "b.1.")
-
-mcmc_list_corr_A_EPX_A <- f_mcmc_list_corr(MCMC_out_A_EPX_A)
-
-df_corr_A_EPX_A <- cor(as.matrix(mcmc_list_corr_A_EPX_A)[, params_keep])
-
-dimnames(df_corr_A_EPX_A) <- lapply(
-  dimnames(df_corr_A_EPX_A),
-  \(x) gsub("\\.1\\.$", "", x)
-)
-
-png(file.path(path_fig, "A_EPX_A_corrplot_article.png"), width = 2000, height = 2000, res = 300)
-
-op <- par(font = 2)
-
-corrplot.mixed(
-  df_corr_A_EPX_A,
-  lower = "ellipse",
-  upper = "number",
-  tl.col = "#2E3440",
-  tl.cex = 0.6,
-  tl.pos = "d",
-  number.cex = 0.7,
-  tl.srt = 45,
-  lower.col = col_corr,
-  upper.col = col_corr
-)
-
-par(op)
-dev.off()
-
-```
-
-## A & G
-
-```{r, echo=F, message=F, warning=F}
-#| fig-cap: Chains convergence.
-#| label: fig-chainsconvergence_F_EPX_AG
-#| fig-height: 8
-#| fig-width: 8
-
-gelman <- f_Plot_Convergence(MCMC_out_F_EPX_AG)
-print(gelman)
-```
-
-```{r corr, message=F, warning=F}
-#| fig-cap: Parameter correlations.
-#| label: fig-corr_F_EPX_AG
-#| fig-height: 5
-#| fig-width: 6
-
-file_rds <- here::here("fig/DEBTKTD_Models/F_EPX_AG_ipairs_plot.png")
-f_Plot_ipairs(MCMC_out_F_EPX_AG, file_rds)
 ```
 :::
 
-### Posterior distributions
+A moderate positive correlation was observed for epoxiconazole ($r=0.64$), suggesting partial parameter dependence and greater difficulty in independently identifying the tolerance threshold and stress slope from the available data (Supplementary Information @fig-corr_G_EPX_AR).
+
+## Posterior distributions
 
 ::: panel-tabset
+## A & R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Distributions of the priors and the posteriors.
+#| label: fig-post_G_EPX_AR
+#| fig-height: 4
+#| fig-width: 8
+
+p_post <- f_Plot_Posteriors(MCMC_out_G_EPX_AR)
+p_post
+```
+
+```{r savepostG_EPX_AR, include = F}
+ggsave(
+  filename="G_EPX_AR_post.png", 
+  plot=p_post, 
+  width=8, height = 4, 
+  path=path_fig
+  )
+```
+
 ## A
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
 #| label: fig-post_A_EPX_A
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_post <- f_Plot_Posteriors(MCMC_out_A_EPX_A)
@@ -820,47 +821,26 @@ p_post
 ggsave(
   filename="A_EPX_A_post.png", 
   plot=p_post, 
-  width=8, height = 8, 
-  path=path_fig
-  )
-```
-
-## A & G
-
-```{r, echo=F, message=F, warning=F}
-#| fig-cap: Distributions of the priors and the posteriors.
-#| label: fig-post_F_EPX_AG
-#| fig-height: 8
-#| fig-width: 8
-
-p_post <- f_Plot_Posteriors(MCMC_out_F_EPX_AG)
-p_post
-```
-
-```{r savepostF_EPX_AG, include = F}
-ggsave(
-  filename="F_EPX_AG_post.png", 
-  plot=p_post, 
-  width=8, height = 8, 
+  width=8, height = 4, 
   path=path_fig
   )
 ```
 :::
 
-### Predicted vs. Obs
+## Predicted vs. Obs
 
 ```{r}
+l_param_name_G_EPX_AR <- names(Summary_res_G_EPX_AR) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.") 
+
+f_In_predobs_TKTD(path_G_EPX_AR, Molec, l_param_name_G_EPX_AR)
+
 l_param_name_A_EPX_A <- names(Summary_res_A_EPX_A) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.") 
 
 f_In_predobs_TKTD(path_A_EPX_A, Molec, l_param_name_A_EPX_A)
-
-l_param_name_F_EPX_AG <- names(Summary_res_F_EPX_AG) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_F_EPX_AG, Molec, l_param_name_F_EPX_AG)
 
 ```
 
@@ -881,6 +861,34 @@ df_data_obs_EPX <- df_data_fit_EPX |>
     ) |> 
   dplyr::select(-c(Weight, Reproduction))
 
+Condition_order <- c(
+  "Control", "C1", "C2", "C3", "C4", "C5",
+  "C6", "C7", "C8"
+)
+
+######## G_EPX_AR ###############################################################
+
+df_pred_G_EPX_AR <- f_read_predobs(path_G_EPX_AR, Nb_experiment, df_data_obs_EPX)
+
+df_pred_Weight_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_G_EPX_AR <- df_data_obs_EPX |> 
+  filter(Time !=0 & Reproduction_obs != 0) |>
+  left_join(df_pred_Reproduction_G_EPX_AR, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_G_EPX_AR <- df_data_obs_EPX |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_G_EPX_AR, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
 ######## A_EPX_A ###############################################################
 
 df_pred_A_EPX_A <- f_read_predobs(path_A_EPX_A, Nb_experiment, df_data_obs_EPX)
@@ -889,39 +897,209 @@ df_pred_Weight_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Weight" & Time !=0)
 df_pred_Reproduction_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Reproduction" & Time !=0)
 
 df_predobs_Reproduction_A_EPX_A <- df_data_obs_EPX |> 
-  filter(Time !=0) |>
+  filter(Time !=0 & Reproduction_obs != 0) |>
   left_join(df_pred_Reproduction_A_EPX_A, suffix = c("_obs", "_pred")) |> 
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
 
 df_predobs_Weight_A_EPX_A <- df_data_obs_EPX |> 
   filter(Time !=0) |>
   left_join(df_pred_Weight_A_EPX_A, suffix = c("_obs", "_pred"))|>
   mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
-
-######## F_EPX_AG ###############################################################
-
-df_pred_F_EPX_AG <- f_read_predobs(path_F_EPX_AG, Nb_experiment, df_data_obs_EPX)
-
-df_pred_Weight_F_EPX_AG <- subset(df_pred_F_EPX_AG, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_F_EPX_AG <- subset(df_pred_F_EPX_AG, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_F_EPX_AG <- df_data_obs_EPX |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Reproduction_F_EPX_AG, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
-
-df_predobs_Weight_F_EPX_AG <- df_data_obs_EPX |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_F_EPX_AG, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
 
 ```
 
 ::: panel-tabset
+## A & R
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_G_EPX_AR
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_exp1 <- c(
+  rev(nord("aurora", 12)[1:9]),
+  Nord_aurora[4]
+)
+
+col_experiment <- rep(col_exp1, 2)
+
+seq_line <- seq(0.05, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_G_EPX_AR,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Condition
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(1, 15, 0.1)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_G_EPX_AR,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Condition
+    ),
+    alpha = 0.7
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+```
+
+```{r savepredobsG_EPX_AR, include = F}
+ggsave(
+  filename = "G_EPX_AR_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+
 ## A
 
 ```{r, message=F, warning=F}
@@ -938,7 +1116,7 @@ col_line1 <- Nord_polar[4]
 col_line2 <- Nord_snow[1]
 
 col_exp1 <- c(
-  rev(nord("aurora", 12)[1:8]),
+  rev(nord("aurora", 12)[1:9]),
   Nord_aurora[4]
 )
 
@@ -997,7 +1175,7 @@ p_W <- ggplot(
       ymax = up,
     color = Condition
     ),
-    alpha = 0.5
+    alpha = 0.7
   )+
   scale_x_log10(
     labels = scales::label_number()
@@ -1018,7 +1196,7 @@ p_W <- ggplot(
 fact_1 <- 2
 fact_2 <- 5
 
-seq_line <- seq(5, 30, 0.1)
+seq_line <- seq(1, 15, 0.1)
 
 df_line <- data.frame(
   x1  = seq_line,
@@ -1070,7 +1248,7 @@ p_R <- ggplot(
       ymax = up,
       color = Condition
     ),
-    alpha = 0.5
+    alpha = 0.7
   )+
   labs(
     x = "Observed reproduction (#)",
@@ -1086,7 +1264,10 @@ p_R <- ggplot(
   scale_y_log10(
    labels = scales::label_number()
     )+
-  theme_minimal()
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
 
 p_predobs <- p_W + p_R +plot_layout(guides="collect") +
   plot_annotation(tag_levels = "A")
@@ -1096,7 +1277,6 @@ p_predobs
 ```
 
 ```{r savepredobsA_EPX_A, include = F}
-
 ggsave(
   filename = "A_EPX_A_predobs.png",
   plot = p_predobs,
@@ -1104,192 +1284,9 @@ ggsave(
   path = path_fig
 ) 
 ```
-
-## A & G
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_F_EPX_AG
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:8]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_F_EPX_AG,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.5
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(5, 30, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_F_EPX_AG,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.5
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsF_EPX_AG, include = F}
-
-ggsave(
-  filename = "F_EPX_AG_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
 :::
 
-### Predicted trajectories for Weight and Reproduction
+## Predicted trajectories for Weight and Reproduction
 
 ```{r setpointfullin}
 
@@ -1301,6 +1298,16 @@ Endpoints_print <- "Weight,
     Reproduction"
 
 
+l_param_name_G_EPX_AR <- names(Summary_res_G_EPX_AR) |>
+  head(-1) |>
+  stringr::str_remove_all("\\.1\\.")
+
+f_In_Setpoint_full_TKTD(
+  path_G_EPX_AR, Molec, 
+  l_param_name_G_EPX_AR, step_sim, Endpoints_print
+  )
+
+
 l_param_name_A_EPX_A <- names(Summary_res_A_EPX_A) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
@@ -1308,16 +1315,6 @@ l_param_name_A_EPX_A <- names(Summary_res_A_EPX_A) |>
 f_In_Setpoint_full_TKTD(
   path_A_EPX_A, Molec, 
   l_param_name_A_EPX_A, step_sim, Endpoints_print
-  )
-
-
-l_param_name_F_EPX_AG <- names(Summary_res_F_EPX_AG) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full_TKTD(
-  path_F_EPX_AG, Molec, 
-  l_param_name_F_EPX_AG, step_sim, Endpoints_print
   )
 
 ```
@@ -1333,20 +1330,20 @@ done
 width_plot <- 12
 height_plot <- 12
 
+file_rds_G_EPX_AR <- file.path(path_G_EPX_AR, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_G_EPX_AR)) {
+  df_pred_full_G_EPX_AR <- readRDS(file_rds_G_EPX_AR)
+} else {
+  df_pred_full_G_EPX_AR <- f_read_Setpoint_full_TKTD(path_G_EPX_AR, Molec, select_times, step_sim)
+}
+
 file_rds_A_EPX_A <- file.path(path_A_EPX_A, paste0("Sim.Res.Exp.full.rds"))
 
 if (file.exists(file_rds_A_EPX_A)) {
   df_pred_full_A_EPX_A <- readRDS(file_rds_A_EPX_A)
 } else {
   df_pred_full_A_EPX_A <- f_read_Setpoint_full_TKTD(path_A_EPX_A, Molec, select_times, step_sim)
-}
-
-file_rds_F_EPX_AG <- file.path(path_F_EPX_AG, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_F_EPX_AG)) {
-  df_pred_full_F_EPX_AG <- readRDS(file_rds_F_EPX_AG)
-} else {
-  df_pred_full_F_EPX_AG <- f_read_Setpoint_full_TKTD(path_F_EPX_AG, Molec, select_times, step_sim)
 }
 
 ######### Plot preparation #####################################################
@@ -1414,7 +1411,31 @@ df_data_obs_EPX_R <- df_data_obs_EPX |>
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
-######### A_EPX_A ############################################################
+######### G_EPX_AR ############################################################
+df_pred_full_G_EPX_AR_plot_G <- df_pred_full_G_EPX_AR |> 
+  left_join(
+    df_Exp_type_Dose_Condition_G,
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_pred_full_G_EPX_AR_plot_R <- df_pred_full_G_EPX_AR |> 
+  left_join(
+    df_Exp_type_Dose_Condition_R,
+    by = c("ID_experiment")
+  ) |> 
+  filter(Experiment_type == "Repro") |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
+  )
+
+######### G_EPX_AR ############################################################
 df_pred_full_A_EPX_A_plot_G <- df_pred_full_A_EPX_A |> 
   left_join(
     df_Exp_type_Dose_Condition_G,
@@ -1438,33 +1459,242 @@ df_pred_full_A_EPX_A_plot_R <- df_pred_full_A_EPX_A |>
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
-######### A_EPX_A ############################################################
-df_pred_full_F_EPX_AG_plot_G <- df_pred_full_F_EPX_AG |> 
-  left_join(
-    df_Exp_type_Dose_Condition_G,
-    by = c("ID_experiment")
-  ) |> 
-  mutate(
-    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
-    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
-  )
-
-df_pred_full_F_EPX_AG_plot_R <- df_pred_full_F_EPX_AG |> 
-  left_join(
-    df_Exp_type_Dose_Condition_R,
-    by = c("ID_experiment")
-  ) |> 
-  filter(Experiment_type == "Repro") |> 
-  mutate(
-    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
-    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
-  )
-
 ```
 
 ::: panel-tabset
+## A & R
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_G_EPX_ARsummary
+#| fig-height: 18
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
+  
+col_exp1 <- c(
+  Nord_aurora[4],
+  rev(nord("aurora", 12)[1:10])
+)
+
+col_experiment <- rep(col_exp1, 2)
+  
+  pW_G <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_G_EPX_AR_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_G_EPX_AR_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_EPX_G, Experiment_type == "Growth"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Effect of epoxiconazole on juvenile growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+  
+  pW_R <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Effect of epoxiconazole on adult growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+  
+   pR_R <- ggplot()+
+
+    geom_ribbon(
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        ymax = up,
+        ymin = low,
+        fill = ID_experiment
+      ),
+      alpha = alpha_ribbon
+    )+
+    
+    geom_line(
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~Facet_label,
+      ncol = wrap_nb_col
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Cumulated reproduction (#)",
+      title ="Effect of epoxiconazole on reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+p_WR_R <- pW_R + pR_R 
+
+p_WR_summary <- pW_G + pW_R + pR_R +
+  plot_layout(ncol=3)
+
+p_WR_summary
+
+```
+
+```{r savetrajWRG_EPX_AR_summary, include = F}
+ggsave(
+  filename="G_EPX_AR_trajWR_G.png", 
+  plot=pW_G, 
+  width=6, height = 6, 
+  path=path_fig
+  )
+
+ggsave(
+  filename="G_EPX_AR_trajWR_R.png", 
+  plot=p_WR_R, 
+  width=12, height = 6, 
+  path=path_fig
+  )
+ggsave(
+  filename="G_EPX_AR_trajWR_summary.png", 
+  plot=p_WR_summary, 
+  width=12, height = 9, 
+  path=path_fig
+  )
+```
+
 ## A
 
 ```{r, echo=F, message=F, warning=F}
@@ -1668,7 +1898,6 @@ p_WR_R <- pW_R + pR_R
 
 p_WR_summary <- pW_G + pW_R + pR_R +
   plot_layout(ncol=3)
-
 p_WR_summary
 
 ```
@@ -1694,33 +1923,98 @@ ggsave(
   path=path_fig
   )
 ```
+:::
 
-## A & G
+Overall, the selected DEB-TKTD model reproduced the concentration-dependent responses observed for juvenile growth, adult growth, and reproduction (@fig-pred_G_EPX_ARsummary & @fig-predobs_G_EPX_AR). The model captured the general magnitude and shape of the decline in life-history performance with increasing epoxiconazole exposure. However, some systematic deviations remained. Growth effects were underestimated at the lowest tested concentrations, between 0.928 and 9.28 mg$\cdot$kg$^{-1}$, resulting in predicted growth values above the observations. Reproductive effects were also underestimated at the highest concentrations, between 43.1 and 200 mg$\cdot$kg$^{-1}$, with predicted cocoon production exceeding the observed values. Despite these discrepancies, the combined assimilation and reproduction pMoA provided an overall satisfactory description of epoxiconazole effects across the three endpoints.
 
-```{r, echo=F, message=F, warning=F}
+## Summary
+
+```{r, message=F, warning=F}
+EPX_low_doses <- c(0, 928, 2000)
+EPX_int_doses <- c(4300, 9280, 20000)
+EPX_high_doses <- c(43100, 92800, 200000)
+
+Dose_level_levels <- c("Low doses", "Intermediate doses", "High doses")
+
+
+df_pred_full_G_EPX_AR_plot_G <- df_pred_full_G_EPX_AR_plot_G |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% EPX_low_doses ~ "Low doses",
+      Dose %in% EPX_int_doses ~ "Intermediate doses",
+      Dose %in% EPX_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_data_obs_EPX_G <- df_data_obs_EPX_G |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% EPX_low_doses ~ "Low doses",
+      Dose %in% EPX_int_doses ~ "Intermediate doses",
+      Dose %in% EPX_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_pred_full_G_EPX_AR_plot_R <- df_pred_full_G_EPX_AR_plot_R |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% EPX_low_doses ~ "Low doses",
+      Dose %in% EPX_int_doses ~ "Intermediate doses",
+      Dose %in% EPX_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+df_data_obs_EPX_R <- df_data_obs_EPX_R |> 
+  mutate(
+    Dose_level = factor(case_when(
+      Dose %in% EPX_low_doses ~ "Low doses",
+      Dose %in% EPX_int_doses ~ "Intermediate doses",
+      Dose %in% EPX_high_doses ~ "High doses"
+    ), Dose_level_levels)
+  )
+
+```
+
+```{r, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
-#| label: fig-pred_F_EPX_AGsummary
-#| fig-height: 18
+#| label: fig-pred_G_EPX_AR_summary_article
+#| fig-height: 10
 #| fig-width: 12
 
 # Plot
   alpha_ribbon <- 0.15
+  alpha_point <- 0.9
   line_width <- 1.1
   point_stroke <- 0.9
   alpha_line <- 0.7
-  wrap_nb_col <- 2
+  wrap_nb_col <- 1
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
   
-col_exp1 <- c(
-  Nord_aurora[4],
-  rev(nord("aurora", 12)[1:10])
+
+col_experiment <- c(
+  # Low doses
+  "#4C566A", #"#DDE8D3",
+  "#A3BE8C",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
 )
 
-col_experiment <- rep(col_exp1, 2)
   
   pW_G <- ggplot()+
 
     geom_ribbon(
-      data = subset(df_pred_full_F_EPX_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      data = subset(df_pred_full_G_EPX_AR_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
       aes(
         x = Time,
         ymax = up,
@@ -1731,7 +2025,7 @@ col_experiment <- rep(col_exp1, 2)
     )+
     
     geom_line(
-      data = subset(df_pred_full_F_EPX_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+      data = subset(df_pred_full_G_EPX_AR_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
       aes(
         x = Time,
         y = predict.endpoint,
@@ -1749,20 +2043,20 @@ col_experiment <- rep(col_exp1, 2)
           y = Weight_obs, 
           color = ID_experiment  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
@@ -1773,13 +2067,14 @@ col_experiment <- rep(col_exp1, 2)
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
+    legend.position = "none",
+    strip.text = element_blank()
   )
   
   pW_R <- ggplot()+
 
     geom_ribbon(
-      data = subset(df_pred_full_F_EPX_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
       aes(
         x = Time,
         ymax = up,
@@ -1790,7 +2085,7 @@ col_experiment <- rep(col_exp1, 2)
     )+
     
     geom_line(
-      data = subset(df_pred_full_F_EPX_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
       aes(
         x = Time,
         y = predict.endpoint,
@@ -1808,20 +2103,20 @@ col_experiment <- rep(col_exp1, 2)
           y = Weight_obs, 
           color = ID_experiment  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Condition",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
@@ -1838,22 +2133,22 @@ col_experiment <- rep(col_exp1, 2)
    pR_R <- ggplot()+
 
     geom_ribbon(
-      data = subset(df_pred_full_F_EPX_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
       aes(
         x = Time,
         ymax = up,
         ymin = low,
-        fill = ID_experiment
+        fill = Facet_label
       ),
       alpha = alpha_ribbon
     )+
     
     geom_line(
-      data = subset(df_pred_full_F_EPX_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+      data = subset(df_pred_full_G_EPX_AR_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
       aes(
         x = Time,
         y = predict.endpoint,
-        color = ID_experiment
+        color = Facet_label
       ),
       linewidth = line_width,
       alpha = alpha_line
@@ -1865,22 +2160,22 @@ col_experiment <- rep(col_exp1, 2)
         aes(  
           x = Time, 
           y = Reproduction_obs, 
-          color = ID_experiment  
+          color = Facet_label  
         ),
-      alpha = 0.7,
+      alpha = alpha_point,
       stroke = point_stroke
     )+
     
     scale_color_manual(
-      name = "Experiments",
+      name = "Conditions",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Experiments",
+      name = "Conditions",
       values = col_experiment
       )+
     facet_wrap(
-      ~Facet_label,
+      ~Dose_level,
       ncol = wrap_nb_col
       )+
     labs(
@@ -1891,38 +2186,24 @@ col_experiment <- rep(col_exp1, 2)
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
+    legend.title = element_text(face = "bold"),
+    strip.text = element_blank()
   )
 
 p_WR_R <- pW_R + pR_R 
 
 p_WR_summary <- pW_G + pW_R + pR_R +
   plot_layout(ncol=3)
+
 p_WR_summary
 
 ```
 
-```{r savetrajWRF_EPX_AG_summary, include = F}
+```{r savetrajWRG_EPX_AR_article, include = F}
 ggsave(
-  filename="F_EPX_AG_trajWR_G.png", 
-  plot=pW_G, 
-  width=6, height = 6, 
-  path=path_fig
-  )
-
-ggsave(
-  filename="F_EPX_AG_trajWR_R.png", 
-  plot=p_WR_R, 
-  width=12, height = 6, 
-  path=path_fig
-  )
-ggsave(
-  filename="F_EPX_AG_trajWR_summary.png", 
+  filename="G_EPX_AR_trajWR_article.png", 
   plot=p_WR_summary, 
-  width=12, height = 9, 
+  width=12, height = 8, 
   path=path_fig
   )
 ```
-:::
-
-Overall, the selected DEB-TKTD model accurately reproduces the concentration-dependent responses observed for juvenile growth, adult growth, and reproduction (@fig-pred_A_EPX_Asummary). The model captures both the magnitude and general shape of the decline in life-history performance with increasing epoxiconazole exposure. No systematic pattern is apparent in the deviations between observed and predicted responses across the exposure gradient, with no consistent overestimation or underestimation of effects at low, intermediate, or high concentrations. These results indicate that an impairment of assimilation alone is sufficient to describe the observed effects of epoxiconazole across all three endpoints.

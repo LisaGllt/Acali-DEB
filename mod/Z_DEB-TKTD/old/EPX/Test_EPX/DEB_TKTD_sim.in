@@ -1,0 +1,542 @@
+#### DEB-TKTD A. caliginosa | Epoxiconazole
+#===============================================
+
+Integrate(Lsodes, 1E-9, 1E-10, 1);
+
+########## Experiments ################################################
+
+kr = 1;
+nec = 43637.4;
+b = 2.681570e-06;
+
+Simulation { # EPX_EC50_growth_Ctrl
+    Init = 1;
+    Ce0=0;
+    Winit=0.07212;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C1
+    Init = 1;
+    Ce0=928;
+    Winit=0.06558;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C2
+    Init = 1;
+    Ce0=2000;
+    Winit=0.0598;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C3
+   Init = 1;
+    Ce0=4300;
+    Winit=0.06414;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C4
+    Init = 1;
+    Ce0=9280;
+    Winit=0.06644;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C5
+    Init = 1;
+    Ce0=20000;
+    Winit=0.0673;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_growth_C6
+    Init = 1;
+    Ce0=43100;
+    Winit=0.07596;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_growth_C7
+    Init = 1;
+    Ce0=92800;
+    Winit=0.05734;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_growth_C8
+    Init = 1;
+    Ce0=2e+05;
+    Winit=0.05398;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal, 
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_Ctrl
+    Init = 2;
+    Ce0=0;
+    Winit=0.76124;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C1
+    Init = 2;
+    Ce0=928;
+    Winit=0.70581;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C2
+    Init = 2;
+    Ce0=2000;
+    Winit=0.69614;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+
+Simulation { # EPX_EC50_repro_C3
+    Init = 2;
+    Ce0=4300;
+    Winit=0.66864;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C4
+    Init = 2;
+    Ce0=9280;
+    Winit=0.70255;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C5
+    Init = 2;
+    Ce0=20000;
+    Winit=0.63882;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C6
+    Init = 2;
+    Ce0=43100;
+    Winit=0.66693;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C7
+    Init = 2;
+    Ce0=92800;
+    Winit=0.6482;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+Simulation { # EPX_EC50_repro_C8
+    Init = 2;
+    Ce0=2e+05;
+    Winit=0.69538;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+                               
+    PrintStep(Weight,
+    Reproduction, Ce, Ci, Damage, Stress, freal,
+				0, 28, 0.05);
+}
+
+End.

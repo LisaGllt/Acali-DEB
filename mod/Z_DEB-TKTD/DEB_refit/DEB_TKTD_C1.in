@@ -8,9 +8,10 @@ MCMC( "DEB_TKTD_C1.out",  # output file
 Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
 Level{ # Global
-    
-Distrib (pAm,          TruncNormal_cv,            259.032,     0.2, 10, 1000);
-Distrib (E_coc,          TruncNormal_cv,            68.4189,     0.2, 10, 1000);
+
+Distrib (pAm,          TruncNormal_cv,            259.032,       0.3, 10, 1000);
+Distrib (E_coc,          TruncNormal_cv,            68.4189,     0.3, 10, 1000);
+Distrib (kapA,         TruncNormal_cv,            0.643309,     0.3, 0, 1);
 
 # Calcul des vraissemblances
 Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);
@@ -22,9 +23,9 @@ Level{
   ############## Experiments ###################
   
   
-Experiment { # EPX_EC50_growth_Ctrl
+Experiment { # IMD_EC50_growth_Ctrl
     Init = 1;
-    Winit=0.07212;
+    Winit=0.10092;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -46,15 +47,15 @@ Experiment { # EPX_EC50_growth_Ctrl
                            Add, 
                             2.7);
     Print(Weight,0, 14, 28);
-    Data(Weight,0.07212, 0.2032, 0.4673);
+    Data(Weight,0.10092, 0.21477, 0.41118);
     Print(Reproduction,0, 14, 28);
     Data(Reproduction,0, 0, 0);
 }
   
   
-Experiment { # EPX_EC50_repro_Ctrl
+Experiment { # IMD_EC50_repro_Ctrl
     Init = 2;
-    Winit=0.76124;
+    Winit=0.75083;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -76,9 +77,9 @@ Experiment { # EPX_EC50_repro_Ctrl
                            Add, 
                             5.4);
     Print(Weight,0, 14, 28);
-    Data(Weight,0.76124, -1, 1.01041);
+    Data(Weight,0.75083, -1, 0.905665);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 16.2);
+    Data(Reproduction,0, -1, 7.5);
 }
 } # End
 } # End global

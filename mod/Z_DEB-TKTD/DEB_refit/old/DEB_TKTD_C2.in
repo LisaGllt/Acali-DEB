@@ -1,0 +1,86 @@
+MCMC( "DEB_TKTD_C2.out",  # output file
+      "",                # name of restart file
+      "",                # name of data file
+      30000, 0,             # iterations, print prediction flag
+      1, 10000,          # printing frequency, iters to print
+      6666);               # random seed
+
+Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
+    
+Level{ # Global
+    
+Distrib (pAm,          TruncNormal_cv,            259.032,     0.25, 10, 1000);
+Distrib (E_coc,          TruncNormal_cv,            68.4189,     0.25, 10, 1000);
+
+# Calcul des vraissemblances
+Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);
+Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));
+
+Level{
+
+  ############## Experiments ###################
+  
+  
+Experiment { # EPX_EC50_growth_Ctrl
+    Init = 1;
+    Winit=0.07212;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=2.7;
+    Texp=18;
+    Dens=1;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            2.7, 2.7);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            2.7);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.07212, 0.2032, 0.4673);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, 0, 0);
+}
+  
+  
+Experiment { # EPX_EC50_repro_Ctrl
+    Init = 2;
+    Winit=0.76124;
+    WeightSoilCosm = 200;
+    OM_soil_t0=6.52;
+    OM_horse_t0=5.4;
+    Texp=18;
+    Dens=2;
+    OM_soil_replace=Events(OM_soil,
+                          2,
+                          0, 28,
+                          Replace, Replace, 
+                           6.52, 6.52);
+    OM_horse_replace=Events(OM_horse,
+                           2,
+                           0, 28,
+                           Replace, Replace, 
+                            5.4, 5.4);
+    OM_horse_add=Events(OM_horse,
+                           1,
+                           14,
+                           Add, 
+                            5.4);
+    Print(Weight,0, 14, 28);
+    Data(Weight,0.76124, -1, 1.01041);
+    Print(Reproduction,0, 14, 28);
+    Data(Reproduction,0, -1, 8.1);
+}
+} # End
+} # End global
+
+End.

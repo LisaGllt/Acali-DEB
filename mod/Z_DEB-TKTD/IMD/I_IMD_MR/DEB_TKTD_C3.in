@@ -3,7 +3,7 @@ MCMC( "DEB_TKTD_C3.out",  # output file
       "",                # name of data file
       30000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
-      2212);               # random seed
+      2222);               # random seed
 
 Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
@@ -369,7 +369,7 @@ Experiment { # IMD_EC50_repro_Ctrl
     Print(Weight,0, 14, 28);
     Data(Weight,0.75083, -1, 0.905665);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 15);
+    Data(Reproduction,0, -1, 7.5);
 }
 Experiment { # IMD_EC50_repro_C1
     Init = 2;
@@ -398,7 +398,7 @@ Experiment { # IMD_EC50_repro_C1
     Print(Weight,0, 14, 28);
     Data(Weight,0.72012, -1, 0.91086);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 17);
+    Data(Reproduction,0, -1, 8.5);
 }
 Experiment { # IMD_EC50_repro_C2
     Init = 2;
@@ -427,7 +427,7 @@ Experiment { # IMD_EC50_repro_C2
     Print(Weight,0, 14, 28);
     Data(Weight,0.76991, -1, 0.95269);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 11.8);
+    Data(Reproduction,0, -1, 5.9);
 }
 Experiment { # IMD_EC50_repro_C3
     Init = 2;
@@ -456,7 +456,7 @@ Experiment { # IMD_EC50_repro_C3
     Print(Weight,0, 14, 28);
     Data(Weight,0.78241, -1, 1.0313);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 14.4);
+    Data(Reproduction,0, -1, 7.2);
 }
 Experiment { # IMD_EC50_repro_C4
     Init = 2;
@@ -485,7 +485,7 @@ Experiment { # IMD_EC50_repro_C4
     Print(Weight,0, 14, 28);
     Data(Weight,0.72182, -1, 0.94486);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 14.2);
+    Data(Reproduction,0, -1, 7.1);
 }
 Experiment { # IMD_EC50_repro_C5
     Init = 2;
@@ -514,7 +514,7 @@ Experiment { # IMD_EC50_repro_C5
     Print(Weight,0, 14, 28);
     Data(Weight,0.75544, -1, 0.77879);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 12.6);
+    Data(Reproduction,0, -1, 6.3);
 }
 Experiment { # IMD_EC50_repro_C6
     Init = 2;
@@ -543,7 +543,7 @@ Experiment { # IMD_EC50_repro_C6
     Print(Weight,0, 14, 28);
     Data(Weight,0.68963, -1, 0.85429);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 12);
+    Data(Reproduction,0, -1, 6);
 }
 Experiment { # IMD_EC50_repro_C7
     Init = 2;
@@ -572,7 +572,7 @@ Experiment { # IMD_EC50_repro_C7
     Print(Weight,0, 14, 28);
     Data(Weight,0.684895, -1, 0.787735);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 7.8);
+    Data(Reproduction,0, -1, 3.9);
 }
 Experiment { # IMD_EC50_repro_C8
     Init = 2;
@@ -601,7 +601,7 @@ Experiment { # IMD_EC50_repro_C8
     Print(Weight,0, 14, 28);
     Data(Weight,0.63245, -1, 0.51443);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 4);
+    Data(Reproduction,0, -1, 2);
 }
 Experiment { # IMD_EC50_repro_C9
     Init = 2;
@@ -630,7 +630,7 @@ Experiment { # IMD_EC50_repro_C9
     Print(Weight,0, 14, 28);
     Data(Weight,0.66219, -1, 0.4056);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 0.2);
+    Data(Reproduction,0, -1, 0.1);
 }
 Experiment { # IMD_EC50_repro_C10
     Init = 2;

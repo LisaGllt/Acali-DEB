@@ -1,0 +1,306 @@
+# DEB-TKTD Apporectodea caliginosa | Imidacloprid
+# -----------------------------------------------------------------------
+
+States = {E,         # Energy in the reserve (J)
+          L,         # Structural volumetric length (cm)
+          Eh,        # Maturity (J)
+          R,         # Cumulated reproduction (# of cocoons produced)
+          OM_soil,   # OM soil quantity in cosm (for Dens earthworms) (g)
+          OM_horse,  # OM horse dung quantity in cosm (for Dens earthworms) (g)
+          z,         # Threshold for kappa change (-)
+          Ci_cent,
+          Ci_periph,
+          Cext,
+          D};        
+
+
+Outputs = {Energy,             # Energy in the reserve (J)
+          Length_struct,       # Structural volumetric length (cm)
+          Maturity,            # Maturity (J)
+          Reproduction,        # Cumulated reproduction (# of cocoons produced)
+		      Organic_matter,
+		      Stress,
+		      Damage,
+		      Weight,
+		      kapreal,
+          freal,
+          pM,
+          kJ_t,
+          g,
+          kapH_real,
+          kapR_real,
+          Qf_soil,
+          Qf_horse,
+          OMsoil,
+          OMhorse,
+          X,
+          Ci,
+          Ce};             
+		   
+Inputs = {Dens, # Number of earthworm in the cosm (#)
+          Init,
+          Ce0,
+          WeightSoilCosm,
+          Winit,
+          Texp,
+          OM_horse_t0,
+          OM_soil_t0,
+          times_replace,
+          OM_horse_replace,
+          OM_horse_add,
+          OM_soil_replace};              
+
+# Error parameters
+Sigma_W; # Error on Weight
+Sigma_R; # Error on Reproduction
+
+
+# pMoA taken into account
+
+bol_A = 1;
+bol_M = 0;
+bol_G = 0;
+bol_R = 1;
+
+
+# DEB PARAMETERS ---------------------------------------------------------------
+
+# Environment
+muOM = 11700;                 # Energy in 1 g of organic matter from horse dung (J/g) 0.9 * 13000
+rOM_ClxHorse = 0.0204226;     # Ratio of energy in 1 g of OM from soil vs 1 g of OM from horse dung
+
+# Energy assimilation
+Fm = 6.92108;          # [F_m], max spec searching rate (g/d.g)
+kapX = 0.258;           # digestion efficiency of food to reserve (-)
+pAm = 413.042;          # {p_Am}, spec assimilation flux (J/d.cm^2)
+r_pAm_pM = 0.629551;     # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
+v = 0.243464;           # energy conductance (cm/d)
+
+K = 0.0778501;          # Slope of functional threshold (K model)
+
+kapJ = 0.978502;        # allocation fraction to soma for juveniles (-) (model C)
+kapA = 0.643309;        # allocation fraction to soma for grouped adults (-) (model C)
+tau = 9.65631;          # transition time between kapJ and kapA (d) (model C)
+
+# Maintenance and growth
+pT = 0;                    # {p_T}, surf-spec somatic maint (J/d.cm^2)
+Eg = 4183;                 # [E_G], spec cost for structure (J/cm^3)
+dv = 1.21968;              # Structure density (g/cm^3) (models w & e)
+de = 1.122480e-09;         # Contribution of reserve to body weight (g/cm^3) (model e)
+
+# Maturity
+kJ = 0.002793;          # maturity maint rate coefficient (1/d)
+Ehb = 0.5;              # maturity at birth (J)
+Ehp = 97.6156;           # maturity at puberty (J)
+kapH = 1;               # maturation efficiency (-)
+
+# Reproduction
+E_coc = 84.0609;  # Energy in a cocoon (J)
+kapR = 0.475;     # reproduction efficiency (-)
+
+# Metabolic response to T
+TAH = 28750;      # Arrhenius temperature for upper boundary (K)
+TH = 293.2;       # upper boundary (K)
+TA = 7976;        # Arrhenius temperature (K)
+Tref = 293.15;    # Reference temperature (K)
+
+Init_R = 1e-6;
+
+# DEB-TKTD PARAMETERS ----------------------------------------------------------
+
+# Initialisation of the environment
+Ci0 = 6.2; # Initial concentration of toxicant in earthworm (ng/g) (5.84 for EPX | 6.2 for IMD)
+Ce0; # Initial concentration of toxicant in soil (ng/g)
+
+# Kinetics in earthworm
+ku = 2.0;         # Uptake rate of toxicant (g(soil).g(worm)-1.d-1) | 0.851 x 2.4 (bc here earthworm weight with gut content)
+ke = 0.12;         # Elimination rate of toxicant (d-1) 
+kperiph = 0.043; # Second compartment dynamics (d-1)
+C_sat = 1676; # Internal saturation concentration (ng/g)
+
+# Kinetics in soil 
+DT50 = 187;      # IMD Half-life in soil (days)
+
+# Effects
+kr = 1;  # Damage reparation constant (d-1)
+nec; # No-effect concentration for sublethal effects (ng/g)
+b;   # Tolerance concentration (ng/g)
+
+log_b;
+#b = exp(log_b);
+
+Initialize{
+
+      kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapA : kapJ)); #(Model C)
+      
+      pM = r_pAm_pM * pAm;
+    	
+    	# Coefficient for temperature correction (Texp in °C)
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
+      srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+    	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+    	
+    # Correction of coefficients depending on temperature
+      pAm_t  = pAm * Tc;        
+      v_t    = v   * Tc;
+      kJ_t   = kJ * Tc;
+      
+    # Primary parameters          
+      Km   = pM / Eg ;
+      Km_t = Km * Tc;
+      Em   = pAm / v ;
+      g    = Eg / (kapreal * Em);
+      Lm   = (v / (Km*g));
+
+    # Starting points
+      E = Em;
+      L = pow(((Winit-de*Em)/(dv)),(1.0/3.0)); #(Model e)
+      Weight = Winit;
+      Weight_struct = dv*pow(L,3);
+      
+      Ehjuv = 71.617 * pow(Weight,2) + 109.293 * Weight - 0.874; # Relationship determined from the predictions of Gollot2026_dens_D5
+      
+      Eh = (Init == 0 ? Ehb :
+              (Init == 1 ? Ehjuv :
+              (Init == 2 ? Ehp : Ehb)));
+      
+      R = Init_R;
+      freal = 1;
+      z = 0;
+      D = 0;
+      Ci_cent = Ci0 * kperiph/(kperiph + kperiph);
+      Ci_periph = Ci0 - Ci_cent;
+      Cext = Ce0;
+    
+} # End of Initialize
+
+
+Dynamics{
+
+    # Toxicokinetics
+      dt(Cext) = -log(2)/DT50 * Cext;
+      
+      tmp_Ci_periph = (kperiph*Ci_cent - kperiph*Ci_periph) - (3/L)*dt(L)*Ci_periph;
+      tmp_Ci_cent = (ku*Cext - ke*Ci_cent + kperiph*Ci_periph - kperiph*Ci_cent) - (3/L)*dt(L)*Ci_cent; # dt(L3) = 3 L2 dt(L)
+      
+      dt(Ci_periph) = (Ci > C_sat ? 0 : tmp_Ci_periph);
+      dt(Ci_cent) = (Ci > C_sat ? 0 : tmp_Ci_cent);
+      
+      Ci = ((Ci_periph + Ci_cent) > C_sat ? C_sat : (Ci_periph + Ci_cent));
+      
+      dt(D) = kr*(Ci-D); # @jager_2020
+      
+    # Toxicodynamics
+    
+      s_f = b * ((D - nec) > 0 ? (D - nec) : 0);
+      
+    # Coefficient for temperature correction (Texp in °C)
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
+      srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+    	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+    	
+    # Correction of coefficients depending on temperature
+      pAm_t  = pAm * Tc;        
+      v_t    = v   * Tc;
+      kJ_t   = kJ * Tc * (1+s_f*bol_M);
+      
+      dt(z) = (Eh >= Ehp ? 1 : 0);                                #(Model A)
+      x = (z/tau > 1 ? 1 : z/tau);                                #(Model A)
+      kapAreal = x * kapA + (1-x) * kapJ;                         #(Model A)
+      kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ)); #(Model A)
+
+      pM = r_pAm_pM * pAm * (1+s_f*bol_M);
+      
+    # Primary parameters          
+      Km   = pM / (Eg * (1+s_f*bol_G)) ;
+      Km_t = Km * Tc;
+      Em   = pAm / v ;
+      g    = (Eg * (1+s_f*bol_G)) / (kapreal * Em);
+      Lm   = (v / (Km*g));
+      
+    
+    # Energie assimilation
+      
+      # Maximal energy ingested by the earthworm (J/d)
+      Qfmax = pAm_t * pow(L,2)/kapX;                          
+      
+      Weight_struct = dv*pow(L,3);
+      
+      Type_Fm = Weight_struct; #(Model W)
+      
+      # Energy ingested by the earthworm per day (J/d)
+      
+      Qfmatter = Fm * Type_Fm;                             # (g/d of matter)
+      QfOMsoil = Qfmatter * OM_soil/(Dens * WeightSoilCosm);   # (g/d of OM from soil)
+      QfOMhorse = Qfmatter * OM_horse/(Dens * WeightSoilCosm); # (g/d of OM from horse)
+      
+      Qf_soil_calc  = QfOMsoil  * muOM * rOM_ClxHorse;     # (J/d)
+      Qf_horse_calc = QfOMhorse * muOM;                    # (J/d)
+      Qf_calc = Qf_soil_calc + Qf_horse_calc;              # (J/d)
+      
+      # Because Qf cannot be superior to Qfmax :
+      Qf_soil  = (Qf_calc > Qfmax ? (Qfmax*OM_soil  /(OM_soil + OM_horse)) : Qf_soil_calc);
+      Qf_horse = (Qf_calc > Qfmax ? (Qfmax*OM_horse /(OM_soil + OM_horse)) : Qf_horse_calc);
+      Qf = Qf_soil + Qf_horse;
+      
+      # Quantity of organic matter consummed by all earthworms in one cosm per day (g/d)
+      OM_soil_out  = (Qf_soil  /(muOM*rOM_ClxHorse))*Dens;   
+      OM_horse_out = (Qf_horse /muOM               )*Dens; # gOM/cosm/d   
+      
+      # Dynamics of organic matter in the cosm (which cannot be negative)
+    
+      dt(OM_soil)  = - OM_soil_out;
+      dt(OM_horse) = - OM_horse_out;
+      
+      OM_soil  = (OM_soil  < 1e-9 ? 1e-9 : OM_soil);
+      OM_horse = (OM_horse < 1e-9 ? 1e-9 : OM_horse);
+      
+      # Functional response of the earthworm to organic matter (K model)
+      X = Qf/(Qfmax);
+      freal = X/(K*(1-X)+X) * ((1-s_f*bol_A) > 0 ? (1-s_f*bol_A) : 0);
+      
+    # Energy in the reserve (which cannot be negative)
+    
+      tmp_E = (pAm_t/L)*(freal-E/Em);
+      dt(E) = (E < 1e-12 ? (-E) : tmp_E);
+
+    # Structural length
+    
+      dt(L) = (v_t / (3 * ( ( (E/Em) + g) ) ) ) * ((E/Em) - (L/Lm));
+      Weight = pow(L,3)*dv + E*de; #(Model e)
+
+    # Maturity
+    
+      pC       = ( (g * E ) / (g + (E/Em)) ) * ((v_t*pow(L,2)) + (Km_t*pow(L,3)));
+      tmp_Eh   = ((1-kapreal) * pC) - (kJ_t* Eh);
+      kapH_real = kapH/(1+s_f*bol_G);
+      dt(Eh)   = (Eh < Ehp ? tmp_Eh : 0) * kapH_real;
+
+    # Reproduction
+      kapR_real = kapR/(1+s_f*bol_R);
+      tmp_R    = kapR_real * ( ((1-kapreal)*pC) - (kJ_t*Ehp));
+  	  dt(R)    = (Eh >= Ehp ? tmp_R/(E_coc) : 0);
+
+} # End of Dynamics
+
+CalcOutputs{
+    Energy = E;
+    Length_struct = L;
+    Maturity = (Eh <= 0 ? 1E-9 : Eh); 
+    Reproduction = (R < (Init_R*10) ? 1e-6 : R);
+    Organic_matter = OM_soil + OM_horse;
+    Weight = Weight; 
+    Qf_soil = Qf_soil;
+    Qf_horse = Qf_horse;
+    OMsoil = OM_soil;
+    OMhorse = OM_horse;
+    X = X;
+    kapreal = kapreal;
+    freal = freal;
+    Ci = Ci;
+    Ce = Cext;
+    Stress = b * ((D - nec) > 0 ? (D - nec) : 0);
+    Damage = D;
+}
+
+End.

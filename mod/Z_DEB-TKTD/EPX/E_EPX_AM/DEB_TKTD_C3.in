@@ -3,7 +3,7 @@ MCMC( "DEB_TKTD_C3.out",  # output file
       "",                # name of data file
       30000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
-      2212);               # random seed
+      2112);               # random seed
 
 Integrate (Lsodes,  1e-10, 1e-09, 0); # Integrate(Solver, RTOL, ATOL, ITOL);
     
@@ -27,7 +27,7 @@ Level{
 Experiment { # EPX_EC50_growth_Ctrl
     Init = 1;
     Ce0=0;
-    Winit=0.07212;
+    Winit=0.10092;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;
@@ -49,7 +49,7 @@ Experiment { # EPX_EC50_growth_Ctrl
                            Add, 
                             2.7);
     Print(Weight,0, 14, 28);
-    Data(Weight,0.07212, 0.2032, 0.4673);
+    Data(Weight,0.10092, 0.21477, 0.41118);
     Print(Reproduction,0, 14, 28);
     Data(Reproduction,0, 0, 0);
 }
@@ -288,7 +288,7 @@ Experiment { # EPX_EC50_growth_C8
 Experiment { # EPX_EC50_repro_Ctrl
     Init = 2;
     Ce0=0;
-    Winit=0.76124;
+    Winit=0.75083;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=5.4;
@@ -310,9 +310,9 @@ Experiment { # EPX_EC50_repro_Ctrl
                            Add, 
                             5.4);
     Print(Weight,0, 14, 28);
-    Data(Weight,0.76124, -1, 1.01041);
+    Data(Weight,0.75083, -1, 0.905665);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 16.2);
+    Data(Reproduction,0, -1, 7.5);
 }
 Experiment { # EPX_EC50_repro_C1
     Init = 2;
@@ -341,7 +341,7 @@ Experiment { # EPX_EC50_repro_C1
     Print(Weight,0, 14, 28);
     Data(Weight,0.70581, -1, 0.98397);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 18.8);
+    Data(Reproduction,0, -1, 9.4);
 }
 Experiment { # EPX_EC50_repro_C2
     Init = 2;
@@ -370,7 +370,7 @@ Experiment { # EPX_EC50_repro_C2
     Print(Weight,0, 14, 28);
     Data(Weight,0.69614, -1, 0.97909);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 20);
+    Data(Reproduction,0, -1, 10);
 }
 Experiment { # EPX_EC50_repro_C3
     Init = 2;
@@ -399,7 +399,7 @@ Experiment { # EPX_EC50_repro_C3
     Print(Weight,0, 14, 28);
     Data(Weight,0.66864, -1, 0.90632);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 18.2);
+    Data(Reproduction,0, -1, 9.1);
 }
 Experiment { # EPX_EC50_repro_C4
     Init = 2;
@@ -428,7 +428,7 @@ Experiment { # EPX_EC50_repro_C4
     Print(Weight,0, 14, 28);
     Data(Weight,0.70255, -1, 0.9933875);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 19.4);
+    Data(Reproduction,0, -1, 9.7);
 }
 Experiment { # EPX_EC50_repro_C5
     Init = 2;
@@ -457,7 +457,7 @@ Experiment { # EPX_EC50_repro_C5
     Print(Weight,0, 14, 28);
     Data(Weight,0.63882, -1, 0.78812);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 17.4);
+    Data(Reproduction,0, -1, 8.7);
 }
 Experiment { # EPX_EC50_repro_C6
     Init = 2;
@@ -486,7 +486,7 @@ Experiment { # EPX_EC50_repro_C6
     Print(Weight,0, 14, 28);
     Data(Weight,0.66693, -1, 0.91225);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 11.4);
+    Data(Reproduction,0, -1, 5.7);
 }
 Experiment { # EPX_EC50_repro_C7
     Init = 2;
@@ -515,7 +515,7 @@ Experiment { # EPX_EC50_repro_C7
     Print(Weight,0, 14, 28);
     Data(Weight,0.6482, -1, 0.83192);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 12.2);
+    Data(Reproduction,0, -1, 6.1);
 }
 Experiment { # EPX_EC50_repro_C8
     Init = 2;
@@ -544,7 +544,7 @@ Experiment { # EPX_EC50_repro_C8
     Print(Weight,0, 14, 28);
     Data(Weight,0.69538, -1, 0.7093);
     Print(Reproduction,0, 14, 28);
-    Data(Reproduction,0, -1, 7);
+    Data(Reproduction,0, -1, 3.5);
 }
 
 } # End
