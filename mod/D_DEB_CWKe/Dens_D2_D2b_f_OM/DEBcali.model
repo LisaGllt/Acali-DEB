@@ -21,6 +21,10 @@ Outputs = {Energy,             # Energy in the reserve (J)
           freal,
           Qf_soil,
           Qf_horse,
+          Qfsoil_calc,
+          Qfhorse_calc,
+          OM_soil_out,
+          OM_horse_out,
           OMsoil,
           OMhorse,
           X};             # Wet weight of the earthworm (g)
@@ -127,6 +131,9 @@ Initialize{
       R = Init_R;
       freal = 1;
       z = 0;
+      
+      OM_soil_out = 0;
+      OM_horse_out = 0;
     
 } # End of Initialize
 
@@ -168,22 +175,45 @@ Dynamics{
       Weight_struct = dv*pow(L,3);
       
       Type_Fm = Weight_struct; #(Model W)
-      # Type_Fm = pow(L,2); #(Model L)
+      
+      
+      
+      
       
       # Energy ingested by the earthworm per day (J/d)
       
-      Qfmatter = Fm * Type_Fm;                             # (g/d of matter)
-      QfOMsoil = Qfmatter * OM_soil/(Dens * WeightSoilCosm);   # (g/d of OM from soil)
-      QfOMhorse = Qfmatter * OM_horse/(Dens * WeightSoilCosm); # (g/d of OM from horse)
+      W_cosm = WeightSoilCosm + OM_horse/0.9;
       
-      Qf_soil_calc  = QfOMsoil  * muOM * rOM_ClxHorse;     # (J/d)
-      Qf_horse_calc = QfOMhorse * muOM;                    # (J/d)
-      Qf_calc = Qf_soil_calc + Qf_horse_calc;              # (J/d)
+      # Potential quantity of matter ingested
+      Qfmatter = Fm * Type_Fm;                                 # (g matter/d)
+      
+      
+      
+      QfOMsoil = Qfmatter * OM_soil/(WeightSoilCosm);   # (g/d of OM from soil)
+      QfOMhorse = Qfmatter * OM_horse/(WeightSoilCosm); # (g/d of OM from horse)
+      
+      Qfsoil_calc  = QfOMsoil  * muOM * rOM_ClxHorse;     # (J/d)
+      Qfhorse_calc = QfOMhorse * muOM;                    # (J/d)
+      Qf_calc = Qfsoil_calc + Qfhorse_calc;               # (J/d)
       
       # Because Qf cannot be superior to Qfmax :
-      Qf_soil  = (Qf_calc > Qfmax ? (Qfmax*OM_soil  /(OM_soil + OM_horse)) : Qf_soil_calc);
-      Qf_horse = (Qf_calc > Qfmax ? (Qfmax*OM_horse /(OM_soil + OM_horse)) : Qf_horse_calc);
+      # Qf_soil  = (Qf_calc > Qfmax ? (Qfmax*OM_soil  /(OM_soil + OM_horse)) : Qfsoil_calc);
+      # Qf_horse = (Qf_calc > Qfmax ? (Qfmax*OM_horse /(OM_soil + OM_horse)) : Qfhorse_calc);
+      # Qf = Qf_soil + Qf_horse;
+      
+  
+      Q_soil  = Q_matter * (OM_soil /W_cosm);
+      Q_horse = Q_matter * (OM_horse/W_cosm);
+      
+      Qf_soil  = Q_soil * muOM * rOM_ClxHorse;
+      Qf_horse = Q_horse * muOM;
       Qf = Qf_soil + Qf_horse;
+      
+      
+      
+      
+      
+      
       
       # Quantity of organic matter consummed by all earthworms in one cosm per day (g/d)
       OM_soil_out  = (Qf_soil  /(muOM*rOM_ClxHorse))*Dens;   
@@ -196,10 +226,6 @@ Dynamics{
       
       OM_soil  = (OM_soil  < 1e-9 ? 1e-9 : OM_soil);
       OM_horse = (OM_horse < 1e-9 ? 1e-9 : OM_horse);
-      
-      # Functional response of the earthworm to organic matter (Y model)
-      # X = Qf/(2*Qfmax);
-      # freal = X/(1+X);
       
       # Functional response of the earthworm to organic matter (K model)
       X = Qf/(Qfmax);
@@ -240,8 +266,12 @@ CalcOutputs{
     Weight = Weight; 
     Qf_soil = Qf_soil;
     Qf_horse = Qf_horse;
+    Qfsoil_calc = Qfsoil_calc;
+    Qfhorse_calc = Qfhorse_calc;
     OMsoil = OM_soil;
     OMhorse = OM_horse;
+    OM_soil_out = OM_soil_out;
+    OM_horse_out = OM_horse_out;
     X = X;
     kapreal = kapreal;
     freal = freal;

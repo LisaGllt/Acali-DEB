@@ -7,15 +7,15 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
 
 ########## Experiments ################################################
 
-Simulation { # IMD_EC50_growth_C9
-    Init = 1;
-    Ce0=1581;
-    Winit=0.11834;
+Simulation { # EPX_EC50_repro_Ctrl
+    Init = 2;
+    Ce0=0;
+    Winit=0.75083;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
-    OM_horse_t0=2.7;
+    OM_horse_t0=5.4;
     Texp=18;
-    Dens=1;
+    Dens=2;
     OM_soil_replace=Events(OM_soil,
                           2,
                           0, 28,
@@ -25,12 +25,12 @@ Simulation { # IMD_EC50_growth_C9
                            2,
                            0, 28,
                            Replace, Replace, 
-                            2.7, 2.7);
+                            5.4, 5.4);
     OM_horse_add=Events(OM_horse,
                            1,
                            14,
                            Add, 
-                            2.7);
+                            5.4);
                                
     Print(Weight,0, 14, 28);
     Print(Reproduction,0, 14, 28);

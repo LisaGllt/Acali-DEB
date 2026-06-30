@@ -7,7 +7,7 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
 
 ########## Experiments ################################################
 
-Simulation { # IMD_EC50_growth_Ctrl
+Simulation { # EPX_EC50_growth_Ctrl
     Init = 1;
     Ce0=0;
     Winit=0.10092;

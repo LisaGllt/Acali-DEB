@@ -21,6 +21,8 @@ Outputs = {Energy,             # Energy in the reserve (J)
           freal,
           Qf_soil,
           Qf_horse,
+          OMsoilout,
+          OMhorseout,
           OMsoil,
           OMhorse,
           X};             # Wet weight of the earthworm (g)
@@ -240,6 +242,8 @@ CalcOutputs{
     Weight = Weight; 
     Qf_soil = Qf_soil;
     Qf_horse = Qf_horse;
+    OMsoilout = OM_soil_out;
+    OMhorseout = OM_horse_out;
     OMsoil = OM_soil;
     OMhorse = OM_horse;
     X = X;

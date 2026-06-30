@@ -7,10 +7,10 @@ Integrate(Lsodes, 1E-6, 1E-6, 1);
 
 ########## Experiments ################################################
 
-Simulation { # IMD_EC50_growth_C6
+Simulation { # EPX_EC50_growth_C6
     Init = 1;
-    Ce0=280;
-    Winit=0.05484;
+    Ce0=43100;
+    Winit=0.07596;
     WeightSoilCosm = 200;
     OM_soil_t0=6.52;
     OM_horse_t0=2.7;

@@ -4816,10 +4816,20 @@ Nb_experiment <- 12
 step_sim <- 0.05
 select_times <- seq(0,400, 0.1)
 
-Endpoints_print <- "freal,
-    Organic_matter,
-    OMsoil,
-    OMhorse"
+# Endpoints_print <- "freal,
+#     Organic_matter,
+#     OMsoil,
+#     OMhorse,
+#     OM_soil_out,
+#     OM_horse_out,
+#     Qf_soil,
+#     Qf_horse,
+#     Weight"
+
+Endpoints_print <- "Qfsoil_calc,
+    Qfhorse_calc,
+    Qf_soil,
+    Qf_horse"
 
 l_param_name_D_OM <- names(Summary_res_D_OM) |>
   head(-1) |>
@@ -4847,10 +4857,62 @@ df_pred_full_D_OM_wide <- df_pred_full_D_OM |>
   pivot_wider(
     id_cols = c(Time, ID_experiment),
     names_from = Endpt, 
-    values_from = predict.endpoint
-    ) |> 
-  mutate(OMtot = OMhorse + OMsoil)
+    values_from = predict.endpoint)
+  #   ) |> 
+  # mutate(
+  #   OMtot = OMhorse + OMsoil,
+  #   OM_horse_out_g = OM_horse_out/Weight,
+  #   OM_soil_out_g = OM_soil_out/Weight
+  #   )
 
+```
+
+```{r}
+p_H <- ggplot(
+  data = df_pred_full_D_OM_wide,
+  aes(
+    x = Time,
+    color = ID_experiment,
+  )
+)+
+  geom_line(
+    aes(
+      y = Qf_horse
+    ),
+    linetype = 1
+  )+
+  geom_line(
+    aes(
+      y = Qfhorse_calc
+    ),
+    linetype = 2,
+    linewidth = 1
+  )+
+  facet_wrap(~ID_experiment, scales = "free")+
+  theme_minimal()
+
+p_S <- ggplot(
+  data = df_pred_full_D_OM_wide,
+  aes(
+    x = Time,
+    color = ID_experiment,
+  )
+)+
+  geom_line(
+    aes(
+      y = Qf_soil
+    ),
+    linetype = 1
+  )+
+  geom_line(
+    aes(
+      y = Qfsoil_calc
+    ),
+    linetype = 2,
+    linewidth = 1
+  )+
+  facet_wrap(~ID_experiment, scales = "free")+
+  theme_minimal()
 ```
 
 ```{r, warning=F, message=F}
@@ -5020,6 +5082,8 @@ line_width <- 0.6
 font_size <- 10
 t_max <- 155
 
+lim_y_OM <- 15
+
 df_pred_full_D_OM_wide_D <- df_pred_full_D_OM_wide |> filter(ID_experiment %in% c("Gollot2026_dens_D1", "Gollot2026_dens_D2", "Gollot2026_dens_D5", "Gollot2026_dens_D7"))
 
 l_labels <- c("1 ind.", "2 ind.", "5 ind.", "7 ind.")
@@ -5067,7 +5131,7 @@ p_OM_dens <- ggplot(
     x = "Time (days)",
     y = "OM in the cosm (g)"
   )+
-  lims(y = c(0,18))+
+  lims(y = c(0,lim_y_OM))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
@@ -5092,7 +5156,7 @@ p_OMhorse_dens <- ggplot(
     x = "Time (days)",
     y = "OM horse in the cosm (g)"
   )+
-  #lims(y = c(0,18))+
+  lims(y = c(0,lim_y_OM))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
@@ -5113,7 +5177,7 @@ p_OMsoil_dens <- ggplot(
     label = l_labels,
     values = pal_dens_dens
     )+
-  #lims(y = c(0,18))+
+  lims(y = c(0,lim_y_OM))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
@@ -5124,7 +5188,107 @@ p_OMsoil_dens <- ggplot(
   )+
   theme_minimal(font_size)
 
-p_dens <- p_freal_dens + p_OM_dens + p_OMhorse_dens + p_OMsoil_dens + plot_layout(ncol=1, guides = "collect") &
+p_OM_horse_out <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = OM_horse_out,
+      color = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "OM horse consummed (g/ind.)"
+  )+
+  lims(y = c(0,NA))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OM_soil_out <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = OM_soil_out,
+      color = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "OM soil consummed (g/ind.)"
+  )+
+  lims(y = c(0,NA))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OM_horse_out_g <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = OM_horse_out_g,
+      color = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "OM horse consummed (g/g ind.)"
+  )+
+  lims(y = c(0,NA))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_OM_soil_out_g <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = OM_soil_out_g,
+      color = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "OM soil consummed (g/g ind.)"
+  )+
+  lims(y = c(0,NA))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_dens <- p_freal_dens + p_OM_dens + p_OMhorse_dens + p_OMsoil_dens + p_OM_horse_out + p_OM_soil_out  + plot_layout(ncol=1, guides = "collect") &
   theme(legend.position = "bottom")
 p <- p_freal_dens + p_freal_food + p_OM_dens + p_OM_food + plot_layout(ncol=2, guides = "collect") + 
   plot_annotation(tag_levels = "A") &

@@ -1333,7 +1333,8 @@ f_read_predobs <- function(file_path, Nb_experiment, df_data_obs){
   
   Sim.Res.Exp <- lapply(1:Nb_experiment, function(j){
     read_tsv(file.path(file_path, paste0("DEB_setpoint_predobs_", j, ".out"))) |> 
-      mutate(No_sim = j)
+      mutate(No_sim = j) |> 
+      mutate(across(everything(), as.numeric))
   }) |> 
     bind_rows()
   
@@ -1588,13 +1589,15 @@ f_read_Setpoint_full <- function(file_path, l_Experiments, Adults_alone = FALSE,
       file.path(file_path, paste0("DEB_setpoint_full_", i, ".out"))
     ) |>
       dplyr::mutate(No_sim = i) |> 
-      dplyr::select(where(~ !all(is.na(.x))))
+      dplyr::select(where(~ any(!is.na(.x))))
     
     if (bol_Eh) {
       Nom_Endpoints = c("Weight", "Maturity", "Energy")
       Nsortie = 3
     } else if (bol_OM) {
-      Nom_Endpoints = c("freal", "Organic_matter", "OMhorse", "OMsoil")
+      #Nom_Endpoints = c("freal", "Organic_matter", "OMhorse", "OMsoil", "OM_horse_out", "OM_soil_out", "Weight", "Qf_horse", "Qf_soil")
+      #Nsortie = 9
+      Nom_Endpoints = c("Qf_horse", "Qf_soil", "Qfhorse_calc", "Qfsoil_calc")
       Nsortie = 4
     } else {
       Nom_Endpoints = c("Weight", "Reproduction")
@@ -3767,7 +3770,7 @@ f_In_Setpoint_full_TKTD <- function(file_path, Molec, l_param_name, step_sim, En
 
 SetPoints("DEB_setpoint_full_', compteur_exp, '.out", "tab_setpoint.out", 0,', l_param_name|>  paste(collapse = ", "),');
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-9, 1E-10, 1);
 
 ########## Experiments ################################################
 ')
@@ -3954,8 +3957,8 @@ f_read_Setpoint_full_TKTD <- function(file_path, Molec, select_times, step_sim, 
       Nom_Endpoints = c("Weight", "Maturity", "Energy")
       Nsortie = 3
     } else {
-      Nom_Endpoints = c("Weight", "Reproduction")
-      Nsortie = 2
+      Nom_Endpoints = c("Weight", "Reproduction", "Ci")
+      Nsortie = 3
     }
     
     df_data_obs_i <- subset(df_data_obs, ID_experiment == ID_i)

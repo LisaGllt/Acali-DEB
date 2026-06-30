@@ -32,10 +32,10 @@ Simulation { # Bart2019_XP5
                            Add, Add, Add, Add, 
                             1.35, 1.35, 1.35, 1.35);
                                
-    PrintStep(freal,
-    Organic_matter,
-    OMsoil,
-    OMhorse,
+    PrintStep(Qfsoil_calc,
+    Qfhorse_calc,
+    Qf_soil,
+    Qf_horse,
 				0, 98, 0.05);
 }
 

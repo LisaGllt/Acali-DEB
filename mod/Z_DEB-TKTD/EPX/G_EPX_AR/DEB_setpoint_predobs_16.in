@@ -3,7 +3,7 @@
 
 SetPoints("DEB_setpoint_predobs_16.out", "tab_setpoint.out", 0,nec, b, Sigma_W);
 
-Integrate(Lsodes, 1E-6, 1E-6, 1);
+Integrate(Lsodes, 1E-9, 1E-10, 1);
 
 ########## Experiments ################################################
 

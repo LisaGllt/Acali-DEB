@@ -829,465 +829,6 @@ ggsave(
 
 ## Predicted vs. Obs
 
-```{r}
-l_param_name_G_EPX_AR <- names(Summary_res_G_EPX_AR) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_G_EPX_AR, Molec, l_param_name_G_EPX_AR)
-
-l_param_name_A_EPX_A <- names(Summary_res_A_EPX_A) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_A_EPX_A, Molec, l_param_name_A_EPX_A)
-
-```
-
-```{bash, eval=F, execute=F}
-for j in $(seq 1 18); do
-./mcsim.DEB-EPX DEB_setpoint_predobs_${j}.in
-done
-```
-
-```{r, results=F, message=F, warning=F}
-
-Nb_experiment <- 18
-
-df_data_obs_EPX <- df_data_fit_EPX |> 
-  mutate(
-    Weight_obs = Weight,
-    Reproduction_obs = Reproduction
-    ) |> 
-  dplyr::select(-c(Weight, Reproduction))
-
-Condition_order <- c(
-  "Control", "C1", "C2", "C3", "C4", "C5",
-  "C6", "C7", "C8"
-)
-
-######## G_EPX_AR ###############################################################
-
-df_pred_G_EPX_AR <- f_read_predobs(path_G_EPX_AR, Nb_experiment, df_data_obs_EPX)
-
-df_pred_Weight_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_G_EPX_AR <- df_data_obs_EPX |> 
-  filter(Time !=0 & Reproduction_obs != 0) |>
-  left_join(df_pred_Reproduction_G_EPX_AR, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()|> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-df_predobs_Weight_G_EPX_AR <- df_data_obs_EPX |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_G_EPX_AR, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()|> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-######## A_EPX_A ###############################################################
-
-df_pred_A_EPX_A <- f_read_predobs(path_A_EPX_A, Nb_experiment, df_data_obs_EPX)
-
-df_pred_Weight_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_A_EPX_A <- df_data_obs_EPX |> 
-  filter(Time !=0 & Reproduction_obs != 0) |>
-  left_join(df_pred_Reproduction_A_EPX_A, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()|> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-df_predobs_Weight_A_EPX_A <- df_data_obs_EPX |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_A_EPX_A, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na()|> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-```
-
-::: panel-tabset
-## A & R
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_G_EPX_AR
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:9]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_G_EPX_AR,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.7
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(1, 15, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_G_EPX_AR,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.7
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
-  theme(
-    legend.position = "none"
-  )
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsG_EPX_AR, include = F}
-ggsave(
-  filename = "G_EPX_AR_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
-
-## A
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_A_EPX_A
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:9]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_A_EPX_A,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.7
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(1, 15, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_A_EPX_A,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.7
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
-  theme(
-    legend.position = "none"
-  )
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsA_EPX_A, include = F}
-ggsave(
-  filename = "A_EPX_A_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
-:::
-
-## Predicted trajectories for Weight and Reproduction
-
 ```{r setpointfullin}
 
 Nb_experiment <- 18
@@ -1295,8 +836,8 @@ step_sim <- 0.05
 select_times <- seq(0,400, 0.1)
 
 Endpoints_print <- "Weight,
-    Reproduction"
-
+    Reproduction,
+    Ci"
 
 l_param_name_G_EPX_AR <- names(Summary_res_G_EPX_AR) |>
   head(-1) |>
@@ -1346,6 +887,599 @@ if (file.exists(file_rds_A_EPX_A)) {
   df_pred_full_A_EPX_A <- f_read_Setpoint_full_TKTD(path_A_EPX_A, Molec, select_times, step_sim)
 }
 
+Nb_experiment <- 18
+
+df_data_obs_EPX <- df_data_fit_EPX |> 
+  mutate(
+    Weight_obs = Weight,
+    Reproduction_obs = Reproduction
+    ) |> 
+  dplyr::select(-c(Weight, Reproduction))
+
+Condition_order <- c(
+  "Control", "C1", "C2", "C3", "C4", "C5",
+  "C6", "C7", "C8"
+)
+
+```
+
+```{r, results=F, message=F, warning=F}
+
+######## G_EPX_AR ###############################################################
+
+#df_pred_G_EPX_AR <- f_read_predobs(path_G_EPX_AR, Nb_experiment, df_data_obs_EPX)
+
+Times_obs <- c(0,14,28)
+
+df_pred_G_EPX_AR <- df_pred_full_G_EPX_AR |> 
+  filter(Time %in% Times_obs)
+
+df_pred_Weight_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_G_EPX_AR <- subset(df_pred_G_EPX_AR, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_G_EPX_AR <- df_data_obs_EPX |> 
+  filter(Time !=0 & Reproduction_obs != 0) |>
+  left_join(df_pred_Reproduction_G_EPX_AR, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_G_EPX_AR <- df_data_obs_EPX |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_G_EPX_AR, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+######## A_EPX_A ###############################################################
+
+Times_obs <- c(0,14,28)
+
+df_pred_A_EPX_A <- df_pred_full_A_EPX_A |> 
+  filter(Time %in% Times_obs)
+
+df_pred_Weight_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_A_EPX_A <- subset(df_pred_A_EPX_A, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_A_EPX_A <- df_data_obs_EPX |> 
+  filter(Time !=0 & Reproduction_obs != 0) |>
+  left_join(df_pred_Reproduction_A_EPX_A, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_A_EPX_A <- df_data_obs_EPX |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_A_EPX_A, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na()|> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+#############################################
+
+df_Exp_type_Dose_Condition_G <- df_data_obs_EPX |> 
+  filter(Experiment_type == "Growth") |> 
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
+  distinct() |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order)
+  )
+
+df_Exp_type_Dose_Condition_R <- df_data_obs_EPX |> 
+  filter(Experiment_type == "Repro") |> 
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
+  distinct() |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order)
+  )
+
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
+  filter(Experiment_type == "Growth") |> 
+  arrange(Condition) |> 
+  pull(ID_experiment)
+
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
+  filter(Experiment_type == "Growth") |> 
+  arrange(Condition) |> 
+  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+  pull(Facet_label)
+
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
+  filter(Experiment_type == "Repro") |> 
+  arrange(Condition) |> 
+  pull(ID_experiment)
+
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
+  filter(Experiment_type == "Repro") |> 
+  arrange(Condition) |> 
+  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+  pull(Facet_label)
+
+df_data_obs_EPX_G <- df_data_obs_EPX |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order),
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_data_obs_EPX_R <- df_data_obs_EPX |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order),
+    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
+  )
+
+###################################################@
+
+df_predobs_Weight_G_EPX_AR_tmp <-  df_predobs_Weight_G_EPX_AR |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_predobs_Reproduction_G_EPX_AR_tmp <-  df_predobs_Reproduction_G_EPX_AR |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  ) 
+
+###
+
+df_predobs_Weight_A_EPX_A_tmp <-  df_predobs_Weight_A_EPX_A |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_predobs_Reproduction_A_EPX_A_tmp <-  df_predobs_Reproduction_A_EPX_A |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  ) 
+
+```
+
+::: panel-tabset
+## A & R
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_G_EPX_AR
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  # Low doses
+  "#4C566A", #"#DDE8D3",
+  "#A3BE8C",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+seq_line <- seq(0.05, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_G_EPX_AR_tmp,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Facet_label,
+    shape = Experiment_type
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_shape_manual(
+    name = "",
+    values = c(shape_IMD, shape_EPX),
+    label = c("Juveniles", "Adults")
+  )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(3, 12, 0.1)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_G_EPX_AR_tmp,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Facet_label
+    ),
+    alpha = 0.7,
+      shape = shape_EPX
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+p_predobs_EPX <-  p_W + p_R +plot_layout(guides="collect") 
+
+```
+
+```{r savepredobsG_EPX_AR, include = F}
+ggsave(
+  filename = "G_EPX_AR_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+
+## A
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_A_EPX_A
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  # Low doses
+  "#4C566A", #"#DDE8D3",
+  "#A3BE8C",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+seq_line <- seq(0.05, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_A_EPX_A_tmp,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Facet_label,
+    shape = Experiment_type
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_shape_manual(
+    name = "",
+    values = c(shape_IMD, shape_EPX),
+    label = c("Juveniles", "Adults")
+  )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(3, 12, 0.1)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_A_EPX_A_tmp,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Facet_label
+    ),
+    alpha = 0.7,
+      shape = shape_EPX
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+```
+
+```{r savepredobsA_EPX_A, include = F}
+ggsave(
+  filename = "A_EPX_A_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+:::
+
+## Predicted trajectories for Weight and Reproduction
+
+```{r}
 ######### Plot preparation #####################################################
 
 Condition_order <- c(
@@ -1465,7 +1599,7 @@ df_pred_full_A_EPX_A_plot_R <- df_pred_full_A_EPX_A |>
 ## A & R
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_G_EPX_ARsummary
 #| fig-height: 18
 #| fig-width: 12
@@ -1540,6 +1674,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1599,6 +1737,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on adult growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1658,6 +1800,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Cumulated reproduction (#)",
       title ="Effect of epoxiconazole on reproduction"
     )+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1698,7 +1844,7 @@ ggsave(
 ## A
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_A_EPX_Asummary
 #| fig-height: 18
 #| fig-width: 12
@@ -1770,6 +1916,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1829,6 +1979,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on adult growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1888,6 +2042,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Cumulated reproduction (#)",
       title ="Effect of epoxiconazole on reproduction"
     )+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1976,7 +2134,7 @@ df_data_obs_EPX_R <- df_data_obs_EPX_R |>
 ```
 
 ```{r, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for exposure condition.
 #| label: fig-pred_G_EPX_AR_summary_article
 #| fig-height: 10
 #| fig-width: 12
@@ -2064,6 +2222,10 @@ col_experiment <- c(
       y = "Weight (g)",
       title ="Effect of epoxiconazole on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -2125,6 +2287,10 @@ col_experiment <- c(
       title ="Effect of epoxiconazole on adult growth"
     )+
     theme_minimal()+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
@@ -2167,11 +2333,11 @@ col_experiment <- c(
     )+
     
     scale_color_manual(
-      name = "Conditions",
+      name = "",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Conditions",
+      name = "",
       values = col_experiment
       )+
     facet_wrap(
@@ -2184,6 +2350,10 @@ col_experiment <- c(
       title ="Effect of epoxiconazole on reproduction"
     )+
     theme_minimal()+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.title = element_text(face = "bold"),
@@ -2206,4 +2376,132 @@ ggsave(
   width=12, height = 8, 
   path=path_fig
   )
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Predicted internal concentration in epoxiconazole exposure condition.
+#| label: fig-pred_G_EPX_AR_summary_Ciarticle
+#| fig-height: 6
+#| fig-width: 6
+
+# Plot
+  alpha_ribbon <- 0.15
+  alpha_point <- 0.9
+  line_width <- 0.8
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 1
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
+  
+
+col_experiment <- c(
+  # Low doses
+  "#4C566A", #"#DDE8D3",
+  "#A3BE8C",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+df_pred_full_G_EPX_AR_plot_tot <- rbind(df_pred_full_G_EPX_AR_plot_G, df_pred_full_G_EPX_AR_plot_R)
+
+  
+  p_Ci_summary_EPX <- ggplot()+
+    
+    geom_line(
+      data = subset(df_pred_full_G_EPX_AR_plot_tot, Endpt == "Ci" & Experiment_type %in% c("Growth", "Repro")),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = Facet_label,
+        linetype = Experiment_type
+      ),
+      linewidth = line_width
+    )+
+    
+    scale_color_manual(
+      name = "",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "",
+      values = col_experiment
+      )+
+    scale_linetype_manual(
+      name = "",
+      label = c("Juveniles", "Adults"),
+      values = c(3, 1)
+    )+
+    facet_wrap(
+      ~Dose_level,
+      ncol = wrap_nb_col,
+      scales = "free_y"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Internal concentration of epoxiconazole (ng/g)"
+    )+
+    theme_minimal()+
+  scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.title = element_text(face = "bold")
+  )
+  
+
+p_Ci_summary_EPX
+
+```
+
+```{r savetrajCi_G_EPX_AR_article, include = F}
+ggsave(
+  filename="G_EPX_AR_trajCi_article.png", 
+  plot=p_Ci_summary_EPX, 
+  width=5, height = 5, 
+  path=path_fig
+  )
+```
+
+```{r, execute=F, include = F}
+#| fig-height: 6
+#| fig-width: 10
+
+# p <- p_Ci_summary_IMD + p_Ci_summary_EPX +
+#   plot_layout(ncol=2) +
+#   plot_annotation(tag_levels = "A")
+# p
+# 
+# ggsave(
+#   filename="FG_IMDEPX_trajCi_article.png", 
+#   plot=p, 
+#   width=10, height = 6, 
+#   path=path_fig
+#   )
+```
+
+```{r}
+#| tbl-cap: Predicted $C_{i, \mathrm{max}}$ and $t_{\mathrm{max}}$ for each exposure concentration and experiment.
+#| label: tbl-Cirecap
+
+df_pred_Ci_G_EPX_AR_summary <- subset(df_pred_full_G_EPX_AR, Endpt == "Ci" & Time !=0)|>
+  group_by(ID_experiment) |>
+  filter(predict.endpoint == max(predict.endpoint, na.rm = TRUE)) |>
+  slice_min(Time, n = 1, with_ties = FALSE) |>
+  ungroup() |>
+  dplyr::select(ID_experiment, Time, predict.endpoint)
+
+df_pred_Ci_G_EPX_AR_summary |> datatable()
 ```

@@ -32,10 +32,10 @@ Simulation { # Gollot2026_dens_D2b
                            Add, Add, Add, Add, Add, 
                             5.4, 5.4, 5.4, 5.4, 5.4);
                                
-    PrintStep(freal,
-    Organic_matter,
-    OMsoil,
-    OMhorse,
+    PrintStep(Qfsoil_calc,
+    Qfhorse_calc,
+    Qf_soil,
+    Qf_horse,
 				0, 154, 0.05);
 }
 

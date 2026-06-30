@@ -34,10 +34,10 @@ Simulation { # Bart2019_XP1_2
                            Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, Add, 
                             2.7, 2.7, 2.7, 2.7, 5.4, 5.4, 5.4, 8.1, 8.1, 8.1, 16.2, 16.2, 16.2);
                                
-    PrintStep(freal,
-    Organic_matter,
-    OMsoil,
-    OMhorse,
+    PrintStep(Qfsoil_calc,
+    Qfhorse_calc,
+    Qf_soil,
+    Qf_horse,
 				0, 364, 0.05);
 }
 

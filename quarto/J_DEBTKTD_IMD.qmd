@@ -879,468 +879,6 @@ ggsave(
 
 ## Predicted vs. Obs
 
-```{r}
-l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_F_IMD_AG, Molec, l_param_name_F_IMD_AG)
-
-
-l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
-
-f_In_predobs_TKTD(path_A_IMD_A, Molec, l_param_name_A_IMD_A)
-
-```
-
-```{bash, eval=F, execute=F}
-for j in $(seq 1 22); do
-./mcsim.DEB-IMD DEB_setpoint_predobs_${j}.in
-done
-```
-
-```{r, results=F, message=F, warning=F}
-
-Nb_experiment <- 22
-
-df_data_obs_IMD <- df_data_fit_IMD |> 
-  mutate(
-    Weight_obs = Weight,
-    Reproduction_obs = Reproduction
-    ) |> 
-  dplyr::select(-c(Weight, Reproduction))
-
-Condition_order <- c(
-  "Control", "C1", "C2", "C3", "C4", "C5",
-  "C6", "C7", "C8", "C9", "C10"
-)
-
-######## F_IMD_AG ###############################################################
-
-df_pred_F_IMD_AG <- f_read_predobs(path_F_IMD_AG, Nb_experiment, df_data_obs_IMD)
-
-df_pred_Weight_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_F_IMD_AG <- df_data_obs_IMD |> 
-  filter(Time !=0 & Reproduction_obs !=0) |>
-  left_join(df_pred_Reproduction_F_IMD_AG, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-df_predobs_Weight_F_IMD_AG <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_F_IMD_AG, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-
-######## A_IMD_A ###############################################################
-
-df_pred_A_IMD_A <- f_read_predobs(path_A_IMD_A, Nb_experiment, df_data_obs_IMD)
-
-df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time !=0)
-
-df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0 & Reproduction_obs !=0) |>
-  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
-  mutate(Condition = factor(Condition, Condition_order))
-
-```
-
-::: panel-tabset
-## A & G
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_F_IMD_AG
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:11]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_F_IMD_AG,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.7
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(0.1, 15, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_F_IMD_AG,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.7
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
-  theme(
-    legend.position = "none"
-  )
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsF_IMD_AG, include = F}
-
-ggsave(
-  filename = "F_IMD_AG_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
-
-## A
-
-```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
-#| label: fig-predobs_A_IMD_A
-#| fig-height: 4
-#| fig-width: 8
-
-fact_1 <- 2
-fact_2 <- 5
-
-col_line0 <- Nord_polar[1]
-col_line1 <- Nord_polar[4]
-col_line2 <- Nord_snow[1]
-
-col_exp1 <- c(
-  rev(nord("aurora", 12)[1:11]),
-  Nord_aurora[4]
-)
-
-col_experiment <- rep(col_exp1, 2)
-
-seq_line <- seq(0.05, 1.5, 0.01)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_W <- ggplot(
-  data = df_predobs_Weight_A_IMD_A,
-  mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-    color = Condition
-    ),
-    alpha = 0.7
-  )+
-  scale_x_log10(
-    labels = scales::label_number()
-    )+
-  scale_y_log10(
-    labels = scales::label_number()
-    )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  labs(
-    x = "Observed weight of earthworms (g)",
-    y = "Predicted weight of earthworms (g)"
-  )+
-  theme_minimal()
-
-fact_1 <- 2
-fact_2 <- 5
-
-seq_line <- seq(0.1, 15, 0.1)
-
-df_line <- data.frame(
-  x1  = seq_line,
-  y1  = seq_line*fact_1,
-  x_1 = seq_line,
-  y_1 = seq_line/fact_1,
-  x2  = seq_line,
-  y2  = seq_line*fact_2,
-  x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
-
-p_R <- ggplot(
-  data = df_predobs_Reproduction_A_IMD_A,
-  mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
-  geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
-    color = col_line1
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
-    color = col_line2
-    )+
-  geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
-    color = col_line2
-    )+
-  geom_abline(
-    slope=1, 
-    intercept = 0, 
-    color = col_line0,
-    linewidth = 1
-    )+
-  geom_pointrange(
-    mapping = aes(
-      ymin = low,
-      ymax = up,
-      color = Condition
-    ),
-    alpha = 0.7
-  )+
-  labs(
-    x = "Observed reproduction (#)",
-    y = "Predicted reproduction (#)"
-  )+
-  scale_color_manual(
-    name = "Experiments",
-    values = col_experiment
-    )+
-  scale_x_log10(
-   labels = scales::label_number()
-    )+
-  scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
-  theme(
-    legend.position = "none"
-  )
-
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
-  plot_annotation(tag_levels = "A")
-
-p_predobs
-
-```
-
-```{r savepredobsA_IMD_A, include = F}
-ggsave(
-  filename = "A_IMD_A_predobs.png",
-  plot = p_predobs,
-  width = 8, height = 4,
-  path = path_fig
-) 
-```
-:::
-
-## Predicted trajectories for Weight and Reproduction
-
 ```{r setpointfullin}
 
 Nb_experiment <- 22
@@ -1348,7 +886,8 @@ step_sim <- 0.05
 select_times <- seq(0,400, 0.1)
 
 Endpoints_print <- "Weight,
-    Reproduction"
+    Reproduction,
+    Ci"
 
 l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
   head(-1) |>
@@ -1397,6 +936,646 @@ if (file.exists(file_rds_A_IMD_A)) {
 } else {
   df_pred_full_A_IMD_A <- f_read_Setpoint_full_TKTD(path_A_IMD_A, Molec, select_times, step_sim)
 }
+
+Nb_experiment <- 22
+
+df_data_obs_IMD <- df_data_fit_IMD |> 
+  mutate(
+    Weight_obs = Weight,
+    Reproduction_obs = Reproduction
+    ) |> 
+  dplyr::select(-c(Weight, Reproduction))
+
+Condition_order <- c(
+  "Control", "C1", "C2", "C3", "C4", "C5",
+  "C6", "C7", "C8", "C9", "C10"
+)
+
+```
+
+```{r, results=F, message=F, warning=F}
+
+######## F_IMD_AG ###############################################################
+
+Times_obs <- c(0,14,28)
+
+df_pred_F_IMD_AG <- df_pred_full_F_IMD_AG |> 
+  filter(Time %in% Times_obs)
+
+df_pred_Weight_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_F_IMD_AG <- df_data_obs_IMD |> 
+  filter(Time !=0 & Reproduction_obs !=0) |>
+  left_join(df_pred_Reproduction_F_IMD_AG, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_F_IMD_AG <- df_data_obs_IMD |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_F_IMD_AG, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+
+######## A_IMD_A ###############################################################
+
+Times_obs <- c(0,14,28)
+
+df_pred_A_IMD_A <- df_pred_full_A_IMD_A |> 
+  filter(Time %in% Times_obs)
+
+df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time !=0)
+df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time !=0)
+
+df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0 & Reproduction_obs !=0) |>
+  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |> 
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |> 
+  filter(Time !=0) |>
+  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred"))|>
+  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
+  drop_na() |> 
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+  mutate(Condition = factor(Condition, Condition_order))
+
+#############################################
+
+df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |> 
+  filter(Experiment_type == "Growth") |> 
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
+  distinct() |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order)
+  )
+
+df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |> 
+  filter(Experiment_type == "Repro") |> 
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
+  distinct() |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order)
+  )
+
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
+  filter(Experiment_type == "Growth") |> 
+  arrange(Condition) |> 
+  pull(ID_experiment)
+
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
+  filter(Experiment_type == "Growth") |> 
+  arrange(Condition) |> 
+  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+  pull(Facet_label)
+
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
+  filter(Experiment_type == "Repro") |> 
+  arrange(Condition) |> 
+  pull(ID_experiment)
+
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
+  filter(Experiment_type == "Repro") |> 
+  arrange(Condition) |> 
+  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+  pull(Facet_label)
+
+df_data_obs_IMD_G <- df_data_obs_IMD |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order),
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_data_obs_IMD_R <- df_data_obs_IMD |> 
+  mutate(
+    Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
+    Condition = factor(Condition, levels = Condition_order),
+    ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_repro)
+  )
+
+###################################################@
+
+df_predobs_Weight_F_IMD_AG_tmp <-  df_predobs_Weight_F_IMD_AG |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_predobs_Reproduction_F_IMD_AG_tmp <-  df_predobs_Reproduction_F_IMD_AG |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  ) 
+
+###
+
+df_predobs_Weight_A_IMD_A_tmp <-  df_predobs_Weight_A_IMD_A |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  )
+
+df_predobs_Reproduction_A_IMD_A_tmp <-  df_predobs_Reproduction_A_IMD_A |> 
+  left_join(
+    (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
+    by = c("ID_experiment")
+  ) |> 
+  mutate(
+    ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
+    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = factor(Facet_label, levels = Facet_levels_growth)
+  ) 
+
+
+```
+
+::: panel-tabset
+## A & G
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_F_IMD_AG
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  
+  # Control + low doses
+  "#4C566A", # Control
+  "#DDE8D3",
+  "#A3BE8C",
+  "#879F72",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+
+seq_line <- seq(0.02, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_F_IMD_AG_tmp,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Facet_label,
+    shape = Experiment_type
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_shape_manual(
+    name = "",
+    values = c(shape_IMD, shape_EPX),
+    label = c("Juveniles", "Adults")
+  )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.05, 15, 0.05)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_F_IMD_AG_tmp,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Facet_label
+    ),
+    alpha = 0.7,
+    shape = shape_EPX
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()#,
+  # breaks = c(Val_Ctrl, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
+   #labels = c("0", "0.001", "0.01", "0.1", "1", "10", "100", "1000")
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs_IMD <- p_W + p_R + plot_layout(guides="collect")
+
+p_predobs
+
+```
+
+```{r savepredobsF_IMD_AG, include = F}
+
+ggsave(
+  filename = "F_IMD_AG_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+
+```{r, execute = F, include = F}
+
+# hjust_plot <- 0
+# 
+# p_predobs_tot <- wrap_elements(p_predobs_IMD +
+#   plot_annotation(
+#     title = "Imidacloprid",
+#     theme = theme(
+#       plot.title = element_text(
+#         face = "bold",
+#         hjust = hjust_plot
+#       )
+#     )
+#   )) / wrap_elements(p_predobs_EPX+
+#   plot_annotation(
+#     title = "Epoxiconazole",
+#     theme = theme(
+#       plot.title = element_text(
+#         face = "bold",
+#         hjust = hjust_plot
+#       )
+#     )
+#   )) +
+#   plot_annotation(tag_levels = "A")
+# 
+# ggsave(
+#   filename = "FG_IMDEPX_predobs.png",
+#   plot = p_predobs_tot,
+#   width = 10, height = 8,
+#   path = path_fig
+# ) 
+```
+
+## A
+
+```{r, message=F, warning=F}
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| label: fig-predobs_A_IMD_A
+#| fig-height: 4
+#| fig-width: 8
+
+fact_1 <- 2
+fact_2 <- 5
+
+col_line0 <- Nord_polar[1]
+col_line1 <- Nord_polar[4]
+col_line2 <- Nord_snow[1]
+
+col_experiment <- c(
+  
+  # Control + low doses
+  "#4C566A", # Control
+  "#DDE8D3",
+  "#A3BE8C",
+  "#879F72",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+
+seq_line <- seq(0.02, 1.5, 0.01)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_W <- ggplot(
+  data = df_predobs_Weight_A_IMD_A_tmp,
+  mapping = aes(
+      x = Weight_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+    color = Facet_label,
+    shape = Experiment_type
+    ),
+    alpha = 0.7
+  )+
+  scale_x_log10(
+    labels = scales::label_number()
+    )+
+  scale_y_log10(
+    labels = scales::label_number()
+    )+
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+    )+
+  scale_shape_manual(
+    name = "",
+    values = c(shape_IMD, shape_EPX),
+    label = c("Juveniles", "Adults")
+  )+
+  labs(
+    x = "Observed weight of earthworms (g)",
+    y = "Predicted weight of earthworms (g)"
+  )+
+  theme_minimal()
+
+fact_1 <- 2
+fact_2 <- 5
+
+seq_line <- seq(0.05, 15, 0.05)
+
+df_line <- data.frame(
+  x1  = seq_line,
+  y1  = seq_line*fact_1,
+  x_1 = seq_line,
+  y_1 = seq_line/fact_1,
+  x2  = seq_line,
+  y2  = seq_line*fact_2,
+  x_2 = seq_line,
+  y_2 = seq_line/fact_2
+  )
+
+p_R <- ggplot(
+  data = df_predobs_Reproduction_A_IMD_A_tmp,
+  mapping = aes(
+      x = Reproduction_obs,
+      y = predict.endpoint
+    )
+  )+
+  geom_path(
+    data=df_line,
+    mapping=aes(x=x1, y=y1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_1, y=y_1),
+    color = col_line1
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x2, y=y2),
+    color = col_line2
+    )+
+  geom_line(
+    data=df_line,
+    mapping=aes(x=x_2, y=y_2),
+    color = col_line2
+    )+
+  geom_abline(
+    slope=1, 
+    intercept = 0, 
+    color = col_line0,
+    linewidth = 1
+    )+
+  geom_pointrange(
+    mapping = aes(
+      ymin = low,
+      ymax = up,
+      color = Facet_label
+    ),
+    alpha = 0.7,
+    shape = shape_EPX
+  )+
+  labs(
+    x = "Observed reproduction (#)",
+    y = "Predicted reproduction (#)"
+  )+
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+    )+
+  scale_x_log10(
+   labels = scales::label_number()#,
+  # breaks = c(Val_Ctrl, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
+   #labels = c("0", "0.001", "0.01", "0.1", "1", "10", "100", "1000")
+    )+
+  scale_y_log10(
+   labels = scales::label_number()
+    )+
+  theme_minimal()+
+  theme(
+    legend.position = "none"
+  )
+
+p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+  plot_annotation(tag_levels = "A")
+
+p_predobs
+
+```
+
+```{r savepredobsA_IMD_A, include = F}
+ggsave(
+  filename = "A_IMD_A_predobs.png",
+  plot = p_predobs,
+  width = 8, height = 4,
+  path = path_fig
+) 
+```
+:::
+
+## Predicted trajectories for Weight and Reproduction
+
+```{r}
 
 ######### Plot preparation #####################################################
 
@@ -1518,7 +1697,7 @@ df_pred_full_A_IMD_A_plot_R <- df_pred_full_A_IMD_A |>
 ## A & G
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_F_IMD_AGsummary
 #| fig-height: 18
 #| fig-width: 12
@@ -1593,6 +1772,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of imidacloprid on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
     lims(y=c(0, max_WG))+
   theme(
@@ -1653,6 +1836,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of imidacloprid on adult growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
     lims(y=c(0, max_WR))+
   theme(
@@ -1713,6 +1900,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Cumulated reproduction (#)",
       title ="Effect of imidacloprid on reproduction"
     )+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
      lims(y = c(0,max_RR))+
   theme(
@@ -1753,7 +1944,7 @@ ggsave(
 ## A
 
 ```{r, echo=F, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_A_IMD_Asummary
 #| fig-height: 18
 #| fig-width: 12
@@ -1825,6 +2016,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1884,6 +2079,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Weight (g)",
       title ="Effect of epoxiconazole on adult growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -1943,6 +2142,10 @@ col_experiment <- rep(col_exp1, 2)
       y = "Cumulated reproduction (#)",
       title ="Effect of epoxiconazole on reproduction"
     )+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -2034,7 +2237,7 @@ df_data_obs_IMD_R <- df_data_obs_IMD_R |>
 ```
 
 ```{r, message=F, warning=F}
-#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| fig-cap: Predicted Weight and Reproduction for exposure condition.
 #| label: fig-pred_F_IMD_AG_summary_article
 #| fig-height: 10
 #| fig-width: 12
@@ -2125,6 +2328,10 @@ col_experiment <- c(
       y = "Weight (g)",
       title ="Effect of imidacloprid on juvenile growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -2185,6 +2392,10 @@ col_experiment <- c(
       y = "Weight (g)",
       title ="Effect of imidacloprid on adult growth"
     )+
+    scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -2228,11 +2439,11 @@ col_experiment <- c(
     )+
     
     scale_color_manual(
-      name = "Conditions",
+      name = "",
       values = col_experiment
       )+
     scale_fill_manual(
-      name = "Conditions",
+      name = "",
       values = col_experiment
       )+
     facet_wrap(
@@ -2244,6 +2455,10 @@ col_experiment <- c(
       y = "Cumulated reproduction (#)",
       title ="Effect of imidacloprid on reproduction"
     )+
+     scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold", size = 11),
@@ -2267,4 +2482,120 @@ ggsave(
   width=12, height = 8, 
   path=path_fig
   )
+```
+
+```{r, message=F, warning=F}
+#| fig-cap: Predicted internal concentration in epoxiconazole for each exposure condition.
+#| label: fig-pred_F_IMD_AG_summary_Ciarticle
+#| fig-height: 6
+#| fig-width: 6
+
+# Plot
+  alpha_ribbon <- 0.15
+  alpha_point <- 0.9
+  line_width <- 0.8
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 1
+  max_WG <- 0.55
+  max_WR <- 1.1
+  max_RR <- 10
+  
+
+col_experiment <- c(
+  
+  # Control + low doses
+  "#4C566A", # Control
+  "#DDE8D3",
+  "#A3BE8C",
+  "#879F72",
+  "#718A5C",
+
+  # Intermediate doses
+  "#F2DFA3",
+  "#E2B984",
+  "#D08770",
+
+  # High doses
+  "#E4B6B9",
+  "#BF616A",
+  "#91434C"
+)
+
+df_pred_full_F_IMD_AG_plot_tot <- rbind(df_pred_full_F_IMD_AG_plot_G, df_pred_full_F_IMD_AG_plot_R)
+
+  
+  p_Ci_summary <- ggplot()+
+    
+    geom_line(
+      data = subset(df_pred_full_F_IMD_AG_plot_tot, Endpt == "Ci" & Experiment_type %in% c("Growth", "Repro")),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = Facet_label,
+        linetype = Experiment_type
+      ),
+      linewidth = line_width
+    )+
+    
+    scale_color_manual(
+      name = "",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "",
+      values = col_experiment
+      )+
+    scale_linetype_manual(
+      name = "",
+      label = c("Juveniles", "Adults"),
+      values = c(3, 1)
+    )+
+    facet_wrap(
+      ~Dose_level,
+      ncol = wrap_nb_col,
+      scales = "free_y"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Internal concentration of imidacloprid (ng/g)"
+    )+
+    theme_minimal()+
+  scale_x_continuous(
+    limits = c(0, 28),        
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.title = element_text(face = "bold")
+  )
+  
+
+p_Ci_summary
+
+p_Ci_summary_IMD <- p_Ci_summary
+
+```
+
+```{r savetrajCi_F_IMD_AG_article, include = F}
+ggsave(
+  filename="F_IMD_AG_trajCi_article.png", 
+  plot=p_Ci_summary, 
+  width=5, height = 6, 
+  path=path_fig
+  )
+```
+
+```{r}
+#| tbl-cap: Predicted $C_{i, \mathrm{max}}$ and $t_{\mathrm{max}}$ for each exposure concentration and experiment.
+#| label: tbl-Cirecap
+
+df_pred_Ci_F_IMD_AG_summary <- subset(df_pred_full_F_IMD_AG, Endpt == "Ci" & Time !=0)|>
+  group_by(ID_experiment) |>
+  filter(predict.endpoint == max(predict.endpoint, na.rm = TRUE)) |>
+  slice_min(Time, n = 1, with_ties = FALSE) |>
+  ungroup() |>
+  dplyr::select(ID_experiment, Time, predict.endpoint)
+
+df_pred_Ci_F_IMD_AG_summary |> datatable()
 ```
