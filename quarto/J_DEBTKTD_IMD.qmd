@@ -1361,7 +1361,7 @@ ggsave(
 #   plot = p_predobs_tot,
 #   width = 10, height = 8,
 #   path = path_fig
-# ) 
+# )
 ```
 
 ## A
@@ -2485,7 +2485,7 @@ ggsave(
 ```
 
 ```{r, message=F, warning=F}
-#| fig-cap: Predicted internal concentration in epoxiconazole for each exposure condition.
+#| fig-cap: Predicted internal concentration in imadacloprid for each exposure condition.
 #| label: fig-pred_F_IMD_AG_summary_Ciarticle
 #| fig-height: 6
 #| fig-width: 6

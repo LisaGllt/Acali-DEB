@@ -3,7 +3,7 @@
 
 SetPoints("DEB_setpoint_full_9.out", "tab_setpoint.out", 0,Fm, pAm, r_pAm_pM, v, kapJ, kapA, Ehp, E_coc, rOM_ClxHorse, K, dv, de, tau, Sigma_W);
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-4, 1E-5, 1);
 
 ########## Experiments ################################################
 
@@ -34,7 +34,7 @@ Simulation { # Gollot2026_dens_D2
                                
     PrintStep(Weight,
     Reproduction,
-				0, 154, 0.05);
+				0, 154, 0.01);
 }
 
   End.

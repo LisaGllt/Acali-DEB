@@ -17,6 +17,8 @@ lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 path_fig <- here::here("fig/DEB_Models")
 
+f_write_DEB_models()
+
 path_A_FLYw <- here::here("mod/A_DEB_FLYw")
 path_B_FLYe <- here::here("mod/B_DEB_FLYe")
 path_C_CWYe <- here::here("mod/C_DEB_CWYe")
@@ -54,126 +56,10 @@ df_carc_exp <- Experiments_carac$df_carc_exp
 
 ```
 
-```{r, echo=F, message=F, warning=F, include = F}
-#| fig-cap: Experimental data from Bart et al. (2019) & (2020).
-#| label: fig-Bart
-#| fig-height: 12
-#| fig-width: 12
-
-l_Experiments_Bart <- c(
-  "Bart2019_XP1_1",  
-  "Bart2019_XP1_2",  
-  #"Bart2019_XP2",
-  "Bart2019_XP3",   
-  "Bart2019_XP4_1",
-  "Bart2019_XP4_2",
-  "Bart2019_XP5", 
-  "Bart2020"#,
-  #"Gollot2026_lufa"
-  # "Gollot2026_dens_D1",
-  # "Gollot2026_dens_D2",
-  # "Gollot2026_dens_D2b",
-  # "Gollot2026_dens_D5",
-  # "Gollot2026_dens_D7"
-  )
-
-df_data_Bart <- f_import_data_DEB(l_Experiments_Bart, Adults_alone = TRUE) 
-
-# Plot
-  alpha_ribbon <- 0.15
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 2
-  
-  col_experiment <- c(
-    Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
-    Nord_aurora[2],
-    Nord_aurora[2], Nord_aurora[3],
-    Nord_aurora[4], 
-    Nord_aurora[5], rev(Nord_frost)
-  )
-  
-  pW <- ggplot()+
-    
-    geom_point(
-      data = df_data_Bart,    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~ID_experiment,
-      ncol = wrap_nb_col,
-      scales = "free"
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Earthworm growth"
-    )+
-    theme_minimal()
-  
-  pR <- ggplot()+
-    
-    geom_point(
-      data = df_data_Bart,    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction, 
-          color = ID_experiment  
-        ),
-      alpha = 0.8,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~ID_experiment, 
-      ncol=wrap_nb_col,
-      scales = "free"
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Reproduction (#)",
-      title ="Earthworm reproduction"
-    )+
-    theme_minimal()
-  
-
-p <- pW + pR +
-  plot_layout(guides = "collect") &
-  guides(color = guide_legend("Experiments")) &
-  theme(legend.position = "none")
-
-```
-
 ## Model fits
 
 ```{r writeIn, message=F, warning=F}
-NbIter <- 200000
+NbIter <- 30000
 OM_diff <- TRUE
 RTOL <- 1e-7
 ATOL <- 1e-6
@@ -230,7 +116,7 @@ f_In_tot(path_B_FLYe, l_Experiments_fit, Adults_alone,
 
 ######### C CWYe ###############################################################
 
-seeds <- c(C1 = 2291, C2 = 5005, C3 = 7007)
+seeds <- c(C1 = 2291, C2 = 8809, C3 = 7007)
 
 text_priors <- '
 Distrib (Fm,           LogUniform,         0.0001,        10);
@@ -285,7 +171,7 @@ f_In_tot(path_D_CWKe, l_Experiments_fit, Adults_alone,
 
 ######### E CLYe ###############################################################
 
-seeds <- c(C1 = 3300, C2 = 7880, C3 = 1210)
+seeds <- c(C1 = 8809, C2 = 6336, C3 = 5809)
 
 text_priors <- '
 Distrib (Fm,           LogUniform,         0.0001,        10);
@@ -392,7 +278,7 @@ f_In_tot(path_H_FWKe, l_Experiments_fit, Adults_alone,
 
 ```
 
-## Estimates results
+'\## Estimates results
 
 ```{r getres, echo=F, message=F, warning=F}
 
@@ -624,6 +510,7 @@ df_result <- list_model_summary %>%
 df_result |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -1404,60 +1291,174 @@ ggsave(
 
 ## Predicted vs. Observed
 
-```{r}
+```{r setpointfullin}
+
+Nb_experiment <- 12
+lim_yrepro <- 100
+step_sim <- 0.01
+select_times <- seq(0,400, 0.1)
+
+Endpoints_print <- "Weight,
+    Reproduction"
+
+
 l_param_name_A_FLYw <- names(Summary_res_A_FLYw) |>
   head(-1) |>
-  stringr::str_remove_all("\\.1\\.") 
+  stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_A_FLYw, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_A_FLYw)
+f_In_Setpoint_full(
+  path_A_FLYw, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_A_FLYw, step_sim, Endpoints_print
+  )
 
 l_param_name_B_FLYe <- names(Summary_res_B_FLYe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_B_FLYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_B_FLYe)
+f_In_Setpoint_full(
+  path_B_FLYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_B_FLYe, step_sim, Endpoints_print
+  )
 
 l_param_name_C_CWYe <- names(Summary_res_C_CWYe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_C_CWYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_C_CWYe)
+f_In_Setpoint_full(
+  path_C_CWYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_C_CWYe, step_sim, Endpoints_print
+  )
 
 l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_D_CWKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_D_CWKe)
+f_In_Setpoint_full(
+  path_D_CWKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_D_CWKe, step_sim, Endpoints_print
+  )
 
 l_param_name_E_CLYe <- names(Summary_res_E_CLYe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_E_CLYe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_E_CLYe)
+f_In_Setpoint_full(
+  path_E_CLYe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_E_CLYe, step_sim, Endpoints_print
+  )
 
 l_param_name_F_CLKe <- names(Summary_res_F_CLKe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_F_CLKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_F_CLKe)
+f_In_Setpoint_full(
+  path_F_CLKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_F_CLKe, step_sim, Endpoints_print
+  )
 
 l_param_name_G_FLKe <- names(Summary_res_G_FLKe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_G_FLKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_G_FLKe)
+f_In_Setpoint_full(
+  path_G_FLKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_G_FLKe, step_sim, Endpoints_print
+  )
 
 l_param_name_H_FWKe <- names(Summary_res_H_FWKe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
-f_In_predobs(path_H_FWKe, l_Experiments_fit, Adults_alone, OM_diff, l_param_name_H_FWKe)
+f_In_Setpoint_full(
+  path_H_FWKe, l_Experiments_fit, 
+  Adults_alone, OM_diff, 
+  l_param_name_H_FWKe, step_sim, Endpoints_print
+  )
+
 ```
 
 ```{bash, eval=F, execute=F}
 for j in $(seq 1 12); do
-./mcsim.DEBcali DEB_setpoint_predobs_${j}.in
+./mcsim.DEBcali DEB_setpoint_full_${j}.in
 done
+```
+
+```{r, message = F, warning = F}
+
+width_plot <- 12
+height_plot <- 12
+
+file_rds_A_FLYw <- file.path(path_A_FLYw, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_A_FLYw)) {
+  df_pred_full_A_FLYw <- readRDS(file_rds_A_FLYw)
+} else {
+  df_pred_full_A_FLYw <- f_read_Setpoint_full(path_A_FLYw, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_B_FLYe <- file.path(path_B_FLYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_B_FLYe)) {
+  df_pred_full_B_FLYe <- readRDS(file_rds_B_FLYe)
+} else {
+  df_pred_full_B_FLYe <- f_read_Setpoint_full(path_B_FLYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_C_CWYe <- file.path(path_C_CWYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_C_CWYe)) {
+  df_pred_full_C_CWYe <- readRDS(file_rds_C_CWYe)
+} else {
+  df_pred_full_C_CWYe <- f_read_Setpoint_full(path_C_CWYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_CWKe)) {
+  df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
+} else {
+  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_E_CLYe <- file.path(path_E_CLYe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_E_CLYe)) {
+  df_pred_full_E_CLYe <- readRDS(file_rds_E_CLYe)
+} else {
+  df_pred_full_E_CLYe <- f_read_Setpoint_full(path_E_CLYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_F_CLKe <- file.path(path_F_CLKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_F_CLKe)) {
+  df_pred_full_F_CLKe <- readRDS(file_rds_F_CLKe)
+} else {
+  df_pred_full_F_CLKe <- f_read_Setpoint_full(path_F_CLKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_G_FLKe <- file.path(path_G_FLKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_G_FLKe)) {
+  df_pred_full_G_FLKe <- readRDS(file_rds_G_FLKe)
+} else {
+  df_pred_full_G_FLKe <- f_read_Setpoint_full(path_G_FLKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
+file_rds_H_FWKe <- file.path(path_H_FWKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_H_FWKe)) {
+  df_pred_full_H_FWKe <- readRDS(file_rds_H_FWKe)
+} else {
+  df_pred_full_H_FWKe <- f_read_Setpoint_full(path_H_FWKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+
 ```
 
 ```{r, results=F, message=F, warning=F}
@@ -3160,6 +3161,7 @@ df_fold <- df_fold %>%
 df_fold |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     pageLength = nrow(df_fold),
     autoWidth = TRUE,
     columnDefs = list(
@@ -3220,6 +3222,7 @@ df_rmse |>
   datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     pageLength = nrow(df_rmse),
     autoWidth = TRUE,
     columnDefs = list(
@@ -3318,176 +3321,6 @@ ggsave(
 
 ## Predicted trajectories for Weight and Reproduction
 
-```{r setpointfullin}
-
-Nb_experiment <- 12
-lim_yrepro <- 100
-step_sim <- 0.05
-select_times <- seq(0,400, 0.1)
-
-Endpoints_print <- "Weight,
-    Reproduction"
-
-
-l_param_name_A_FLYw <- names(Summary_res_A_FLYw) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_A_FLYw, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_A_FLYw, step_sim, Endpoints_print
-  )
-
-l_param_name_B_FLYe <- names(Summary_res_B_FLYe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_B_FLYe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_B_FLYe, step_sim, Endpoints_print
-  )
-
-l_param_name_C_CWYe <- names(Summary_res_C_CWYe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_C_CWYe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_C_CWYe, step_sim, Endpoints_print
-  )
-
-l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_D_CWKe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_D_CWKe, step_sim, Endpoints_print
-  )
-
-l_param_name_E_CLYe <- names(Summary_res_E_CLYe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_E_CLYe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_E_CLYe, step_sim, Endpoints_print
-  )
-
-l_param_name_F_CLKe <- names(Summary_res_F_CLKe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_F_CLKe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_F_CLKe, step_sim, Endpoints_print
-  )
-
-l_param_name_G_FLKe <- names(Summary_res_G_FLKe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_G_FLKe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_G_FLKe, step_sim, Endpoints_print
-  )
-
-l_param_name_H_FWKe <- names(Summary_res_H_FWKe) |>
-  head(-1) |>
-  stringr::str_remove_all("\\.1\\.")
-
-f_In_Setpoint_full(
-  path_H_FWKe, l_Experiments_fit, 
-  Adults_alone, OM_diff, 
-  l_param_name_H_FWKe, step_sim, Endpoints_print
-  )
-
-```
-
-```{bash, eval=F, execute=F}
-for j in $(seq 1 12); do
-./mcsim.DEBcali DEB_setpoint_full_${j}.in
-done
-```
-
-```{r, message = F, warning = F}
-
-width_plot <- 12
-height_plot <- 12
-
-file_rds_A_FLYw <- file.path(path_A_FLYw, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_A_FLYw)) {
-  df_pred_full_A_FLYw <- readRDS(file_rds_A_FLYw)
-} else {
-  df_pred_full_A_FLYw <- f_read_Setpoint_full(path_A_FLYw, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_B_FLYe <- file.path(path_B_FLYe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_B_FLYe)) {
-  df_pred_full_B_FLYe <- readRDS(file_rds_B_FLYe)
-} else {
-  df_pred_full_B_FLYe <- f_read_Setpoint_full(path_B_FLYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_C_CWYe <- file.path(path_C_CWYe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_C_CWYe)) {
-  df_pred_full_C_CWYe <- readRDS(file_rds_C_CWYe)
-} else {
-  df_pred_full_C_CWYe <- f_read_Setpoint_full(path_C_CWYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_D_CWKe)) {
-  df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
-} else {
-  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_E_CLYe <- file.path(path_E_CLYe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_E_CLYe)) {
-  df_pred_full_E_CLYe <- readRDS(file_rds_E_CLYe)
-} else {
-  df_pred_full_E_CLYe <- f_read_Setpoint_full(path_E_CLYe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_F_CLKe <- file.path(path_F_CLKe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_F_CLKe)) {
-  df_pred_full_F_CLKe <- readRDS(file_rds_F_CLKe)
-} else {
-  df_pred_full_F_CLKe <- f_read_Setpoint_full(path_F_CLKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_G_FLKe <- file.path(path_G_FLKe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_G_FLKe)) {
-  df_pred_full_G_FLKe <- readRDS(file_rds_G_FLKe)
-} else {
-  df_pred_full_G_FLKe <- f_read_Setpoint_full(path_G_FLKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-file_rds_H_FWKe <- file.path(path_H_FWKe, paste0("Sim.Res.Exp.full.rds"))
-
-if (file.exists(file_rds_H_FWKe)) {
-  df_pred_full_H_FWKe <- readRDS(file_rds_H_FWKe)
-} else {
-  df_pred_full_H_FWKe <- f_read_Setpoint_full(path_H_FWKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
-}
-
-```
-
 ::: panel-tabset
 ## A_FLYw
 
@@ -3518,7 +3351,7 @@ col_experiment <- c(
       data = subset(df_pred_full_A_FLYw, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -3641,7 +3474,6 @@ p
 ```
 
 ```{r savetrajWRA_FLYw, include = F}
-
 ggsave(
   filename="A_FLYw_trajWR.png", 
   plot=p, 
@@ -3649,7 +3481,6 @@ ggsave(
   height = height_plot, 
   path=path_fig
   )
-
 ```
 
 ## B_FLYe
@@ -3681,7 +3512,7 @@ ggsave(
       data = subset(df_pred_full_B_FLYe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -3843,7 +3674,7 @@ ggsave(
       data = subset(df_pred_full_C_CWYe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -3977,6 +3808,16 @@ ggsave(
 
 ## D_CWKe
 
+```{r}
+file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
+
+if (file.exists(file_rds_D_CWKe)) {
+  df_pred_full_D_CWKe <- readRDS(file_rds_D_CWKe)
+} else {
+  df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, l_Experiments_fit, Adults_alone = FALSE, Nb_experiment, select_times, step_sim)
+}
+```
+
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
 #| label: fig-pred_D_CWKe
@@ -4001,9 +3842,10 @@ ggsave(
   pW <- ggplot()+
     
     geom_ribbon(
-      data = subset(df_pred_full_D_CWKe, Endpt == "Weight"),
+      data = subset(df_pred_full_D_CWKe, Endpt == "Weight" & ID_experiment == "Bart2019_XP3"),
       aes(
         x = Time,
+      #  ymax = min(up, max_up),
         ymax = up,
         ymin = low,
         fill = ID_experiment
@@ -4012,7 +3854,7 @@ ggsave(
     )+
     
     geom_line(
-      data = subset(df_pred_full_D_CWKe, Endpt == "Weight"),
+      data = subset(df_pred_full_D_CWKe, Endpt == "Weight" & ID_experiment == "Bart2019_XP3"),
       aes(
         x = Time,
         y = predict.endpoint,
@@ -4022,17 +3864,17 @@ ggsave(
       alpha = alpha_line
     )+
     
-    geom_point(
-      data = df_data_obs,    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
+    # geom_point(
+    #   data = df_data_obs,    
+    #   mapping = 
+    #     aes(  
+    #       x = Time, 
+    #       y = Weight_obs, 
+    #       color = ID_experiment  
+    #     ),
+    #   alpha = 0.7,
+    #   stroke = point_stroke
+    # )+
     
     scale_color_manual(
       name = "Experiments",
@@ -4052,6 +3894,7 @@ ggsave(
       y = "Weight (g)",
       title ="Earthworm growth"
     )+
+    #lims(y=c(0,1.3))+
     theme_minimal()+
   theme(
     plot.title = element_text(face = "bold")
@@ -4166,7 +4009,7 @@ ggsave(
       data = subset(df_pred_full_E_CLYe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -4328,7 +4171,7 @@ ggsave(
       data = subset(df_pred_full_F_CLKe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -4490,7 +4333,7 @@ ggsave(
       data = subset(df_pred_full_G_FLKe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -4652,7 +4495,7 @@ ggsave(
       data = subset(df_pred_full_H_FWKe, Endpt == "Weight"),
       aes(
         x = Time,
-        ymax = up,
+        ymax = min(up, max_up),
         ymin = low,
         fill = ID_experiment
       ),
@@ -4786,6 +4629,1055 @@ ggsave(
 ```
 :::
 
+::: panel-tabset
+## A_FLYw
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_A_FLYwr
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+
+    
+    geom_line(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_A_FLYw, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## B_FLYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_B_FLYer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_B_FLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## C_CWYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_C_CWYer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+
+    
+    geom_line(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    geom_line(
+      data = subset(df_pred_full_C_CWYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## D_CWKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_D_CWKer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+
+    
+    geom_line(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    geom_line(
+      data = subset(df_pred_full_D_CWKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## E_CLYe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_E_CLYer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+
+    geom_line(
+      data = subset(df_pred_full_E_CLYe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## F_CLKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_F_CLKer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+
+    
+    geom_line(
+      data = subset(df_pred_full_F_CLKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## G_FLKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_G_FLKer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+    
+    geom_line(
+      data = subset(df_pred_full_G_FLKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+    geom_line(
+      data = subset(df_pred_full_G_FLKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+
+## H_FWKe
+
+```{r, echo=F, message=F, warning=F}
+#| fig-cap: Predicted Weight and Reproduction for each experiment.
+#| label: fig-pred_H_FWKer
+#| fig-height: 12
+#| fig-width: 12
+
+# Plot
+  alpha_ribbon <- 0.15
+  line_width <- 1.1
+  point_stroke <- 0.9
+  alpha_line <- 0.7
+  wrap_nb_col <- 2
+  
+  col_experiment <- c(
+  Nord_aurora[1], Nord_aurora[1], Nord_polar[1],
+  Nord_aurora[2],
+  Nord_aurora[2], Nord_aurora[3],
+  Nord_aurora[4], 
+  Nord_aurora[5], rev(Nord_frost)
+  )
+  
+  pW <- ggplot()+
+    
+
+    
+    geom_line(
+      data = subset(df_pred_full_H_FWKe, Endpt == "Weight"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Weight_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.7,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment,
+      ncol = wrap_nb_col,
+      scales = "free"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Weight (g)",
+      title ="Earthworm growth"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  pR <- ggplot()+
+    
+
+    
+    geom_line(
+      data = subset(df_pred_full_H_FWKe, Endpt == "Reproduction"),
+      aes(
+        x = Time,
+        y = predict.endpoint,
+        color = ID_experiment
+      ),
+      linewidth = line_width,
+      alpha = alpha_line
+    )+
+    
+    geom_point(
+      data = df_data_obs,    
+      mapping = 
+        aes(  
+          x = Time, 
+          y = Reproduction_obs, 
+          color = ID_experiment  
+        ),
+      alpha = 0.8,
+      stroke = point_stroke
+    )+
+    
+    scale_color_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    scale_fill_manual(
+      name = "Experiments",
+      values = col_experiment
+      )+
+    facet_wrap(
+      ~ID_experiment, 
+      ncol=wrap_nb_col,
+      scales = "free_x"
+      )+
+    labs(
+      x="Time (days)", 
+      y = "Reproduction (#)",
+      title ="Earthworm reproduction"
+    )+
+    theme_minimal()+
+  theme(
+    plot.title = element_text(face = "bold")
+  )
+  
+  
+
+p <- pW + pR +
+  plot_layout(guides = "collect") &
+  guides(color = guide_legend("Experiments")) &
+  theme(legend.position = "none")
+
+p
+```
+:::
+
 Calibration of all tested model formulations was achieved using three MCMC chains. Convergence diagnostics indicated satisfactory mixing and convergence overall, with chains converging toward similar posterior distributions and Gelman–Rubin statistics close to 1 ($\hat{R}$). However, for some model formulations, posterior estimates of specific parameters approached the upper or lower bounds of their biologically constrained priors, suggesting limited parameter identifiability or weak support for these formulations. Model comparison based on BIC revealed substantial differences among formulations (@tbl-ResModels).
 
 The two best-supported models shared three common characteristics: (i) a progressive change in energy allocation after maturation (C), (ii) a normalized hyperbolic functional response (K), and (iii) a formulation in which reserve contribution to fresh body mass was independent of structural size (e). The only difference between these two formulations concerned the scaling of the maximum searching rate, which was either structural-mass-specific (W) or surface-area-specific (L) : model W.K.C.e (BIC = 25.5) and model L.K.C.e (BIC = -31.3). whereas all other formulations had considerably higher BIC values (103-597).
@@ -4803,7 +5695,7 @@ For reproduction, the main deviations also corresponded to specific experimental
 ## Organic matter dynamic and functional response
 
 ```{r, warning=F, message=F}
-path_D_OM <- here::here("mod/D_DEB_CWKe/Dens_D2_D2b_f_OM")
+path_D_OM <- here::here("mod/D_DEB_CWKe/OM_study")
 
 MCMC_out_D_OM <- f_MCSim(path_D_OM)
 L_parameters_D_OM <- unique(MCMC_out_D_OM$Priors$Nom)
@@ -4816,20 +5708,19 @@ Nb_experiment <- 12
 step_sim <- 0.05
 select_times <- seq(0,400, 0.1)
 
-# Endpoints_print <- "freal,
-#     Organic_matter,
-#     OMsoil,
-#     OMhorse,
-#     OM_soil_out,
-#     OM_horse_out,
-#     Qf_soil,
-#     Qf_horse,
-#     Weight"
-
-Endpoints_print <- "Qfsoil_calc,
-    Qfhorse_calc,
+Endpoints_print <- "freal,
+    OMsoil,
+    OMhorse,
+    OM_soil_out,
+    OM_horse_out,
+    Q_soil,
+    Q_horse,
     Qf_soil,
-    Qf_horse"
+    Qf_horse,
+    Q_matter,
+    Q_mattermax,
+    Weight"
+
 
 l_param_name_D_OM <- names(Summary_res_D_OM) |>
   head(-1) |>
@@ -4857,62 +5748,12 @@ df_pred_full_D_OM_wide <- df_pred_full_D_OM |>
   pivot_wider(
     id_cols = c(Time, ID_experiment),
     names_from = Endpt, 
-    values_from = predict.endpoint)
-  #   ) |> 
-  # mutate(
-  #   OMtot = OMhorse + OMsoil,
-  #   OM_horse_out_g = OM_horse_out/Weight,
-  #   OM_soil_out_g = OM_soil_out/Weight
-  #   )
+    values_from = predict.endpoint
+    ) |>
+  mutate(
+    OMtot = OMhorse + OMsoil
+    )
 
-```
-
-```{r}
-p_H <- ggplot(
-  data = df_pred_full_D_OM_wide,
-  aes(
-    x = Time,
-    color = ID_experiment,
-  )
-)+
-  geom_line(
-    aes(
-      y = Qf_horse
-    ),
-    linetype = 1
-  )+
-  geom_line(
-    aes(
-      y = Qfhorse_calc
-    ),
-    linetype = 2,
-    linewidth = 1
-  )+
-  facet_wrap(~ID_experiment, scales = "free")+
-  theme_minimal()
-
-p_S <- ggplot(
-  data = df_pred_full_D_OM_wide,
-  aes(
-    x = Time,
-    color = ID_experiment,
-  )
-)+
-  geom_line(
-    aes(
-      y = Qf_soil
-    ),
-    linetype = 1
-  )+
-  geom_line(
-    aes(
-      y = Qfsoil_calc
-    ),
-    linetype = 2,
-    linewidth = 1
-  )+
-  facet_wrap(~ID_experiment, scales = "free")+
-  theme_minimal()
 ```
 
 ```{r, warning=F, message=F}
@@ -4930,18 +5771,23 @@ line_width <- 0.6
 font_size <- 10
 t_max <- 155
 
+min_f <- 0.8
+max_f <- 1
+
 df_pred_full_D_OM_wide_D22b <- df_pred_full_D_OM_wide |> filter(ID_experiment %in% c("Gollot2026_dens_D2", "Gollot2026_dens_D2b"))
 
-p_freal_food <- ggplot(
+p_freal_food <- ggplot()+
+  geom_line(
     data = df_pred_full_D_OM_wide_D22b,
     aes(
       x = Time,
       y = freal,
       color = ID_experiment,
       linetype = ID_experiment
-    )
-  )+
-  geom_line(linewidth = line_width)+
+    ),
+    linewidth = line_width
+    )+
+  
   scale_color_manual(
     name = "Condition",
     label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
@@ -4956,40 +5802,100 @@ p_freal_food <- ggplot(
     x = "Time (days)",
     y = "Functional response, f (-)"
   )+
-  lims(y = c(0,1))+
+  lims(y = c(min_f,max_f))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
   ) +
   theme_minimal(font_size)
 
-p_OM_food <- ggplot(
+p_OM_food <- ggplot() +
+  geom_line(
     data = df_pred_full_D_OM_wide_D22b,
     aes(
       x = Time,
       y = OMtot,
       color = ID_experiment,
       linetype = ID_experiment
-    )
-  )+
-  geom_line(linewidth = line_width)+
+    ),
+    linewidth = line_width
+  ) +
+
+  # Cosm change
+  geom_point(
+    aes(
+      x = seq(0, t_max, 28),
+      y = 0,
+      shape = "Cosm change"
+    ),
+    color = Nord_aurora[1],
+    size = 1.2
+  ) +
+
+  # Horse manure addition
+  geom_point(
+    aes(
+      x = seq(0, t_max, 14),
+      y = 0.5,
+      shape = "Horse dung addition"
+    ),
+    color = Nord_aurora[2],
+    fill = Nord_aurora[2],
+    size = 1.2
+  ) +
+
   scale_color_manual(
     name = "Condition",
-    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    labels = c(
+      "1.5 g/ind/14d (D2)",
+      "3 g/ind/14d (D2b)"
+    ),
     values = c(col_D2, col_D2b)
-    )+
+  ) +
+
   scale_linetype_manual(
     name = "Condition",
-    label = c("1.5 g/ind/14d (D2)", "3 g/ind/14d (D2b)"),
+    labels = c(
+      "1.5 g/ind/14d (D2)",
+      "3 g/ind/14d (D2b)"
+    ),
     values = c(type_D2, type_D2b)
-  )+
+  ) +
+
+  scale_shape_manual(
+    name = "Management event",
+    values = c(
+      "Cosm change" = 16,
+      "Horse dung addition" = 25
+    ),
+    guide = guide_legend(
+      override.aes = list(
+        color = c(
+          Nord_aurora[1],
+          Nord_aurora[2]
+        ),
+        fill = c(
+          NA,
+          Nord_aurora[2]
+        )
+      )
+    )
+  ) +
+
+  guides(
+    color = guide_legend(order = 1),
+    linetype = guide_legend(order = 1),
+    shape = "none"
+  ) +
   labs(
     x = "Time (days)",
     y = "OM in the cosm (g)"
-  )+
-  lims(y = c(0,18))+
-  scale_x_continuous(     
-    breaks = seq(0, t_max, by = 28),        
+  ) +
+  coord_cartesian(
+    ylim = c(0, 18)
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, t_max, by = 28),
     minor_breaks = seq(0, t_max, by = 14)
   ) +
   theme_minimal(font_size)
@@ -5088,6 +5994,68 @@ df_pred_full_D_OM_wide_D <- df_pred_full_D_OM_wide |> filter(ID_experiment %in% 
 
 l_labels <- c("1 ind.", "2 ind.", "5 ind.", "7 ind.")
 
+p_W <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = Weight,
+      color = ID_experiment
+    )
+  )+
+  geom_line(linewidth = line_width)+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)"
+  )+
+  lims(y = c(0,1))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+p_Qmatter <- ggplot(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      color = ID_experiment
+    )
+  )+
+  geom_line(
+    aes(
+      y = Q_matter_max
+    ),
+    linewidth = line_width,
+    linetype = 2
+    )+
+  geom_line(
+    aes(
+      y = Q_matter_Fm
+    ),
+    linewidth = line_width,
+    linetype = 1
+    )+
+  scale_color_manual(
+    name = "Condition",
+    label = l_labels,
+    values = pal_dens_dens
+    )+
+  labs(
+    x = "Time (days)",
+    y = "Q_matter (g)"
+  )+
+  #lims(y = c(0,1))+
+  scale_x_continuous(     
+    breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
 p_freal_dens <- ggplot(
     data = df_pred_full_D_OM_wide_D,
     aes(
@@ -5106,22 +6074,41 @@ p_freal_dens <- ggplot(
     x = "Time (days)",
     y = "Functional response, f (-)"
   )+
-  lims(y = c(0,1))+
+  lims(y = c(min_f,max_f))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
     minor_breaks = seq(0, t_max, by = 14)
   ) +
   theme_minimal(font_size)
 
-p_OM_dens <- ggplot(
+p_OM_dens <- ggplot()+
+  geom_line(
     data = df_pred_full_D_OM_wide_D,
     aes(
       x = Time,
       y = OMtot,
       color = ID_experiment
-    )
+    ),
+    linewidth = line_width
+    )+
+  # Cosm change
+  geom_point(
+    aes(
+      x = seq(0,t_max, 28),
+      y = 0
+    ),
+    color = Nord_aurora[1]
   )+
-  geom_line(linewidth = line_width)+
+  # Horse add
+  geom_point(
+    aes(
+      x = seq(0,t_max, 14),
+      y = 0.5
+    ),
+    color = Nord_aurora[2],
+    fill = Nord_aurora[2],
+    shape = 25
+  )+
   scale_color_manual(
     name = "Condition",
     label = l_labels,
@@ -5134,6 +6121,76 @@ p_OM_dens <- ggplot(
   lims(y = c(0,lim_y_OM))+
   scale_x_continuous(     
     breaks = seq(0, t_max, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal(font_size)
+
+
+p_OM_dens <- ggplot() +
+  geom_line(
+    data = df_pred_full_D_OM_wide_D,
+    aes(
+      x = Time,
+      y = OMtot,
+      color = ID_experiment
+    ),
+    linewidth = line_width
+  ) +
+
+  # Cosm change
+  geom_point(
+    aes(
+      x = seq(0, t_max, 28),
+      y = 0,
+      shape = "Cosm change"
+    ),
+    color = Nord_aurora[1],
+    size = 1.2
+  ) +
+  # Horse manure addition
+  geom_point(
+    aes(
+      x = seq(0, t_max, 14),
+      y = 0.5,
+      shape = "Horse dung addition"
+    ),
+    color = Nord_aurora[2],
+    fill = Nord_aurora[2],
+    size = 1.2
+  ) +
+
+  scale_color_manual(
+    name = "Condition",
+    labels = l_labels,
+    values = pal_dens_dens
+  ) +
+  scale_shape_manual(
+    name = "Management event",
+    values = c(
+      "Cosm change" = 16,
+      "Horse dung addition" = 25
+    ),
+    guide = guide_legend(
+      override.aes = list(
+        color = c(Nord_aurora[1], Nord_aurora[2]),
+        fill = c(NA, Nord_aurora[2])
+      )
+    )
+  ) +
+
+  guides(
+    color = guide_legend(order = 1),
+    shape = guide_legend(order = 2)
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "OM in the cosm (g)"
+  ) +
+  coord_cartesian(
+    ylim = c(0, lim_y_OM)
+  ) +
+  scale_x_continuous(
+    breaks = seq(0, t_max, by = 28),
     minor_breaks = seq(0, t_max, by = 14)
   ) +
   theme_minimal(font_size)
@@ -5288,12 +6345,96 @@ p_OM_soil_out_g <- ggplot(
   ) +
   theme_minimal(font_size)
 
-p_dens <- p_freal_dens + p_OM_dens + p_OMhorse_dens + p_OMsoil_dens + p_OM_horse_out + p_OM_soil_out  + plot_layout(ncol=1, guides = "collect") &
+p_dens <- p_freal_dens + p_OM_dens + p_OMhorse_dens + p_OMsoil_dens + p_OM_horse_out + p_OM_soil_out  + plot_layout(ncol=2, guides = "collect") &
   theme(legend.position = "bottom")
-p <- p_freal_dens + p_freal_food + p_OM_dens + p_OM_food + plot_layout(ncol=2, guides = "collect") + 
-  plot_annotation(tag_levels = "A") &
-  theme(legend.position = "bottom")
+
+library(cowplot)
+library(grid)
+
+leg_dens <- cowplot::get_legend(
+  p_freal_dens +
+    guides(
+      color = guide_legend(nrow = 1, byrow = TRUE)
+    ) +
+    theme(
+      legend.position = "bottom",
+      legend.justification = "center",
+      legend.box.just = "center"
+    )
+)
+
+leg_food <- cowplot::get_legend(
+  p_freal_food +
+    guides(
+      color = guide_legend(nrow = 1, byrow = TRUE),
+      linetype = guide_legend(nrow = 1, byrow = TRUE)
+    ) +
+    theme(
+      legend.position = "bottom",
+      legend.justification = "center",
+      legend.box.just = "center"
+    )
+)
+
+leg_events <- cowplot::get_legend(
+  p_OM_dens +
+    guides(
+      color = "none",
+      linetype = "none",
+      shape = guide_legend(nrow = 1, byrow = TRUE)
+    ) +
+    theme(legend.position = "bottom")
+)
+
+# Largeur réelle des deux légendes
+w_dens <- convertWidth(
+  grobWidth(leg_dens),
+  unitTo = "cm",
+  valueOnly = TRUE
+)
+
+w_food <- convertWidth(
+  grobWidth(leg_food),
+  unitTo = "cm",
+  valueOnly = TRUE
+)
+
+legend_row_1 <- (
+  wrap_elements(full = leg_dens) |
+  wrap_elements(full = leg_food)
+) +
+  plot_layout(
+    ncol = 2,
+    widths = c(1, 1)
+  )
+
+# Troisième légende centrée en dessous
+legend_row_2 <- (
+  plot_spacer() +
+  wrap_elements(full = leg_events) +
+  plot_spacer()
+) +
+  plot_layout(
+    ncol = 3,
+    widths = c(1, 2, 1)
+  )
+
+p_main <- (
+  p_freal_dens + p_freal_food +
+  p_OM_dens + p_OM_food +
+  plot_layout(ncol = 2) +
+  plot_annotation(tag_levels = "A")
+) &
+  theme(legend.position = "none")
+
+p <- p_main /
+  wrap_elements(full = legend_row_1) /
+  legend_row_2 +
+  plot_layout(
+    heights = c(1, 0.10, 0.07)
+  )
 p
+
 ```
 
 ```{r saveOMdyndens, include = F}
@@ -5357,6 +6498,9 @@ df_predobs_Weight_D_CWKe_plot <- df_predobs_Weight_D_CWKe |>
       .default = Density_env
     )
   )
+
+x_repro_min <- 0.5
+y_repro_min <- 0.5
 
 ```
 
@@ -5518,10 +6662,12 @@ p_R_Dens <- ggplot(
     values = col_Density_env
     )+
   scale_x_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(x_repro_min, NA)
     )+
   scale_y_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(y_repro_min, NA)
     )+
   theme_minimal()
 
@@ -5700,10 +6846,12 @@ p_R_Food <- ggplot(
     values = col_Food_env
     )+
   scale_x_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(x_repro_min, NA)
     )+
   scale_y_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(y_repro_min, NA)
     )+
   theme_minimal()
 
@@ -5882,10 +7030,12 @@ p_R_Temp <- ggplot(
     values = col_T_env
     )+
   scale_x_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(x_repro_min, NA)
     )+
   scale_y_log10(
-   labels = scales::label_number()
+   labels = scales::label_number(),
+   limits = c(y_repro_min, NA)
     )+
   theme_minimal()
 
@@ -6025,7 +7175,7 @@ df_predobs_Reproduction_D_CWKe_Fit <- df_predobs_Reproduction_D_CWKe_Fit |>
 
 df_fold_D_Reproduction_Dens <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Density_env")
 df_fold_D_Reproduction_Food <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Food_env")
-df_fold_D_Reproduction_Temp <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "Density_env")
+df_fold_D_Reproduction_Temp <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, "T_env")
 
 df_fold_D_Reproduction_Dens_Status <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, c("Density_env", "Status"))
 df_fold_D_Reproduction_Food_Status <- f_Quality_fit(df_predobs_Reproduction_D_CWKe_Fit, c("Food_env", "Status"))
@@ -6039,6 +7189,7 @@ df_fold_D_Reproduction_Temp_Status <- f_Quality_fit(df_predobs_Reproduction_D_CW
 df_fold_D_Weight_Temp |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -6053,6 +7204,7 @@ df_fold_D_Weight_Temp |> datatable(
 df_fold_D_Weight_Dens_Status |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -6067,6 +7219,7 @@ df_fold_D_Weight_Dens_Status |> datatable(
 df_fold_D_Weight_Food_Status |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -6087,6 +7240,7 @@ df_fold_D_Reproduction_Temp |> datatable(
       )
     )
   )
+
 ```
 
 ```{r, warning=F, message=F}
@@ -6095,6 +7249,7 @@ df_fold_D_Reproduction_Temp |> datatable(
 df_fold_D_Reproduction_Dens_Status |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -6109,6 +7264,7 @@ df_fold_D_Reproduction_Dens_Status |> datatable(
 df_fold_D_Reproduction_Food_Status |> datatable(
   options = list(
     dom = 't',
+    paging = FALSE,
     autoWidth = TRUE,
     columnDefs = list(
       list(className = 'dt-left', targets = "_all")
@@ -6142,17 +7298,17 @@ Nboot      <- 1000  # nb replicat
 
 l_params_median <- c(
   # Environment
-  muOM = 11700, rOM_ClxHorse = 0.0204226,
+  muOM = 13000, rOM_ClxHorse = 0.0294325,
   # Energy assimilation
-  Fm = 6.92108, kapX = 0.258, K = 0.0778501, pAm = 259.032, v = 0.243464,
-  kapJ  = 0.978502, kapA = 0.643309, 
-  tau = 9.65631,
+  Fm = 3.87576, kapX = 0.258, K = 0.0546564, pAm = 259.953, v = 0.230918,
+  kapJ  = 0.983041, kapA = 0.707631, 
+  tau = 11.9528,
   # Maintenance and growth
-  r_pAm_pM = 0.629551, Eg = 4183, dv = 1.21968, de = 1.122480e-09,
+  r_pAm_pM = 0.70081, Eg = 4183, dv = 1.2135, de = 1.130890e-09,
   # Maturity
-  kJ = 0.002793, Ehb = 0.5, Ehp = 97.6156,
+  kJ = 0.002793, Ehb = 0.5, Ehp = 73.1002,
   # Reproduction
-  E_coc = 68.4189, kapR = 0.475,
+  E_coc = 57.8342, kapR = 0.475,
   # Metabolic response to T
   TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15
 )
@@ -6198,7 +7354,7 @@ if (file.exists(file_rds_AS_T)) {
 ```
 
 ```{r, warning=F, message=F}
-l_sim_fail_T <- c(261497)
+l_sim_fail_T <- c()
 
 Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
 
@@ -6464,17 +7620,17 @@ Nboot      <- 1000  # nb replicat
 
 l_params_median <- c(
   # Environment
-  muOM = 11700, rOM_ClxHorse = 0.0204226,
+  muOM = 13000, rOM_ClxHorse = 0.0294325,
   # Energy assimilation
-  Fm = 6.92108, kapX = 0.258, K = 0.0778501, pAm = 259.032, v = 0.243464,
-  kapJ  = 0.978502, kapA = 0.643309, 
-  tau = 9.65631,
+  Fm = 3.87576, kapX = 0.258, K = 0.0546564, pAm = 259.953, v = 0.230918,
+  kapJ  = 0.983041, kapA = 0.707631, 
+  tau = 11.9528,
   # Maintenance and growth
-  r_pAm_pM = 0.629551, Eg = 4183, dv = 1.21968, de = 1.122480e-09,
+  r_pAm_pM = 0.70081, Eg = 4183, dv = 1.2135, de = 1.130890e-09,
   # Maturity
-  kJ = 0.002793, Ehb = 0.5, Ehp = 97.6156,
+  kJ = 0.002793, Ehb = 0.5, Ehp = 73.1002,
   # Reproduction
-  E_coc = 68.4189, kapR = 0.475,
+  E_coc = 57.8342, kapR = 0.475,
   # Metabolic response to T
   TAH = 28750, TH = 293.2, TA = 7976, Tref = 293.15
 )
@@ -6522,12 +7678,7 @@ if (file.exists(file_rds_AS_noT)) {
 ```{r, warning=F, message=F}
 
 
-l_sim_fail_noT <- c(20220, 27726, 
-                    110220, 272759, 281510, 
-                    320220, 327726, 350220, 357726, 391018, 
-                    470220, 477726, 
-                    500220, 507726, 530220, 537726, 590220, 597726, 
-                    620220, 627726)
+l_sim_fail_noT <- c()
 
 Names_AS_outputs <- c("Weight_Juv", "Weight_Adult", "Energy_Juv", "Energy_Adult", "Maturity_Juv", "Maturity_Adult", "Reproduction", "Organic_matter")
 

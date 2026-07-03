@@ -1,0 +1,231 @@
+```{r}
+
+ID_exp_select <- c("Bart2019_XP3","Gollot2026_dens_D1", "Gollot2026_dens_D2")
+Endpt_select_out <- c("freal", "OM_horse_out", "OM_soil_out")
+tmax <- 160
+p <- ggplot(
+  data = df_pred_full_D_OM |> filter(ID_experiment %in% ID_exp_select & !(Endpt %in% Endpt_select_out)),
+  aes(
+    x = Time,
+    y = predict.endpoint
+  )
+)+
+  geom_line()+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  facet_grid(rows=vars(Endpt), cols=vars(ID_experiment), scales ="free")+
+  
+  theme_minimal()
+```
+
+```{r}
+ID_exp_select <- c("Gollot2026_dens_D7")
+Endpt_select_out <- c("freal", "OM_horse_out", "OM_soil_out")
+tmax <- 160
+Time_pb <- 50
+df_pred_full_D_OM_tmp <- df_pred_full_D_OM_wide |> 
+  filter(ID_experiment %in% ID_exp_select) |> 
+  mutate(
+    bol_Qmatmax = ifelse(Q_matter == Q_mattermax, TRUE, FALSE)
+  )
+
+pOMh <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = OMhorse
+  )
+)+
+  geom_line()+
+  labs(y="OM_horse")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pOMs <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = OMsoil
+  )
+)+
+  geom_line()+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  labs(y="OM_soil")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pQh <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = Q_horse
+  )
+)+
+  geom_line()+
+  labs(y="Q_horse")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pQs <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = Q_soil
+  )
+)+
+  geom_line()+
+  labs(y="Q_soil")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pQfh <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = Qf_horse
+  )
+)+
+  geom_line()+
+  labs(y="Qf_horse")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pQfs <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = Qf_soil
+  )
+)+
+  geom_line()+
+  labs(y="Qf_soil")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pQmatter <- ggplot()+
+  geom_line(
+    data = df_pred_full_D_OM_tmp,
+    aes(
+      x = Time,
+      y = Q_matter
+    )
+  )+
+  geom_line(
+    data = df_pred_full_D_OM_tmp,
+    aes(
+      x = Time,
+      y = Q_mattermax
+    ),
+    color="red"
+  )+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  labs(y="Qmatter")+
+  lims(y=c(0,20))+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+pW <- ggplot(
+  data = df_pred_full_D_OM_tmp,
+  aes(
+    x = Time,
+    y = Weight
+  )
+)+
+  geom_line()+
+  labs(y="Weight")+
+  geom_vline(xintercept = Time_pb, color = "blue")+
+  scale_x_continuous(     
+    breaks = seq(0, tmax, by = 28),        
+    minor_breaks = seq(0, t_max, by = 14)
+  ) +
+  theme_minimal()
+
+p <- pOMh + pOMs + pQh + pQs + pQfh + pQfs + pQmatter + pW + plot_layout(ncol=2)
+
+```
+
+```{r}
+p_H <- ggplot(
+  data = df_pred_full_D_OM_wide,
+  aes(
+    x = Time,
+    color = ID_experiment,
+  )
+)+
+  geom_line(
+    aes(
+      y = Qf_horse
+    ),
+    linetype = 1
+  )+
+  facet_wrap(~ID_experiment, scales = "free")+
+  theme_minimal()
+
+p_S <- ggplot(
+  data = df_pred_full_D_OM_wide,
+  aes(
+    x = Time,
+    color = ID_experiment,
+  )
+)+
+  geom_line(
+    aes(
+      y = Qf_soil
+    ),
+    linetype = 1
+  )+
+  facet_wrap(~ID_experiment, scales = "free")+
+  theme_minimal()
+```
+
+```{r}
+p_Qmat <- ggplot(
+  data = df_pred_full_D_OM_wide,
+  aes(
+    x = Time,
+    color = ID_experiment,
+  )
+)+
+  geom_line(
+    aes(
+      y = Q_matter
+    ),
+    linetype = 1
+  )+
+  geom_line(
+    aes(
+      y = Q_mattermax
+    ),
+    linetype = 2
+  )+
+  facet_wrap(~ID_experiment, scales = "free")+
+  theme_minimal()
+```

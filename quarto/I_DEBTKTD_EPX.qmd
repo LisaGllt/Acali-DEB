@@ -1569,7 +1569,7 @@ df_pred_full_G_EPX_AR_plot_R <- df_pred_full_G_EPX_AR |>
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
-######### G_EPX_AR ############################################################
+######### A_EPX_A ############################################################
 df_pred_full_A_EPX_A_plot_G <- df_pred_full_A_EPX_A |> 
   left_join(
     df_Exp_type_Dose_Condition_G,
@@ -2485,9 +2485,9 @@ ggsave(
 # p
 # 
 # ggsave(
-#   filename="FG_IMDEPX_trajCi_article.png", 
-#   plot=p, 
-#   width=10, height = 6, 
+#   filename="FG_IMDEPX_trajCi_article.png",
+#   plot=p,
+#   width=10, height = 6,
 #   path=path_fig
 #   )
 ```

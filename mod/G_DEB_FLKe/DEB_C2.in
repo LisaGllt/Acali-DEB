@@ -1,7 +1,7 @@
 MCMC( "DEB_C2.out",  # output file
       "",                # name of restart file
       "",                # name of data file
-      200000, 0,             # iterations, print prediction flag
+      30000, 0,             # iterations, print prediction flag
       1, 10000,          # printing frequency, iters to print
       6666);               # random seed
 

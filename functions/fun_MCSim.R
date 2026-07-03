@@ -474,6 +474,403 @@ f_MC_RMSE_calc <- function(df_data, df_MonteCarlo_sim){
 
 ## DEB -----
 
+f_write_DEB_models <- function() {
+  
+  l_DEB_models <- c(
+    "A_DEB_FLYw",
+    "B_DEB_FLYe",
+    "C_DEB_CWYe",
+    "D_DEB_CWKe",
+    "E_DEB_CLYe",
+    "F_DEB_CLKe",
+    "G_DEB_FLKe",
+    "H_DEB_FWKe"
+  )
+  
+  l_RLWType <- c(
+    "w",
+    "e",
+    "e",
+    "e",
+    "e",
+    "e",
+    "e",
+    "e"
+  )
+  
+  l_fType <- c(
+    "Y",
+    "Y",
+    "Y",
+    "K",
+    "Y",
+    "K",
+    "K",
+    "K"
+  )
+  
+  l_KapChange <- c(
+    "F",
+    "F",
+    "C",
+    "C",
+    "C",
+    "C",
+    "F",
+    "F"
+  )
+  
+  l_FmType <- c(
+    "L",
+    "L",
+    "W",
+    "W",
+    "L",
+    "L",
+    "L",
+    "W"
+  )
+  
+  df_DEBmodels <- data.frame(
+    Name = l_DEB_models,
+    KapChange = l_KapChange,
+    FmType = l_FmType,
+    fType = l_fType,
+    RLWType = l_RLWType
+  )
+  
+  Text_Start <- "# DEB Apporectodea caliginosa
+# -----------------------------------------------------------------------
+
+States = {E,         # Energy in the reserve (J)
+          L,         # Structural volumetric length (cm)
+          Eh,        # Maturity (J)
+          R,         # Cumulated reproduction (# of cocoons produced)
+          OM_soil,   # OM soil quantity in cosm (for Dens earthworms) (g)
+          OM_horse,  # OM horse dung quantity in cosm (for Dens earthworms) (g)
+          z};        # Threshold for kappa change (-)
+
+
+Outputs = {Energy,             # Energy in the reserve (J)
+          Size,                # Size of the earthworm (cm)
+          Length_struct,       # Structural volumetric length (cm)
+          Maturity,            # Maturity (J)
+          Reproduction,        # Cumulated reproduction (# of cocoons produced)
+		      Organic_matter,
+		      Weight,
+		      kapreal,
+          freal,
+          Q_soil,
+          Q_horse,
+          Qf_soil,
+          Qf_horse,
+          Q_mattermax,
+          Q_matter,
+          OM_soil_out,
+          OM_horse_out,
+          OMsoil,
+          OMhorse,
+          X};             # Wet weight of the earthworm (g)
+		   
+Inputs = {Dens, # Number of earthworm in the cosm (#)
+          Init,
+          Soil,
+          Winit,
+          Texp,
+          WeightSoilCosm,
+          OM_horse_t0,
+          OM_soil_t0,
+          times_replace,
+          OM_horse_replace,
+          OM_horse_add,
+          OM_soil_replace};              
+
+# Error parameters
+Sigma_W; # Error on Weight
+Sigma_R; # Error on Reproduction
+
+
+# PARAMETERS ---------------------------------------------------------------
+
+# Environment
+muOM         = 13000;            # Energy in 1 g of organic matter from horse dung (J/g) 0.9 * 13000
+rOM_ClxHorse = 0.18;             # Ratio of energy in 1 g of OM from soil vs 1 g of OM from horse dung
+
+# Energy assimilation
+Fm           = 0.5;                # [F_m], max spec searching rate (g/d.g)
+kapX         = 0.258;              # digestion efficiency of food to reserve (-)
+pAm          = 1712.41;            # {p_Am}, spec assimilation flux (J/d.cm^2)
+r_pAm_pM     = 1.5;                # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
+v            = 0.18505;            # energy conductance (cm/d)
+
+K            = 0.1;                # Slope of functional threshold (K model)
+
+kap          = 0.4373;             # allocation fraction to soma (-)
+kapJ;                              # allocation fraction to soma for juveniles (-) (model A)
+kapA;                              # allocation fraction to soma for grouped adults (-) (model A)
+tau;                               # transition time between kapJ and kapA (d) (model A)
+
+# Maintenance and growth
+pM           = 1680.1;               # [p_M], vol-spec somatic maint (J/d.cm^3)
+pT           = 0;                    # {p_T}, surf-spec somatic maint (J/d.cm^2)
+Eg           = 4183;                 # 6880.33;     # [E_G], spec cost for structure (J/cm^3)
+Shape        = 0.066193;             # shape coefficient (-)
+dv           = 1;                    # Structure density (g/cm^3) (models w & e)
+wE;                                  # Energy density of reserve (g/J) (model w)
+de           = 27.24;                # Contribution of reserve to body weight (g/cm^3) (model e)
+wv           = 6.72;                 # Contribution of water replacement to body fresh weight (g/cm^3) (model w)
+
+# Maturity
+kJ           = 0.002793;          # maturity maint rate coefficient (1/d)
+Ehb          = 0.5;               # maturity at birth (J)
+Ehp          = 100;               # maturity at puberty (J)
+
+# Reproduction
+L_coc        = 0.23;       # Structural length of a cocoon (cm)
+E_coc        = 467;        # Energy in a cocoon (J)
+UE0          = 0.078;      # Scaled cost of an egg (cm^2/d)
+kapR         = 0.475;      # reproduction efficiency (-)
+
+# Metabolic response to T
+TAH          = 28750;       # Arrhenius temperature for upper boundary (K)
+TH           = 293.2;       # upper boundary (K)
+TA           = 7976;        # Arrhenius temperature (K)
+Tref         = 293.15;      # Reference temperature (K)
+
+
+Init_R = 1e-6;
+"
+  
+  Text_End <- "CalcOutputs{
+    Energy         = E;
+    Size           = L*1/Shape;
+    Length_struct  = L;
+    Maturity       = (Eh <= 0 ? 1E-9 : Eh); 
+    Reproduction   = (R < (Init_R*10) ? 1e-6 : R);
+    Organic_matter = OM_soil + OM_horse;
+    Weight         = Weight;
+    Q_soil         = Q_soil;
+    Q_horse        = Q_horse;
+    Qf_soil        = Qf_soil; 
+    Qf_horse       = Qf_horse;
+    OMsoil         = OM_soil;
+    OMhorse        = OM_horse;
+    OM_soil_out    = OM_soil_out;
+    OM_horse_out   = OM_horse_out;
+    Q_mattermax    = Q_mattermax;
+    Q_matter       = Q_matter;
+    X              = X;
+    kapreal        = kapreal;
+    freal          = freal;
+}
+
+End."
+  
+  for (i in 1:length(df_DEBmodels$Name)) {
+    
+    Name_i <- df_DEBmodels$Name[i]
+    KapChange_i <- df_DEBmodels$KapChange[i]
+    FmType_i <- df_DEBmodels$FmType[i]
+    fType_i <- df_DEBmodels$fType[i]
+    RLWType_i <- df_DEBmodels$RLWType[i]
+    
+    if (KapChange_i == "F") {
+      Text_Kappa <- "      kapreal = kap; # Model F"
+      Text_Kappa_Dyn <- "      kapreal = kap; # Model F
+            z = 0;"
+    } else if (KapChange_i == "C") {
+      Text_Kappa <- "      kapreal = (Eh < Ehp ? kapJ : (Dens > 1 ? kapA : kapJ)); # Model A"
+      Text_Kappa_Dyn <- "      dt(z) = (Eh >= Ehp ? 1 : 0);                                 #(Model A)
+            x = (z/tau > 1 ? 1 : z/tau);                                 # Model A
+            kapAreal = x * kapA + (1-x) * kapJ;                          # Model A
+            kapreal  = (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ)); # Model A"
+    }
+    
+    if (RLWType_i == "w") {
+      Text_Linit <-  "        L = pow(((Winit)/(dv+wE)),(1.0/3.0)); # Model w"
+      Text_Weight <- "      Weight = pow(L,3)*(dv + E/Em*wE); # Model w"
+    } else if (RLWType_i == "e") {
+      Text_Linit <- "        L = pow(((Winit-de*Em)/(dv)),(1.0/3.0)); # Model e"
+      Text_Weight <- "      Weight = pow(L,3)*dv + E*de; # Model e"
+    }
+    
+    if (fType_i == "K") {
+      Text_f <- "     # Functional response of the earthworm to organic matter - K model
+          X = Qf/(Qfmax);
+          freal = X/(K*(1-X)+X);"
+    } else if (fType_i == "Y") {
+      Text_f <- "     # Functional response of the earthworm to organic matter - Y model
+           X = Qf/(2*Qfmax);
+          freal = X/(1+X);"
+    }
+    
+    if (FmType_i == "W") {
+      Text_Fm <- "      Type_Fm = Weight_struct; # Model W"
+    } else if (FmType_i == "L") {
+      Text_Fm <- "      Type_Fm = pow(L,2); # Model L"
+    }
+
+    
+    Text_Init <- paste(
+      "Initialize{
+        
+        ",
+      Text_Kappa,
+        "
+        
+        pM = r_pAm_pM * pAm;
+        
+        # Coefficient for temperature correction (Texp in °C)
+        sA  = exp(TA/Tref-TA/(Texp+273.15));
+        srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+        Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+        
+        # Correction of coefficients depending on temperature
+        pAm_t  = pAm * Tc;        
+        v_t    = v   * Tc;
+        kJ_t   = kJ * Tc;
+        
+        # Primary parameters          
+        Km   = pM / Eg ;
+        Km_t = Km * Tc;
+        Em   = pAm / v ;
+        g    = Eg / (kapreal * Em);
+        Lm   = (v / (Km*g));
+        
+        # Starting points
+        E = Em;",
+        Text_Linit,
+        "
+        Weight = Winit;
+        Weight_struct = dv*pow(L,3);
+        Eh = Ehb;
+        R = Init_R;
+        freal = 1;
+        z = 0;
+        
+        OM_soil_out = 0;
+        OM_horse_out = 0;
+        
+      } # End of Initialize
+      ",
+      sep = "\n"
+    )
+    
+    Text_Dyn <- paste(
+      "Dynamics{
+
+    # Coefficient for temperature correction (Texp in °C)
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
+      srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+    	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+    	
+    # Correction of coefficients depending on temperature
+      pAm_t  = pAm * Tc;        
+      v_t    = v   * Tc;
+      kJ_t   = kJ  * Tc;
+     ",
+      Text_Kappa_Dyn,
+      "
+
+      pM = r_pAm_pM * pAm;
+      
+    # Primary parameters          
+      Km   = pM / Eg ;
+      Km_t = Km * Tc;
+      Em   = pAm / v ;
+      g    = Eg / (kapreal * Em);
+      Lm   = (v / (Km*g));
+      
+    
+    # Energie assimilation
+      
+      W_cosm = WeightSoilCosm + OM_horse/0.9;                        
+      
+      Weight_struct = dv*pow(L,3);
+      ",
+      Text_Fm,
+      "
+      
+      Qfmax = pAm_t * pow(L,2)/kapX; # (J/d)
+      
+      Q_mattermax = (Qfmax * W_cosm) / (OM_horse * muOM + OM_soil * muOM * rOM_ClxHorse); # (g matter/d)
+      
+      # Quantity of matter ingested per earthworm per day (g/d)
+      Q_matter_tmp = Fm * Type_Fm ;
+      Q_matter = (Q_matter_tmp > Q_mattermax ? Q_mattermax : Q_matter_tmp);              # (g matter/d)
+      
+      Q_soil_tmp  = Q_matter * (OM_soil /W_cosm);
+      Q_soil = ( (Q_soil_tmp * Dens) > OM_soil ? (OM_soil/Dens) : Q_soil_tmp);
+      Q_horse_tmp = Q_matter * (OM_horse/W_cosm);
+      Q_horse = ( (Q_horse_tmp * Dens) > OM_horse ? (OM_horse/Dens) : Q_horse_tmp);
+      
+      # Quantity of ingested energy per earthworm per day (J/d)
+      Qf_soil  = Q_soil * muOM * rOM_ClxHorse;
+      Qf_horse = Q_horse * muOM;
+      Qf = Qf_soil + Qf_horse;
+      
+      # Quantity of organic matter consummed by all earthworms in one cosm per day (g/d)
+      OM_soil_out  = Q_soil  * Dens; # gOM/cosm/d  
+      OM_horse_out = Q_horse * Dens; # gOM/cosm/d   
+      
+      # Dynamics of organic matter in the cosm (which cannot be negative)
+    
+      dt(OM_soil)  = - OM_soil_out;
+      dt(OM_horse) = - OM_horse_out;
+      
+      OM_soil  = (OM_soil  < 1e-9 ? 1e-9 : OM_soil);
+      OM_horse = (OM_horse < 1e-9 ? 1e-9 : OM_horse);
+      ",
+      Text_f,
+      "
+      
+    # Energy in the reserve (which cannot be negative)
+    
+      tmp_E = (pAm_t/L)*(freal-E/Em);
+      dt(E) = (E < 1e-12 ? (-E) : tmp_E);
+
+    # Structural length
+    
+      dt(L) = (v_t / (3 * ( ( (E/Em) + g) ) ) ) * ((E/Em) - (L/Lm));
+      ",
+      Text_Weight,
+      "
+
+    # Maturity
+    
+      pC       = ( (g * E ) / (g + (E/Em)) ) * ((v_t*pow(L,2)) + (Km_t*pow(L,3)));
+      tmp_Eh   = ((1-kapreal) * pC) - (kJ_t* Eh);
+      dt(Eh)   = (Eh < Ehp ? tmp_Eh : 0);
+
+    # Reproduction
+    
+      tmp_R    = kapR * ( ((1-kapreal)*pC) - (kJ_t*Ehp));
+  	  dt(R)    = (Eh >= Ehp ? tmp_R/(E_coc) : 0);
+
+} # End of Dynamics
+",
+      sep = "\n"
+    )
+    
+    
+    Text_full_i <- paste(
+      Text_Start,
+      Text_Init,
+      Text_Dyn,
+      Text_End, 
+      sep="\n"
+      )
+    
+    path_model_i <- here::here("mod", paste0(Name_i, "/DEBcali.model"))
+    writeLines(
+      Text_full_i,
+      path_model_i
+    )
+    
+  }
+  
+}
+
 f_In_experiments <- function(l_Experiments, Adult_alone){
   
   df_DEB_mean <- f_import_data_DEB(l_Experiments, Adults_alone) |> 
@@ -1151,7 +1548,7 @@ f_In_predobs <- function(file_path, l_Experiments, Adults_alone, OM_diff, l_para
 
 SetPoints("DEB_setpoint_predobs_', compteur_exp, '.out", "tab_setpoint.out", 0,', l_param_name|>  paste(collapse = ", "),');
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-4, 1E-5, 1);
 
 ########## Experiments ################################################
 ')
@@ -1406,7 +1803,7 @@ f_In_Setpoint_full <- function(file_path, l_Experiments, Adults_alone, OM_diff, 
 
 SetPoints("DEB_setpoint_full_', compteur_exp, '.out", "tab_setpoint.out", 0,', l_param_name|>  paste(collapse = ", "),');
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-4, 1E-5, 1);
 
 ########## Experiments ################################################
 ')
@@ -1595,10 +1992,20 @@ f_read_Setpoint_full <- function(file_path, l_Experiments, Adults_alone = FALSE,
       Nom_Endpoints = c("Weight", "Maturity", "Energy")
       Nsortie = 3
     } else if (bol_OM) {
-      #Nom_Endpoints = c("freal", "Organic_matter", "OMhorse", "OMsoil", "OM_horse_out", "OM_soil_out", "Weight", "Qf_horse", "Qf_soil")
-      #Nsortie = 9
-      Nom_Endpoints = c("Qf_horse", "Qf_soil", "Qfhorse_calc", "Qfsoil_calc")
-      Nsortie = 4
+      Nom_Endpoints = c("freal",
+                        "OMhorse",
+                        "OMsoil",
+                        "OM_horse_out",
+                        "OM_soil_out",
+                        "Q_horse",
+                        "Q_soil",
+                        "Qf_horse",
+                        "Qf_soil",
+                        "Q_matter",
+                        "Q_mattermax",
+                        "Weight")
+      Nsortie = 12
+
     } else {
       Nom_Endpoints = c("Weight", "Reproduction")
       Nsortie = 2
@@ -2657,6 +3064,544 @@ f_AS_Sobol_index <- function(
 }
 
 ## DEB-TKTD ----
+
+f_write_DEBTKTD_models <- function(KapChange, FmType, fType, RLWType) {
+  
+  l_DEB_models <- c(
+    "A_EPX_A",
+    "B_EPX_M",
+    "C_EPX_G",
+    "D_EPX_R",
+    "E_EPX_AM",
+    "F_EPX_AG",
+    "G_EPX_AR",
+    "H_EPX_MG",
+    "I_EPX_MR",
+    "J_EPX_GR",
+    
+    "A_IMD_A",
+    "B_IMD_M",
+    "C_IMD_G",
+    "D_IMD_R",
+    "E_IMD_AM",
+    "F_IMD_AG",
+    "G_IMD_AR",
+    "H_IMD_MG",
+    "I_IMD_MR",
+    "J_IMD_GR"
+  )
+  
+  l_bol_A <- rep(c(
+    1,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0
+  ),2)
+  
+  l_bol_M <- rep(c(
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    1,
+    0
+  ), 2)
+  
+  l_bol_G <- rep(c(
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1
+  ), 2)
+  
+  l_bol_R <- rep(c(
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0,
+    1,
+    1
+  ), 2)
+  
+  l_Molecule <- c(
+    rep("EPX", 10),
+    rep("IMD", 10)
+  )
+  
+  df_DEBmodels <- data.frame(
+    Name = l_DEB_models,
+    Molecule = l_Molecule,
+    bol_A = l_bol_A,
+    bol_M = l_bol_M,
+    bol_G = l_bol_G,
+    bol_R = l_bol_R
+  )
+  
+  Text_End <- "CalcOutputs{
+    Energy         = E;
+    Size           = L*1/Shape;
+    Length_struct  = L;
+    Maturity       = (Eh <= 0 ? 1E-9 : Eh); 
+    Reproduction   = (R < (Init_R*10) ? 1e-6 : R);
+    Organic_matter = OM_soil + OM_horse;
+    Weight         = Weight;
+    Q_soil         = Q_soil;
+    Q_horse        = Q_horse;
+    Qf_soil        = Qf_soil; 
+    Qf_horse       = Qf_horse;
+    OMsoil         = OM_soil;
+    OMhorse        = OM_horse;
+    OM_soil_out    = OM_soil_out;
+    OM_horse_out   = OM_horse_out;
+    Q_mattermax    = Q_mattermax;
+    Q_matter       = Q_matter;
+    X              = X;
+    kapreal        = kapreal;
+    freal          = freal;
+    Ci             = Ci;
+    Ce             = Cext;
+    Stress         = b * ((D - nec) > 0 ? (D - nec) : 0);
+    Damage         = D;
+}
+
+End."
+
+for (i in 1:length(df_DEBmodels$Name)) {
+  Name_i <- df_DEBmodels$Name[i]
+  Molecule_name <- df_DEBmodels$Molecule[i]
+  bol_A <- df_DEBmodels$bol_A[i]
+  bol_M <- df_DEBmodels$bol_M[i]
+  bol_G <- df_DEBmodels$bol_G[i]
+  bol_R <- df_DEBmodels$bol_R[i]
+  
+  Text_Start <- paste0("# DEB-TKTD ", Molecule_name, " - Apporectodea caliginosa
+# -----------------------------------------------------------------------
+
+States = {E,         # Energy in the reserve (J)
+          L,         # Structural volumetric length (cm)
+          Eh,        # Maturity (J)
+          R,         # Cumulated reproduction (# of cocoons produced)
+          OM_soil,   # OM soil quantity in cosm (for Dens earthworms) (g)
+          OM_horse,  # OM horse dung quantity in cosm (for Dens earthworms) (g)
+          z,
+          Ci_cent,
+          Ci_periph,
+          Cext,
+          D};        # Threshold for kappa change (-)
+
+
+Outputs = {Energy,             # Energy in the reserve (J)
+          Size,                # Size of the earthworm (cm)
+          Length_struct,       # Structural volumetric length (cm)
+          Maturity,            # Maturity (J)
+          Reproduction,        # Cumulated reproduction (# of cocoons produced)
+		      Organic_matter,
+		      Weight,
+		      kapreal,
+          freal,
+          Q_soil,
+          Q_horse,
+          Qf_soil,
+          Qf_horse,
+          Q_mattermax,
+          Q_matter,
+          OM_soil_out,
+          OM_horse_out,
+          OMsoil,
+          OMhorse,
+          X,
+          Ci,
+          Ce,
+          Stress,
+          Damage};        
+		   
+Inputs = {Dens, # Number of earthworm in the cosm (#)
+          Init,
+          Soil,
+          Winit,
+          Texp,
+          WeightSoilCosm,
+          OM_horse_t0,
+          OM_soil_t0,
+          times_replace,
+          OM_horse_replace,
+          OM_horse_add,
+          OM_soil_replace};              
+
+# Error parameters
+Sigma_W; # Error on Weight
+Sigma_R; # Error on Reproduction
+
+
+# PARAMETERS ---------------------------------------------------------------
+
+# Environment
+muOM         = 13000;            # Energy in 1 g of organic matter from horse dung (J/g) 0.9 * 13000
+rOM_ClxHorse = 0.0294325;        # Ratio of energy in 1 g of OM from soil vs 1 g of OM from horse dung
+
+# Energy assimilation
+Fm           = 3.87576;            # [F_m], max spec searching rate (g/d.g)
+kapX         = 0.258;              # digestion efficiency of food to reserve (-)
+pAm          = 341.857;            # {p_Am}, spec assimilation flux (J/d.cm^2)
+r_pAm_pM     = 0.70081;            # Ratio between pAm and pM (pM = pAm * r_pAm_pM)
+v            = 0.230918;           # energy conductance (cm/d)
+
+K            = 0.0546564;          # Slope of functional threshold (K model)
+
+kap          = 0.4373;             # allocation fraction to soma (-)
+kapJ         = 0.983041;           # allocation fraction to soma for juveniles (-) (model A)
+kapA         = 0.728915;           # allocation fraction to soma for grouped adults (-) (model A)
+tau          = 11.9528;            # transition time between kapJ and kapA (d) (model A)
+
+# Maintenance and growth
+pM           = 1680.1;               # [p_M], vol-spec somatic maint (J/d.cm^3)
+pT           = 0;                    # {p_T}, surf-spec somatic maint (J/d.cm^2)
+Eg           = 4183;                 # [E_G], spec cost for structure (J/cm^3)
+Shape        = 0.066193;             # shape coefficient (-)
+dv           = 1.2135;               # Structure density (g/cm^3) (models w & e)
+wE;                                  # Energy density of reserve (g/J) (model w)
+de           = 1.130890e-09;         # Contribution of reserve to body weight (g/cm^3) (model e)
+wv           = 6.72;                 # Contribution of water replacement to body fresh weight (g/cm^3) (model w)
+
+# Maturity
+kJ           = 0.002793;          # maturity maint rate coefficient (1/d)
+Ehb          = 0.5;               # maturity at birth (J)
+Ehp          = 73.1002;           # maturity at puberty (J)
+
+# Reproduction
+L_coc        = 0.23;       # Structural length of a cocoon (cm)
+E_coc        = 74.966;    # Energy in a cocoon (J)
+UE0          = 0.078;      # Scaled cost of an egg (cm^2/d)
+kapR         = 0.475;      # reproduction efficiency (-)
+kapH         = 1;          # Maturity efficiency (-)
+
+# Metabolic response to T
+TAH          = 28750;       # Arrhenius temperature for upper boundary (K)
+TH           = 293.2;       # upper boundary (K)
+TA           = 7976;        # Arrhenius temperature (K)
+Tref         = 293.15;      # Reference temperature (K)
+
+
+Init_R = 1e-6;
+")
+  
+if (Molecule_name == "EPX") {
+  
+  Text_Param_TKTD <- "
+# DEB-TKTD PARAMETERS ----------------------------------------------------------
+
+# Initialisation of the environment
+Ci0 = 5.84; # Initial concentration of toxicant in earthworm (ng/g) (5.84 for EPX | 6.2 for IMD)
+Ce0; # Initial concentration of toxicant in soil (ng/g)
+
+# Kinetics in earthworm
+ku = 1.5;         # Uptake rate of toxicant (g(soil).g(worm)-1.d-1) | 0.851 x 1.8 (bc here earthworm weight with gut content)
+ke = 1.8;         # Elimination rate of toxicant (d-1) 
+kperiph = 0.0001; # Second compartment dynamics (d-1)
+
+# Kinetics in soil 
+DT50 = 353.5;      # EPX Half-life in soil (days)
+
+# Effects
+kr = 1;  # Damage reparation constant (d-1)
+nec; # No-effect concentration for sublethal effects (ng/g)
+b;   # Tolerance concentration (ng/g)
+  "
+  
+  Text_TK <- "
+      dt(Ci_periph) = (kperiph*Ci_cent - kperiph*Ci_periph) - (3/L)*dt(L)*Ci_periph;
+      dt(Ci_cent) = (ku*Cext - ke*Ci_cent + kperiph*Ci_periph - kperiph*Ci_cent) - (3/L)*dt(L)*Ci_cent; # dt(L3) = 3 L2 dt(L)
+      Ci = Ci_periph + Ci_cent;
+  "
+  
+} else if (Molecule_name == "IMD") {
+  
+  Text_Param_TKTD <- "
+# DEB-TKTD PARAMETERS ----------------------------------------------------------
+
+# Initialisation of the environment
+Ci0 = 6.2; # Initial concentration of toxicant in earthworm (ng/g) (5.84 for EPX | 6.2 for IMD)
+Ce0; # Initial concentration of toxicant in soil (ng/g)
+
+# Kinetics in earthworm
+ku = 2.0;         # Uptake rate of toxicant (g(soil).g(worm)-1.d-1) | 0.851 x 2.4 (bc here earthworm weight with gut content)
+ke = 0.12;         # Elimination rate of toxicant (d-1) 
+kperiph = 0.043; # Second compartment dynamics (d-1)
+C_sat = 1676; # Internal saturation concentration (ng/g)
+
+# Kinetics in soil 
+DT50 = 187;      # IMD Half-life in soil (days)
+
+# Effects
+kr = 1;  # Damage reparation constant (d-1)
+nec; # No-effect concentration for sublethal effects (ng/g)
+b;   # Tolerance concentration (ng/g)"
+  
+  Text_TK <- "
+      tmp_Ci_periph = (kperiph*Ci_cent - kperiph*Ci_periph) - (3/L)*dt(L)*Ci_periph;
+      tmp_Ci_cent = (ku*Cext - ke*Ci_cent + kperiph*Ci_periph - kperiph*Ci_cent) - (3/L)*dt(L)*Ci_cent; # dt(L3) = 3 L2 dt(L)
+      
+      dt(Ci_periph) = (Ci > C_sat ? 0 : tmp_Ci_periph);
+      dt(Ci_cent) = (Ci > C_sat ? 0 : tmp_Ci_cent);
+      
+      Ci = ((Ci_periph + Ci_cent) > C_sat ? C_sat : (Ci_periph + Ci_cent));
+  "
+  
+}
+  
+  Text_pMoA <- paste(
+    "# pMoA taken into account",
+    paste0("bol_A = ", bol_A,";"),
+    paste0("bol_M = ", bol_M,";"),
+    paste0("bol_G = ", bol_G,";"),
+    paste0("bol_R = ", bol_R,";
+           "),
+    sep = "\n"
+  )
+  
+  if (KapChange == "F") {
+    Text_Kappa <- "      kapreal = kap; # Model F"
+    Text_Kappa_Dyn <- "      kapreal = kap; # Model F
+            z = 0;"
+  } else if (KapChange == "C") {
+    Text_Kappa <- "      kapreal = (Init == 2 ? kapA : (Eh < Ehp ? kapJ : (Dens > 1 ? kapA : kapJ))); # Model A"
+    Text_Kappa_Dyn <- "      dt(z) = (Eh >= Ehp ? 1 : 0);                                # Model A
+      x = (z/tau > 1 ? 1 : z/tau);                                # Model A
+      kapAreal = x * kapA + (1-x) * kapJ;                         # Model A
+      kapreal = (Init == 2 ? kapA : (Eh < Ehp ? kapJ : (Dens > 1 ? kapAreal : kapJ))); # Model A"
+  }
+  
+  if (RLWType == "w") {
+    Text_Linit <-  "        L = pow(((Winit)/(dv+wE)),(1.0/3.0)); # Model w"
+    Text_Weight <- "      Weight = pow(L,3)*(dv + E/Em*wE); # Model w"
+  } else if (RLWType == "e") {
+    Text_Linit <- "        L = pow(((Winit-de*Em)/(dv)),(1.0/3.0)); # Model e"
+    Text_Weight <- "      Weight = pow(L,3)*dv + E*de; # Model e"
+  }
+  
+  if (fType == "K") {
+    Text_f <- "     # Functional response of the earthworm to organic matter - K model
+          X = Qf/(Qfmax);
+          freal = X/(K*(1-X)+X) * ((1-s_f*bol_A) > 0 ? (1-s_f*bol_A) : 0);"
+  } else if (fType == "Y") {
+    Text_f <- "     # Functional response of the earthworm to organic matter - Y model
+           X = Qf/(2*Qfmax);
+          freal = X/(1+X) * ((1-s_f*bol_A) > 0 ? (1-s_f*bol_A) : 0);"
+  }
+  
+  if (FmType == "W") {
+    Text_Fm <- "      Type_Fm = Weight_struct; # Model W"
+  } else if (FmType == "L") {
+    Text_Fm <- "      Type_Fm = pow(L,2); # Model L"
+  }
+  
+  
+  Text_Init <- paste(
+    "Initialize{
+    
+        Weight = Winit;
+        Weight_struct = dv*pow(L,3);
+        
+        Ehjuv = 58.501 * pow(Weight,2) + 80.538 * Weight - 0.514; # Relationship determined from the predictions of Gollot2026_dens_D5
+      
+        Eh = (Init == 0 ? Ehb :
+              (Init == 1 ? Ehjuv :
+              (Init == 2 ? Ehp : Ehb)));
+        
+        ",
+    Text_Kappa,
+    "
+        
+        pM = r_pAm_pM * pAm;
+        
+        # Coefficient for temperature correction (Texp in °C)
+        sA  = exp(TA/Tref-TA/(Texp+273.15));
+        srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+        Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+        
+        # Correction of coefficients depending on temperature
+        pAm_t  = pAm * Tc;        
+        v_t    = v   * Tc;
+        kJ_t   = kJ * Tc;
+        
+        # Primary parameters          
+        Km   = pM / Eg ;
+        Km_t = Km * Tc;
+        Em   = pAm / v ;
+        g    = Eg / (kapreal * Em);
+        Lm   = (v / (Km*g));
+        
+        # Starting points
+        E = Em;",
+    Text_Linit,
+    "
+        R = Init_R;
+        freal = 1;
+        z = 0;
+        
+        OM_soil_out = 0;
+        OM_horse_out = 0;
+        
+        D = 0;
+        Ci_cent = Ci0 * kperiph/(kperiph + kperiph);
+        Ci_periph = Ci0 - Ci_cent;
+        Cext = Ce0;
+        
+      } # End of Initialize
+      ",
+    sep = "\n"
+  )
+  
+  Text_Dyn <- paste(
+    "Dynamics{
+    
+    # Toxicokinetics
+      dt(Cext) = -log(2)/DT50 * Cext;
+      
+      ",
+    Text_TK,
+      "
+      dt(D) = kr*(Ci-D); # @jager_2020
+      
+    # Toxicodynamics
+    
+      s_f = b * ((D - nec) > 0 ? (D - nec) : 0);
+
+    # Coefficient for temperature correction (Texp in °C)
+    	sA  = exp(TA/Tref-TA/(Texp+273.15));
+      srH = (1 + exp(TAH/TH-TAH/Tref))/(1+exp(TAH/TH-TAH/(Texp+273.15)));
+    	Tc  = sA*((Texp+273.15>=Tref)*srH + (Texp+273.15<Tref));
+    	
+    # Correction of coefficients depending on temperature
+      pAm_t  = pAm * Tc;        
+      v_t    = v   * Tc;
+      kJ_t   = kJ  * Tc * (1+s_f*bol_M);
+     ",
+    Text_Kappa_Dyn,
+    "
+
+      pM = r_pAm_pM * pAm * (1+s_f*bol_M);
+      
+    # Primary parameters          
+      Km   = pM / (Eg * (1+s_f*bol_G)) ;
+      Km_t = Km * Tc;
+      Em   = pAm / v ;
+      g    = (Eg * (1+s_f*bol_G)) / (kapreal * Em);
+      Lm   = (v / (Km*g));
+      
+    
+    # Energie assimilation
+      
+      W_cosm = WeightSoilCosm + OM_horse/0.9;                        
+      
+      Weight_struct = dv*pow(L,3);
+      ",
+    Text_Fm,
+    "
+      
+      Qfmax = pAm_t * pow(L,2)/kapX; # (J/d)
+      
+      Q_mattermax = (Qfmax * W_cosm) / (OM_horse * muOM + OM_soil * muOM * rOM_ClxHorse); # (g matter/d)
+      
+      # Quantity of matter ingested per earthworm per day (g/d)
+      Q_matter_tmp = Fm * Type_Fm ;
+      Q_matter = (Q_matter_tmp > Q_mattermax ? Q_mattermax : Q_matter_tmp);              # (g matter/d)
+      
+      Q_soil_tmp  = Q_matter * (OM_soil /W_cosm);
+      Q_soil = ( (Q_soil_tmp * Dens) > OM_soil ? (OM_soil/Dens) : Q_soil_tmp);
+      Q_horse_tmp = Q_matter * (OM_horse/W_cosm);
+      Q_horse = ( (Q_horse_tmp * Dens) > OM_horse ? (OM_horse/Dens) : Q_horse_tmp);
+      
+      # Quantity of ingested energy per earthworm per day (J/d)
+      Qf_soil  = Q_soil * muOM * rOM_ClxHorse;
+      Qf_horse = Q_horse * muOM;
+      Qf = Qf_soil + Qf_horse;
+      
+      # Quantity of organic matter consummed by all earthworms in one cosm per day (g/d)
+      OM_soil_out  = Q_soil  * Dens; # gOM/cosm/d  
+      OM_horse_out = Q_horse * Dens; # gOM/cosm/d   
+      
+      # Dynamics of organic matter in the cosm (which cannot be negative)
+    
+      dt(OM_soil)  = - OM_soil_out;
+      dt(OM_horse) = - OM_horse_out;
+      
+      OM_soil  = (OM_soil  < 1e-9 ? 1e-9 : OM_soil);
+      OM_horse = (OM_horse < 1e-9 ? 1e-9 : OM_horse);
+      ",
+    Text_f,
+    "
+      
+    # Energy in the reserve (which cannot be negative)
+    
+      tmp_E = (pAm_t/L)*(freal-E/Em);
+      dt(E) = (E < 1e-12 ? (-E) : tmp_E);
+
+    # Structural length
+    
+      dt(L) = (v_t / (3 * ( ( (E/Em) + g) ) ) ) * ((E/Em) - (L/Lm));
+      ",
+    Text_Weight,
+    "
+
+    # Maturity
+    
+      pC       = ( (g * E ) / (g + (E/Em)) ) * ((v_t*pow(L,2)) + (Km_t*pow(L,3)));
+      tmp_Eh   = ((1-kapreal) * pC) - (kJ_t* Eh);
+      kapH_real = kapH/(1+s_f*bol_G);
+      dt(Eh)   = (Eh < Ehp ? tmp_Eh : 0) * kapH_real;
+
+    # Reproduction
+      kapR_real = kapR/(1+s_f*bol_R);
+      tmp_R     = kapR_real * ( ((1-kapreal)*pC) - (kJ_t*Ehp));
+  	  dt(R)     = (Eh >= Ehp ? tmp_R/(E_coc) : 0);
+
+} # End of Dynamics
+",
+    sep = "\n"
+  )
+  
+  
+  Text_full_i <- paste(
+    Text_Start,
+    Text_Param_TKTD,
+    Text_pMoA,
+    Text_Init,
+    Text_Dyn,
+    Text_End, 
+    sep="\n"
+  )
+  
+  path_model_i <- here::here("mod/Z_DEB-TKTD", paste0(Molecule_name, "/",Name_i, "/DEB-", Molecule_name,".model"))
+  writeLines(
+    Text_full_i,
+    path_model_i
+  )
+  
+}
+
+}
+
 
 f_import_data_DEBTKTD <- function() {
   
@@ -4375,14 +5320,13 @@ f_Plots_MCMC_Likelihood <- function(df) {
     )
   ) +
     geom_line() +
-    scale_y_log10()+
     scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
     labs(
       x = "First half iterations", 
       y = "LnPosterior"
     ) +
     theme_minimal()
-  
+
   p2 <- ggplot(
     df$df_LnPost |> 
       filter(iteration !=1), 
@@ -4393,7 +5337,6 @@ f_Plots_MCMC_Likelihood <- function(df) {
     )
   ) +
     geom_line() +
-    scale_y_log10()+
     scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
     labs(
       x = paste(df$Nb_iter_kept, "last iterations"), 
@@ -4401,6 +5344,7 @@ f_Plots_MCMC_Likelihood <- function(df) {
     ) +
     theme_minimal()
   
+
   p3 <- ggplot(
     df$df_Devc |> 
       filter(iteration !=1), 
@@ -4411,7 +5355,6 @@ f_Plots_MCMC_Likelihood <- function(df) {
     )
   ) +
     geom_line() +
-    scale_y_log10()+
     scale_color_manual(name = "Chains", label = lab_chains, values = pal_chains) +
     labs(
       x = paste(df$Nb_iter_kept, "last iterations"), 

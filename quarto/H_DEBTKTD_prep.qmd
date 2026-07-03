@@ -465,7 +465,7 @@ p_WR_summary_EPX
 The juvenile growth experiments were conducted with juvenile individuals housed individually in cosms containing 200 g of Closeaux soil, maintained at 18°C, and fed 3 g of horse dung per individual every 14 days. Individuals were exposed to a range of concentrations of either imidacloprid or epoxiconazole. In the DEB-TKTD model, the initial maturity of these individuals must be specified, although it was not and can not be directly measured. We therefore use a proxy based on the relationship between predicted body mass and predicted maturity obtained from the DEB model for the Gollot2026_dens_D5 experiment, which was conducted under the same experimental conditions as the culture from which these earthworms came from.
 
 ```{r}
-path_D_CWKe <- here::here("mod/D_DEB_CWKe/W_Eh_relationship")
+path_D_CWKe <- here::here("mod/D_DEB_CWKe/WEh_relationship")
 
 MCMC_out_D_CWKe <- f_MCSim(path_D_CWKe)
 L_parameters_D_CWKe <- unique(MCMC_out_D_CWKe$Priors$Nom)
@@ -600,6 +600,8 @@ Prior distributions were defined within $\pm 30\%$ of the values estimated in th
 ```{r, warning=F, message=F}
 path_fig <- here::here("fig/DEBTKTD_Models")
 path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+
+# ./mcsim.DEBcali DEB_TKTD_C1.in
 
 MCMC_out_DEB_refit <- f_MCSim(path_DEB_refit)
 
@@ -749,6 +751,12 @@ writeLines(
 ```
 
 ```{r}
+
+# ./mcsim.DEBcali DEB_setpoint_full_new_1.in
+# ./mcsim.DEBcali DEB_setpoint_full_new_2.in
+# 
+# ./mcsim.DEBcali DEB_setpoint_full_old_1.in
+# ./mcsim.DEBcali DEB_setpoint_full_old_2.in
 
 step_sim <- 0.05
 max_time <- 28
@@ -925,99 +933,99 @@ The posterior mode of $\{\dot{p}_{Am}\}$ increased from 259.0 \[237.6; 280.0\] t
 
 Using the recalibrated parameter values improved the agreement between predicted and observed juvenile and adult growth trajectories. Reproduction was also more closely reproduced than with the original parameterization, although cocoon production remained slightly overestimated. The posterior mode estimates of $\{\dot{p}_{Am}\}$, $E_{coc}$, and $\kappa_A$ were therefore retained and fixed for all subsequent DEB-TKTD analyses.
 
-```{r, include = F, warning=F, message=F}
+```{r, include = F, warning=F, message=F, execute = F}
 #| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the allocation energy fraction to soma in adults ($\kappa_A$).
 #| label: fig-refit
 #| fig-height: 4
 #| fig-width: 8
 
 
-path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
-
-df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))  |> 
-  mutate(
-    Name_experiment = factor(case_when(
-      No_sim == 1 ~ "Juveniles controles",
-      No_sim == 2 ~ "Adult controles",
-    ), c("Juveniles controles", "Adult controles")),
-    DEB_type = "Old"
-  )
-df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))  |> 
-  mutate(
-    Name_experiment = factor(case_when(
-      No_sim == 1 ~ "Juveniles controles",
-      No_sim == 2 ~ "Adult controles",
-    ), c("Juveniles controles", "Adult controles")),
-    DEB_type = "New"
-  )
-
-df_sim_DEB <- rbind(df_sim_old_DEB, df_sim_new_DEB)
-
-df_data_Ctrl <- f_import_data_DEBTKTD() |> 
-  filter(Condition == "Ctrl" & Molecule == "IMD") |> 
-  mutate(
-    No_sim = case_when(
-      Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
-      Molecule == "IMD" & Experiment_type == "Repro" ~ 2
-    )
-  )  |> 
-  mutate(
-    Name_experiment = factor(case_when(
-      No_sim == 1 ~ "Juveniles controles",
-      No_sim == 2 ~ "Adult controles",
-    ), c("Juveniles controles", "Adult controles"))
-  )
-
-pW <- ggplot()+
-  geom_point(
-    data = df_data_Ctrl,
-    aes(
-      x = Time, 
-      y = Weight
-    ),
-    color = Nord_polar[1]
-  )+
-  geom_line(
-    data = df_sim_DEB,
-    aes(
-      x = Time,
-      y = Weight,
-      color = DEB_type
-    )
-  )+
-  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  facet_wrap(~Name_experiment)+
-  theme_minimal()+
-  theme(
-    strip.text = element_text(face="bold")
-  )
-
-pR <- ggplot()+
-  geom_point(
-    data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
-    aes(
-      x = Time, 
-      y = Reproduction
-    ),
-    color = Nord_polar[1]
-  )+
-  geom_line(
-    data = df_sim_DEB |> filter(Name_experiment == "Adult controles"),
-    aes(
-      x = Time,
-      y = Reproduction,
-      color = DEB_type
-    )
-  )+
-  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  facet_wrap(~Name_experiment)+
-  theme_minimal()+
-  theme(
-    strip.text = element_text(face="bold")
-  )
-
-p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
-p
+# path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+# 
+# df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))  |> 
+#   mutate(
+#     Name_experiment = factor(case_when(
+#       No_sim == 1 ~ "Juveniles controles",
+#       No_sim == 2 ~ "Adult controles",
+#     ), c("Juveniles controles", "Adult controles")),
+#     DEB_type = "Old"
+#   )
+# df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))  |> 
+#   mutate(
+#     Name_experiment = factor(case_when(
+#       No_sim == 1 ~ "Juveniles controles",
+#       No_sim == 2 ~ "Adult controles",
+#     ), c("Juveniles controles", "Adult controles")),
+#     DEB_type = "New"
+#   )
+# 
+# df_sim_DEB <- rbind(df_sim_old_DEB, df_sim_new_DEB)
+# 
+# df_data_Ctrl <- f_import_data_DEBTKTD() |> 
+#   filter(Condition == "Ctrl" & Molecule == "IMD") |> 
+#   mutate(
+#     No_sim = case_when(
+#       Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
+#       Molecule == "IMD" & Experiment_type == "Repro" ~ 2
+#     )
+#   )  |> 
+#   mutate(
+#     Name_experiment = factor(case_when(
+#       No_sim == 1 ~ "Juveniles controles",
+#       No_sim == 2 ~ "Adult controles",
+#     ), c("Juveniles controles", "Adult controles"))
+#   )
+# 
+# pW <- ggplot()+
+#   geom_point(
+#     data = df_data_Ctrl,
+#     aes(
+#       x = Time, 
+#       y = Weight
+#     ),
+#     color = Nord_polar[1]
+#   )+
+#   geom_line(
+#     data = df_sim_DEB,
+#     aes(
+#       x = Time,
+#       y = Weight,
+#       color = DEB_type
+#     )
+#   )+
+#   scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+#   facet_wrap(~Name_experiment)+
+#   theme_minimal()+
+#   theme(
+#     strip.text = element_text(face="bold")
+#   )
+# 
+# pR <- ggplot()+
+#   geom_point(
+#     data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
+#     aes(
+#       x = Time, 
+#       y = Reproduction
+#     ),
+#     color = Nord_polar[1]
+#   )+
+#   geom_line(
+#     data = df_sim_DEB |> filter(Name_experiment == "Adult controles"),
+#     aes(
+#       x = Time,
+#       y = Reproduction,
+#       color = DEB_type
+#     )
+#   )+
+#   scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
+#   facet_wrap(~Name_experiment)+
+#   theme_minimal()+
+#   theme(
+#     strip.text = element_text(face="bold")
+#   )
+# 
+# p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
+# p
 
 ```
 
@@ -1079,3 +1087,12 @@ Models are designated in the code with combinaison of letters corresponding to t
 -   R : Reproduction costs.
 
 Only toxicodynamic parameters are estimated in the present study, whereas all DEB and toxicokinetic parameters remained fixed to previously estimated posterior modes Parameter estimation is performed using Bayesian inference implemented in MCSim [@bois_2009]. Three independent Markov Chain Monte Carlo (MCMC) chains of 30,000 iterations were run, with only the last 10,000 retained for inference. Growth endpoints are modeled assuming normally distributed residuals, whereas cocoon production is modeled using a Poisson likelihood. Convergence diagnostics includes inspection of chain mixing and agreement among posterior distributions across chains. The point estimates correspond to the posterior distributions mode.
+
+```{r}
+KapChange <- "C"
+FmType <- "W"
+fType <- "K"
+RLWType <- "e"
+
+f_write_DEBTKTD_models(KapChange, FmType, fType, RLWType)
+```

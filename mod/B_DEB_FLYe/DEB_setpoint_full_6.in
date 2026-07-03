@@ -3,7 +3,7 @@
 
 SetPoints("DEB_setpoint_full_6.out", "tab_setpoint.out", 0,Fm, pAm, r_pAm_pM, v, kap, Ehp, E_coc, rOM_ClxHorse, dv, de, Sigma_W);
 
-Integrate(Lsodes, 1E-5, 1E-6, 1);
+Integrate(Lsodes, 1E-4, 1E-5, 1);
 
 ########## Experiments ################################################
 
@@ -34,7 +34,7 @@ Simulation { # Bart2019_XP5
                                
     PrintStep(Weight,
     Reproduction,
-				0, 98, 0.05);
+				0, 98, 0.01);
 }
 
   End.
