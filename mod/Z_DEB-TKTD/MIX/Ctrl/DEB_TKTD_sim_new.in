@@ -5,7 +5,9 @@ Integrate(Lsodes, 1E-9, 1E-10, 1);
 
 ########## Experiments ################################################
 
-E_coc = 75.6476;
+pAm = 341.8;
+kapA = 0.73;
+E_coc = 75.0;
 
 Simulation { # MIX_N0
     Init = 2;

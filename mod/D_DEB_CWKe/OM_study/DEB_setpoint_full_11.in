@@ -44,7 +44,7 @@ Simulation { # Gollot2026_dens_D5
     Q_matter,
     Q_mattermax,
     Weight,
-				0, 154, 0.05);
+				0, 154, 0.01);
 }
 
   End.

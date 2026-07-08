@@ -46,7 +46,7 @@ Simulation { # Bart2019_XP4_2
     Q_matter,
     Q_mattermax,
     Weight,
-				0, 392, 0.05);
+				0, 392, 0.01);
 }
 
   End.

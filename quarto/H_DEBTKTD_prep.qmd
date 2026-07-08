@@ -17,12 +17,11 @@ Toxicodynamic calibration of the DEB-TKTD models relies on experimental data pre
 To remain consistent with the deterministic formulation of the DEB model and previous calibration procedures, observed responses are aggregated as mean values at the treatment-condition level before model fitting. This aggregation reduces the influence of inter-individual variability and experimental noise while preserving treatment-level temporal trajectories relevant to DEB processes.
 
 ```{r, warning=F, message=FALSE}
-
 # Import data
 df_data_obs <- f_import_data_DEBTKTD()
-df_data_obs_EPX <- df_data_obs |> 
+df_data_obs_EPX <- df_data_obs |>
   filter(Molecule == "EPX")
-df_data_obs_IMD <- df_data_obs |> 
+df_data_obs_IMD <- df_data_obs |>
   filter(Molecule == "IMD")
 
 ####### EPX ########################
@@ -33,65 +32,65 @@ Condition_order <- c(
   "C6", "C7", "C8"
 )
 
-df_Exp_type_Dose_Condition_G <- df_data_obs_EPX |> 
-  filter(Experiment_type == "Growth") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_G <- df_data_obs_EPX |>
+  filter(Experiment_type == "Growth") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-df_Exp_type_Dose_Condition_R <- df_data_obs_EPX |> 
-  filter(Experiment_type == "Repro") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_R <- df_data_obs_EPX |>
+  filter(Experiment_type == "Repro") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
 # Data from juvenile growth experiment
-df_data_obs_EPX_G <- df_data_obs_EPX |> 
+df_data_obs_EPX_G <- df_data_obs_EPX |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
 # Data from adult reproduction experiment
-df_data_obs_EPX_R <- df_data_obs_EPX |> 
+df_data_obs_EPX_R <- df_data_obs_EPX |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
-  ) |> 
+  ) |>
   filter(!(Time == 14))
 
 ###### IMD ############################
@@ -102,65 +101,65 @@ Condition_order <- c(
   "C6", "C7", "C8", "C9", "C10"
 )
 
-df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Growth") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |>
+  filter(Experiment_type == "Growth") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Repro") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |>
+  filter(Experiment_type == "Repro") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
 # Data from juvenile growth experiment
-df_data_obs_IMD_G <- df_data_obs_IMD |> 
+df_data_obs_IMD_G <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
 # Data from adult reproduction experiment
-df_data_obs_IMD_R <- df_data_obs_IMD |> 
+df_data_obs_IMD_R <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
-  ) |> 
+  ) |>
   filter(!(Time == 14))
 ```
 
@@ -171,143 +170,135 @@ df_data_obs_IMD_R <- df_data_obs_IMD |>
 #| fig-width: 12
 
 # Plot
-  alpha_ribbon <- 0.15
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 2
-  point_size <- 2
-  
+alpha_ribbon <- 0.15
+line_width <- 1.1
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 2
+point_size <- 2
+
 col_exp1 <- c(
   Nord_aurora[4],
   rev(nord("aurora", 12)[1:10])
 )
 col_experiment <- rep(col_exp1, 2)
-  
-  pW_G_IMD <- ggplot(
-    data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight, 
-          color = ID_experiment  
-        )
-  )+
 
-    geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-    geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on juvenile growth"
-    )+
-    theme_minimal()+
+pW_G_IMD <- ggplot(
+  data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),
+  mapping =
+    aes(
+      x = Time,
+      y = Weight,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on juvenile growth"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
-  
-  pW_R_IMD <- ggplot(
-    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight, 
-          color = ID_experiment  
-        )
-  )+
 
-   geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-    
-    geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on adult growth"
-    )+
-    theme_minimal()+
+pW_R_IMD <- ggplot(
+  data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+  mapping =
+    aes(
+      x = Time,
+      y = Weight,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on adult growth"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
-  
-   pR_R_IMD <- ggplot(
-     data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction, 
-          color = ID_experiment  
-        )
-   )+
 
-    geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-     
-     geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Cumulated reproduction (#)",
-      title ="Effect of imidacloprid on reproduction"
-    )+
-    theme_minimal()+
+pR_R_IMD <- ggplot(
+  data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+  mapping =
+    aes(
+      x = Time,
+      y = Reproduction,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)",
+    title = "Effect of imidacloprid on reproduction"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
 
 p_WR_summary_IMD <- pW_G_IMD + pW_R_IMD + pR_R_IMD +
-  plot_layout(ncol=3)
+  plot_layout(ncol = 3)
 p_WR_summary_IMD
 
 ```
@@ -319,141 +310,134 @@ p_WR_summary_IMD
 #| fig-width: 12
 
 # Plot
-  alpha_ribbon <- 0.15
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 2
+alpha_ribbon <- 0.15
+line_width <- 1.1
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 2
 col_exp1 <- c(
   Nord_aurora[4],
   rev(nord("aurora", 12)[1:10])
 )
 
 col_experiment <- rep(col_exp1, 2)
-  
-  pW_G_EPX <- ggplot(
-    data = subset(df_data_obs_EPX_G, Experiment_type == "Growth"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight, 
-          color = ID_experiment  
-        )
-  )+
 
-    geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-    
-    geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of epoxiconazole on juvenile growth"
-    )+
-    theme_minimal()+
+pW_G_EPX <- ggplot(
+  data = subset(df_data_obs_EPX_G, Experiment_type == "Growth"),
+  mapping =
+    aes(
+      x = Time,
+      y = Weight,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of epoxiconazole on juvenile growth"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
-  
-  pW_R_EPX <- ggplot(
-    data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight, 
-          color = ID_experiment  
-        )
-  )+
 
-   geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-    geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of epoxiconazole on adult growth"
-    )+
-    theme_minimal()+
+pW_R_EPX <- ggplot(
+  data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),
+  mapping =
+    aes(
+      x = Time,
+      y = Weight,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of epoxiconazole on adult growth"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
-  
-   pR_R_EPX <- ggplot(
-     data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction, 
-          color = ID_experiment  
-        )
-   )+
 
-    geom_point(
-      alpha = 0.7,
-      stroke = point_stroke,
-      size = point_size
-    )+
-     geom_line()+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Cumulated reproduction (#)",
-      title ="Effect of epoxiconazole on reproduction"
-    )+
-    theme_minimal()+
+pR_R_EPX <- ggplot(
+  data = subset(df_data_obs_EPX_R, Experiment_type == "Repro"),
+  mapping =
+    aes(
+      x = Time,
+      y = Reproduction,
+      color = ID_experiment
+    )
+) +
+  geom_point(
+    alpha = 0.7,
+    stroke = point_stroke,
+    size = point_size
+  ) +
+  geom_line() +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)",
+    title = "Effect of epoxiconazole on reproduction"
+  ) +
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
 
 p_WR_summary_EPX <- pW_G_EPX + pW_R_EPX + pR_R_EPX +
-  plot_layout(ncol=3)
+  plot_layout(ncol = 3)
 p_WR_summary_EPX
 
 ```
@@ -465,37 +449,51 @@ p_WR_summary_EPX
 The juvenile growth experiments were conducted with juvenile individuals housed individually in cosms containing 200 g of Closeaux soil, maintained at 18°C, and fed 3 g of horse dung per individual every 14 days. Individuals were exposed to a range of concentrations of either imidacloprid or epoxiconazole. In the DEB-TKTD model, the initial maturity of these individuals must be specified, although it was not and can not be directly measured. We therefore use a proxy based on the relationship between predicted body mass and predicted maturity obtained from the DEB model for the Gollot2026_dens_D5 experiment, which was conducted under the same experimental conditions as the culture from which these earthworms came from.
 
 ```{r}
+# Put the selected model in this folder :
 path_D_CWKe <- here::here("mod/D_DEB_CWKe/WEh_relationship")
+
+# Put also the MCMC .in, .out, .out.kernel and the tab_setpoint 
+# files generated with the best model results
+
+# Get results
 
 MCMC_out_D_CWKe <- f_MCSim(path_D_CWKe)
 L_parameters_D_CWKe <- unique(MCMC_out_D_CWKe$Priors$Nom)
 
-Summary_res_D_CWKe <- 
-  as.data.frame(MCMC_out_D_CWKe$Summary_res)[1:length(L_parameters_D_CWKe)] |> 
-  mutate(Model = "D_CWKe") 
+Summary_res_D_CWKe <-
+  as.data.frame(MCMC_out_D_CWKe$Summary_res)[1:length(L_parameters_D_CWKe)] |>
+  mutate(Model = "D_CWKe")
+
+# Run the simulations with the new parameter values
 
 Nb_experiment <- 1
-step_sim <- 0.05
-select_times <- seq(0,400, 0.1)
+step_sim <- 0.05 # Must be small enough to not fail the integration
+
+# Selection of a limited set of times for graphics
+select_times <- seq(0, 400, 0.1)
 
 Endpoints_print <- "Weight,
     Maturity,
     Energy"
 
+# Used experiment
 l_Experiment_D5 <- c("Gollot2026_dens_D5")
 
 l_param_name_D_CWKe <- names(Summary_res_D_CWKe) |>
   head(-1) |>
   stringr::str_remove_all("\\.1\\.")
 
+# Generation of the .in files for simulations
 f_In_Setpoint_full(
-  path_D_CWKe, l_Experiment_D5, 
-  Adults_alone = FALSE, OM_diff = TRUE, 
+  path_D_CWKe, l_Experiment_D5,
+  Adults_alone = FALSE, OM_diff = TRUE,
   l_param_name_D_CWKe, step_sim, Endpoints_print
-  )
+)
 
+# Run simulations in MCSim
 # ./mcsim.DEBcali DEB_setpoint_full_1.in
 
+# Read simulations results
 
 file_rds_D_CWKe <- file.path(path_D_CWKe, paste0("Sim.Res.Exp.full.rds"))
 
@@ -505,20 +503,26 @@ if (file.exists(file_rds_D_CWKe)) {
   df_pred_full_D_CWKe <- f_read_Setpoint_full(path_D_CWKe, Adults_alone = FALSE, l_Experiment_D5, Nb_experiment, select_times, step_sim, bol_Eh = TRUE)
 }
 
-df_pred_full_D_CWKe_wide <- df_pred_full_D_CWKe |> 
+df_pred_full_D_CWKe_wide <- df_pred_full_D_CWKe |>
   pivot_wider(
     id_cols = Time,
-    names_from = Endpt, 
+    names_from = Endpt,
     values_from = predict.endpoint
-    )
+  )
 
 ```
 
 ```{r}
+
+# Linear model for the relationship btw Weight and Maturity
+
 mod_RWEh <- lm(
-  Maturity ~ Weight + I(Weight^2), 
+  Maturity ~ Weight + I(Weight^2),
   data = df_pred_full_D_CWKe_wide |> filter(Weight < 0.5)
-  )
+)
+# This model is run only for Weights < 0.5 because 
+# we need the relatioship for juveniles only
+
 summary(mod_RWEh)
 
 c <- coef(mod_RWEh)[["(Intercept)"]]
@@ -593,27 +597,33 @@ For the initialisation of the energy in the reserve, we assume individuals were 
 
 ### Re-estimations of $\{\dot{p}_{Am}\}$, $E_{coc}$ and $\kappa_A$
 
-Before estimating toxicodynamic parameters, the baseline DEB model was evaluated against the control data from the juvenile growth, adult growth, and reproduction experiments. This preliminary step was used to account for possible physiological differences between the earthworms used in the toxicity experiments and the populations included in the original DEB calibration. When systematic discrepancies were identified between control observations and model predictions, selected DEB parameters associated with the affected biological process were allowed to vary, while the model structure and all remaining physiological parameters were retained from the original calibration. Candidate parameters were selected according to their mechanistic relationship with the response requiring adjustment, in order to limit the number of re-estimated parameters and preserve identifiability. All other DEB parameters were fixed to the posterior mode values obtained from the initial DEB model.
-
-Prior distributions were defined within $\pm 30\%$ of the values estimated in the initial DEB calibration. Parameter estimation was performed using Bayesian inference implemented in MCSim [@bois_2009] and using three independent MCMC chains of 30,000 iterations, of which the final 10,000 iterations were retained to characterize the posterior distributions. The posterior mode estimates of $\{\dot{p}_{Am}\}$ and $E_{coc}$ were subsequently fixed during the estimation of the toxicodynamic parameters.
+DEB parameter values were initially fixed at the modes of their posterior distributions obtained during the original model calibration (@sec-DEB). Because discrepancies were observed between model predictions and the control data from the single-substance experiments, three DEB parameters associated with the biological processes requiring adjustment were recalibrated: the maximum surface-area-specific assimilation rate, $\{\dot p_{Am}\}$, the cocoon energy content, $E_{coc}$, and the adult allocation fraction, $\kappa_A$. These parameters were selected based on their mechanistic relationships with the affected responses, while limiting the number of re-estimated parameters to preserve identifiability. Prior distributions were defined within $\pm 30%$ of the values obtained during the initial DEB calibration. The posterior mode estimates of $\{\dot p_{Am}\}$, $E_{coc}$, and $\kappa_A$ were subsequently fixed during the calibration of the DEB-TKTD models.
 
 ```{r, warning=F, message=F}
 path_fig <- here::here("fig/DEBTKTD_Models")
+
+# Put the best model file in this folder with the estimated
+# parameter values from the DEB part
+# Put also the tab_setpoint file generated 
+# and rename it as tab_setpoint_old_raw.out
 path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
 
+# Run the MCMC chains with the control individuals
 # ./mcsim.DEBcali DEB_TKTD_C1.in
 
-MCMC_out_DEB_refit <- f_MCSim(path_DEB_refit)
+# Read results
 
-NC_DEB_refit <- MCMC_out_DEB_refit$NC
-Nb_param_DEB_refit <- MCMC_out_DEB_refit$Nb_param
-Nb_experiment_DEB_refit <- MCMC_out_DEB_refit$Nb_experiment
-Nb_iter_kept_DEB_refit <- MCMC_out_DEB_refit$Nb_iter_kept
+MCMC_out_DEB_refit        <- f_MCSim(path_DEB_refit)
+
+NC_DEB_refit              <- MCMC_out_DEB_refit$NC
+Nb_param_DEB_refit        <- MCMC_out_DEB_refit$Nb_param
+Nb_experiment_DEB_refit   <- MCMC_out_DEB_refit$Nb_experiment
+Nb_iter_kept_DEB_refit    <- MCMC_out_DEB_refit$Nb_iter_kept
 N_iter_setpoint_DEB_refit <- MCMC_out_DEB_refit$N_iter_setpoint
-L_parameters_DEB_refit <- unique(MCMC_out_DEB_refit$Priors$Nom)
+L_parameters_DEB_refit    <- unique(MCMC_out_DEB_refit$Priors$Nom)
 
-Summary_res_DEB_refit <- 
-  as.data.frame(MCMC_out_DEB_refit$Summary_res)[1:length(L_parameters_DEB_refit)] |> 
+Summary_res_DEB_refit <-
+  as.data.frame(MCMC_out_DEB_refit$Summary_res)[1:length(L_parameters_DEB_refit)] |>
   mutate(Model = "DEB_refit")
 
 Summary_res_DEB_refit
@@ -703,8 +713,6 @@ dev.off()
 
 ```
 
-The joint posterior distributions and MCMC trajectories showes no apparent correlation between $\{\dot{p}_{Am}\}$ and $E_{coc}$, suggesting that the two parameters were independently identifiable from the control growth and reproduction data.
-
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
 #| label: fig-post_DEB_refit
@@ -724,12 +732,19 @@ ggsave(
   )
 ```
 
-```{r}
-path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
-df_tab_setpoint_old_raw <- f_Read_fichier2(file.path(path_DEB_refit, "tab_setpoint_old_raw.out"))
+```{r tabsetold}
 
-df_tab_setpoint_old <- df_tab_setpoint_old_raw |> 
-  dplyr::select(c("pAm.1.", "kapA.1.", "E_coc.1.")) |> 
+# We only need the tab_setpoint_old_raw.out for the re-estimated parameters 
+# to be able to compare the old and the new parameter values.
+
+path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
+
+df_tab_setpoint_old_raw <- f_Read_fichier2(
+  file.path(path_DEB_refit, "tab_setpoint_old_raw.out")
+  )
+
+df_tab_setpoint_old <- df_tab_setpoint_old_raw |>
+  dplyr::select(c("pAm.1.", "kapA.1.", "E_coc.1.")) |>
   mutate(
     Iter = dplyr::row_number(), .before = 1
   )
@@ -750,7 +765,10 @@ writeLines(
 
 ```
 
-```{r}
+```{r simDEBrefit}
+
+# Run the simulations with the control individuals for both 
+# the old and the new values
 
 # ./mcsim.DEBcali DEB_setpoint_full_new_1.in
 # ./mcsim.DEBcali DEB_setpoint_full_new_2.in
@@ -764,8 +782,8 @@ max_time <- 28
 df_pred_old <- f_Read_setpoint_DEB_refit(path_DEB_refit, step_sim, max_time, "old")
 df_pred_new <- f_Read_setpoint_DEB_refit(path_DEB_refit, step_sim, max_time, "new")
 
-df_pred_old_G <- df_pred_old   |> 
-  filter(Endpt == "Weight") |> 
+df_pred_old_G <- df_pred_old |>
+  filter(Endpt == "Weight") |>
   mutate(
     Name_experiment = factor(case_when(
       No_sim == 1 ~ "Juveniles controles",
@@ -774,8 +792,8 @@ df_pred_old_G <- df_pred_old   |>
     DEB_type = "Old"
   )
 
-df_pred_new_G <- df_pred_new |> 
-  filter(Endpt == "Weight") |> 
+df_pred_new_G <- df_pred_new |>
+  filter(Endpt == "Weight") |>
   mutate(
     Name_experiment = factor(case_when(
       No_sim == 1 ~ "Juveniles controles",
@@ -784,9 +802,9 @@ df_pred_new_G <- df_pred_new |>
     DEB_type = "New"
   )
 
-df_pred_old_R <- df_pred_old   |> 
-  filter(Endpt == "Reproduction") |> 
-  filter(No_sim == 2) |> 
+df_pred_old_R <- df_pred_old |>
+  filter(Endpt == "Reproduction") |>
+  filter(No_sim == 2) |>
   mutate(
     Name_experiment = factor(case_when(
       No_sim == 1 ~ "Juveniles controles",
@@ -794,9 +812,9 @@ df_pred_old_R <- df_pred_old   |>
     ), c("Juveniles controles", "Adult controles")),
     DEB_type = "Old"
   )
-df_pred_new_R <- df_pred_new   |> 
-  filter(Endpt == "Reproduction") |> 
-  filter(No_sim == 2) |> 
+df_pred_new_R <- df_pred_new |>
+  filter(Endpt == "Reproduction") |>
+  filter(No_sim == 2) |>
   mutate(
     Name_experiment = factor(case_when(
       No_sim == 1 ~ "Juveniles controles",
@@ -809,14 +827,14 @@ df_pred_G <- rbind(df_pred_old_G, df_pred_new_G)
 df_pred_R <- rbind(df_pred_old_R, df_pred_new_R)
 
 
-df_data_Ctrl <- f_import_data_DEBTKTD() |> 
-  filter(Condition == "Ctrl" & Molecule == "IMD") |> 
+df_data_Ctrl <- f_import_data_DEBTKTD() |>
+  filter(Condition == "Ctrl" & Molecule == "IMD") |>
   mutate(
     No_sim = case_when(
       Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
       Molecule == "IMD" & Experiment_type == "Repro" ~ 2
     )
-  )  |> 
+  ) |>
   mutate(
     Name_experiment = factor(case_when(
       No_sim == 1 ~ "Juveniles controles",
@@ -834,19 +852,17 @@ df_data_Ctrl <- f_import_data_DEBTKTD() |>
 
 alpha_ribbon <- 0.2
 
-pW <- ggplot()+
-  
+pW <- ggplot() +
   geom_ribbon(
-      data = df_pred_G,
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = DEB_type
-      ),
-      alpha = alpha_ribbon
-    )+
-  
+    data = df_pred_G,
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = DEB_type
+    ),
+    alpha = alpha_ribbon
+  ) +
   geom_line(
     data = df_pred_G,
     aes(
@@ -854,39 +870,38 @@ pW <- ggplot()+
       y = predict.endpoint,
       color = DEB_type
     )
-  )+
-  
+  ) +
   geom_point(
     data = df_data_Ctrl,
     aes(
-      x = Time, 
+      x = Time,
       y = Weight
     ),
     color = Nord_polar[1]
-  )+
-  
-  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  facet_wrap(~Name_experiment)+
-  labs(x = "Time (days)", y = "Weight (g)")+
-  theme_minimal()+
+  ) +
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB") +
+  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB") +
+  facet_wrap(~Name_experiment) +
+  labs(
+    x = "Time (days)", 
+    y = "Weight (g)"
+    ) +
+  theme_minimal() +
   theme(
-    strip.text = element_text(face="bold")
+    strip.text = element_text(face = "bold")
   )
 
-pR <- ggplot()+
-  
+pR <- ggplot() +
   geom_ribbon(
-      data = df_pred_R,
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = DEB_type
-      ),
-      alpha = alpha_ribbon
-    )+
-  
+    data = df_pred_R,
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = DEB_type
+    ),
+    alpha = alpha_ribbon
+  ) +
   geom_line(
     data = df_pred_R,
     aes(
@@ -894,26 +909,33 @@ pR <- ggplot()+
       y = predict.endpoint,
       color = DEB_type
     )
-  )+
-  
+  ) +
   geom_point(
     data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
     aes(
-      x = Time, 
+      x = Time,
       y = Reproduction
     ),
     color = Nord_polar[1]
-  )+
-  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-  facet_wrap(~Name_experiment)+
-  labs(x = "Time (days)", y = "Reproduction (#)")+
-  theme_minimal()+
+  ) +
+  scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB") +
+  scale_fill_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB") +
+  facet_wrap(~Name_experiment) +
+  labs(
+    x = "Time (days)",
+    y = "Reproduction (#)"
+  ) +
+  theme_minimal() +
   theme(
-    strip.text = element_text(face="bold")
+    strip.text = element_text(face = "bold")
   )
 
-p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
+p <- pW + pR +
+  plot_layout(
+    ncol = 2,
+    guides = "collect",
+    widths = c(2, 1)
+  )
 p
 
 ```
@@ -929,105 +951,9 @@ ggsave(
 
 Predictions obtained with the original DEB parameterization showed a slight underestimation of both juvenile and adult growth, together with an overestimation of cocoon production (@fig-refitrib). To improve the description of the control trajectories before estimating toxicodynamic effects, three DEB parameters were therefore re-estimated: the maximum surface-area-specific assimilation rate, $\{\dot{p}_{Am}\}$, the cocoon energy content, $E_{coc}$, and the adult allocation fraction, $\kappa_A$.
 
-The posterior mode of $\{\dot{p}_{Am}\}$ increased from 259.0 \[237.6; 280.0\] to 292.8 \[238.2; 323.5\] J$\cdot$cm$^{-2}\cdot$d$^{-1}$, while $E_{coc}$ increased from 68.4 \[58.4; 75.5\] to 79.5 \[53.2; 114.2\] J. The posterior mode of $\kappa_A$ also increased slightly, from 0.64 \[0.56; 0.70\] to 0.67 \[0.64; 0.73\]. The substantial overlap between the original and recalibrated credible intervals indicates that the updated estimates remained broadly consistent with the initial DEB parameterization. The posterior correlation between the parameters was weak, indicating that the parameters were estimated independently (@fig-corrDEBrefitipairs).
+The posterior mode of $\{\dot{p}_{Am}\}$ increased from 259.9 \[234.8 ; 285.7\] to 341.8 \[267.5; 377.2\] J$\cdot$cm$^{-2}\cdot$d$^{-1}$, while $E_{coc}$ increased from 57.8 \[51.2 ; 70.0\] to 75.0 \[51.8; 114.2\] J. The posterior mode of $\kappa_A$ also increased slightly, from 0.71 \[0.63 ; 0.76\] to 0.73 \[0.69; 0.77\]. The substantial overlap between the original and recalibrated credible intervals indicates that the updated estimates remained broadly consistent with the initial DEB parameterization. The posterior correlation between the parameters was weak, indicating that the parameters were estimated independently (@fig-corrDEBrefitipairs).
 
-Using the recalibrated parameter values improved the agreement between predicted and observed juvenile and adult growth trajectories. Reproduction was also more closely reproduced than with the original parameterization, although cocoon production remained slightly overestimated. The posterior mode estimates of $\{\dot{p}_{Am}\}$, $E_{coc}$, and $\kappa_A$ were therefore retained and fixed for all subsequent DEB-TKTD analyses.
-
-```{r, include = F, warning=F, message=F, execute = F}
-#| fig-cap: Observed growth and reproduction responses of control *Aporrectodea caliginosa* and corresponding predictions from the baseline DEB model before and after parameter recalibration. Points represent experimental treatment means. The original trajectories were generated using the posterior mode parameter values from the initial DEB calibration, whereas the recalibrated trajectories used the newly estimated values of the allocation energy fraction to soma in adults ($\kappa_A$).
-#| label: fig-refit
-#| fig-height: 4
-#| fig-width: 8
-
-
-# path_DEB_refit <- here::here("mod/Z_DEB-TKTD/DEB_refit")
-# 
-# df_sim_old_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_old.out"))  |> 
-#   mutate(
-#     Name_experiment = factor(case_when(
-#       No_sim == 1 ~ "Juveniles controles",
-#       No_sim == 2 ~ "Adult controles",
-#     ), c("Juveniles controles", "Adult controles")),
-#     DEB_type = "Old"
-#   )
-# df_sim_new_DEB <- f_MCSim_read_sim(file.path(path_DEB_refit, "sim_new.out"))  |> 
-#   mutate(
-#     Name_experiment = factor(case_when(
-#       No_sim == 1 ~ "Juveniles controles",
-#       No_sim == 2 ~ "Adult controles",
-#     ), c("Juveniles controles", "Adult controles")),
-#     DEB_type = "New"
-#   )
-# 
-# df_sim_DEB <- rbind(df_sim_old_DEB, df_sim_new_DEB)
-# 
-# df_data_Ctrl <- f_import_data_DEBTKTD() |> 
-#   filter(Condition == "Ctrl" & Molecule == "IMD") |> 
-#   mutate(
-#     No_sim = case_when(
-#       Molecule == "IMD" & Experiment_type == "Growth" ~ 1,
-#       Molecule == "IMD" & Experiment_type == "Repro" ~ 2
-#     )
-#   )  |> 
-#   mutate(
-#     Name_experiment = factor(case_when(
-#       No_sim == 1 ~ "Juveniles controles",
-#       No_sim == 2 ~ "Adult controles",
-#     ), c("Juveniles controles", "Adult controles"))
-#   )
-# 
-# pW <- ggplot()+
-#   geom_point(
-#     data = df_data_Ctrl,
-#     aes(
-#       x = Time, 
-#       y = Weight
-#     ),
-#     color = Nord_polar[1]
-#   )+
-#   geom_line(
-#     data = df_sim_DEB,
-#     aes(
-#       x = Time,
-#       y = Weight,
-#       color = DEB_type
-#     )
-#   )+
-#   scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-#   facet_wrap(~Name_experiment)+
-#   theme_minimal()+
-#   theme(
-#     strip.text = element_text(face="bold")
-#   )
-# 
-# pR <- ggplot()+
-#   geom_point(
-#     data = df_data_Ctrl |> filter(Name_experiment == "Adult controles"),
-#     aes(
-#       x = Time, 
-#       y = Reproduction
-#     ),
-#     color = Nord_polar[1]
-#   )+
-#   geom_line(
-#     data = df_sim_DEB |> filter(Name_experiment == "Adult controles"),
-#     aes(
-#       x = Time,
-#       y = Reproduction,
-#       color = DEB_type
-#     )
-#   )+
-#   scale_color_manual(values = c(Nord_frost[4], Nord_frost[2]), name = "DEB")+
-#   facet_wrap(~Name_experiment)+
-#   theme_minimal()+
-#   theme(
-#     strip.text = element_text(face="bold")
-#   )
-# 
-# p <- pW + pR + plot_layout(ncol = 2, guides = "collect", widths = c(2, 1),)
-# p
-
-```
+Using the recalibrated parameter values improved the agreement between predicted and observed juvenile and adult growth trajectories. Reproduction was also more closely reproduced than with the original parameterization, although cocoon production remained slightly overestimated. However, the recalibration also resulted in wider 95% credible intervals, indicating greater uncertainty in the predicted responses. The posterior mode estimates of $\{\dot{p}_{Am}\}$, $E_{coc}$, and $\kappa_A$ were nevertheless retained and fixed for all subsequent DEB-TKTD analyses.
 
 ## Construction of the DEB-TKTD models
 
@@ -1086,13 +1012,16 @@ Models are designated in the code with combinaison of letters corresponding to t
 -   G : Growth and maturity costs,
 -   R : Reproduction costs.
 
-Only toxicodynamic parameters are estimated in the present study, whereas all DEB and toxicokinetic parameters remained fixed to previously estimated posterior modes Parameter estimation is performed using Bayesian inference implemented in MCSim [@bois_2009]. Three independent Markov Chain Monte Carlo (MCMC) chains of 30,000 iterations were run, with only the last 10,000 retained for inference. Growth endpoints are modeled assuming normally distributed residuals, whereas cocoon production is modeled using a Poisson likelihood. Convergence diagnostics includes inspection of chain mixing and agreement among posterior distributions across chains. The point estimates correspond to the posterior distributions mode.
+Both the DEB recalibration and the DEB-TKTD calibration on the single substances data @gollot_2026 were performed using Bayesian inference implemented in MCSim [@bois_2009]. Three independent Markov chain Monte Carlo chains of 30,000 iterations were run, and the final 10,000 iterations of each chain were retained to characterize the posterior distributions. Growth endpoints were modeled assuming normally distributed residuals, whereas cocoon production was modeled using a Poisson likelihood. Convergence was assessed by inspecting chain mixing and the agreement of posterior distributions among chains. Point estimates were defined as the modes of the posterior distributions with their 95% credibility intervals.
 
-```{r}
+```{r writeTKTDmodels}
+
+# Automatically writes the different TKTD models 
+
 KapChange <- "C"
-FmType <- "W"
-fType <- "K"
-RLWType <- "e"
+FmType    <- "W"
+fType     <- "K"
+RLWType   <- "e"
 
 f_write_DEBTKTD_models(KapChange, FmType, fType, RLWType)
 ```

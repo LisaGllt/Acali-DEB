@@ -15,7 +15,7 @@ Distrib (b,            LogUniform,                0.0001,          10);
 
 # Calcul des vraissemblances
 Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);
-Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
+Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);
 Likelihood (Reproduction, Poisson, Prediction(Reproduction));
 
 Level{

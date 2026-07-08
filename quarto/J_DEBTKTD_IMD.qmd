@@ -14,14 +14,11 @@ lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 ```{r, warning=F, message=F}
 Condition_order <- c("Ctrl", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10")
 
-df_data_EC50 <- f_import_data_DEBTKTD() |> 
+df_data_EC50 <- f_import_data_DEBTKTD() |>
   mutate(
-    #Condition = fct_reorder(Condition, Dose)
     Condition = fct_relevel(Condition, Condition_order)
-  ) |> 
+  ) |>
   filter(!(Experiment_type == "Repro" & Time == 14))
-
-
 ```
 
 ## Model fit
@@ -44,309 +41,352 @@ path_H_IMD_MG <- here::here("mod/Z_DEB-TKTD/IMD/H_IMD_MG")
 path_I_IMD_MR <- here::here("mod/Z_DEB-TKTD/IMD/I_IMD_MR")
 path_J_IMD_GR <- here::here("mod/Z_DEB-TKTD/IMD/J_IMD_GR")
 
-df_data_fit_IMD <- f_import_data_DEBTKTD() |> 
-  filter(Molecule == Molec) |> 
+# Data used
+df_data_fit_IMD <- f_import_data_DEBTKTD() |>
+  filter(Molecule == Molec) |>
   mutate(No_sim = case_when(
-    Experiment_type == "Repro" ~ No_sim+9,
+    Experiment_type == "Repro" ~ No_sim + 9,
     .default = No_sim
   ))
-
 ```
 
 ```{r fit_IMD, message=F, warning=F}
-
 path_fig <- here::here("fig/DEBTKTD_Models")
 Molec <- "IMD"
 df_data_fit_IMD <- f_import_data_DEBTKTD() |> filter(Molecule == Molec)
 OM_diff <- TRUE
 
 NbIter <- 30000
-RTOL <- 1e-10
-ATOL <- 1e-9
+RTOL   <- 1e-10
+ATOL   <- 1e-9
 
-text_priors <- '
+# Define priors
+text_priors <- "
 Distrib (nec,          TruncNormal_cv,            1000,     0.2, 10, 100000);
 Distrib (b,            LogUniform,                0.0001,          10);
 
 # Calcul des vraissemblances
-Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);'
+Distrib (Sigma_W, TruncNormal,  0.005, 1, 0.01, 100);"
 
-text_likelihood <- 'Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);  
-Likelihood (Reproduction, Poisson, Prediction(Reproduction));'
+text_likelihood <- "Likelihood (Weight,   Normal, Prediction(Weight), Sigma_W);
+Likelihood (Reproduction, Poisson, Prediction(Reproduction));"
+
+# Write MCMC .in files
 
 ######## A_IMD_A ##############################################################
 seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
-f_In_TKTD_tot(path_A_IMD_A, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_A_IMD_A, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## B_IMD_M ##############################################################
 seeds <- c(C1 = 3345, C2 = 6666, C3 = 2112)
-f_In_TKTD_tot(path_B_IMD_M, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_B_IMD_M, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## C_IMD_G ##############################################################
 seeds <- c(C1 = 3303, C2 = 6666, C3 = 2212)
-f_In_TKTD_tot(path_C_IMD_G, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_C_IMD_G, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## D_IMD_R ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-f_In_TKTD_tot(path_D_IMD_R, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_D_IMD_R, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## E_IMD_AM ##############################################################
 seeds <- c(C1 = 3345, C2 = 6666, C3 = 2112)
-f_In_TKTD_tot(path_E_IMD_AM, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_E_IMD_AM, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## F_IMD_AG ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-f_In_TKTD_tot(path_F_IMD_AG, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_F_IMD_AG, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## G_IMD_AR ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-f_In_TKTD_tot(path_G_IMD_AR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_G_IMD_AR, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## H_IMD_MG ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-f_In_TKTD_tot(path_H_IMD_MG, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_H_IMD_MG, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## I_IMD_MR ##############################################################
 seeds <- c(C1 = 3345, C2 = 6666, C3 = 2222)
-f_In_TKTD_tot(path_I_IMD_MR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_I_IMD_MR, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
 ######## J_IMD_GR ##############################################################
 seeds <- c(C1 = 3345, C2 = 3666, C3 = 2212)
-f_In_TKTD_tot(path_J_IMD_GR, Molec, text_priors, text_likelihood, NbIter, seeds, RTOL, ATOL)
+f_In_TKTD_tot(
+  path_J_IMD_GR, Molec, 
+  text_priors, text_likelihood, 
+  NbIter, seeds, RTOL, ATOL
+)
 
+# Run the MCMC for each model
 # ./mcsim.DEB-IMD DEB_TKTD_C1.in
-
 ```
 
 ## Estimates results
 
 ```{r, warning=F, message=F}
-n_data_Weight <- length(na.omit(df_data_fit_IMD$Weight))
+n_data_Weight       <- length(na.omit(df_data_fit_IMD$Weight))
 n_data_Reproduction <- length(na.omit(df_data_fit_IMD$Reproduction))
-n_data_fit <- n_data_Weight + n_data_Reproduction
+
+n_data_fit          <- n_data_Weight + n_data_Reproduction
 
 ######### A_IMD_A ###############################################################
 
-MCMC_out_A_IMD_A <- f_MCSim(path_A_IMD_A)
+MCMC_out_A_IMD_A        <- f_MCSim(path_A_IMD_A)
 
-NC_A_IMD_A <- MCMC_out_A_IMD_A$NC
-Nb_param_A_IMD_A <- MCMC_out_A_IMD_A$Nb_param
-Nb_experiment_A_IMD_A <- MCMC_out_A_IMD_A$Nb_experiment
-Nb_iter_kept_A_IMD_A <- MCMC_out_A_IMD_A$Nb_iter_kept
+NC_A_IMD_A              <- MCMC_out_A_IMD_A$NC
+Nb_param_A_IMD_A        <- MCMC_out_A_IMD_A$Nb_param
+Nb_experiment_A_IMD_A   <- MCMC_out_A_IMD_A$Nb_experiment
+Nb_iter_kept_A_IMD_A    <- MCMC_out_A_IMD_A$Nb_iter_kept
 N_iter_setpoint_A_IMD_A <- MCMC_out_A_IMD_A$N_iter_setpoint
-L_parameters_A_IMD_A <- unique(MCMC_out_A_IMD_A$Priors$Nom)
+L_parameters_A_IMD_A    <- unique(MCMC_out_A_IMD_A$Priors$Nom)
 
-LL_A_IMD_A <- f_get_mode(MCMC_out_A_IMD_A$df_LnData$LnData)
-k_A_IMD_A <- Nb_param_A_IMD_A - 1 # On enlève le Sigma_W
+LL_A_IMD_A  <- f_get_mode(MCMC_out_A_IMD_A$df_LnData$LnData)
+k_A_IMD_A   <- Nb_param_A_IMD_A - 1 # Remove Sigma_W
 
-BIC_A_IMD_A <- -2*LL_A_IMD_A+k_A_IMD_A*log(n_data_fit)
+BIC_A_IMD_A <- -2 * LL_A_IMD_A + k_A_IMD_A * log(n_data_fit)
 
-Summary_res_A_IMD_A <- 
-  as.data.frame(MCMC_out_A_IMD_A$Summary_res)[1:length(L_parameters_A_IMD_A)] |> 
+Summary_res_A_IMD_A <-
+  as.data.frame(MCMC_out_A_IMD_A$Summary_res)[1:length(L_parameters_A_IMD_A)] |>
   mutate(Model = "A_IMD_A")
 
-#Summary_res_A_IMD_A
+# Summary_res_A_IMD_A
 
 ######### B_IMD_M ###############################################################
 
-MCMC_out_B_IMD_M <- f_MCSim(path_B_IMD_M)
+MCMC_out_B_IMD_M        <- f_MCSim(path_B_IMD_M)
 
-NC_B_IMD_M <- MCMC_out_B_IMD_M$NC
-Nb_param_B_IMD_M <- MCMC_out_B_IMD_M$Nb_param
-Nb_experiment_B_IMD_M <- MCMC_out_B_IMD_M$Nb_experiment
-Nb_iter_kept_B_IMD_M <- MCMC_out_B_IMD_M$Nb_iter_kept
+NC_B_IMD_M              <- MCMC_out_B_IMD_M$NC
+Nb_param_B_IMD_M        <- MCMC_out_B_IMD_M$Nb_param
+Nb_experiment_B_IMD_M   <- MCMC_out_B_IMD_M$Nb_experiment
+Nb_iter_kept_B_IMD_M    <- MCMC_out_B_IMD_M$Nb_iter_kept
 N_iter_setpoint_B_IMD_M <- MCMC_out_B_IMD_M$N_iter_setpoint
-L_parameters_B_IMD_M <- unique(MCMC_out_B_IMD_M$Priors$Nom)
+L_parameters_B_IMD_M    <- unique(MCMC_out_B_IMD_M$Priors$Nom)
 
-LL_B_IMD_M <- f_get_mode(MCMC_out_B_IMD_M$df_LnData$LnData)
-k_B_IMD_M <- Nb_param_B_IMD_M - 1 # On enlève le Sigma_W
+LL_B_IMD_M  <- f_get_mode(MCMC_out_B_IMD_M$df_LnData$LnData)
+k_B_IMD_M   <- Nb_param_B_IMD_M - 1 # Remove Sigma_W
 
-BIC_B_IMD_M <- -2*LL_B_IMD_M+k_B_IMD_M*log(n_data_fit)
+BIC_B_IMD_M <- -2 * LL_B_IMD_M + k_B_IMD_M * log(n_data_fit)
 
-Summary_res_B_IMD_M <- 
-  as.data.frame(MCMC_out_B_IMD_M$Summary_res)[1:length(L_parameters_B_IMD_M)] |> 
+Summary_res_B_IMD_M <-
+  as.data.frame(MCMC_out_B_IMD_M$Summary_res)[1:length(L_parameters_B_IMD_M)] |>
   mutate(Model = "B_IMD_M")
 
-#Summary_res_B_IMD_M
+# Summary_res_B_IMD_M
 
 ######### C_IMD_G ###############################################################
 
-MCMC_out_C_IMD_G <- f_MCSim(path_C_IMD_G)
+MCMC_out_C_IMD_G        <- f_MCSim(path_C_IMD_G)
 
-NC_C_IMD_G <- MCMC_out_C_IMD_G$NC
-Nb_param_C_IMD_G <- MCMC_out_C_IMD_G$Nb_param
-Nb_experiment_C_IMD_G <- MCMC_out_C_IMD_G$Nb_experiment
-Nb_iter_kept_C_IMD_G <- MCMC_out_C_IMD_G$Nb_iter_kept
+NC_C_IMD_G              <- MCMC_out_C_IMD_G$NC
+Nb_param_C_IMD_G        <- MCMC_out_C_IMD_G$Nb_param
+Nb_experiment_C_IMD_G   <- MCMC_out_C_IMD_G$Nb_experiment
+Nb_iter_kept_C_IMD_G    <- MCMC_out_C_IMD_G$Nb_iter_kept
 N_iter_setpoint_C_IMD_G <- MCMC_out_C_IMD_G$N_iter_setpoint
-L_parameters_C_IMD_G <- unique(MCMC_out_C_IMD_G$Priors$Nom)
+L_parameters_C_IMD_G    <- unique(MCMC_out_C_IMD_G$Priors$Nom)
 
-LL_C_IMD_G <- f_get_mode(MCMC_out_C_IMD_G$df_LnData$LnData)
-k_C_IMD_G <- Nb_param_C_IMD_G - 1 # On enlève le Sigma_W
+LL_C_IMD_G  <- f_get_mode(MCMC_out_C_IMD_G$df_LnData$LnData)
+k_C_IMD_G   <- Nb_param_C_IMD_G - 1 # Remove Sigma_W
 
-BIC_C_IMD_G <- -2*LL_C_IMD_G+k_C_IMD_G*log(n_data_fit)
+BIC_C_IMD_G <- -2 * LL_C_IMD_G + k_C_IMD_G * log(n_data_fit)
 
-Summary_res_C_IMD_G <- 
-  as.data.frame(MCMC_out_C_IMD_G$Summary_res)[1:length(L_parameters_C_IMD_G)] |> 
+Summary_res_C_IMD_G <-
+  as.data.frame(MCMC_out_C_IMD_G$Summary_res)[1:length(L_parameters_C_IMD_G)] |>
   mutate(Model = "C_IMD_G")
 
-#Summary_res_C_IMD_G
+# Summary_res_C_IMD_G
 
 ######### D_IMD_R ###############################################################
 
-MCMC_out_D_IMD_R <- f_MCSim(path_D_IMD_R)
+MCMC_out_D_IMD_R        <- f_MCSim(path_D_IMD_R)
 
-NC_D_IMD_R <- MCMC_out_D_IMD_R$NC
-Nb_param_D_IMD_R <- MCMC_out_D_IMD_R$Nb_param
-Nb_experiment_D_IMD_R <- MCMC_out_D_IMD_R$Nb_experiment
-Nb_iter_kept_D_IMD_R <- MCMC_out_D_IMD_R$Nb_iter_kept
+NC_D_IMD_R              <- MCMC_out_D_IMD_R$NC
+Nb_param_D_IMD_R        <- MCMC_out_D_IMD_R$Nb_param
+Nb_experiment_D_IMD_R   <- MCMC_out_D_IMD_R$Nb_experiment
+Nb_iter_kept_D_IMD_R    <- MCMC_out_D_IMD_R$Nb_iter_kept
 N_iter_setpoint_D_IMD_R <- MCMC_out_D_IMD_R$N_iter_setpoint
-L_parameters_D_IMD_R <- unique(MCMC_out_D_IMD_R$Priors$Nom)
+L_parameters_D_IMD_R    <- unique(MCMC_out_D_IMD_R$Priors$Nom)
 
-LL_D_IMD_R <- f_get_mode(MCMC_out_D_IMD_R$df_LnData$LnData)
-k_D_IMD_R <- Nb_param_D_IMD_R - 1 # On enlève le Sigma_W
+LL_D_IMD_R  <- f_get_mode(MCMC_out_D_IMD_R$df_LnData$LnData)
+k_D_IMD_R   <- Nb_param_D_IMD_R - 1 # Remove Sigma_W
 
-BIC_D_IMD_R <- -2*LL_D_IMD_R+k_D_IMD_R*log(n_data_fit)
+BIC_D_IMD_R <- -2 * LL_D_IMD_R + k_D_IMD_R * log(n_data_fit)
 
-Summary_res_D_IMD_R <- 
-  as.data.frame(MCMC_out_D_IMD_R$Summary_res)[1:length(L_parameters_D_IMD_R)] |> 
+Summary_res_D_IMD_R <-
+  as.data.frame(MCMC_out_D_IMD_R$Summary_res)[1:length(L_parameters_D_IMD_R)] |>
   mutate(Model = "D_IMD_R")
 
-#Summary_res_D_IMD_R
+# Summary_res_D_IMD_R
 
 ######### E_IMD_AM ###############################################################
 
-MCMC_out_E_IMD_AM <- f_MCSim(path_E_IMD_AM)
+MCMC_out_E_IMD_AM        <- f_MCSim(path_E_IMD_AM)
 
-NC_E_IMD_AM <- MCMC_out_E_IMD_AM$NC
-Nb_param_E_IMD_AM <- MCMC_out_E_IMD_AM$Nb_param
-Nb_experiment_E_IMD_AM <- MCMC_out_E_IMD_AM$Nb_experiment
-Nb_iter_kept_E_IMD_AM <- MCMC_out_E_IMD_AM$Nb_iter_kept
+NC_E_IMD_AM              <- MCMC_out_E_IMD_AM$NC
+Nb_param_E_IMD_AM        <- MCMC_out_E_IMD_AM$Nb_param
+Nb_experiment_E_IMD_AM   <- MCMC_out_E_IMD_AM$Nb_experiment
+Nb_iter_kept_E_IMD_AM    <- MCMC_out_E_IMD_AM$Nb_iter_kept
 N_iter_setpoint_E_IMD_AM <- MCMC_out_E_IMD_AM$N_iter_setpoint
-L_parameters_E_IMD_AM <- unique(MCMC_out_E_IMD_AM$Priors$Nom)
+L_parameters_E_IMD_AM    <- unique(MCMC_out_E_IMD_AM$Priors$Nom)
 
 LL_E_IMD_AM <- f_get_mode(MCMC_out_E_IMD_AM$df_LnData$LnData)
-k_E_IMD_AM <- Nb_param_E_IMD_AM - 1 # On enlève le Sigma_W
+k_E_IMD_AM <- Nb_param_E_IMD_AM - 1 # Remove Sigma_W
 
-BIC_E_IMD_AM <- -2*LL_E_IMD_AM+k_E_IMD_AM*log(n_data_fit)
+BIC_E_IMD_AM <- -2 * LL_E_IMD_AM + k_E_IMD_AM * log(n_data_fit)
 
-Summary_res_E_IMD_AM <- 
-  as.data.frame(MCMC_out_E_IMD_AM$Summary_res)[1:length(L_parameters_E_IMD_AM)] |> 
+Summary_res_E_IMD_AM <-
+  as.data.frame(MCMC_out_E_IMD_AM$Summary_res)[1:length(L_parameters_E_IMD_AM)] |>
   mutate(Model = "E_IMD_AM")
 
-#Summary_res_E_IMD_AM
+# Summary_res_E_IMD_AM
 
 ######### F_IMD_AG ###############################################################
 
-MCMC_out_F_IMD_AG <- f_MCSim(path_F_IMD_AG)
+MCMC_out_F_IMD_AG        <- f_MCSim(path_F_IMD_AG)
 
-NC_F_IMD_AG <- MCMC_out_F_IMD_AG$NC
-Nb_param_F_IMD_AG <- MCMC_out_F_IMD_AG$Nb_param
-Nb_experiment_F_IMD_AG <- MCMC_out_F_IMD_AG$Nb_experiment
-Nb_iter_kept_F_IMD_AG <- MCMC_out_F_IMD_AG$Nb_iter_kept
+NC_F_IMD_AG              <- MCMC_out_F_IMD_AG$NC
+Nb_param_F_IMD_AG        <- MCMC_out_F_IMD_AG$Nb_param
+Nb_experiment_F_IMD_AG   <- MCMC_out_F_IMD_AG$Nb_experiment
+Nb_iter_kept_F_IMD_AG    <- MCMC_out_F_IMD_AG$Nb_iter_kept
 N_iter_setpoint_F_IMD_AG <- MCMC_out_F_IMD_AG$N_iter_setpoint
-L_parameters_F_IMD_AG <- unique(MCMC_out_F_IMD_AG$Priors$Nom)
+L_parameters_F_IMD_AG    <- unique(MCMC_out_F_IMD_AG$Priors$Nom)
 
-LL_F_IMD_AG <- f_get_mode(MCMC_out_F_IMD_AG$df_LnData$LnData)
-k_F_IMD_AG <- Nb_param_F_IMD_AG - 1 # On enlève le Sigma_W
+LL_F_IMD_AG  <- f_get_mode(MCMC_out_F_IMD_AG$df_LnData$LnData)
+k_F_IMD_AG   <- Nb_param_F_IMD_AG - 1 # Remove le Sigma_W
 
-BIC_F_IMD_AG <- -2*LL_F_IMD_AG+k_F_IMD_AG*log(n_data_fit)
+BIC_F_IMD_AG <- -2 * LL_F_IMD_AG + k_F_IMD_AG * log(n_data_fit)
 
-Summary_res_F_IMD_AG <- 
-  as.data.frame(MCMC_out_F_IMD_AG$Summary_res)[1:length(L_parameters_F_IMD_AG)] |> 
+Summary_res_F_IMD_AG <-
+  as.data.frame(MCMC_out_F_IMD_AG$Summary_res)[1:length(L_parameters_F_IMD_AG)] |>
   mutate(Model = "F_IMD_AG")
 
-#Summary_res_F_IMD_AG
+# Summary_res_F_IMD_AG
 
 ######### G_IMD_AR ###############################################################
 
-MCMC_out_G_IMD_AR <- f_MCSim(path_G_IMD_AR)
+MCMC_out_G_IMD_AR        <- f_MCSim(path_G_IMD_AR)
 
-NC_G_IMD_AR <- MCMC_out_G_IMD_AR$NC
-Nb_param_G_IMD_AR <- MCMC_out_G_IMD_AR$Nb_param
-Nb_experiment_G_IMD_AR <- MCMC_out_G_IMD_AR$Nb_experiment
-Nb_iter_kept_G_IMD_AR <- MCMC_out_G_IMD_AR$Nb_iter_kept
+NC_G_IMD_AR              <- MCMC_out_G_IMD_AR$NC
+Nb_param_G_IMD_AR        <- MCMC_out_G_IMD_AR$Nb_param
+Nb_experiment_G_IMD_AR   <- MCMC_out_G_IMD_AR$Nb_experiment
+Nb_iter_kept_G_IMD_AR    <- MCMC_out_G_IMD_AR$Nb_iter_kept
 N_iter_setpoint_G_IMD_AR <- MCMC_out_G_IMD_AR$N_iter_setpoint
-L_parameters_G_IMD_AR <- unique(MCMC_out_G_IMD_AR$Priors$Nom)
+L_parameters_G_IMD_AR    <- unique(MCMC_out_G_IMD_AR$Priors$Nom)
 
-LL_G_IMD_AR <- f_get_mode(MCMC_out_G_IMD_AR$df_LnData$LnData)
-k_G_IMD_AR <- Nb_param_G_IMD_AR - 1 # On enlève le Sigma_W
+LL_G_IMD_AR  <- f_get_mode(MCMC_out_G_IMD_AR$df_LnData$LnData)
+k_G_IMD_AR   <- Nb_param_G_IMD_AR - 1 # Remove Sigma_W
 
-BIC_G_IMD_AR <- -2*LL_G_IMD_AR+k_G_IMD_AR*log(n_data_fit)
+BIC_G_IMD_AR <- -2 * LL_G_IMD_AR + k_G_IMD_AR * log(n_data_fit)
 
-Summary_res_G_IMD_AR <- 
-  as.data.frame(MCMC_out_G_IMD_AR$Summary_res)[1:length(L_parameters_G_IMD_AR)] |> 
+Summary_res_G_IMD_AR <-
+  as.data.frame(MCMC_out_G_IMD_AR$Summary_res)[1:length(L_parameters_G_IMD_AR)] |>
   mutate(Model = "G_IMD_AR")
 
-#Summary_res_G_IMD_AR
+# Summary_res_G_IMD_AR
 
 ######### H_IMD_MG ###############################################################
 
-MCMC_out_H_IMD_MG <- f_MCSim(path_H_IMD_MG)
+MCMC_out_H_IMD_MG        <- f_MCSim(path_H_IMD_MG)
 
-NC_H_IMD_MG <- MCMC_out_H_IMD_MG$NC
-Nb_param_H_IMD_MG <- MCMC_out_H_IMD_MG$Nb_param
-Nb_experiment_H_IMD_MG <- MCMC_out_H_IMD_MG$Nb_experiment
-Nb_iter_kept_H_IMD_MG <- MCMC_out_H_IMD_MG$Nb_iter_kept
+NC_H_IMD_MG              <- MCMC_out_H_IMD_MG$NC
+Nb_param_H_IMD_MG        <- MCMC_out_H_IMD_MG$Nb_param
+Nb_experiment_H_IMD_MG   <- MCMC_out_H_IMD_MG$Nb_experiment
+Nb_iter_kept_H_IMD_MG    <- MCMC_out_H_IMD_MG$Nb_iter_kept
 N_iter_setpoint_H_IMD_MG <- MCMC_out_H_IMD_MG$N_iter_setpoint
-L_parameters_H_IMD_MG <- unique(MCMC_out_H_IMD_MG$Priors$Nom)
+L_parameters_H_IMD_MG    <- unique(MCMC_out_H_IMD_MG$Priors$Nom)
 
-LL_H_IMD_MG <- f_get_mode(MCMC_out_H_IMD_MG$df_LnData$LnData)
-k_H_IMD_MG <- Nb_param_H_IMD_MG - 1 # On enlève le Sigma_W
+LL_H_IMD_MG  <- f_get_mode(MCMC_out_H_IMD_MG$df_LnData$LnData)
+k_H_IMD_MG   <- Nb_param_H_IMD_MG - 1 # Remove Sigma_W
 
-BIC_H_IMD_MG <- -2*LL_H_IMD_MG+k_H_IMD_MG*log(n_data_fit)
+BIC_H_IMD_MG <- -2 * LL_H_IMD_MG + k_H_IMD_MG * log(n_data_fit)
 
-Summary_res_H_IMD_MG <- 
-  as.data.frame(MCMC_out_H_IMD_MG$Summary_res)[1:length(L_parameters_H_IMD_MG)] |> 
+Summary_res_H_IMD_MG <-
+  as.data.frame(MCMC_out_H_IMD_MG$Summary_res)[1:length(L_parameters_H_IMD_MG)] |>
   mutate(Model = "H_IMD_MG")
 
-#Summary_res_H_IMD_MG
+# Summary_res_H_IMD_MG
 
 ######### I_IMD_MR ###############################################################
 
-MCMC_out_I_IMD_MR <- f_MCSim(path_I_IMD_MR)
+MCMC_out_I_IMD_MR        <- f_MCSim(path_I_IMD_MR)
 
-NC_I_IMD_MR <- MCMC_out_I_IMD_MR$NC
-Nb_param_I_IMD_MR <- MCMC_out_I_IMD_MR$Nb_param
-Nb_experiment_I_IMD_MR <- MCMC_out_I_IMD_MR$Nb_experiment
-Nb_iter_kept_I_IMD_MR <- MCMC_out_I_IMD_MR$Nb_iter_kept
+NC_I_IMD_MR              <- MCMC_out_I_IMD_MR$NC
+Nb_param_I_IMD_MR        <- MCMC_out_I_IMD_MR$Nb_param
+Nb_experiment_I_IMD_MR   <- MCMC_out_I_IMD_MR$Nb_experiment
+Nb_iter_kept_I_IMD_MR    <- MCMC_out_I_IMD_MR$Nb_iter_kept
 N_iter_setpoint_I_IMD_MR <- MCMC_out_I_IMD_MR$N_iter_setpoint
-L_parameters_I_IMD_MR <- unique(MCMC_out_I_IMD_MR$Priors$Nom)
+L_parameters_I_IMD_MR    <- unique(MCMC_out_I_IMD_MR$Priors$Nom)
 
-LL_I_IMD_MR <- f_get_mode(MCMC_out_I_IMD_MR$df_LnData$LnData)
-k_I_IMD_MR <- Nb_param_I_IMD_MR - 1 # On enlève le Sigma_W
+LL_I_IMD_MR  <- f_get_mode(MCMC_out_I_IMD_MR$df_LnData$LnData)
+k_I_IMD_MR   <- Nb_param_I_IMD_MR - 1 # Remove Sigma_W
 
-BIC_I_IMD_MR <- -2*LL_I_IMD_MR+k_I_IMD_MR*log(n_data_fit)
+BIC_I_IMD_MR <- -2 * LL_I_IMD_MR + k_I_IMD_MR * log(n_data_fit)
 
-Summary_res_I_IMD_MR <- 
-  as.data.frame(MCMC_out_I_IMD_MR$Summary_res)[1:length(L_parameters_I_IMD_MR)] |> 
+Summary_res_I_IMD_MR <-
+  as.data.frame(MCMC_out_I_IMD_MR$Summary_res)[1:length(L_parameters_I_IMD_MR)] |>
   mutate(Model = "I_IMD_MR")
 
-#Summary_res_I_IMD_MR
+# Summary_res_I_IMD_MR
 
 ######### J_IMD_GR ###############################################################
 
-MCMC_out_J_IMD_GR <- f_MCSim(path_J_IMD_GR)
+MCMC_out_J_IMD_GR        <- f_MCSim(path_J_IMD_GR)
 
-NC_J_IMD_GR <- MCMC_out_J_IMD_GR$NC
-Nb_param_J_IMD_GR <- MCMC_out_J_IMD_GR$Nb_param
-Nb_experiment_J_IMD_GR <- MCMC_out_J_IMD_GR$Nb_experiment
-Nb_iter_kept_J_IMD_GR <- MCMC_out_J_IMD_GR$Nb_iter_kept
+NC_J_IMD_GR              <- MCMC_out_J_IMD_GR$NC
+Nb_param_J_IMD_GR        <- MCMC_out_J_IMD_GR$Nb_param
+Nb_experiment_J_IMD_GR   <- MCMC_out_J_IMD_GR$Nb_experiment
+Nb_iter_kept_J_IMD_GR    <- MCMC_out_J_IMD_GR$Nb_iter_kept
 N_iter_setpoint_J_IMD_GR <- MCMC_out_J_IMD_GR$N_iter_setpoint
-L_parameters_J_IMD_GR <- unique(MCMC_out_J_IMD_GR$Priors$Nom)
+L_parameters_J_IMD_GR    <- unique(MCMC_out_J_IMD_GR$Priors$Nom)
 
-LL_J_IMD_GR <- f_get_mode(MCMC_out_J_IMD_GR$df_LnData$LnData)
-k_J_IMD_GR <- Nb_param_J_IMD_GR - 1 # On enlève le Sigma_W
+LL_J_IMD_GR  <- f_get_mode(MCMC_out_J_IMD_GR$df_LnData$LnData)
+k_J_IMD_GR   <- Nb_param_J_IMD_GR - 1 # Remove Sigma_W
 
-BIC_J_IMD_GR <- -2*LL_J_IMD_GR+k_J_IMD_GR*log(n_data_fit)
+BIC_J_IMD_GR <- -2 * LL_J_IMD_GR + k_J_IMD_GR * log(n_data_fit)
 
-Summary_res_J_IMD_GR <- 
-  as.data.frame(MCMC_out_J_IMD_GR$Summary_res)[1:length(L_parameters_J_IMD_GR)] |> 
+Summary_res_J_IMD_GR <-
+  as.data.frame(MCMC_out_J_IMD_GR$Summary_res)[1:length(L_parameters_J_IMD_GR)] |>
   mutate(Model = "J_IMD_GR")
 
-
-
-list_models <- c("A_IMD_A", "B_IMD_M", "C_IMD_G", "D_IMD_R", "E_IMD_AM", "F_IMD_AG", "G_IMD_AR", "H_IMD_MG", "I_IMD_MR", "J_IMD_GR")
-
+list_models <- c(
+  "A_IMD_A", "B_IMD_M", "C_IMD_G", "D_IMD_R", 
+  "E_IMD_AM", "F_IMD_AG", "G_IMD_AR", "H_IMD_MG", "I_IMD_MR", "J_IMD_GR"
+)
 
 df_LL_BIC <- data.frame(
   Model = list_models,
@@ -356,10 +396,13 @@ df_LL_BIC <- data.frame(
 ```
 
 ```{r resall, warning=F, message=F}
-#| tbl-cap: Estimation results from all models. 
+#| tbl-cap: Estimation results from all models.
 #| label: tbl-IMDTKTDres
 
-list_models <- c("A_IMD_A", "B_IMD_M", "C_IMD_G", "D_IMD_R", "E_IMD_AM", "F_IMD_AG", "G_IMD_AR", "H_IMD_MG", "I_IMD_MR", "J_IMD_GR")
+list_models <- c(
+  "A_IMD_A", "B_IMD_M", "C_IMD_G", "D_IMD_R", 
+  "E_IMD_AM", "F_IMD_AG", "G_IMD_AR", "H_IMD_MG", "I_IMD_MR", "J_IMD_GR"
+)
 
 list_model_summary <- mget(paste0("Summary_res_", list_models))
 
@@ -401,25 +444,25 @@ df_result <- list_model_summary %>%
     Model,
     any_of(param_order),
     everything()
-  ) |> 
-  left_join(df_LL_BIC) |> 
+  ) |>
+  left_join(df_LL_BIC) |>
   arrange(BIC)
 
 df_result |> datatable(
   options = list(
-    dom = 't',
+    dom = "t",
     autoWidth = TRUE,
     columnDefs = list(
-      list(className = 'dt-left', targets = "_all")
-      )
-    ),
-  class="hover"
-  )
+      list(className = "dt-left", targets = "_all")
+    )
+  ),
+  class = "hover"
+)
 ```
 
-For imidacloprid, comparison of the candidate physiological modes of action showed that the best-supported model combined effects on assimilation and growth (@tbl-IMDTKTDres). This formulation had the lowest BIC (BIC = -64.7), followed by the growth and reproduction model (BIC = -60.7; $\Delta\mathrm{BIC}=4.0$) and the assimilation and reproduction model (BIC = -57.1; $\Delta\mathrm{BIC}=7.6$). The assimilation-only formulation received substantially less support (BIC = -49.7; $\Delta\mathrm{BIC}=15.0$). These results provide clear support for the combined assimilation and growth pMoA, while the growth and reproduction formulation remained a plausible, although less supported, alternative. Overall, imidacloprid effects were best represented by impaired energy assimilation combined with a direct effect on growth, rather than by reduced assimilation alone or by effects restricted to maintenance or reproduction.
+For imidacloprid, the lowest BIC was obtained for the model combining effects on maintenance and growth (BIC = -65.1; @tbl-IMDTKTDres). However, the assimilation-and-growth formulation received nearly equivalent support (BIC = -64.1; $\Delta\mathrm{BIC}=1.0$), whereas the growth-and-reproduction model was less supported (BIC = -62.8; $\Delta\mathrm{BIC}=2.3$). The remaining formulations showed substantially higher BIC values. These results therefore did not allow a clear statistical distinction between the maintenance-and-growth and assimilation-and-growth pMoAs. Because imidacloprid is known to affect earthworm activity, feeding behaviour, and bioturbation [@dittbrenner_2010], a reduction in resource acquisition or processing was considered biologically more plausible than a primary increase in maintenance costs. The assimilation-and-growth formulation was therefore retained for subsequent analyses, while acknowledging the maintenance-and-growth model as an equally plausible statistical alternative.
 
-The selected assimilation and growth model estimated a no-effect concentration ($c_0$) of 1,122 \[893 ; 1,511\] ng$\cdot$g$^{-1}$ (internal concentration) and a stress slope parameter ($b$) of 0.014 \[0.011 ; 8.1\] g$\cdot$ng$^{-1}$. The broader relative uncertainty associated with $b$ indicates that the increase in stress above the no-effect concentration was less precisely estimated than the threshold itself.
+The selected assimilation and growth model estimated a no-effect concentration ($c_0$) of 1,132 \[882; 1,494\] ng$\cdot$g$^{-1}$ internal concentration and a stress slope parameter ($b$) of 0.02 \[0.01; 8.54\] g$\cdot$ng$^{-1}$. The wide credible interval around $b$ indicates that the increase in stress above the threshold remained poorly constrained.
 
 ## Chains
 
@@ -434,16 +477,15 @@ The selected assimilation and growth model estimated a no-effect concentration (
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_A_IMD_A)
 p_chains
-  
 ```
 
 ```{r savechainsA_IMD_A, include = F}
 ggsave(
-  filename="A_IMD_A_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "A_IMD_A_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## M
@@ -456,16 +498,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_B_IMD_M)
 p_chains
-  
 ```
 
 ```{r savechainsB_IMD_M, include = F}
 ggsave(
-  filename="B_IMD_M_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "B_IMD_M_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## G
@@ -478,16 +519,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_C_IMD_G)
 p_chains
-  
 ```
 
 ```{r savechainsC_IMD_G, include = F}
 ggsave(
-  filename="C_IMD_G_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "C_IMD_G_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## R
@@ -500,16 +540,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_D_IMD_R)
 p_chains
-  
 ```
 
 ```{r savechainsD_IMD_R, include = F}
 ggsave(
-  filename="D_IMD_R_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "D_IMD_R_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## A & M
@@ -522,16 +561,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_E_IMD_AM)
 p_chains
-  
 ```
 
 ```{r savechainsE_IMD_AM, include = F}
 ggsave(
-  filename="E_IMD_AM_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "E_IMD_AM_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## A & G
@@ -544,16 +582,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_F_IMD_AG)
 p_chains
-  
 ```
 
 ```{r savechainsF_IMD_AG, include = F}
 ggsave(
-  filename="F_IMD_AG_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## A & R
@@ -566,16 +603,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_G_IMD_AR)
 p_chains
-  
 ```
 
 ```{r savechainsG_IMD_AR, include = F}
 ggsave(
-  filename="G_IMD_AR_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "G_IMD_AR_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## M & G
@@ -588,16 +624,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_H_IMD_MG)
 p_chains
-  
 ```
 
 ```{r savechainsH_IMD_MG, include = F}
 ggsave(
-  filename="H_IMD_MG_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "H_IMD_MG_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## M & R
@@ -610,16 +645,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_I_IMD_MR)
 p_chains
-  
 ```
 
 ```{r savechainsI_IMD_MR, include = F}
 ggsave(
-  filename="I_IMD_MR_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "I_IMD_MR_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## G & R
@@ -632,16 +666,15 @@ ggsave(
 
 p_chains <- f_Plot_MCMC_Chains(MCMC_out_J_IMD_GR)
 p_chains
-  
 ```
 
 ```{r savechainsJ_IMD_GR, include = F}
 ggsave(
-  filename="J_IMD_GR_chains.png", 
-  plot=p_chains, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "J_IMD_GR_chains.png",
+  plot = p_chains,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 :::
 
@@ -658,16 +691,15 @@ ggsave(
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_F_IMD_AG)
 p_LL
-
 ```
 
 ```{r saveLLF_IMD_AG, include = F}
 ggsave(
-  filename="F_IMD_AG_chainsLL.png", 
-  plot=p_LL, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_chainsLL.png",
+  plot = p_LL,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## A
@@ -680,16 +712,15 @@ ggsave(
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_IMD_A)
 p_LL
-
 ```
 
 ```{r saveLLA_IMD_A, include = F}
 ggsave(
-  filename="A_IMD_A_chainsLL.png", 
-  plot=p_LL, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "A_IMD_A_chainsLL.png",
+  plot = p_LL,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 :::
 
@@ -717,15 +748,13 @@ print(gelman)
 file_rds <- here::here("fig/DEBTKTD_Models/F_IMD_AG_ipairs_plot.png")
 
 f_Plot_ipairs(MCMC_out_F_IMD_AG, file_rds)
-
 ```
 
 ```{r, include = F}
-
 col_corr <- colorRampPalette(c(
-  "#BF616A",  # corrélations négatives
+  "#BF616A", # corrélations négatives
   "white",
-  "#5E81AC"   # corrélations positives
+  "#5E81AC" # corrélations positives
 ))(200)
 
 params_keep <- c("nec.1.", "b.1.")
@@ -759,7 +788,6 @@ corrplot.mixed(
 par(op)
 
 dev.off()
-
 ```
 
 ## A
@@ -782,15 +810,13 @@ print(gelman)
 
 file_rds <- here::here("fig/DEBTKTD_Models/A_IMD_A_ipairs_plot.png")
 f_Plot_ipairs(MCMC_out_A_IMD_A, file_rds)
-
 ```
 
 ```{r, include = F}
-
 col_corr <- colorRampPalette(c(
-  "#BF616A",  # corrélations négatives
+  "#BF616A", # corrélations négatives
   "white",
-  "#5E81AC"   # corrélations positives
+  "#5E81AC" # corrélations positives
 ))(200)
 
 params_keep <- c("nec.1.", "b.1.")
@@ -824,7 +850,6 @@ corrplot.mixed(
 par(op)
 
 dev.off()
-
 ```
 :::
 
@@ -847,11 +872,11 @@ p_post
 
 ```{r savepostF_IMD_AG, include = F}
 ggsave(
-  filename="F_IMD_AG_post.png", 
-  plot=p_post, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_post.png",
+  plot = p_post,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ## A
@@ -868,22 +893,20 @@ p_post
 
 ```{r savepostA_IMD_A, include = F}
 ggsave(
-  filename="A_IMD_A_post.png", 
-  plot=p_post, 
-  width=8, height = 4, 
-  path=path_fig
-  )
-
+  filename = "A_IMD_A_post.png",
+  plot = p_post,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 :::
 
 ## Predicted vs. Obs
 
 ```{r setpointfullin}
-
 Nb_experiment <- 22
 step_sim <- 0.05
-select_times <- seq(0,400, 0.1)
+select_times <- seq(0, 400, 0.1)
 
 Endpoints_print <- "Weight,
     Reproduction,
@@ -894,9 +917,9 @@ l_param_name_F_IMD_AG <- names(Summary_res_F_IMD_AG) |>
   stringr::str_remove_all("\\.1\\.")
 
 f_In_Setpoint_full_TKTD(
-  path_F_IMD_AG, Molec, 
+  path_F_IMD_AG, Molec,
   l_param_name_F_IMD_AG, step_sim, Endpoints_print
-  )
+)
 
 
 l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
@@ -904,10 +927,9 @@ l_param_name_A_IMD_A <- names(Summary_res_A_IMD_A) |>
   stringr::str_remove_all("\\.1\\.")
 
 f_In_Setpoint_full_TKTD(
-  path_A_IMD_A, Molec, 
+  path_A_IMD_A, Molec,
   l_param_name_A_IMD_A, step_sim, Endpoints_print
-  )
-
+)
 ```
 
 ```{bash, eval=F, execute=F}
@@ -917,7 +939,6 @@ done
 ```
 
 ```{r, message = F, warning = F}
-
 width_plot <- 12
 height_plot <- 12
 
@@ -939,191 +960,187 @@ if (file.exists(file_rds_A_IMD_A)) {
 
 Nb_experiment <- 22
 
-df_data_obs_IMD <- df_data_fit_IMD |> 
+df_data_obs_IMD <- df_data_fit_IMD |>
   mutate(
     Weight_obs = Weight,
     Reproduction_obs = Reproduction
-    ) |> 
+  ) |>
   dplyr::select(-c(Weight, Reproduction))
 
 Condition_order <- c(
   "Control", "C1", "C2", "C3", "C4", "C5",
   "C6", "C7", "C8", "C9", "C10"
 )
-
 ```
 
 ```{r, results=F, message=F, warning=F}
-
 ######## F_IMD_AG ###############################################################
 
-Times_obs <- c(0,14,28)
+Times_obs <- c(0, 14, 28)
 
-df_pred_F_IMD_AG <- df_pred_full_F_IMD_AG |> 
+df_pred_F_IMD_AG <- df_pred_full_F_IMD_AG |>
   filter(Time %in% Times_obs)
 
-df_pred_Weight_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Weight" & Time != 0)
+df_pred_Reproduction_F_IMD_AG <- subset(df_pred_F_IMD_AG, Endpt == "Reproduction" & Time != 0)
 
-df_predobs_Reproduction_F_IMD_AG <- df_data_obs_IMD |> 
-  filter(Time !=0 & Reproduction_obs !=0) |>
-  left_join(df_pred_Reproduction_F_IMD_AG, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+df_predobs_Reproduction_F_IMD_AG <- df_data_obs_IMD |>
+  filter(Time != 0 & Reproduction_obs != 0) |>
+  left_join(df_pred_Reproduction_F_IMD_AG, suffix = c("_obs", "_pred")) |>
+  mutate(across(everything(), ~ replace(.x, .x == -1, NA))) |>
+  drop_na() |>
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |>
   mutate(Condition = factor(Condition, Condition_order))
 
-df_predobs_Weight_F_IMD_AG <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_F_IMD_AG, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+df_predobs_Weight_F_IMD_AG <- df_data_obs_IMD |>
+  filter(Time != 0) |>
+  left_join(df_pred_Weight_F_IMD_AG, suffix = c("_obs", "_pred")) |>
+  mutate(across(everything(), ~ replace(.x, .x == -1, NA))) |>
+  drop_na() |>
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |>
   mutate(Condition = factor(Condition, Condition_order))
 
 
 ######## A_IMD_A ###############################################################
 
-Times_obs <- c(0,14,28)
+Times_obs <- c(0, 14, 28)
 
-df_pred_A_IMD_A <- df_pred_full_A_IMD_A |> 
+df_pred_A_IMD_A <- df_pred_full_A_IMD_A |>
   filter(Time %in% Times_obs)
 
-df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time !=0)
-df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time !=0)
+df_pred_Weight_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Weight" & Time != 0)
+df_pred_Reproduction_A_IMD_A <- subset(df_pred_A_IMD_A, Endpt == "Reproduction" & Time != 0)
 
-df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0 & Reproduction_obs !=0) |>
-  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |> 
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+df_predobs_Reproduction_A_IMD_A <- df_data_obs_IMD |>
+  filter(Time != 0 & Reproduction_obs != 0) |>
+  left_join(df_pred_Reproduction_A_IMD_A, suffix = c("_obs", "_pred")) |>
+  mutate(across(everything(), ~ replace(.x, .x == -1, NA))) |>
+  drop_na() |>
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |>
   mutate(Condition = factor(Condition, Condition_order))
 
-df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |> 
-  filter(Time !=0) |>
-  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred"))|>
-  mutate(across(everything(), ~replace(.x, .x == -1, NA))) |> 
-  drop_na() |> 
-  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |> 
+df_predobs_Weight_A_IMD_A <- df_data_obs_IMD |>
+  filter(Time != 0) |>
+  left_join(df_pred_Weight_A_IMD_A, suffix = c("_obs", "_pred")) |>
+  mutate(across(everything(), ~ replace(.x, .x == -1, NA))) |>
+  drop_na() |>
+  mutate(Condition = ifelse(Dose == 0, "Control", Condition)) |>
   mutate(Condition = factor(Condition, Condition_order))
 
 #############################################
 
-df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Growth") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |>
+  filter(Experiment_type == "Growth") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Repro") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |>
+  filter(Experiment_type == "Repro") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-df_data_obs_IMD_G <- df_data_obs_IMD |> 
+df_data_obs_IMD_G <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_data_obs_IMD_R <- df_data_obs_IMD |> 
+df_data_obs_IMD_R <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
-###################################################@
+################################################### @
 
-df_predobs_Weight_F_IMD_AG_tmp <-  df_predobs_Weight_F_IMD_AG |> 
+df_predobs_Weight_F_IMD_AG_tmp <- df_predobs_Weight_F_IMD_AG |>
   left_join(
     (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_predobs_Reproduction_F_IMD_AG_tmp <-  df_predobs_Reproduction_F_IMD_AG |> 
+df_predobs_Reproduction_F_IMD_AG_tmp <- df_predobs_Reproduction_F_IMD_AG |>
   left_join(
     (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
-  ) 
+  )
 
 ###
 
-df_predobs_Weight_A_IMD_A_tmp <-  df_predobs_Weight_A_IMD_A |> 
+df_predobs_Weight_A_IMD_A_tmp <- df_predobs_Weight_A_IMD_A |>
   left_join(
     (df_Exp_type_Dose_Condition_G |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_predobs_Reproduction_A_IMD_A_tmp <-  df_predobs_Reproduction_A_IMD_A |> 
+df_predobs_Reproduction_A_IMD_A_tmp <- df_predobs_Reproduction_A_IMD_A |>
   left_join(
     (df_Exp_type_Dose_Condition_R |> dplyr::select(-c("Dose", "Experiment_type", "Condition"))),
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
-  ) 
-
-
+  )
 ```
 
 ::: panel-tabset
 ## A & G
 
 ```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line.
 #| label: fig-predobs_F_IMD_AG
 #| fig-height: 4
 #| fig-width: 8
@@ -1136,7 +1153,6 @@ col_line1 <- Nord_polar[4]
 col_line2 <- Nord_snow[1]
 
 col_experiment <- c(
-  
   # Control + low doses
   "#4C566A", # Control
   "#DDE8D3",
@@ -1160,77 +1176,76 @@ seq_line <- seq(0.02, 1.5, 0.01)
 
 df_line <- data.frame(
   x1  = seq_line,
-  y1  = seq_line*fact_1,
+  y1  = seq_line * fact_1,
   x_1 = seq_line,
-  y_1 = seq_line/fact_1,
+  y_1 = seq_line / fact_1,
   x2  = seq_line,
-  y2  = seq_line*fact_2,
+  y2  = seq_line * fact_2,
   x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
+  y_2 = seq_line / fact_2
+)
 
 p_W <- ggplot(
   data = df_predobs_Weight_F_IMD_AG_tmp,
   mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
+    x = Weight_obs,
+    y = predict.endpoint
+  )
+) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
+    data = df_line,
+    mapping = aes(x = x1, y = y1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
+    data = df_line,
+    mapping = aes(x = x_1, y = y_1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
+    data = df_line,
+    mapping = aes(x = x2, y = y2),
     color = col_line2
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
+    data = df_line,
+    mapping = aes(x = x_2, y = y_2),
     color = col_line2
-    )+
-  
+  ) +
   geom_abline(
-    slope=1, 
-    intercept = 0, 
+    slope = 1,
+    intercept = 0,
     color = col_line0,
     linewidth = 1
-    )+
+  ) +
   geom_pointrange(
     mapping = aes(
       ymin = low,
       ymax = up,
-    color = Facet_label,
-    shape = Experiment_type
+      color = Facet_label,
+      shape = Experiment_type
     ),
     alpha = 0.7
-  )+
+  ) +
   scale_x_log10(
     labels = scales::label_number()
-    )+
+  ) +
   scale_y_log10(
     labels = scales::label_number()
-    )+
+  ) +
   scale_color_manual(
     name = "",
     values = col_experiment
-    )+
+  ) +
   scale_shape_manual(
     name = "",
     values = c(shape_IMD, shape_EPX),
     label = c("Juveniles", "Adults")
-  )+
+  ) +
   labs(
     x = "Observed weight of earthworms (g)",
     y = "Predicted weight of earthworms (g)"
-  )+
+  ) +
   theme_minimal()
 
 fact_1 <- 2
@@ -1240,48 +1255,48 @@ seq_line <- seq(0.05, 15, 0.05)
 
 df_line <- data.frame(
   x1  = seq_line,
-  y1  = seq_line*fact_1,
+  y1  = seq_line * fact_1,
   x_1 = seq_line,
-  y_1 = seq_line/fact_1,
+  y_1 = seq_line / fact_1,
   x2  = seq_line,
-  y2  = seq_line*fact_2,
+  y2  = seq_line * fact_2,
   x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
+  y_2 = seq_line / fact_2
+)
 
 p_R <- ggplot(
   data = df_predobs_Reproduction_F_IMD_AG_tmp,
   mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
+    x = Reproduction_obs,
+    y = predict.endpoint
+  )
+) +
   geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
+    data = df_line,
+    mapping = aes(x = x1, y = y1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
+    data = df_line,
+    mapping = aes(x = x_1, y = y_1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
+    data = df_line,
+    mapping = aes(x = x2, y = y2),
     color = col_line2
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
+    data = df_line,
+    mapping = aes(x = x_2, y = y_2),
     color = col_line2
-    )+
+  ) +
   geom_abline(
-    slope=1, 
-    intercept = 0, 
+    slope = 1,
+    intercept = 0,
     color = col_line0,
     linewidth = 1
-    )+
+  ) +
   geom_pointrange(
     mapping = aes(
       ymin = low,
@@ -1290,51 +1305,46 @@ p_R <- ggplot(
     ),
     alpha = 0.7,
     shape = shape_EPX
-  )+
+  ) +
   labs(
     x = "Observed reproduction (#)",
     y = "Predicted reproduction (#)"
-  )+
+  ) +
   scale_color_manual(
     name = "Experiments",
     values = col_experiment
-    )+
+  ) +
   scale_x_log10(
-   labels = scales::label_number()#,
-  # breaks = c(Val_Ctrl, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
-   #labels = c("0", "0.001", "0.01", "0.1", "1", "10", "100", "1000")
-    )+
+    labels = scales::label_number()
+  ) +
   scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
+    labels = scales::label_number()
+  ) +
+  theme_minimal() +
   theme(
     legend.position = "none"
   )
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+p_predobs <- p_W + p_R + plot_layout(guides = "collect") +
   plot_annotation(tag_levels = "A")
 
-p_predobs_IMD <- p_W + p_R + plot_layout(guides="collect")
+p_predobs_IMD <- p_W + p_R + plot_layout(guides = "collect")
 
 p_predobs
-
 ```
 
 ```{r savepredobsF_IMD_AG, include = F}
-
 ggsave(
   filename = "F_IMD_AG_predobs.png",
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
-) 
+)
 ```
 
 ```{r, execute = F, include = F}
-
 # hjust_plot <- 0
-# 
+#
 # p_predobs_tot <- wrap_elements(p_predobs_IMD +
 #   plot_annotation(
 #     title = "Imidacloprid",
@@ -1355,7 +1365,7 @@ ggsave(
 #     )
 #   )) +
 #   plot_annotation(tag_levels = "A")
-# 
+#
 # ggsave(
 #   filename = "FG_IMDEPX_predobs.png",
 #   plot = p_predobs_tot,
@@ -1367,7 +1377,7 @@ ggsave(
 ## A
 
 ```{r, message=F, warning=F}
-#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
+#| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line.
 #| label: fig-predobs_A_IMD_A
 #| fig-height: 4
 #| fig-width: 8
@@ -1380,7 +1390,6 @@ col_line1 <- Nord_polar[4]
 col_line2 <- Nord_snow[1]
 
 col_experiment <- c(
-  
   # Control + low doses
   "#4C566A", # Control
   "#DDE8D3",
@@ -1404,77 +1413,76 @@ seq_line <- seq(0.02, 1.5, 0.01)
 
 df_line <- data.frame(
   x1  = seq_line,
-  y1  = seq_line*fact_1,
+  y1  = seq_line * fact_1,
   x_1 = seq_line,
-  y_1 = seq_line/fact_1,
+  y_1 = seq_line / fact_1,
   x2  = seq_line,
-  y2  = seq_line*fact_2,
+  y2  = seq_line * fact_2,
   x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
+  y_2 = seq_line / fact_2
+)
 
 p_W <- ggplot(
   data = df_predobs_Weight_A_IMD_A_tmp,
   mapping = aes(
-      x = Weight_obs,
-      y = predict.endpoint
-    )
-  )+
+    x = Weight_obs,
+    y = predict.endpoint
+  )
+) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
+    data = df_line,
+    mapping = aes(x = x1, y = y1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
+    data = df_line,
+    mapping = aes(x = x_1, y = y_1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
+    data = df_line,
+    mapping = aes(x = x2, y = y2),
     color = col_line2
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
+    data = df_line,
+    mapping = aes(x = x_2, y = y_2),
     color = col_line2
-    )+
-  
+  ) +
   geom_abline(
-    slope=1, 
-    intercept = 0, 
+    slope = 1,
+    intercept = 0,
     color = col_line0,
     linewidth = 1
-    )+
+  ) +
   geom_pointrange(
     mapping = aes(
       ymin = low,
       ymax = up,
-    color = Facet_label,
-    shape = Experiment_type
+      color = Facet_label,
+      shape = Experiment_type
     ),
     alpha = 0.7
-  )+
+  ) +
   scale_x_log10(
     labels = scales::label_number()
-    )+
+  ) +
   scale_y_log10(
     labels = scales::label_number()
-    )+
+  ) +
   scale_color_manual(
     name = "",
     values = col_experiment
-    )+
+  ) +
   scale_shape_manual(
     name = "",
     values = c(shape_IMD, shape_EPX),
     label = c("Juveniles", "Adults")
-  )+
+  ) +
   labs(
     x = "Observed weight of earthworms (g)",
     y = "Predicted weight of earthworms (g)"
-  )+
+  ) +
   theme_minimal()
 
 fact_1 <- 2
@@ -1484,48 +1492,48 @@ seq_line <- seq(0.05, 15, 0.05)
 
 df_line <- data.frame(
   x1  = seq_line,
-  y1  = seq_line*fact_1,
+  y1  = seq_line * fact_1,
   x_1 = seq_line,
-  y_1 = seq_line/fact_1,
+  y_1 = seq_line / fact_1,
   x2  = seq_line,
-  y2  = seq_line*fact_2,
+  y2  = seq_line * fact_2,
   x_2 = seq_line,
-  y_2 = seq_line/fact_2
-  )
+  y_2 = seq_line / fact_2
+)
 
 p_R <- ggplot(
   data = df_predobs_Reproduction_A_IMD_A_tmp,
   mapping = aes(
-      x = Reproduction_obs,
-      y = predict.endpoint
-    )
-  )+
+    x = Reproduction_obs,
+    y = predict.endpoint
+  )
+) +
   geom_path(
-    data=df_line,
-    mapping=aes(x=x1, y=y1),
+    data = df_line,
+    mapping = aes(x = x1, y = y1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_1, y=y_1),
+    data = df_line,
+    mapping = aes(x = x_1, y = y_1),
     color = col_line1
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x2, y=y2),
+    data = df_line,
+    mapping = aes(x = x2, y = y2),
     color = col_line2
-    )+
+  ) +
   geom_line(
-    data=df_line,
-    mapping=aes(x=x_2, y=y_2),
+    data = df_line,
+    mapping = aes(x = x_2, y = y_2),
     color = col_line2
-    )+
+  ) +
   geom_abline(
-    slope=1, 
-    intercept = 0, 
+    slope = 1,
+    intercept = 0,
     color = col_line0,
     linewidth = 1
-    )+
+  ) +
   geom_pointrange(
     mapping = aes(
       ymin = low,
@@ -1534,33 +1542,30 @@ p_R <- ggplot(
     ),
     alpha = 0.7,
     shape = shape_EPX
-  )+
+  ) +
   labs(
     x = "Observed reproduction (#)",
     y = "Predicted reproduction (#)"
-  )+
+  ) +
   scale_color_manual(
     name = "Experiments",
     values = col_experiment
-    )+
+  ) +
   scale_x_log10(
-   labels = scales::label_number()#,
-  # breaks = c(Val_Ctrl, 0.001, 0.01, 0.1, 1, 10, 100, 1000),
-   #labels = c("0", "0.001", "0.01", "0.1", "1", "10", "100", "1000")
-    )+
+    labels = scales::label_number()
+  ) +
   scale_y_log10(
-   labels = scales::label_number()
-    )+
-  theme_minimal()+
+    labels = scales::label_number()
+  ) +
+  theme_minimal() +
   theme(
     legend.position = "none"
   )
 
-p_predobs <- p_W + p_R +plot_layout(guides="collect") +
+p_predobs <- p_W + p_R + plot_layout(guides = "collect") +
   plot_annotation(tag_levels = "A")
 
 p_predobs
-
 ```
 
 ```{r savepredobsA_IMD_A, include = F}
@@ -1569,14 +1574,13 @@ ggsave(
   plot = p_predobs,
   width = 8, height = 4,
   path = path_fig
-) 
+)
 ```
 :::
 
 ## Predicted trajectories for Weight and Reproduction
 
 ```{r}
-
 ######### Plot preparation #####################################################
 
 Condition_order <- c(
@@ -1584,113 +1588,112 @@ Condition_order <- c(
   "C6", "C7", "C8", "C9", "C10"
 )
 
-df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Growth") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_G <- df_data_obs_IMD |>
+  filter(Experiment_type == "Growth") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |> 
-  filter(Experiment_type == "Repro") |> 
-  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |> 
-  distinct() |> 
+df_Exp_type_Dose_Condition_R <- df_data_obs_IMD |>
+  filter(Experiment_type == "Repro") |>
+  dplyr::select(ID_experiment, Experiment_type, Dose, Condition) |>
+  distinct() |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order)
   )
 
-ID_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
+ID_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_growth <- df_Exp_type_Dose_Condition_G |> 
-  filter(Experiment_type == "Growth") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_growth <- df_Exp_type_Dose_Condition_G |>
+  filter(Experiment_type == "Growth") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-ID_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
+ID_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
   pull(ID_experiment)
 
-Facet_levels_repro <- df_Exp_type_Dose_Condition_R |> 
-  filter(Experiment_type == "Repro") |> 
-  arrange(Condition) |> 
-  mutate(Facet_label = paste(Condition, ":", Dose/1000, "mg/kg")) |> 
+Facet_levels_repro <- df_Exp_type_Dose_Condition_R |>
+  filter(Experiment_type == "Repro") |>
+  arrange(Condition) |>
+  mutate(Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg")) |>
   pull(Facet_label)
 
-df_data_obs_IMD_G <- df_data_obs_IMD |> 
+df_data_obs_IMD_G <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_data_obs_IMD_R <- df_data_obs_IMD |> 
+df_data_obs_IMD_R <- df_data_obs_IMD |>
   mutate(
     Condition = dplyr::recode(Condition, "Ctrl" = "Control"),
     Condition = factor(Condition, levels = Condition_order),
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
 
 ######### F_IMD_AG ############################################################
-df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG |> 
+df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG |>
   left_join(
     df_Exp_type_Dose_Condition_G,
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG |> 
+df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG |>
   left_join(
     df_Exp_type_Dose_Condition_R,
     by = c("ID_experiment")
-  ) |> 
-  filter(Experiment_type == "Repro") |> 
+  ) |>
+  filter(Experiment_type == "Repro") |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
 
 ######### A_IMD_A ############################################################
-df_pred_full_A_IMD_A_plot_G <- df_pred_full_A_IMD_A |> 
+df_pred_full_A_IMD_A_plot_G <- df_pred_full_A_IMD_A |>
   left_join(
     df_Exp_type_Dose_Condition_G,
     by = c("ID_experiment")
-  ) |> 
+  ) |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_growth),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_growth)
   )
 
-df_pred_full_A_IMD_A_plot_R <- df_pred_full_A_IMD_A |> 
+df_pred_full_A_IMD_A_plot_R <- df_pred_full_A_IMD_A |>
   left_join(
     df_Exp_type_Dose_Condition_R,
     by = c("ID_experiment")
-  ) |> 
-  filter(Experiment_type == "Repro") |> 
+  ) |>
+  filter(Experiment_type == "Repro") |>
   mutate(
     ID_experiment = factor(ID_experiment, levels = ID_levels_repro),
-    Facet_label = paste(Condition, ":", Dose/1000, "mg/kg"),
+    Facet_label = paste(Condition, ":", Dose / 1000, "mg/kg"),
     Facet_label = factor(Facet_label, levels = Facet_levels_repro)
   )
-
 ```
 
 ::: panel-tabset
@@ -1703,242 +1706,247 @@ df_pred_full_A_IMD_A_plot_R <- df_pred_full_A_IMD_A |>
 #| fig-width: 12
 
 # Plot
-  alpha_ribbon <- 0.15
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 2
-  max_WG <- 0.55
-  max_WR <- 1.1
-  max_RR <- 10
-  
+alpha_ribbon <- 0.15
+line_width <- 1.1
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 2
+max_WG <- 0.55
+max_WR <- 1.1
+max_RR <- 10
+
 col_exp1 <- c(
   Nord_aurora[4],
   rev(nord("aurora", 12)[1:10])
 )
 
 col_experiment <- rep(col_exp1, 2)
-  
-  pW_G <- ggplot()+
 
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+pW_G <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),
+    mapping =
       aes(
         x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
+        y = Weight_obs,
         color = ID_experiment
       ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on juvenile growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on juvenile growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
-    theme_minimal()+
-    lims(y=c(0, max_WG))+
-  theme(
-    plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
-  )
-  
-  pW_R <- ggplot()+
-
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
-        color = ID_experiment
-      ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on adult growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
-    breaks = seq(0, 28, by = 14)
-  ) +
-    theme_minimal()+
-    lims(y=c(0, max_WR))+
-  theme(
-    plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
-  )
-  
-   pR_R <- ggplot()+
-
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
-        color = ID_experiment
-      ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Cumulated reproduction (#)",
-      title ="Effect of imidacloprid on reproduction"
-    )+
-     scale_x_continuous(
-    limits = c(0, 28),        
-    breaks = seq(0, 28, by = 14)
-  ) +
-    theme_minimal()+
-     lims(y = c(0,max_RR))+
+  theme_minimal() +
+  lims(y = c(0, max_WG)) +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
 
-p_WR_R <- pW_R + pR_R 
+pW_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
+      aes(
+        x = Time,
+        y = Weight_obs,
+        color = ID_experiment
+      ),
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on adult growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme_minimal() +
+  lims(y = c(0, max_WR)) +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+pR_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
+      aes(
+        x = Time,
+        y = Reproduction_obs,
+        color = ID_experiment
+      ),
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)",
+    title = "Effect of imidacloprid on reproduction"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme_minimal() +
+  lims(y = c(0, max_RR)) +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+p_WR_R <- pW_R + pR_R
 
 p_WR_summary <- pW_G + pW_R + pR_R +
-  plot_layout(ncol=3)
+  plot_layout(ncol = 3)
 p_WR_summary
-
 ```
 
 ```{r savetrajWRF_IMD_AG_summary, include = F}
 ggsave(
-  filename="F_IMD_AG_trajWR_G.png", 
-  plot=pW_G, 
-  width=6, height = 6, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_trajWR_G.png",
+  plot = pW_G,
+  width = 6, height = 6,
+  path = path_fig
+)
 
 ggsave(
-  filename="F_IMD_AG_trajWR_R.png", 
-  plot=p_WR_R, 
-  width=12, height = 6, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_trajWR_R.png",
+  plot = p_WR_R,
+  width = 12, height = 6,
+  path = path_fig
+)
 ggsave(
-  filename="F_IMD_AG_trajWR_summary.png", 
-  plot=p_WR_summary, 
-  width=12, height = 9, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_trajWR_summary.png",
+  plot = p_WR_summary,
+  width = 12, height = 9,
+  path = path_fig
+)
 ```
 
 ## A
@@ -1950,237 +1958,241 @@ ggsave(
 #| fig-width: 12
 
 # Plot
-  alpha_ribbon <- 0.15
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 2
-  
+alpha_ribbon <- 0.15
+line_width <- 1.1
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 2
+
 col_exp1 <- c(
   Nord_aurora[4],
   rev(nord("aurora", 12)[1:10])
 )
 
 col_experiment <- rep(col_exp1, 2)
-  
-  pW_G <- ggplot()+
 
-    geom_ribbon(
-      data = subset(df_pred_full_A_IMD_A_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+pW_G <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),
+    mapping =
       aes(
         x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_A_IMD_A_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
+        y = Weight_obs,
         color = ID_experiment
       ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of epoxiconazole on juvenile growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of epoxiconazole on juvenile growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
-    theme_minimal()+
-  theme(
-    plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
-  )
-  
-  pW_R <- ggplot()+
-
-    geom_ribbon(
-      data = subset(df_pred_full_A_IMD_A_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_A_IMD_A_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
-        color = ID_experiment
-      ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of epoxiconazole on adult growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
-    breaks = seq(0, 28, by = 14)
-  ) +
-    theme_minimal()+
-  theme(
-    plot.title = element_text(face = "bold", size = 11),
-    legend.position = "none"
-  )
-  
-   pR_R <- ggplot()+
-
-    geom_ribbon(
-      data = subset(df_pred_full_A_IMD_A_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_A_IMD_A_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
-        color = ID_experiment
-      ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction_obs, 
-          color = ID_experiment  
-        ),
-      alpha = 0.7,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Experiments",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Facet_label,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Cumulated reproduction (#)",
-      title ="Effect of epoxiconazole on reproduction"
-    )+
-     scale_x_continuous(
-    limits = c(0, 28),        
-    breaks = seq(0, 28, by = 14)
-  ) +
-    theme_minimal()+
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
 
-p_WR_R <- pW_R + pR_R 
+pW_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
+      aes(
+        x = Time,
+        y = Weight_obs,
+        color = ID_experiment
+      ),
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of epoxiconazole on adult growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+pR_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_A_IMD_A_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
+      aes(
+        x = Time,
+        y = Reproduction_obs,
+        color = ID_experiment
+      ),
+    alpha = 0.7,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Experiments",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Facet_label,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)",
+    title = "Effect of epoxiconazole on reproduction"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
+    breaks = seq(0, 28, by = 14)
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 11),
+    legend.position = "none"
+  )
+
+p_WR_R <- pW_R + pR_R
 
 p_WR_summary <- pW_G + pW_R + pR_R +
-  plot_layout(ncol=3)
+  plot_layout(ncol = 3)
 p_WR_summary
-
-
 ```
 
 ```{r savetrajWRA_IMD_A_summary, include = F}
 ggsave(
-  filename="A_IMD_A_trajWR_G.png", 
-  plot=pW_G, 
-  width=6, height = 6, 
-  path=path_fig
-  )
+  filename = "A_IMD_A_trajWR_G.png",
+  plot = pW_G,
+  width = 6, height = 6,
+  path = path_fig
+)
 
 ggsave(
-  filename="A_IMD_A_trajWR_R.png", 
-  plot=p_WR_R, 
-  width=12, height = 6, 
-  path=path_fig
-  )
+  filename = "A_IMD_A_trajWR_R.png",
+  plot = p_WR_R,
+  width = 12, height = 6,
+  path = path_fig
+)
 ggsave(
-  filename="A_IMD_A_trajWR_summary.png", 
-  plot=p_WR_summary, 
-  width=12, height = 9, 
-  path=path_fig
-  )
+  filename = "A_IMD_A_trajWR_summary.png",
+  plot = p_WR_summary,
+  width = 12, height = 9,
+  path = path_fig
+)
 ```
 :::
 
@@ -2198,7 +2210,7 @@ IMD_high_doses <- c(890, 1581, 5000)
 Dose_level_levels <- c("Low doses", "Intermediate doses", "High doses")
 
 
-df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG_plot_G |> 
+df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG_plot_G |>
   mutate(
     Dose_level = factor(case_when(
       Dose %in% IMD_low_doses ~ "Low doses",
@@ -2207,7 +2219,7 @@ df_pred_full_F_IMD_AG_plot_G <- df_pred_full_F_IMD_AG_plot_G |>
     ), Dose_level_levels)
   )
 
-df_data_obs_IMD_G <- df_data_obs_IMD_G |> 
+df_data_obs_IMD_G <- df_data_obs_IMD_G |>
   mutate(
     Dose_level = factor(case_when(
       Dose %in% IMD_low_doses ~ "Low doses",
@@ -2216,7 +2228,7 @@ df_data_obs_IMD_G <- df_data_obs_IMD_G |>
     ), Dose_level_levels)
   )
 
-df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG_plot_R |> 
+df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG_plot_R |>
   mutate(
     Dose_level = factor(case_when(
       Dose %in% IMD_low_doses ~ "Low doses",
@@ -2225,7 +2237,7 @@ df_pred_full_F_IMD_AG_plot_R <- df_pred_full_F_IMD_AG_plot_R |>
     ), Dose_level_levels)
   )
 
-df_data_obs_IMD_R <- df_data_obs_IMD_R |> 
+df_data_obs_IMD_R <- df_data_obs_IMD_R |>
   mutate(
     Dose_level = factor(case_when(
       Dose %in% IMD_low_doses ~ "Low doses",
@@ -2233,7 +2245,6 @@ df_data_obs_IMD_R <- df_data_obs_IMD_R |>
       Dose %in% IMD_high_doses ~ "High doses"
     ), Dose_level_levels)
   )
-
 ```
 
 ```{r, message=F, warning=F}
@@ -2243,19 +2254,18 @@ df_data_obs_IMD_R <- df_data_obs_IMD_R |>
 #| fig-width: 12
 
 # Plot
-  alpha_ribbon <- 0.15
-  alpha_point <- 0.9
-  line_width <- 1.1
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 1
-  max_WG <- 0.55
-  max_WR <- 1.1
-  max_RR <- 10
-  
+alpha_ribbon <- 0.15
+alpha_point <- 0.9
+line_width <- 1.1
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 1
+max_WG <- 0.55
+max_WR <- 1.1
+max_RR <- 10
+
 
 col_experiment <- c(
-  
   # Control + low doses
   "#4C566A", # Control
   "#DDE8D3",
@@ -2274,215 +2284,226 @@ col_experiment <- c(
   "#91434C"
 )
 
-  
-  pW_G <- ggplot()+
 
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
+pW_G <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_G, 
+      Endpt == "Weight" & Experiment_type == "Growth"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),
+    mapping =
       aes(
         x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_G, Endpt == "Weight" & Experiment_type == "Growth"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
+        y = Weight_obs,
         color = ID_experiment
       ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_G, Experiment_type == "Growth"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = alpha_point,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Condition",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Condition",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Dose_level,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on juvenile growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
+    alpha = alpha_point,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Condition",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Condition",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Dose_level,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on juvenile growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
-    theme_minimal()+
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none",
     strip.text = element_blank()
   )
-  
-  pW_R <- ggplot()+
 
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
+pW_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = ID_experiment
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Weight" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = ID_experiment
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
       aes(
         x = Time,
-        ymax = up,
-        ymin = low,
-        fill = ID_experiment
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Weight" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
+        y = Weight_obs,
         color = ID_experiment
       ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Weight_obs, 
-          color = ID_experiment  
-        ),
-      alpha = alpha_point,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "Condition",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "Condition",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Dose_level,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Weight (g)",
-      title ="Effect of imidacloprid on adult growth"
-    )+
-    scale_x_continuous(
-    limits = c(0, 28),        
+    alpha = alpha_point,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "Condition",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "Condition",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Dose_level,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Weight (g)",
+    title = "Effect of imidacloprid on adult growth"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
-    theme_minimal()+
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.position = "none"
   )
-  
-   pR_R <- ggplot()+
 
-    geom_ribbon(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
+pR_R <- ggplot() +
+  geom_ribbon(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      ymax = up,
+      ymin = low,
+      fill = Facet_label
+    ),
+    alpha = alpha_ribbon
+  ) +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_R, 
+      Endpt == "Reproduction" & Experiment_type == "Repro"
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = Facet_label
+    ),
+    linewidth = line_width,
+    alpha = alpha_line
+  ) +
+  geom_point(
+    data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),
+    mapping =
       aes(
         x = Time,
-        ymax = up,
-        ymin = low,
-        fill = Facet_label
-      ),
-      alpha = alpha_ribbon
-    )+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_R, Endpt == "Reproduction" & Experiment_type == "Repro"),
-      aes(
-        x = Time,
-        y = predict.endpoint,
+        y = Reproduction_obs,
         color = Facet_label
       ),
-      linewidth = line_width,
-      alpha = alpha_line
-    )+
-    
-    geom_point(
-      data = subset(df_data_obs_IMD_R, Experiment_type == "Repro"),    
-      mapping = 
-        aes(  
-          x = Time, 
-          y = Reproduction_obs, 
-          color = Facet_label  
-        ),
-      alpha = alpha_point,
-      stroke = point_stroke
-    )+
-    
-    scale_color_manual(
-      name = "",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "",
-      values = col_experiment
-      )+
-    facet_wrap(
-      ~Dose_level,
-      ncol = wrap_nb_col
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Cumulated reproduction (#)",
-      title ="Effect of imidacloprid on reproduction"
-    )+
-     scale_x_continuous(
-    limits = c(0, 28),        
+    alpha = alpha_point,
+    stroke = point_stroke
+  ) +
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "",
+    values = col_experiment
+  ) +
+  facet_wrap(
+    ~Dose_level,
+    ncol = wrap_nb_col
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Cumulated reproduction (#)",
+    title = "Effect of imidacloprid on reproduction"
+  ) +
+  scale_x_continuous(
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
-    theme_minimal()+
+  theme_minimal() +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.title = element_text(face = "bold"),
     strip.text = element_blank()
   )
 
-p_WR_R <- pW_R + pR_R 
+p_WR_R <- pW_R + pR_R
 
 p_WR_summary <- pW_G + pW_R + pR_R +
-  plot_layout(ncol=3)
+  plot_layout(ncol = 3)
 
 p_WR_summary
-
 ```
 
 ```{r savetrajWRF_IMD_AG_article, include = F}
 ggsave(
-  filename="F_IMD_AG_trajWR_article.png", 
-  plot=p_WR_summary, 
-  width=12, height = 8, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_trajWR_article.png",
+  plot = p_WR_summary,
+  width = 12, height = 8,
+  path = path_fig
+)
 ```
+
+Overall, the selected DEB-TKTD model captured the main concentration-response patterns observed for juvenile growth, adult growth, and reproduction (@fig-pred_F_IMD_AG_summary_article, @fig-predobs_F_IMD_AG & @fig-pred_F_IMD_AGsummary). It reproduced the general decline in life-history performance with increasing imidacloprid exposure, supporting a physiological mode of action involving both reduced assimilation and altered growth processes.
+
+Nevertheless, some systematic deviations remained across the exposure gradient. The model overestimated the effect on juvenile growth at intermediate imidacloprid concentrations (0.158 and 0.5 mg$\cdot$kg$^{-1}$) resulting in predicted values below the observations. Reproduction was similarly underestimated over this intermediate concentration range. At the highest concentrations, between 1.6 and 5 mg$\cdot$kg$^{-1}$, the model moderately underestimated the effect on growth and cocoon production.
+
+We can also look at the predicted internal concentrations :
 
 ```{r, message=F, warning=F}
 #| fig-cap: Predicted internal concentration in imadacloprid for each exposure condition.
@@ -2491,19 +2512,18 @@ ggsave(
 #| fig-width: 6
 
 # Plot
-  alpha_ribbon <- 0.15
-  alpha_point <- 0.9
-  line_width <- 0.8
-  point_stroke <- 0.9
-  alpha_line <- 0.7
-  wrap_nb_col <- 1
-  max_WG <- 0.55
-  max_WR <- 1.1
-  max_RR <- 10
-  
+alpha_ribbon <- 0.15
+alpha_point <- 0.9
+line_width <- 0.8
+point_stroke <- 0.9
+alpha_line <- 0.7
+wrap_nb_col <- 1
+max_WG <- 0.55
+max_WR <- 1.1
+max_RR <- 10
+
 
 col_experiment <- c(
-  
   # Control + low doses
   "#4C566A", # Control
   "#DDE8D3",
@@ -2524,73 +2544,73 @@ col_experiment <- c(
 
 df_pred_full_F_IMD_AG_plot_tot <- rbind(df_pred_full_F_IMD_AG_plot_G, df_pred_full_F_IMD_AG_plot_R)
 
-  
-  p_Ci_summary <- ggplot()+
-    
-    geom_line(
-      data = subset(df_pred_full_F_IMD_AG_plot_tot, Endpt == "Ci" & Experiment_type %in% c("Growth", "Repro")),
-      aes(
-        x = Time,
-        y = predict.endpoint,
-        color = Facet_label,
-        linetype = Experiment_type
-      ),
-      linewidth = line_width
-    )+
-    
-    scale_color_manual(
-      name = "",
-      values = col_experiment
-      )+
-    scale_fill_manual(
-      name = "",
-      values = col_experiment
-      )+
-    scale_linetype_manual(
-      name = "",
-      label = c("Juveniles", "Adults"),
-      values = c(3, 1)
-    )+
-    facet_wrap(
-      ~Dose_level,
-      ncol = wrap_nb_col,
-      scales = "free_y"
-      )+
-    labs(
-      x="Time (days)", 
-      y = "Internal concentration of imidacloprid (ng/g)"
-    )+
-    theme_minimal()+
+
+p_Ci_summary <- ggplot() +
+  geom_line(
+    data = subset(
+      df_pred_full_F_IMD_AG_plot_tot, 
+      Endpt == "Ci" & Experiment_type %in% c("Growth", "Repro")
+    ),
+    aes(
+      x = Time,
+      y = predict.endpoint,
+      color = Facet_label,
+      linetype = Experiment_type
+    ),
+    linewidth = line_width
+  ) +
+  scale_color_manual(
+    name = "",
+    values = col_experiment
+  ) +
+  scale_fill_manual(
+    name = "",
+    values = col_experiment
+  ) +
+  scale_linetype_manual(
+    name = "",
+    label = c("Juveniles", "Adults"),
+    values = c(3, 1)
+  ) +
+  facet_wrap(
+    ~Dose_level,
+    ncol = wrap_nb_col,
+    scales = "free_y"
+  ) +
+  labs(
+    x = "Time (days)",
+    y = "Internal concentration of imidacloprid (ng/g)"
+  ) +
+  theme_minimal() +
   scale_x_continuous(
-    limits = c(0, 28),        
+    limits = c(0, 28),
     breaks = seq(0, 28, by = 14)
   ) +
   theme(
     plot.title = element_text(face = "bold", size = 11),
     legend.title = element_text(face = "bold")
   )
-  
+
 
 p_Ci_summary
 
 p_Ci_summary_IMD <- p_Ci_summary
-
 ```
 
 ```{r savetrajCi_F_IMD_AG_article, include = F}
 ggsave(
-  filename="F_IMD_AG_trajCi_article.png", 
-  plot=p_Ci_summary, 
-  width=5, height = 6, 
-  path=path_fig
-  )
+  filename = "F_IMD_AG_trajCi_article.png",
+  plot = p_Ci_summary,
+  width = 5, height = 6,
+  path = path_fig
+)
 ```
 
 ```{r}
 #| tbl-cap: Predicted $C_{i, \mathrm{max}}$ and $t_{\mathrm{max}}$ for each exposure concentration and experiment.
-#| label: tbl-Cirecap
+#| label: tbl-CirecapIMD
 
-df_pred_Ci_F_IMD_AG_summary <- subset(df_pred_full_F_IMD_AG, Endpt == "Ci" & Time !=0)|>
+df_pred_Ci_F_IMD_AG_summary <- subset(df_pred_full_F_IMD_AG, Endpt == "Ci" & Time != 0) |>
   group_by(ID_experiment) |>
   filter(predict.endpoint == max(predict.endpoint, na.rm = TRUE)) |>
   slice_min(Time, n = 1, with_ties = FALSE) |>
@@ -2599,3 +2619,5 @@ df_pred_Ci_F_IMD_AG_summary <- subset(df_pred_full_F_IMD_AG, Endpt == "Ci" & Tim
 
 df_pred_Ci_F_IMD_AG_summary |> datatable()
 ```
+
+Predicted internal concentrations increased throughout the 28-day exposure at the four lowest imidacloprid concentrations, with maximum values reached at the end of the experiment (@fig-pred_F_IMD_AG_summary_Ciarticle, @tbl-CirecapIMD). From 0.16 mg$\cdot$kg$^{-1}$ onwards, internal concentrations reached the estimated saturation level of 1,676 ng$\cdot$g$^{-1}$, with the time required to reach this plateau decreasing as external concentration increased. Consequently, the highest exposure treatments differed mainly in how rapidly the saturation level was reached rather than in their maximal internal concentration. Predicted concentrations were slightly higher in adults than in juveniles at the lower exposure levels, but both life stages converged towards the same saturation plateau. The estimated no-effect concentration of 1,132 ng$\cdot$g$^{-1}$ was exceeded only from 0.16 mg$\cdot$kg$^{-1}$ onwards, corresponding to the concentration range in which toxic effects were predicted to emerge.

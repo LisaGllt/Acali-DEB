@@ -10,10 +10,12 @@ lab_chains <- c("1", "2", "3", "4", "5", "6", "7", "8")
 
 # Case of isolated adults
 
+The case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood ($\kappa_J$), and (ii) introducing a transition toward the adult allocation fraction ($\kappa_A$) after maturation, as implemented for grouped adults.
+
 ## Load data
 
 ```{r}
-path_fig <- here::here("fig/DEB_Models")
+path_fig   <- here::here("fig/DEB_Models")
 path_files <- here::here("mod/Y_DEB_IsolatedAdultes")
 
 col_experiment <- c(
@@ -29,7 +31,7 @@ l_Experiments_IsolatedAdults <- c(
   )
 
 Adults_alone <- TRUE
-OM_diff <- TRUE
+OM_diff      <- TRUE
 
 df_data_obs <- f_import_data_DEB(l_Experiments_IsolatedAdults, Adults_alone)
 ```
@@ -38,15 +40,26 @@ df_data_obs <- f_import_data_DEB(l_Experiments_IsolatedAdults, Adults_alone)
 
 ```{r setpointfullin}
 
+# We use the tab_setpoint file produced by 
+# the generation of the W.K.C.e model results
+
 Nb_experiment <- length(l_Experiments_IsolatedAdults)
-step_sim <- 0.05
+step_sim <- 0.05 # Must be small enough to not fail the integration
+
+# We keep a limited set of times for the graphics
 select_times <- seq(0,400, 0.1)
 
+# Endpoints to simulate
 Endpoints_print <- "Weight,
     Reproduction"
 
+# List of the parameters in the same order as in the tab_setpoint
+l_param_name <- c("Fm", "pAm", "r_pAm_pM", "v", 
+                  "kapJ", "kapA", "Ehp", "E_coc", 
+                  "rOM_ClxHorse", "K", "dv", "de", "tau", 
+                  "Sigma_W")
 
-l_param_name <- c("Fm", "pAm", "r_pAm_pM", "v", "kapJ", "kapA", "Ehp", "E_coc", "rOM_ClxHorse", "K", "dv", "de", "tau", "Sigma_W")
+# Generate the .in simulation files for MCSim
 
 f_In_Setpoint_full(
   file.path(path_files, "kapJ"), l_Experiments_IsolatedAdults, 
@@ -64,7 +77,11 @@ f_In_Setpoint_full(
 
 ```{bash, eval=F, execute=F}
 
-# Put the tab_setpoint.out from the best model in each folder
+# Put the tab_setpoint.out from the best model in each folder : 
+# "mod/Y_DEB_IsolatedAdultes/kapA"
+# "mod/Y_DEB_IsolatedAdultes/kapJ"
+
+# Run the simulations
 
 for j in $(seq 1 3); do
 ./mcsim.DEBcali_A DEB_setpoint_full_${j}.in
@@ -76,6 +93,8 @@ done
 ```
 
 ```{r, message=F, warning=F}
+
+# Read results
 
 file_rds_kapA <- file.path(file.path(path_files, "kapA"), paste0("Sim.Res.Exp.full.rds"))
 
@@ -108,6 +127,7 @@ df_data_obs <- df_data_obs |>
     )
   )
 
+# Type of model
 df_pred_full_kapJ$kappa <- "J"
 df_pred_full_kapA$kappa <- "A"
 
@@ -127,11 +147,11 @@ df_data_obs_full <- bind_rows(df_data_obs_kapJ, df_data_obs_kapA) |>
 #| fig-height: 4
 #| fig-width: 8
 
-alpha_ribbon <- 0.15
-line_width <- 1.1
-point_stroke <- 0.9
-alpha_line <- 0.7
-wrap_nb_col <- 2
+alpha_ribbon  <- 0.15
+line_width    <- 1.1
+point_stroke  <- 0.9
+alpha_line    <- 0.7
+wrap_nb_col   <- 2
 size_subtitle <- 8
 
 col_kappa <- c(Nord_frost[2], Nord_frost[4], Nord_frost[4])
@@ -337,18 +357,17 @@ p_D1 <- ggplot()+
   )
 
 pW <- p_XP11 + p_XP41 + p_D1 + 
-  plot_layout(ncol=3, guides = "collect") # +
-  # plot_annotation(tag_levels = "A")
+  plot_layout(ncol=3, guides = "collect")
 pW
 ```
 
 ```{r savetrajW, include = F}
 ggsave(
-  filename="Y_IsolatedAdults_trajW.png", 
-  plot=pW, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "Y_IsolatedAdults_trajW.png",
+  plot = pW,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
 
 ```{r}
@@ -358,10 +377,10 @@ ggsave(
 #| fig-width: 8
 
 alpha_ribbon <- 0.15
-line_width <- 1.1
+line_width   <- 1.1
 point_stroke <- 0.9
-alpha_line <- 0.7
-wrap_nb_col <- 2
+alpha_line   <- 0.7
+wrap_nb_col  <- 2
 
 col_kappa <- c(Nord_frost[2], Nord_frost[4])
 col_data <- Nord_polar[4]
@@ -560,16 +579,19 @@ p_D1 <- ggplot()+
   )
 
 pR <- p_XP11 + p_XP41 + p_D1 + 
-  plot_layout(ncol=3, guides = "collect") # +
-  # plot_annotation(tag_levels = "A")
+  plot_layout(ncol=3, guides = "collect")
 pR
 ```
 
 ```{r savetrajR, include = F}
 ggsave(
-  filename="Y_IsolatedAdults_trajR.png", 
-  plot=pR, 
-  width=8, height = 4, 
-  path=path_fig
-  )
+  filename = "Y_IsolatedAdults_trajR.png",
+  plot = pR,
+  width = 8, height = 4,
+  path = path_fig
+)
 ```
+
+The formulation maintaining the juvenile allocation fraction throughout adulthood ($\kappa_J$) reproduced the observed growth trajectories of isolated adults more accurately than the formulation including a transition toward the adult allocation fraction ($\kappa_A$), which systematically underestimated growth after maturation (@fig-predkapW). This result suggests that isolated adults maintain growth patterns closer to those of juveniles than to those of grouped reproducing adults.
+
+However, despite the absence of observed cocoon production in isolated adults, both formulations still predicted a non-zero allocation of energy toward reproduction after maturation (@fig-predkapR). This discrepancy indicates that the energetic fate of the reproductive flux remains inadequately represented in the current model formulations and must be further investigated.
