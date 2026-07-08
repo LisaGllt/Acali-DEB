@@ -458,7 +458,7 @@ df_LL_BIC <- data.frame(
 
 ```
 
-```{r resall}
+```{r resall, message=FALSE, warning=FALSE}
 #| tbl-cap: Estimation results from all models. 
 #| label: tbl-ResModels
 
@@ -708,7 +708,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_A_FLYw
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_FLYw)
@@ -730,7 +730,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_B_FLYe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_B_FLYe)
@@ -752,7 +752,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_C_CWYe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_C_CWYe)
@@ -774,7 +774,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_D_CWKe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_D_CWKe)
@@ -796,7 +796,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_E_CLYe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_E_CLYe)
@@ -818,7 +818,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_F_CLKe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_F_CLKe)
@@ -840,7 +840,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_G_FLKe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_G_FLKe)
@@ -862,7 +862,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_H_FWKe
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_H_FWKe)
@@ -892,7 +892,6 @@ ggsave(
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_A_FLYw)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -915,7 +914,6 @@ f_Plot_ipairs(MCMC_out_A_FLYw, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_B_FLYe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -938,7 +936,6 @@ f_Plot_ipairs(MCMC_out_B_FLYe, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_C_CWYe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -961,7 +958,6 @@ f_Plot_ipairs(MCMC_out_C_CWYe, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_D_CWKe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1025,7 +1021,6 @@ dev.off()
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_E_CLYe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1048,7 +1043,6 @@ f_Plot_ipairs(MCMC_out_E_CLYe, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_F_CLKe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1071,7 +1065,6 @@ f_Plot_ipairs(MCMC_out_F_CLKe, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_G_FLKe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1094,7 +1087,6 @@ f_Plot_ipairs(MCMC_out_G_FLKe, file_rds)
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_H_FWKe)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1291,7 +1283,7 @@ ggsave(
 
 ## Predicted vs. Observed
 
-```{r setpointfullin}
+```{r setpointfullin, message=FALSE, warning=FALSE}
 
 Nb_experiment <- 12
 lim_yrepro <- 100
@@ -1390,7 +1382,7 @@ for j in $(seq 1 12); do
 done
 ```
 
-```{r, message = F, warning = F}
+```{r, message=F, warning=F}
 
 width_plot <- 12
 height_plot <- 12
@@ -1463,7 +1455,7 @@ if (file.exists(file_rds_H_FWKe)) {
 
 ```
 
-```{r}
+```{r, message=F, warning=F}
 
 Nb_experiment <- 12
 
@@ -3117,7 +3109,7 @@ ggsave(
 
 ### Folds
 
-```{r countfold, warning=F}
+```{r countfold, warning=F, message=F}
 #| tbl-cap: Folds for Weight and Reproduction for each model.
 
 No_round <- 1
@@ -5147,7 +5139,7 @@ p_dens <- p_freal_dens + p_OM_dens + p_OMhorse_dens + p_OMsoil_dens + p_OM_horse
 
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 #| fig-cap: Predicted function response and organic matter dynamic.
 #| label: fig-OMdynDens
 #| fig-height: 6

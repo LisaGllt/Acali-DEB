@@ -51,8 +51,8 @@ df_XP1_2 <- subset(df_XP1, Experiment == "Bart2019_XP1_2")
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 1_1 from @bart_2019.
 #| label: fig-XP1_1
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 364
 
@@ -126,8 +126,8 @@ p
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 1_2 from @bart_2019.
 #| label: fig-XP1_2
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 364
 
@@ -225,8 +225,8 @@ df_XP1_2_mean <- df_XP1_2_mean |>
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 1_1 from @bart_2019.
 #| label: fig-XP1_1_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 364
 
@@ -318,8 +318,8 @@ p
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 1_2 from @bart_2019.
 #| label: fig-XP1_2_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 364
 
@@ -427,8 +427,8 @@ df_XP2 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Ba
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 2 from @bart_2019.
 #| label: fig-XP2
-#| fig-height: 4
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 84
 
@@ -480,8 +480,8 @@ df_XP2_mean <- df_XP2_mean |>
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 2 from @bart_2019.
 #| label: fig-XP2_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 85
 
@@ -589,8 +589,8 @@ df_XP3 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Ba
 ```{r}
 #| fig-cap: Experiment 3 from @bart_2019.
 #| label: fig-XP3
-#| fig-height: 4
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 238
 
@@ -648,8 +648,8 @@ df_XP3_mean <- df_XP3_mean |>
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 3 from @bart_2019.
 #| label: fig-XP3_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 240
 
@@ -764,8 +764,8 @@ df_XP4_2 <- subset(df_XP4, Experiment == "Bart2019_XP4_2")
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_1 from @bart_2019.
 #| label: fig-XP4_1
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 392
 
@@ -839,8 +839,8 @@ p
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_2 from @bart_2019.
 #| label: fig-XP4_2
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 392
 
@@ -938,8 +938,8 @@ df_XP4_2_mean <- df_XP4_2_mean |>
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_1 from @bart_2019.
 #| label: fig-XP4_1_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 240
 
@@ -1036,8 +1036,8 @@ p
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 4_2 from @bart_2019.
 #| label: fig-XP4_2_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 240
 
@@ -1145,8 +1145,8 @@ df_XP5 <- read_excel(here::here("data/Data_expe_raw/Data_Acali.xlsx"), sheet="Ba
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 5 from @bart_2019.
 #| label: fig-XP5
-#| fig-height: 4
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 112
 
@@ -1198,8 +1198,8 @@ df_XP5_mean <- df_XP5_mean |>
 ```{r, warning=F, message=F}
 #| fig-cap: Experiment 5 from @bart_2019.
 #| label: fig-XP5_mean
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 112
 
@@ -1320,8 +1320,8 @@ p <- p_XP1_1_w +
 ```{r, warning=F, message=F}
 #| fig-cap: Experiments from @bart_2019.
 #| label: fig-XPmeanfull
-#| fig-height: 8
-#| fig-width: 6
+#| fig-height: 6
+#| fig-width: 8
 
 xmax <- 370
 

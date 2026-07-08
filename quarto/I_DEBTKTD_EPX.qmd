@@ -701,7 +701,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_G_EPX_AR
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 
@@ -724,7 +724,7 @@ ggsave(
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
 #| label: fig-like_A_EPX_A
-#| fig-height: 8
+#| fig-height: 4
 #| fig-width: 8
 
 p_LL <- f_Plots_MCMC_Likelihood(MCMC_out_A_EPX_A)
@@ -749,11 +749,10 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
 #| label: fig-chainsconvergence_G_EPX_AR
-#| fig-height: 8
+#| fig-height: 5
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_G_EPX_AR)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -815,11 +814,10 @@ dev.off()
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
 #| label: fig-chainsconvergence_A_EPX_A
-#| fig-height: 8
+#| fig-height: 5
 #| fig-width: 8
 
 gelman <- f_Plot_Convergence(MCMC_out_A_EPX_A)
-print(gelman)
 ```
 
 ```{r corr, message=F, warning=F}
@@ -1657,7 +1655,7 @@ df_pred_full_A_EPX_A_plot_R <- df_pred_full_A_EPX_A |>
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_G_EPX_ARsummary
-#| fig-height: 18
+#| fig-height: 10
 #| fig-width: 12
 
 # Plot
@@ -1909,7 +1907,7 @@ ggsave(
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each exposure condition and experiment.
 #| label: fig-pred_A_EPX_Asummary
-#| fig-height: 18
+#| fig-height: 10
 #| fig-width: 12
 
 # Plot

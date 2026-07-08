@@ -282,8 +282,8 @@ df_GrowthRate_mean <- df_GrowthRate |>
 ```{r, warning = F, message = F}
 #| fig-cap: Growth rates of earthworms per condition
 #| label: fig-densgrowthratedens
-#| fig-height: 6
-#| fig-width: 8
+#| fig-height: 4
+#| fig-width: 6
 
 p <- ggplot(
   data = df_GrowthRate,
@@ -414,7 +414,7 @@ p
 ```{r, warning = F, message = F}
 #| fig-cap: Reproduction of earthworms per conditions.
 #| label: fig-densegg
-#| fig-height: 8
+#| fig-height: 6
 #| fig-width: 8
 
 xmax <- 170

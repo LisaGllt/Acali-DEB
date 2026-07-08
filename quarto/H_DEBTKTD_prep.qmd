@@ -163,10 +163,13 @@ df_data_obs_IMD_R <- df_data_obs_IMD |>
   filter(!(Time == 14))
 ```
 
+::: panel-tabset
+## IMD
+
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Available data on the toxicity of imidacloprid on earthworm growth and reproduction.
 #| label: fig-DataIMD
-#| fig-height: 18
+#| fig-height: 12
 #| fig-width: 12
 
 # Plot
@@ -303,10 +306,12 @@ p_WR_summary_IMD
 
 ```
 
+## EPX
+
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Available data on the toxicity of epoxiconazole on earthworm growth and reproduction.
 #| label: fig-DataEPX
-#| fig-height: 18
+#| fig-height: 10
 #| fig-width: 12
 
 # Plot
@@ -441,6 +446,7 @@ p_WR_summary_EPX <- pW_G_EPX + pW_R_EPX + pR_R_EPX +
 p_WR_summary_EPX
 
 ```
+:::
 
 ## Adjustment of the DEB model
 
@@ -765,7 +771,7 @@ writeLines(
 
 ```
 
-```{r simDEBrefit}
+```{r simDEBrefit, results=FALSE, message=F}
 
 # Run the simulations with the control individuals for both 
 # the old and the new values
