@@ -434,34 +434,66 @@ T_c &amp;= s_A (T_{exp}+273.15 \geq T_{ref}) s_{rH} + (T_{exp} + 273.15 &lt; T_{
 </section>
 <section id="tested-model-formulations" class="level2" data-number="5.2">
 <h2 data-number="5.2" class="anchored" data-anchor-id="tested-model-formulations"><span class="header-section-number">5.2</span> Tested model formulations</h2>
-<p>Our model formulation is based on the standard DEB model <span class="citation" data-cites="kooijman_2009a">(<a href="references.html#ref-kooijman_2009a" role="doc-biblioref">Kooijman, 2009</a>)</span>, using the extended model developed by <span class="citation" data-cites="gergs_2022">Gergs et al. (<a href="references.html#ref-gergs_2022" role="doc-biblioref">2022</a>)</span> as a starting point. Model notation and terminology follow the conventions defined in standard DEB theory <span class="citation" data-cites="kooijman_2009a">(<a href="references.html#ref-kooijman_2009a" role="doc-biblioref">Kooijman, 2009</a>)</span>. The standard DEB model describes four primary state variables at the individual level of the earthworm : (i) Structural length <span class="math inline">\(L\)</span>; (ii) Energy of the reserve, <span class="math inline">\(E\)</span>; (iii) Maturity, <span class="math inline">\(E_h\)</span>; and (iv) Reproduction, <span class="math inline">\(R\)</span>, corresponding to the cumulated number of offspring produced by the individual. Environmental state variables are also taken into account as inputs (temperature, organic matter content). Model parameters are detailed in <a href="#tbl-chap3Param" class="quarto-xref">Table&nbsp;<span>5.1</span></a>, while state and intermediate variables are listed in <a href="#tbl-art4ModStateVar" class="quarto-xref">Table&nbsp;<span>5.2</span></a>.</p>
+<p>Our model formulation is based on the standard DEB model <span class="citation" data-cites="kooijman_2009a">(<a href="references.html#ref-kooijman_2009a" role="doc-biblioref">Kooijman, 2009</a>)</span>, using the extended model developed by <span class="citation" data-cites="gergs_2022">Gergs et al. (<a href="references.html#ref-gergs_2022" role="doc-biblioref">2022</a>)</span> as a starting point. Model notation and terminology follow the conventions defined in standard DEB theory <span class="citation" data-cites="kooijman_2009a">(<a href="references.html#ref-kooijman_2009a" role="doc-biblioref">Kooijman, 2009</a>)</span>. The standard DEB model describes four primary state variables at the individual level of the earthworm : (i) Structural length, <span class="math inline">\(L\)</span>; (ii) Energy of the reserve, <span class="math inline">\(E\)</span>; (iii) Maturity, <span class="math inline">\(E_h\)</span>; and (iv) Reproduction, <span class="math inline">\(R\)</span>, corresponding to the cumulated number of offspring produced by the individual. Environmental state variables are also taken into account as inputs (temperature, organic matter content). Model parameters are detailed in <a href="#tbl-chap3Param" class="quarto-xref">Table&nbsp;<span>5.1</span></a>, while state and intermediate variables are listed in Supplementary Information <a href="#tbl-art4ModStateVar" class="quarto-xref">Table&nbsp;<span>5.2</span></a>.</p>
 <p>Several alternative model formulations were evaluated to test key biological assumptions.</p>
 <p>Our primary objective was to mechanistically link the quantity and quality of available organic matter to the functional response (<span class="math inline">\(f\)</span>). Organic matter from soil and horse dung were treated separately due to differences in quality and bioavailability. Horse dung was assumed to contain 90% organic matter with an energy density of 3100 kcal/kg (13 000 J/g, <span class="math inline">\(\mu_{OM}\)</span>) <span class="citation" data-cites="chastain_2022 sahu_2016">(<a href="references.html#ref-chastain_2022" role="doc-biblioref">Chastain, 2022</a>; <a href="references.html#ref-sahu_2016" role="doc-biblioref">Sahu et al., 2016</a>)</span>. In contrast, soil organic matter was assumed to provide less usable energy. To account for this difference, a scaling factor (<span class="math inline">\(r_{OM}\)</span>) was introduced to relate the energy content of soil organic matter to that of horse dung.</p>
-<p>The ingestion rate was formulated as a function of the maximum surface-area-specific searching rate, <span class="math inline">\(\{\dot{F}_m\}\)</span>, or the maximum mass-specific searching rate, <span class="math inline">\([\dot{F}_m]\)</span>, individual size, organic matter availability, and population density (<a href="#eq-chap3Assim" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>). Specifically, the ingested energy depends on structural size or structural mass, the quantities of soil and horse organic matter in the cosm (<span class="math inline">\(OM{soil}\)</span>, <span class="math inline">\(OM_{horse}\)</span> in <span class="math inline">\(\mathrm{g_{OM}}\)</span>), their respective energetic contributions, and the number of individuals (<span class="math inline">\(Nb_{ind}\)</span>).</p>
-<p><span id="eq-chap3Assim"><span class="math display">\[
+<p>The ingestion rate was formulated as a function of the maximum surface-area-specific searching rate, <span class="math inline">\(\{\dot{F}_m\}\)</span>, or the maximum mass-specific searching rate, <span class="math inline">\([\dot{F}_m]\)</span>, individual size, organic matter availability, and population density (<a href="#eq-chap3Qmatter" class="quarto-xref">Equation&nbsp;<span>5.1</span></a>).</p>
+<p><span id="eq-chap3Qmatter"><span class="math display">\[
 \begin{aligned}
-\dot Q_f^{matter} &amp;= \{\dot{F}_m\}\ L^2  &amp; (\text{version L}) \\
-\dot Q_f^{matter} &amp;= [\dot{F}_m]\ d_V L^3 &amp; (\text{version W}) \\ \\
-\dot Q_{f}^{soil} &amp;= \dot Q_f^{matter} \times \frac{OM_{soil}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM}\ r_{OM}\\
-\dot Q_{f}^{horse} &amp;= \dot Q_f^{matter} \times \frac{OM_{horse}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM} \\ \\
-\dot Q_{f,tot} &amp;= \dot Q_{f,horse} + \dot Q_{f,soil}
+\dot Q_{matter} &amp;= \{\dot{F}_m\}\ L^2  &amp;(\text{version L}) \\
+\dot Q_{matter} &amp;= [\dot{F}_m]\ d_V L^3 &amp;(\text{version W})
 \end{aligned}
 \tag{5.1}\]</span></span></p>
-<p>Consumption by individuals was explicitly incorporated into the temporal dynamics of organic matter in the cosm with the calculation of the rates of consumption of horse dung and soil organic matter (<span class="math inline">\(\dot{OM}_{out}^{horse}\)</span> and <span class="math inline">\(\dot{OM}_{out}^{soil}\)</span> in <span class="math inline">\(\mathrm{g_{OM}.d^{-1}}\)</span>) (<a href="#eq-chap3OMdyn" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>).</p>
+<p>To prevent the ingestion of a quantity of soil greater than that corresponding to the maximum energy absorbable by a worm per day (<span class="math inline">\(\dot Q_{f,max}\)</span>), <span class="math inline">\(\dot Q_{matter}\)</span> is capped at the soil quantity <span class="math inline">\(\dot Q_{matter,max}\)</span> equivalent to this energy threshold (<a href="#eq-chap3Qmax" class="quarto-xref">Equation&nbsp;<span>5.2</span></a>).</p>
+<p><span id="eq-chap3Qmax"><span class="math display">\[
+\begin{aligned}
+\dot Q_{f,max} &amp;= \frac{\{\dot p_{Am}\}_T \ L^2}{\kappa_X} \\
+\dot Q_{matter,max} &amp;= \frac{\dot Q_{f,max}\ W_{cosm}}{(OM_{horse} + OM_{soil}\ r_{OM})\ \mu_{OM}}\\ \\
+\dot Q_{matter,real} &amp;= \min(\dot Q_{matter}, \dot Q_{matter,max})
+\end{aligned}
+\tag{5.2}\]</span></span></p>
+<p>with :</p>
+<ul>
+<li><span class="math inline">\(\{\dot p_{Am}\}_T\)</span>, the temperature-corrected surface-specific maximum assimilation rate (J<span class="math inline">\(\cdot\)</span>d<span class="math inline">\(^{-1} \cdot\)</span>cm<span class="math inline">\(^{-2}\)</span>)</li>
+<li><span class="math inline">\(\kappa_X\)</span>, the digestion efficiency</li>
+<li><span class="math inline">\(W_{cosm}\)</span>, the dry mass of matter in the cosm (g)</li>
+<li><span class="math inline">\(OM_{horse}\)</span> and <span class="math inline">\(OM_{soil}\)</span> the dry mass of organic matter from horse dung and soil in the cosm, respectively (g).</li>
+</ul>
+<p>The ingested energy then depends on the quantities of soil and organic matter in the cosm and their respective energetic contributions (<a href="#eq-chap3Assim" class="quarto-xref">Equation&nbsp;<span>5.3</span></a>).</p>
+<p><span id="eq-chap3Assim"><span class="math display">\[
+\begin{aligned}
+\dot Q_{f}^{soil} &amp;= \dot Q_{matter,real} \times \frac{OM_{soil}}{W_{cosm}} \times \mu_{OM}\ r_{OM}\\
+\dot Q_{f}^{horse} &amp;= \dot Q_{matter,real} \times \frac{OM_{horse}}{W_{cosm}} \times \mu_{OM} \\ \\
+\dot Q_{f}^{tot} &amp;= \dot Q_{f}^{horse} + \dot Q_{f}^{soil}
+\end{aligned}
+\tag{5.3}\]</span></span></p>
+<p>with :</p>
+<ul>
+<li><span class="math inline">\(\dot Q_{f}^{soil}\)</span>, the amount of energy ingested by an earthworm from soil organic matter per day (J/d)</li>
+<li><span class="math inline">\(\dot Q_{f}^{horse}\)</span>, the amount of energy consumed by an earthworm from the horse dung organic matter per day (J/d)</li>
+<li><span class="math inline">\(\dot Q_{f}^{tot}\)</span> sums the two previous quantities</li>
+</ul>
+<p>Consumption by individuals was explicitly incorporated into the temporal dynamics of organic matter in the cosm with the calculation of the rates of consumption of horse dung and soil organic matter (<span class="math inline">\(\dot{OM}_{out}^{horse}\)</span> and <span class="math inline">\(\dot{OM}_{out}^{soil}\)</span> in <span class="math inline">\(\mathrm{g_{OM}.d^{-1}}\)</span>) depending on the number of individuals in the cosm (<span class="math inline">\(n_{ind}\)</span>) (<a href="#eq-chap3OMdyn" class="quarto-xref">Equation&nbsp;<span>5.5</span></a>). If the available organic matter is insufficient to cover the requirements of all individuals, the quantity is distributed equally among them.</p>
 <p><span id="eq-chap3OMdyn"><span class="math display">\[
 \begin{aligned}
 \frac{\mathrm d OM_{soil}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ Nb_{ind}\\
 \frac{\mathrm d OM_{horse}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ Nb_{ind}
 \end{aligned}
-\tag{5.2}\]</span></span></p>
-<p>The functional response (<span class="math inline">\(f\)</span>) was derived as a saturating function of the ratio between ingested energy and maximal ingestion capacity. Within the DEB framework, <span class="math inline">\(f\)</span> represents the degree to which food availability limits assimilation, ranging from food limitation (<span class="math inline">\(f \approx 0\)</span>) to <em>ad libitum</em> conditions (<span class="math inline">\(f \approx 1\)</span>). A saturating relationship was therefore used to reflect the progressive increase in assimilated energy as ingestion approaches the maximal capacity of the organism. Two alternative formulations were tested (<a href="#eq-chap3funres" class="quarto-xref">Equation&nbsp;<span>5.3</span></a>): (i) a classical hyperbolic response, commonly used in DEB applications, in which <span class="math inline">\(f = 0.5\)</span> when ingested energy reaches half of its maximum value, and (ii) a normalized hyperbolic formulation constraining <span class="math inline">\(f\)</span> between 0 and 1 such that <span class="math inline">\(f = 1\)</span> when ingestion reaches its maximal value. This formulation allows maximal ingestion to correspond biologically to <em>ad libitum</em> feeding conditions, where additional food no longer increases assimilation and life-history performance.</p>
+\tag{5.4}\]</span></span></p>
+<p><span id="eq-chap3OMdyn"><span class="math display">\[
+\begin{aligned}
+\frac{\mathrm d OM_{soil}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ n_{ind}\\
+\frac{\mathrm d OM_{horse}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ n_{ind}
+\end{aligned}
+\tag{5.5}\]</span></span></p>
+<p>The functional response (<span class="math inline">\(f\)</span>) was derived as a saturating function of the ratio between ingested energy and maximal ingestion capacity. Within the DEB framework, <span class="math inline">\(f\)</span> represents the degree to which food availability limits assimilation, ranging from food limitation (<span class="math inline">\(f \approx 0\)</span>) to <em>ad libitum</em> conditions (<span class="math inline">\(f \approx 1\)</span>). A saturating relationship was therefore used to reflect the progressive increase in assimilated energy as ingestion approaches the maximal capacity of the organism. Two alternative formulations were tested (<a href="#eq-chap3funres" class="quarto-xref">Equation&nbsp;<span>5.6</span></a>): (i) a classical hyperbolic response, commonly used in DEB applications, in which <span class="math inline">\(f = 0.5\)</span> when ingested energy reaches half of its maximum value, and (ii) a normalized hyperbolic formulation constraining <span class="math inline">\(f\)</span> between 0 and 1 such that <span class="math inline">\(f = 1\)</span> when ingestion reaches its maximal value. This formulation allows maximal ingestion to correspond biologically to <em>ad libitum</em> feeding conditions, where additional food no longer increases assimilation and life-history performance.</p>
 <p><span id="eq-chap3funres"><span class="math display">\[
 \begin{aligned}
 f &amp;= \frac{X}{1+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} &amp;\text{(version Y)} \\
 f &amp;= \frac{X}{K\ (1-X)+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} &amp;\text{(version K)}
 \end{aligned}
-\tag{5.3}\]</span></span></p>
-<p>Reserve mobilization, growth, maturation, and reproduction follow standard DEB equations with temperature correction. A baseline formulation assuming a fixed allocation fraction throughout the life cycle was considered (equation version F), consistent with the standard DEB <span class="math inline">\(\kappa\)</span>-rule. In addition, we introduced a model variant with a context-dependent allocation rule for <span class="math inline">\(\kappa\)</span> to account for reproductive opportunities (equation version C, <a href="#eq-chap3kappaC" class="quarto-xref">Equation&nbsp;<span>5.4</span></a>). Specifically, energy allocation shifts when individuals reach maturity (at time <span class="math inline">\(t_p\)</span>), reflecting the biological constraint that reproduction requires the presence of conspecifics. This transition can occur progressively over a characteristic timescale <span class="math inline">\(\tau\)</span>.</p>
+\tag{5.6}\]</span></span></p>
+<p>Reserve mobilization, growth, maturation, and reproduction follow standard DEB equations with temperature correction. A baseline formulation assuming a fixed allocation fraction throughout the life cycle was considered (equation version F), consistent with the standard DEB <span class="math inline">\(\kappa\)</span>-rule. In addition, we introduced a model variant with a context-dependent allocation rule for <span class="math inline">\(\kappa\)</span> to account for reproductive opportunities (equation version C, <a href="#eq-chap3kappaC" class="quarto-xref">Equation&nbsp;<span>5.7</span></a>). Specifically, energy allocation shifts when individuals reach maturity (at time <span class="math inline">\(t_p\)</span>), reflecting the biological constraint that reproduction requires the presence of conspecifics. This transition can occur progressively over a characteristic timescale <span class="math inline">\(\tau\)</span> (d).</p>
 <p><span id="eq-chap3kappaC"><span class="math display">\[
 \begin{aligned}
 x &amp;=
@@ -471,15 +503,21 @@ x &amp;=
 \end{cases} \\
 \kappa_{real} &amp;= (1-x)\kappa_J + x\ \kappa_A
 \end{aligned}
-\tag{5.4}\]</span></span></p>
-<p>Finally, two alternative formulations were considered to relate structural size (<span class="math inline">\(L\)</span>) to fresh body mass (<span class="math inline">\(W_W\)</span>), reflecting different assumptions regarding reserve (<span class="math inline">\(E\)</span>) contribution to total body weight. In the first formulation, reserve contribution was assumed proportional to structural size, consistent with the weak homeostasis assumption of DEB theory, whereby reserve covaries with structure. In the second formulation, reserve contribution was represented independently of structural size, allowing fresh body mass to vary according to reserve dynamics independently of structural growth (<a href="#eq-chap3RLW" class="quarto-xref">Equation&nbsp;<span>5.5</span></a>).</p>
+\tag{5.7}\]</span></span></p>
+<p>Finally, two alternative formulations were considered to relate structural size (<span class="math inline">\(L\)</span>) to fresh body mass (<span class="math inline">\(W_W\)</span>), reflecting different assumptions regarding reserve (<span class="math inline">\(E\)</span>) contribution to total body weight. In the first formulation, reserve contribution was assumed proportional to structural size, consistent with the weak homeostasis assumption of DEB theory, whereby reserve covaries with structure. In the second formulation, reserve contribution was represented independently of structural size, allowing fresh body mass to vary according to reserve dynamics independently of structural growth (<a href="#eq-chap3RLW" class="quarto-xref">Equation&nbsp;<span>5.8</span></a>).</p>
 <p><span id="eq-chap3RLW"><span class="math display">\[
 \begin{aligned}
-W_W &amp;= L^3&nbsp;\left( d_V + \frac{E}{E_m} w_E \right) &amp; \text{(version w)} \\
+W_W &amp;= L^3 \left( d_V + \frac{E}{E_m} w_E \right) &amp; \text{(version w)} \\
 W_W &amp;= L^3 \ d_V + E\ d_E  &amp; \text{(version e)}
 \end{aligned}
-\tag{5.5}\]</span></span></p>
-<p>with <span class="math inline">\(d_V\)</span> the density of structure (g.cm<span class="math inline">\(^{-3}\)</span>), <span class="math inline">\(d_E\)</span> the density of reserve (g.J<span class="math inline">\(^{-1}\)</span>), <span class="math inline">\(w_E\)</span> the Contribution of reserve to body weight (g.cm<span class="math inline">\(^{-3}\)</span>) and <span class="math inline">\(E_m\)</span> the maximum reserve (J).</p>
+\tag{5.8}\]</span></span></p>
+<p>with :</p>
+<ul>
+<li><span class="math inline">\(d_V\)</span> the density of structure (g<span class="math inline">\(\cdot\)</span>cm<span class="math inline">\(^{-3}\)</span>)</li>
+<li><span class="math inline">\(d_E\)</span> the density of reserve (g<span class="math inline">\(\cdot\)</span>J<span class="math inline">\(^{-1}\)</span>)</li>
+<li><span class="math inline">\(w_E\)</span> the contribution of reserve to body weight (g<span class="math inline">\(\cdot\)</span>cm<span class="math inline">\(^{-3}\)</span>)</li>
+<li><span class="math inline">\(E_m\)</span> the maximum reserve (J).</li>
+</ul>
 <p>Models are designated with a combination of letters corresponding to the different variants of equations.</p>
 <div id="tbl-chap3Param" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -506,14 +544,14 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <tr class="odd">
 <td><span class="math inline">\(\{\dot p_{Am}\}\)</span></td>
 <td>Surface area-specific maximum assimilation rate</td>
-<td><span class="math inline">\(\mathrm{J.d^{-1}.cm^{-2}}\)</span></td>
-<td>259.0 [237.6 ; 280.0]</td>
+<td><span class="math inline">\(\mathrm{J\cdot d^{-1}\cdot cm^{-2}}\)</span></td>
+<td>259.9 [234.8 ; 285.7]</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\([\dot{F}_m]\)</span></td>
 <td>Structure mass-specific maximum searching rate</td>
-<td><span class="math inline">\(\mathrm{g.d^{-1}.g^{-3}}\)</span></td>
-<td>6.9 [4.1 ; 8.9]</td>
+<td><span class="math inline">\(\mathrm{g \cdot d^{-1} \cdot g^{-3}}\)</span></td>
+<td>3.9 [2.4 ; 8.8]</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\kappa_X\)</span></td>
@@ -525,13 +563,13 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <td><span class="math inline">\(K\)</span></td>
 <td>Slope of the normalized hyperbolic functional response</td>
 <td>-</td>
-<td>0.08 [0.05 ; 0.11]</td>
+<td>0.06 [0.03 ; 0.17]</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\dot \nu\)</span></td>
 <td>Energy conductance</td>
-<td><span class="math inline">\(\mathrm{cm.d^{-1}}\)</span></td>
-<td>0.24 [0.21 ; 0.27]</td>
+<td><span class="math inline">\(\mathrm{cm \cdot d^{-1}}\)</span></td>
+<td>0.23 [0.20 ; 0.26]</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\kappa_{J}\)</span></td>
@@ -543,13 +581,13 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <td><span class="math inline">\(\kappa_{A}\)</span></td>
 <td>Apparent allocation fraction to soma during the adult stage when individuals are grouped</td>
 <td>-</td>
-<td>0.64 [0.56 ; 0.70]</td>
+<td>0.71 [0.63 ; 0.76]</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\tau\)</span></td>
 <td>Transition time between <span class="math inline">\(\kappa_{J}\)</span> and <span class="math inline">\(\kappa_{A}\)</span></td>
 <td><span class="math inline">\(\mathrm{d}\)</span></td>
-<td>&nbsp;9.6 [5.4 ; 19.2]</td>
+<td>&nbsp;11.9 [6.1 ; 20.4]</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\kappa_{R}\)</span></td>
@@ -560,25 +598,25 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <tr class="even">
 <td><span class="math inline">\(\left[ \dot p_M \right]\)</span></td>
 <td>Volume-specific somatic maintenance rate</td>
-<td><span class="math inline">\(\mathrm{J.d^{-1}.cm^{-3}}\)</span></td>
-<td>163.1 [130.2 ; 192.5]</td>
+<td><span class="math inline">\(\mathrm{J\cdot d^{-1}\cdot cm^{-3}}\)</span></td>
+<td>182.2 [144.6 ; 212.3]</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\left \{ \dot p_T \right \}\)</span></td>
 <td>Surface area-specific somatic maintenance rate</td>
-<td><span class="math inline">\(\mathrm{J.d^{-1}.cm^{-3}}\)</span></td>
+<td><span class="math inline">\(\mathrm{J\cdot d^{-1}\cdot cm^{-3}}\)</span></td>
 <td>0* <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(\dot k_J\)</span></td>
 <td>Maturity maintenance rate coefficient</td>
 <td><span class="math inline">\(\mathrm{d^{-1}}\)</span></td>
-<td>0.002793* <br> <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
+<td>0.002793* <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(\left[ \dot E_G \right]\)</span></td>
 <td>Volume-specific costs of structure</td>
-<td><span class="math inline">\(\mathrm{J.cm^{-3}}\)</span></td>
+<td><span class="math inline">\(\mathrm{J\cdot cm^{-3}}\)</span></td>
 <td>4183* (standard value)</td>
 </tr>
 <tr class="even">
@@ -591,25 +629,25 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <td><span class="math inline">\(E_h^p\)</span></td>
 <td>Maturity at puberty</td>
 <td><span class="math inline">\(\mathrm{J}\)</span></td>
-<td>97.6 [60.8 ; 133.6]</td>
+<td>73.1 [55.9 ; 127.7]</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(E_{coc}\)</span></td>
 <td>Energy in a cocoon</td>
 <td><span class="math inline">\(\mathrm{J}\)</span></td>
-<td>68.4 [58.4 ; 75.5]</td>
+<td>57.8 [51.2 ; 70.0]</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(d_V\)</span></td>
 <td>Density of structure</td>
-<td><span class="math inline">\(\mathrm{g.cm^{-3}}\)</span></td>
-<td>1.22 [1.15 ; 1.33]</td>
+<td><span class="math inline">\(\mathrm{g\cdot cm^{-3}}\)</span></td>
+<td>1.21 [1.09 ; 1.26]</td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(d_E\)</span></td>
 <td>Density of reserve</td>
-<td><span class="math inline">\(\mathrm{g.J^{-1}}\)</span></td>
-<td>1.1e-9 [1.1e-9 ; 5.7e-7]</td>
+<td><span class="math inline">\(\mathrm{g\cdot J^{-1}}\)</span></td>
+<td>1.1e-9 [1.1e-9 ; 6.8e-7]</td>
 </tr>
 <tr class="odd">
 <td></td>
@@ -620,14 +658,14 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <tr class="even">
 <td><span class="math inline">\(\mu_{OM}\)</span></td>
 <td>Soil organic matter energy content</td>
-<td><span class="math inline">\(\mathrm{J.g^{-1}}\)</span></td>
+<td><span class="math inline">\(\mathrm{J\cdot g^{-1}}\)</span></td>
 <td>11700*</td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(r_{OM}\)</span></td>
 <td>Fraction of energy in soil compared to horse dung organic matter</td>
 <td>-</td>
-<td>0.020 [0.017 ; 0.027]</td>
+<td>0.029 [0.019 ; 0.045]</td>
 </tr>
 <tr class="even">
 <td></td>
@@ -639,25 +677,25 @@ Table&nbsp;5.1: <strong>Parameter description and their estimated values for the
 <td><span class="math inline">\(T_A^H\)</span></td>
 <td>Arrhenius temperature for upper boundary</td>
 <td>K</td>
-<td>28750* <br> <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
+<td>28750* <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(T^H\)</span></td>
 <td>Upper boundary</td>
 <td>K</td>
-<td>293.2* <br> <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
+<td>293.2* <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 <tr class="odd">
 <td><span class="math inline">\(T_A\)</span></td>
 <td>Arrhenius temperature</td>
 <td>K</td>
-<td>7976* <br> <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
+<td>7976* <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 <tr class="even">
 <td><span class="math inline">\(T_{\mathrm{ref}}\)</span></td>
 <td>Reference temperature</td>
 <td>K</td>
-<td>293.15 <br> <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
+<td>293.15 <span class="citation" data-cites="gergs_2022">(<a href="references.html#ref-gergs_2022" role="doc-biblioref">Gergs et al., 2022</a>)</span></td>
 </tr>
 </tbody>
 </table>
@@ -700,103 +738,123 @@ Table&nbsp;5.2: <strong>Model state and intermediate variables.</strong>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{g_{OM}}\)</span></td>
 </tr>
 <tr class="even">
-<td style="text-align: left;"><span class="math inline">\(Soil_{w, cosm}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(W_{soil}\)</span></td>
 <td style="text-align: left;">Dry mass of soil in the cosm</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{g_{soil}}\)</span></td>
 </tr>
 <tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(W_{cosm}\)</span></td>
+<td style="text-align: left;">Dry mass of matter in the cosm</td>
+<td style="text-align: center;"><span class="math inline">\(\mathrm{g_{soil}}\)</span></td>
+</tr>
+<tr class="even">
 <td style="text-align: left;"><strong>Organism state variables</strong></td>
 <td style="text-align: left;"></td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(E\)</span></td>
 <td style="text-align: left;">Energy reserve</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(E_h\)</span></td>
 <td style="text-align: left;">Maturity</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J}\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(L\)</span></td>
 <td style="text-align: left;">Volumetric structural length</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{cm}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(R\)</span></td>
 <td style="text-align: left;">Cumulated reproduction</td>
 <td style="text-align: center;"><span class="math inline">\(\#\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(W_w\)</span></td>
 <td style="text-align: left;">Wet weight</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{g}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><strong>Intermediate variables</strong></td>
 <td style="text-align: left;"></td>
 <td style="text-align: center;"></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(E_m\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\displaystyle \frac{\left\{\dot{p}_{Am}\right\}}{v}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J.cm^{-1}}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(f\)</span></td>
 <td style="text-align: left;">Scaled functional response</td>
 <td style="text-align: center;"><span class="math inline">\(-\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(g\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\displaystyle \frac{[E_G]}{\kappa_{real} E_m}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{cm^{-2}}\)</span></td>
 </tr>
-<tr class="odd">
-<td style="text-align: left;"><span class="math inline">\(K_m\)</span></td>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\dot k_M\)</span></td>
 <td style="text-align: left;"><span class="math inline">\(\displaystyle \frac{\left[\dot{p}_M\right]_t}{[E_G]}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{d^{-1}}\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(\kappa_{real}\)</span></td>
 <td style="text-align: left;">Allocation fraction to soma</td>
 <td style="text-align: center;"><span class="math inline">\(-\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(L_m\)</span></td>
-<td style="text-align: left;"><span class="math inline">\(\displaystyle \frac{v_t}{K_m g}\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(\displaystyle \frac{v_t}{\dot k_M g}\)</span></td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{cm}\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(\dot{OM}_{out}^{horse}\)</span></td>
 <td style="text-align: left;">Rate of consumption of horse dung organic matter</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{g_{OM}.d^{-1}}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(\dot{OM}_{out}^{soil}\)</span></td>
 <td style="text-align: left;">Rate of consumption of soil organic matter</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{g_{OM}.d^{-1}}\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(\dot{p}_C\)</span></td>
 <td style="text-align: left;">Flux of mobilized energy from reserve</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td style="text-align: left;"><span class="math inline">\(\dot{p}_R\)</span></td>
 <td style="text-align: left;">Energy flux allocated to maturity / reproduction</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td style="text-align: left;"><span class="math inline">\(\dot{Q}_{f,max}\)</span></td>
-<td style="text-align: left;">Maximum rate of energy ingested</td>
+<td style="text-align: left;">Maximum rate of ingested energy</td>
+<td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\dot{Q}_{matter}\)</span></td>
+<td style="text-align: left;">Rate of matter ingestion</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;"><span class="math inline">\(\dot{Q}_f^{matter}\)</span></td>
-<td style="text-align: left;">Rate of matter ingestion</td>
+<td style="text-align: left;"><span class="math inline">\(\dot{Q}_{matter, max}\)</span></td>
+<td style="text-align: left;">Maximum rate of matter ingestion</td>
+<td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(\dot{Q}_{horse}\)</span></td>
+<td style="text-align: left;">Rate of horse dung organic matter ingestion</td>
+<td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(\dot{Q}_{soil}\)</span></td>
+<td style="text-align: left;">Rate of soil organic matter ingestion</td>
 <td style="text-align: center;"><span class="math inline">\(\mathrm{J.d^{-1}}\)</span></td>
 </tr>
 <tr class="even">
@@ -821,7 +879,7 @@ Table&nbsp;5.2: <strong>Model state and intermediate variables.</strong>
 <div id="tbl-chap3XP" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-chap3XP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5.3: <strong>Summary of the experimental conditions for each experiment used to calibrate the DEB model.</strong> The experiment numbering for Bart et al.&nbsp;(2019) follows that of the original publication. In experiments XP1 and XP4, individuals were either maintained in isolation throughout the experiment ou grouped only after puberty was detected. These experiments were therefore split into separate datasets to distinguish isolated individuals from individuals grouped at the adult stage (1: isolated; 2: grouped after puberty). Control individuals from Bart et al.&nbsp;(2020) include those from the XP2 experiment reported in Bart (2019).&nbsp;WHC: Water Holding Capacity. * 3 g/ind are given days 70, 84 and 140.<br>
+Table&nbsp;5.3: <strong>Summary of the experimental conditions for each experiment used to calibrate the DEB model.</strong> The experiment numbering for Bart et al.&nbsp;(2019) follows that of the original publication. In experiments XP1 and XP4, individuals were either maintained in isolation throughout the experiment ou grouped only after puberty was detected. These experiments were therefore split into separate datasets to distinguish isolated individuals from individuals grouped at the adult stage (1: isolated; 2: grouped after puberty). Control individuals from Bart et al.&nbsp;(2020) include those from the XP2 experiment reported in Bart (2019). WHC: Water Holding Capacity. * 3 g/ind are given days 70, 84 and 140.<br>
 ** Earthworms are first put individually in cosms before being grouped when adults. They are first grouped by 2 for 98 days then by 3 for 84 days then by 6.
 </figcaption>
 <div aria-describedby="tbl-chap3XP-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -988,12 +1046,13 @@ Table&nbsp;5.3: <strong>Summary of the experimental conditions for each experime
 </div>
 </figure>
 </div>
+<p>The DEB models were calibrated and evaluated using both literature datasets and the new density experiment conducted in this study. Together, these datasets cover multiple life stages and experimental conditions, including isolated individuals, grouped adults, and juveniles reared under different density and food availability conditions. The main characteristics of each dataset, including density treatment and feeding conditions are summarized in <a href="#tbl-chap3XP" class="quarto-xref">Table&nbsp;<span>5.3</span></a>. This combination of datasets provides complementary information for characterizing growth, maturation, and reproduction processes across a range of environmental conditions (temperature, feeding, population density).</p>
 <p>Model calibration was performed exclusively using datasets corresponding to juvenile individuals and adults maintained in groups. Data from isolated adults were excluded from the calibration procedure because reproduction cannot occur in the absence of mating partners, potentially affecting energy allocation patterns and biasing the estimation of reproductive parameters.</p>
-<p>Model parameters were estimated within a Bayesian framework using largely weakly informative priors, while incorporating more constrained priors for parameters with available biological or physiological knowledge. The full set of prior distributions is detailed in <a href="E_Model_comparison.html" class="quarto-xref"><span>Chapter 6</span></a>. The models were implemented in the MCSim environment. Parameter inference was performed using Bayesian numerical calibration following <span class="citation" data-cites="bois_2009">Bois (<a href="references.html#ref-bois_2009" role="doc-biblioref">2009</a>)</span>. Likelihood functions were defined assuming normally distributed errors for body weight and Poisson-distributed counts for reproduction. Markov Chain Monte Carlo (MCMC) simulations were run with 3 chains for 100,000 iterations to approximate posterior distributions of model parameters which were estimated from the last 10,000 iterations of the MCMC chains. The point estimates correspond to the posterior distributions mode.</p>
-<p>Model comparison was based on the Bayesian Information Criterion (BIC), which balances goodness-of-fit and model complexity by penalizing models with a higher number of parameters, but also on the RMSE of each experiment. In addition, to investigate whether model performance and prediction bias varied across experimental conditions, predicted-observed relationships were examined according to temperature, density, food availability, and developmental stage.</p>
+<p>Model parameters were estimated within a Bayesian framework using largely weakly informative priors, while incorporating more constrained priors for parameters with available biological or physiological knowledge. The full set of prior distributions is detailed in <a href="E_Model_comparison.html" class="quarto-xref"><span>Chapter 6</span></a> The models were implemented in the MCSim environment. Parameter inference was performed using Bayesian numerical calibration following <span class="citation" data-cites="bois_2009">Bois (<a href="references.html#ref-bois_2009" role="doc-biblioref">2009</a>)</span>. Likelihood functions were defined assuming normally distributed errors for body weight and Poisson-distributed counts for reproduction. Markov Chain Monte Carlo (MCMC) simulations were run with 3 chains for 30,000 iterations to approximate posterior distributions of model parameters which were estimated from the last 10,000 iterations of the MCMC chains. Point estimates were defined as the modes of the posterior distributions with their 95% credibility intervals.</p>
+<p>Not all possible combinations of model assumptions were tested in a full factorial design. Candidate formulations were instead evaluated sequentially, based on biological plausibility and on the behaviour of preliminary fits. Eight combinations were retained for comparison: L.Y.F.w, L.Y.F.e, L.K.F.e, W.K.F.e, L.Y.C.e, L.K.C.e, W.Y.C.e, and W.K.C.e. This selection allowed the main alternative assumptions concerning searching-rate scaling, functional-response shape, post-maturation allocation, and reserve contribution to body mass to be compared while limiting redundant or weakly supported formulations. Model comparison was based on the Bayesian Information Criterion (BIC), which balances goodness-of-fit and model complexity by penalizing models with a higher number of parameters, but also on the RMSE of each experiment. In addition, to investigate whether model performance and prediction bias varied across experimental conditions, predicted-observed relationships were examined according to temperature, density, food availability, and developmental stage.</p>
 <p>A global sensitivity analysis was conducted on the best-performing model using the Sobol method with the Jansen estimator, implemented in the “sensitivity” R package <span class="citation" data-cites="ioss_2026">(<a href="references.html#ref-ioss_2026" role="doc-biblioref">Ioss et al., 2026</a>)</span>. Two complementary analyses were performed: one including the parameters governing temperature dependence and one excluding them, in order to distinguish the contribution of thermal correction from that of the remaining physiological and environmental parameters. Parameter values were varied independently within ±10% of their posterior estimates to quantify their relative influence on model outputs.</p>
 <p>The sensitivity analysis was based on simulations of the Gollot2026_D2 experiment, in which two earthworms were maintained per cosm under moderate food availability. Body mass, reserve energy, and maturity were evaluated at both the juvenile stage (<span class="math inline">\(t = 50\)</span> days) and the adult stage (<span class="math inline">\(t = 140\)</span> days). Reproductive output at <span class="math inline">\(t = 140\)</span> days and the total amount of organic matter remaining in the cosm at <span class="math inline">\(t = 50\)</span> days were also included as endpoints. These endpoints were selected to characterize parameter influence on energy acquisition, individual state, life-history transitions, and reproductive performance at contrasting developmental stages.</p>
-<p>Finally, the case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood (<span class="math inline">\(\kappa_J\)</span>), and (ii) introducing a transition toward the adult allocation fraction (<span class="math inline">\(\kappa_A\)</span>) after maturation, as implemented for grouped adults.</p>
+<p>Finally, the case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood (<span class="math inline">\(\kappa_J\)</span>), and (ii) introducing a transition toward the adult allocation fraction (<span class="math inline">\(\kappa_A\)</span> ) after maturation, as implemented for grouped adults.</p>
 
 
 <!-- -->
@@ -1638,162 +1697,210 @@ Whalen, J. K., &amp; Parmelee, R. W. (1999). Quantification of nitrogen assimila
 <span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="fu">## Tested model formulations</span></span>
 <span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Our model formulation is based on the standard DEB model <span class="co">[</span><span class="ot">@kooijman_2009a</span><span class="co">]</span>, using the extended model developed by @gergs_2022 as a starting point. Model notation and terminology follow the conventions defined in standard DEB theory <span class="co">[</span><span class="ot">@kooijman_2009a</span><span class="co">]</span>. The standard DEB model describes four primary state variables at the individual level of the earthworm : (i) Structural length $L$; (ii) Energy of the reserve, $E$; (iii) Maturity, $E_h$; and (iv) Reproduction, $R$, corresponding to the cumulated number of offspring produced by the individual. Environmental state variables are also taken into account as inputs (temperature, organic matter content). Model parameters are detailed in @tbl-chap3Param, while state and intermediate variables are listed in @tbl-art4ModStateVar.</span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a>Our model formulation is based on the standard DEB model <span class="co">[</span><span class="ot">@kooijman_2009a</span><span class="co">]</span>, using the extended model developed by @gergs_2022 as a starting point. Model notation and terminology follow the conventions defined in standard DEB theory <span class="co">[</span><span class="ot">@kooijman_2009a</span><span class="co">]</span>. The standard DEB model describes four primary state variables at the individual level of the earthworm : (i) Structural length, $L$; (ii) Energy of the reserve, $E$; (iii) Maturity, $E_h$; and (iv) Reproduction, $R$, corresponding to the cumulated number of offspring produced by the individual. Environmental state variables are also taken into account as inputs (temperature, organic matter content). Model parameters are detailed in @tbl-chap3Param, while state and intermediate variables are listed in Supplementary Information @tbl-art4ModStateVar.</span>
 <span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>Several alternative model formulations were evaluated to test key biological assumptions.</span>
 <span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>Our primary objective was to mechanistically link the quantity and quality of available organic matter to the functional response ($f$). Organic matter from soil and horse dung were treated separately due to differences in quality and bioavailability. Horse dung was assumed to contain 90% organic matter with an energy density of 3100 kcal/kg (13 000 J/g, $\mu_{OM}$) <span class="co">[</span><span class="ot">@chastain_2022; @sahu_2016</span><span class="co">]</span>. In contrast, soil organic matter was assumed to provide less usable energy. To account for this difference, a scaling factor ($r_{OM}$) was introduced to relate the energy content of soil organic matter to that of horse dung.</span>
 <span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>The ingestion rate was formulated as a function of the maximum surface-area-specific searching rate, $<span class="sc">\{</span>\dot{F}_m\}$, or the maximum mass-specific searching rate, $[\dot{F}_m]$, individual size, organic matter availability, and population density (@eq-chap3Assim). Specifically, the ingested energy depends on structural size or structural mass, the quantities of soil and horse organic matter in the cosm ($OM{soil}$, $OM_{horse}$ in $\mathrm{g_{OM}}$), their respective energetic contributions, and the number of individuals ($Nb_{ind}$).</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>The ingestion rate was formulated as a function of the maximum surface-area-specific searching rate, $<span class="sc">\{</span>\dot{F}_m<span class="sc">\}</span>$, or the maximum mass-specific searching rate, $<span class="co">[</span><span class="ot">\dot{F}_m</span><span class="co">]</span>$, individual size, organic matter availability, and population density (@eq-chap3Qmatter).</span>
 <span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>\dot Q_f^{matter} &amp;= <span class="sc">\{</span>\dot{F}_m<span class="sc">\}</span>\ L^2  &amp; (\text{version L}) <span class="sc">\\</span></span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>\dot Q_f^{matter} &amp;= <span class="co">[</span><span class="ot">\dot{F}_m</span><span class="co">]</span>\ d_V L^3 &amp; (\text{version W}) <span class="sc">\\</span> <span class="sc">\\</span></span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>\dot Q_{f}^{soil} &amp;= \dot Q_f^{matter} \times \frac{OM_{soil}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM}\ r_{OM}<span class="sc">\\</span></span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>\dot Q_{f}^{horse} &amp;= \dot Q_f^{matter} \times \frac{OM_{horse}}{Soil_{w,cosm}\ Nb_{ind}} \times \mu_{OM} <span class="sc">\\</span> <span class="sc">\\</span></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a>\dot Q_{f,tot} &amp;= \dot Q_{f,horse} + \dot Q_{f,soil}</span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3Assim}</span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>Consumption by individuals was explicitly incorporated into the temporal dynamics of organic matter in the cosm with the calculation of the rates of consumption of horse dung and soil organic matter ($\dot{OM}_{out}^{horse}$ and $\dot{OM}_{out}^{soil}$ in $\mathrm{g_{OM}.d^{-1}}$) (@eq-chap3OMdyn).</span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{soil}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ Nb_{ind}<span class="sc">\\</span></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{horse}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ Nb_{ind}</span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3OMdyn}</span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a>\dot Q_{matter} &amp;= <span class="sc">\{</span>\dot{F}_m<span class="sc">\}</span>\ L^2  &amp;(\text{version L}) <span class="sc">\\</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a>\dot Q_{matter} &amp;= <span class="co">[</span><span class="ot">\dot{F}_m</span><span class="co">]</span>\ d_V L^3 &amp;(\text{version W})</span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3Qmatter}</span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a>To prevent the ingestion of a quantity of soil greater than that corresponding to the maximum energy absorbable by a worm per day ($\dot Q_{f,max}$), $\dot Q_{matter}$ is capped at the soil quantity $\dot Q_{matter,max}$ equivalent to this energy threshold (@eq-chap3Qmax).</span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a>\dot Q_{f,max} &amp;= \frac{<span class="sc">\{</span>\dot p_{Am}<span class="sc">\}</span>_T \ L^2}{\kappa_X} <span class="sc">\\</span></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>\dot Q_{matter,max} &amp;= \frac{\dot Q_{f,max}\ W_{cosm}}{(OM_{horse} + OM_{soil}\ r_{OM})\ \mu_{OM}}<span class="sc">\\</span> <span class="sc">\\</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>\dot Q_{matter,real} &amp;= \min(\dot Q_{matter}, \dot Q_{matter,max})</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3Qmax}</span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>with :</span>
 <span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>The functional response ($f$) was derived as a saturating function of the ratio between ingested energy and maximal ingestion capacity. Within the DEB framework, $f$ represents the degree to which food availability limits assimilation, ranging from food limitation ($f \approx 0$) to *ad libitum* conditions ($f \approx 1$). A saturating relationship was therefore used to reflect the progressive increase in assimilated energy as ingestion approaches the maximal capacity of the organism. Two alternative formulations were tested (@eq-chap3funres): (i) a classical hyperbolic response, commonly used in DEB applications, in which $f = 0.5$ when ingested energy reaches half of its maximum value, and (ii) a normalized hyperbolic formulation constraining $f$ between 0 and 1 such that $f = 1$ when ingestion reaches its maximal value. This formulation allows maximal ingestion to correspond biologically to *ad libitum* feeding conditions, where additional food no longer increases assimilation and life-history performance.</span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>f &amp;= \frac{X}{1+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} &amp;\text{(version Y)} <span class="sc">\\</span></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>f &amp;= \frac{X}{K\ (1-X)+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} &amp;\text{(version K)}</span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3funres}</span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>Reserve mobilization, growth, maturation, and reproduction follow standard DEB equations with temperature correction. A baseline formulation assuming a fixed allocation fraction throughout the life cycle was considered (equation version F), consistent with the standard DEB $\kappa$-rule. In addition, we introduced a model variant with a context-dependent allocation rule for $\kappa$ to account for reproductive opportunities (equation version C, @eq-chap3kappaC). Specifically, energy allocation shifts when individuals reach maturity (at time $t_p$), reflecting the biological constraint that reproduction requires the presence of conspecifics. This transition can occur progressively over a characteristic timescale $\tau$.</span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>x &amp;= </span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>\begin{cases}</span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>\text{if } E_h &lt; E_h^p, &amp; 0 <span class="sc">\\</span></span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>\text{if } E_h \geq E_h^p, &amp; \min \left( 1, \frac{t-t_p}{\tau}\right)</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>\end{cases} <span class="sc">\\</span></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>\kappa_{real} &amp;= (1-x)\kappa_J + x\ \kappa_A</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3kappaC}</span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a>Finally, two alternative formulations were considered to relate structural size ($L$) to fresh body mass ($W_W$), reflecting different assumptions regarding reserve ($E$) contribution to total body weight. In the first formulation, reserve contribution was assumed proportional to structural size, consistent with the weak homeostasis assumption of DEB theory, whereby reserve covaries with structure. In the second formulation, reserve contribution was represented independently of structural size, allowing fresh body mass to vary according to reserve dynamics independently of structural growth (@eq-chap3RLW).</span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>W_W &amp;= L^3&nbsp;\left( d_V + \frac{E}{E_m} w_E \right) &amp; \text{(version w)} <span class="sc">\\</span></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>W_W &amp;= L^3 \ d_V + E\ d_E  &amp; \text{(version e)}</span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3RLW}</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>\noindent with $d_V$ the density of structure (g.cm$^{-3}$), $d_E$ the density of reserve (g.J$^{-1}$), $w_E$ the Contribution of reserve to body weight (g.cm$^{-3}$) and $E_m$ the maximum reserve (J).</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>Models are designated with a combination of letters corresponding to the different variants of equations.</span>
-<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Description <span class="pp">|</span> Unit <span class="pp">|</span> Value <span class="pp">|</span></span>
-<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|----|----|----|----|</span></span>
-<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="sc">\{</span>\dot p_{Am}<span class="sc">\}</span>$ <span class="pp">|</span> Surface area-specific maximum assimilation rate <span class="pp">|</span> $\mathrm{J.d^{-1}.cm^{-2}}$ <span class="pp">|</span> 259.0 <span class="sc">\[</span>237.6 ; 280.0<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="co">[</span><span class="ot">\dot{F}_m</span><span class="co">]</span>$ <span class="pp">|</span> Structure mass-specific maximum searching rate <span class="pp">|</span> $\mathrm{g.d^{-1}.g^{-3}}$ <span class="pp">|</span> 6.9 <span class="sc">\[</span>4.1 ; 8.9<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_X$ <span class="pp">|</span> Fraction of food energy fixed in reserve (digestion efficiency) <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.258<span class="sc">\*</span> <span class="co">[</span><span class="ot">@whalen_1999</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $K$ <span class="pp">|</span> Slope of the normalized hyperbolic functional response <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.08 <span class="sc">\[</span>0.05 ; 0.11<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot \nu$ <span class="pp">|</span> Energy conductance <span class="pp">|</span> $\mathrm{cm.d^{-1}}$ <span class="pp">|</span> 0.24 <span class="sc">\[</span>0.21 ; 0.27<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{J}$ <span class="pp">|</span> Apparent allocation fraction to soma during the juvenile stage <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.98 <span class="sc">\[</span>0.97 ; 0.99<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{A}$ <span class="pp">|</span> Apparent allocation fraction to soma during the adult stage when individuals are grouped <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.64 <span class="sc">\[</span>0.56 ; 0.70<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tau$ <span class="pp">|</span> Transition time between $\kappa_{J}$ and $\kappa_{A}$ <span class="pp">|</span> $\mathrm{d}$ <span class="pp">|</span> &nbsp;9.6 <span class="sc">\[</span>5.4 ; 19.2<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{R}$ <span class="pp">|</span> Fraction of reproduction energy fixed in eggs (reproduction efficiency) <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.475<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left<span class="co">[</span><span class="ot"> \dot p_M \right</span><span class="co">]</span>$ <span class="pp">|</span> Volume-specific somatic maintenance rate <span class="pp">|</span> $\mathrm{J.d^{-1}.cm^{-3}}$ <span class="pp">|</span> 163.1 <span class="sc">\[</span>130.2 ; 192.5<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left <span class="sc">\{</span> \dot p_T \right <span class="sc">\}</span>$ <span class="pp">|</span> Surface area-specific somatic maintenance rate <span class="pp">|</span> $\mathrm{J.d^{-1}.cm^{-3}}$ <span class="pp">|</span> 0<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot k_J$ <span class="pp">|</span> Maturity maintenance rate coefficient <span class="pp">|</span> $\mathrm{d^{-1}}$ <span class="pp">|</span> 0.002793<span class="sc">\*</span> <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left<span class="co">[</span><span class="ot"> \dot E_G \right</span><span class="co">]</span>$ <span class="pp">|</span> Volume-specific costs of structure <span class="pp">|</span> $\mathrm{J.cm^{-3}}$ <span class="pp">|</span> 4183<span class="sc">\*</span> \newline (standard value) <span class="pp">|</span></span>
-<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h^b$ <span class="pp">|</span> Maturity at birth <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 0.5<span class="sc">\*</span> <span class="pp">|</span></span>
-<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h^p$ <span class="pp">|</span> Maturity at puberty <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 97.6 <span class="sc">\[</span>60.8 ; 133.6<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_{coc}$ <span class="pp">|</span> Energy in a cocoon <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 68.4 <span class="sc">\[</span>58.4 ; 75.5<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d_V$ <span class="pp">|</span> Density of structure <span class="pp">|</span> $\mathrm{g.cm^{-3}}$ <span class="pp">|</span> 1.22 <span class="sc">\[</span>1.15 ; 1.33<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d_E$ <span class="pp">|</span> Density of reserve <span class="pp">|</span> $\mathrm{g.J^{-1}}$ <span class="pp">|</span> 1.1e-9 <span class="sc">\[</span>1.1e-9 ; 5.7e-7<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> *Soil organic matter parameters* <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mu_{OM}$ <span class="pp">|</span> Soil organic matter energy content <span class="pp">|</span> $\mathrm{J.g^{-1}}$ <span class="pp">|</span> 11700<span class="sc">\*</span> <span class="pp">|</span></span>
-<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $r_{OM}$ <span class="pp">|</span> Fraction of energy in soil compared to horse dung organic matter <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.020 <span class="sc">\[</span>0.017 ; 0.027<span class="sc">\]</span> <span class="pp">|</span></span>
-<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> *Metabolic response to temperature* <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_A^H$ <span class="pp">|</span> Arrhenius temperature for upper boundary <span class="pp">|</span> K <span class="pp">|</span> 28750<span class="sc">\*</span> <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T^H$ <span class="pp">|</span> Upper boundary <span class="pp">|</span> K <span class="pp">|</span> 293.2<span class="sc">\*</span> <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_A$ <span class="pp">|</span> Arrhenius temperature <span class="pp">|</span> K <span class="pp">|</span> 7976<span class="sc">\*</span> <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_{\mathrm{ref}}$ <span class="pp">|</span> Reference temperature <span class="pp">|</span> K <span class="pp">|</span> 293.15 <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
-<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>: **Parameter description and their estimated values for the best-performing model.** Results are expressed as the modes of the distributions and their respective credibility interval (95%). Fixed parameters are indicated with an asterisque. {#tbl-chap3Param}</span>
-<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Description <span class="pp">|</span> Unit <span class="pp">|</span></span>
-<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|</span>:--:<span class="pp">|</span></span>
-<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Environmental state variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $OM_{horse}$ <span class="pp">|</span> Horse dung organic matter mass <span class="pp">|</span> $\mathrm{g_{OM}}$ <span class="pp">|</span></span>
-<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $OM_{soil}$ <span class="pp">|</span> Soil organic matter mass <span class="pp">|</span> $\mathrm{g_{OM}}$ <span class="pp">|</span></span>
-<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $Soil_{w, cosm}$ <span class="pp">|</span> Dry mass of soil in the cosm <span class="pp">|</span> $\mathrm{g_{soil}}$ <span class="pp">|</span></span>
-<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Organism state variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E$ <span class="pp">|</span> Energy reserve <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span></span>
-<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h$ <span class="pp">|</span> Maturity <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span></span>
-<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $L$ <span class="pp">|</span> Volumetric structural length <span class="pp">|</span> $\mathrm{cm}$ <span class="pp">|</span></span>
-<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $R$ <span class="pp">|</span> Cumulated reproduction <span class="pp">|</span> $<span class="sc">\#</span>$ <span class="pp">|</span></span>
-<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $W_w$ <span class="pp">|</span> Wet weight <span class="pp">|</span> $\mathrm{g}$ <span class="pp">|</span></span>
-<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Intermediate variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
-<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_m$ <span class="pp">|</span> $\displaystyle \frac{\left<span class="sc">\{</span>\dot{p}_{Am}\right<span class="sc">\}</span>}{v}$ <span class="pp">|</span> $\mathrm{J.cm^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f$ <span class="pp">|</span> Scaled functional response <span class="pp">|</span> $-$ <span class="pp">|</span></span>
-<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $g$ <span class="pp">|</span> $\displaystyle \frac{<span class="co">[</span><span class="ot">E_G</span><span class="co">]</span>}{\kappa_{real} E_m}$ <span class="pp">|</span> $\mathrm{cm^{-2}}$ <span class="pp">|</span></span>
-<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $K_m$ <span class="pp">|</span> $\displaystyle \frac{\left<span class="co">[</span><span class="ot">\dot{p}_M\right</span><span class="co">]</span>_t}{<span class="co">[</span><span class="ot">E_G</span><span class="co">]</span>}$ <span class="pp">|</span> $\mathrm{d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{real}$ <span class="pp">|</span> Allocation fraction to soma <span class="pp">|</span> $-$ <span class="pp">|</span></span>
-<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $L_m$ <span class="pp">|</span> $\displaystyle \frac{v_t}{K_m g}$ <span class="pp">|</span> $\mathrm{cm}$ <span class="pp">|</span></span>
-<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{OM}_{out}^{horse}$ | Rate of consumption of horse dung organic matter | $\mathrm{g_{OM}.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{OM}_{out}^{soil}$ | Rate of consumption of soil organic matter | $\mathrm{g_{OM}.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{p}_C$ <span class="pp">|</span> Flux of mobilized energy from reserve <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{p}_R$ <span class="pp">|</span> Energy flux allocated to maturity / reproduction <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{f,max}$ <span class="pp">|</span> Maximum rate of energy ingested <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_f^{matter}$ <span class="pp">|</span> Rate of matter ingestion <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_f^{horse}$ <span class="pp">|</span> Rate of energy ingested through horse dung <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_f^{soil}$ <span class="pp">|</span> Rate of energy ingested through soil <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
-<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a>: **Model state and intermediate variables.** {#tbl-art4ModStateVar tbl-pos="H"}</span>
-<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="fu">## Model parametrization and calibration</span></span>
-<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>The DEB model was calibrated and evaluated using both literature datasets and the new density experiment conducted in this study. Together, these datasets cover multiple life stages and experimental conditions, including isolated individuals, grouped adults, and juveniles reared under different density and food availability conditions. The main characteristics of each dataset, including density treatment and feeding conditions are summarized in @tbl-chap3XP (more detail @sec-DataSynth). This combination of datasets provides complementary information for characterizing growth, maturation, and reproduction processes across a range of environmental conditions (temperature, feeding, population density).</span>
-<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source <span class="pp">|</span> Experiment name <span class="pp">|</span> T <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (°C) <span class="pp">|</span> Humidity (%WHC) <span class="pp">|</span> Soil quantity (g) <span class="pp">|</span> Added horse dung (g/ind/14d) <span class="pp">|</span> Ind./Cosm <span class="pp">|</span> Development stage <span class="pp">|</span> Sample size <span class="pp">|</span></span>
-<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|----|----|----|----|----|----|----|----|----|</span></span>
-<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bart et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2019) <span class="pp">|</span> XP1_1 <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 3 individuals <span class="pp">|</span></span>
-<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP1_2 <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 then grouped<span class="sc">\*\*</span> <span class="pp">|</span> Juveniles to grouped adults <span class="pp">|</span> 6 individuals <span class="pp">|</span></span>
-<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP3 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> Varying \newline (0 or 3)<span class="sc">\*</span> <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 5 individuals <span class="pp">|</span></span>
-<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP4_1 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 2 individuals <span class="pp">|</span></span>
-<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP4_2 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1 <span class="pp">|</span> 1 then grouped<span class="sc">\*\*</span> <span class="pp">|</span> Juveniles to grouped adults <span class="pp">|</span> 6 individuals <span class="pp">|</span></span>
-<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP5 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1.5 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 5 individuals <span class="pp">|</span></span>
-<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bart et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2020) <span class="pp">|</span> Control \newline individuals <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 91 between 0–42 days then 7 individuals <span class="pp">|</span></span>
-<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Gollot et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2026) <span class="pp">|</span> D1 <span class="pp">|</span> 18 <span class="pp">|</span> 70 <span class="pp">|</span> 200 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
-<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D2 <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (limiting food) <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1.5 <span class="pp">|</span> 2 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
-<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D2b <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (*ad libitum*) <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 3 <span class="pp">|</span> 2 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 2 replicates <span class="pp">|</span></span>
-<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D5 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 0.6 <span class="pp">|</span> 5 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
-<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D7 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 0.43 <span class="pp">|</span> 7 <span class="pp">|</span> Juveniles <span class="pp">|</span> 3 replicates <span class="pp">|</span></span>
-<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>: **Summary of the experimental conditions for each experiment used to calibrate the DEB model.** The experiment numbering for Bart et al. (2019) follows that of the original publication. In experiments XP1 and XP4, individuals were either maintained in isolation throughout the experiment ou grouped only after puberty was detected. These experiments were therefore split into separate datasets to distinguish isolated individuals from individuals grouped at the adult stage (1: isolated; 2: grouped after puberty). Control individuals from Bart et al. (2020) include those from the XP2 experiment reported in Bart (2019).&nbsp;WHC: Water Holding Capacity. \newline <span class="sc">\*</span> 3 g/ind are given days 70, 84 and 140.\</span>
-<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>\newline <span class="sc">\*\*</span> Earthworms are first put individually in cosms before being grouped when adults. They are first grouped by 2 for 98 days then by 3 for 84 days then by 6. {#tbl-chap3XP}</span>
-<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>Model calibration was performed exclusively using datasets corresponding to juvenile individuals and adults maintained in groups. Data from isolated adults were excluded from the calibration procedure because reproduction cannot occur in the absence of mating partners, potentially affecting energy allocation patterns and biasing the estimation of reproductive parameters.</span>
-<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>Model parameters were estimated within a Bayesian framework using largely weakly informative priors, while incorporating more constrained priors for parameters with available biological or physiological knowledge. The full set of prior distributions is detailed in @sec-DEB. The models were implemented in the MCSim environment. Parameter inference was performed using Bayesian numerical calibration following @bois_2009. Likelihood functions were defined assuming normally distributed errors for body weight and Poisson-distributed counts for reproduction. Markov Chain Monte Carlo (MCMC) simulations were run with 3 chains for 100,000 iterations to approximate posterior distributions of model parameters which were estimated from the last 10,000 iterations of the MCMC chains. The point estimates correspond to the posterior distributions mode.</span>
-<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>Model comparison was based on the Bayesian Information Criterion (BIC), which balances goodness-of-fit and model complexity by penalizing models with a higher number of parameters, but also on the RMSE of each experiment. In addition, to investigate whether model performance and prediction bias varied across experimental conditions, predicted-observed relationships were examined according to temperature, density, food availability, and developmental stage.</span>
-<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>A global sensitivity analysis was conducted on the best-performing model using the Sobol method with the Jansen estimator, implemented in the “sensitivity” R package <span class="co">[</span><span class="ot">@ioss_2026</span><span class="co">]</span>. Two complementary analyses were performed: one including the parameters governing temperature dependence and one excluding them, in order to distinguish the contribution of thermal correction from that of the remaining physiological and environmental parameters. Parameter values were varied independently within ±10% of their posterior estimates to quantify their relative influence on model outputs.</span>
-<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>The sensitivity analysis was based on simulations of the Gollot2026_D2 experiment, in which two earthworms were maintained per cosm under moderate food availability. Body mass, reserve energy, and maturity were evaluated at both the juvenile stage ($t = 50$ days) and the adult stage ($t = 140$ days). Reproductive output at $t = 140$ days and the total amount of organic matter remaining in the cosm at $t = 50$ days were also included as endpoints. These endpoints were selected to characterize parameter influence on energy acquisition, individual state, life-history transitions, and reproductive performance at contrasting developmental stages.</span>
-<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a>Finally, the case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood ($\kappa_J$), and (ii) introducing a transition toward the adult allocation fraction ($\kappa_A$) after maturation, as implemented for grouped adults.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$<span class="sc">\{</span>\dot p_{Am}<span class="sc">\}</span>_T$, the temperature-corrected surface-specific maximum assimilation rate (J$\cdot$d$^{-1} \cdot$cm$^{-2}$)</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\kappa_X$, the digestion efficiency</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$W_{cosm}$, the dry mass of matter in the cosm (g)</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$OM_{horse}$ and $OM_{soil}$ the dry mass of organic matter from horse dung and soil in the cosm, respectively (g).</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>The ingested energy then depends on the quantities of soil and organic matter in the cosm and their respective energetic contributions (@eq-chap3Assim).</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>\dot Q_{f}^{soil} &amp;= \dot Q_{matter,real} \times \frac{OM_{soil}}{W_{cosm}} \times \mu_{OM}\ r_{OM}<span class="sc">\\</span></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a>\dot Q_{f}^{horse} &amp;= \dot Q_{matter,real} \times \frac{OM_{horse}}{W_{cosm}} \times \mu_{OM} <span class="sc">\\</span> <span class="sc">\\</span></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>\dot Q_{f}^{tot} &amp;= \dot Q_{f}^{horse} + \dot Q_{f}^{soil}</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3Assim}</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>with :</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\dot Q_{f}^{soil}$, the amount of energy ingested by an earthworm from soil organic matter per day (J/d)</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\dot Q_{f}^{horse}$, the amount of energy consumed by an earthworm from the horse dung organic matter per day (J/d)</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$\dot Q_{f}^{tot}$ sums the two previous quantities</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>Consumption by individuals was explicitly incorporated into the temporal dynamics of organic matter in the cosm with the calculation of the rates of consumption of horse dung and soil organic matter ($\dot{OM}_{out}^{horse}$ and $\dot{OM}_{out}^{soil}$ in $\mathrm{g_{OM}.d^{-1}}$) depending on the number of individuals in the cosm ($n_{ind}$) (@eq-chap3OMdyn). If the available organic matter is insufficient to cover the requirements of all individuals, the quantity is distributed equally among them.</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{soil}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ Nb_{ind}<span class="sc">\\</span></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{horse}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ Nb_{ind}</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3OMdyn}</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{soil}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{soil}}{\mu_{OM}\ r_{OM}}\ n_{ind}<span class="sc">\\</span></span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a>\frac{\mathrm d OM_{horse}}{\mathrm d t} &amp;= -\frac{\dot Q_{f}^{horse}}{\mu_{OM}}\ n_{ind}</span>
+<span id="cb1-172"><a href="#cb1-172" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-173"><a href="#cb1-173" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3OMdyn}</span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>The functional response ($f$) was derived as a saturating function of the ratio between ingested energy and maximal ingestion capacity. Within the DEB framework, $f$ represents the degree to which food availability limits assimilation, ranging from food limitation ($f \approx 0$) to *ad libitum* conditions ($f \approx 1$). A saturating relationship was therefore used to reflect the progressive increase in assimilated energy as ingestion approaches the maximal capacity of the organism. Two alternative formulations were tested (@eq-chap3funres): (i) a classical hyperbolic response, commonly used in DEB applications, in which $f = 0.5$ when ingested energy reaches half of its maximum value, and (ii) a normalized hyperbolic formulation constraining $f$ between 0 and 1 such that $f = 1$ when ingestion reaches its maximal value. This formulation allows maximal ingestion to correspond biologically to *ad libitum* feeding conditions, where additional food no longer increases assimilation and life-history performance.</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>f &amp;= \frac{X}{1+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\frac 1 2 \dot Q_{f,max}} &amp;\text{(version Y)} <span class="sc">\\</span></span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>f &amp;= \frac{X}{K\ (1-X)+X} &amp;\text{with }\  X &amp;= \frac{\dot Q_{f,tot}}{\dot Q_{f,max}} &amp;\text{(version K)}</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3funres}</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>Reserve mobilization, growth, maturation, and reproduction follow standard DEB equations with temperature correction. A baseline formulation assuming a fixed allocation fraction throughout the life cycle was considered (equation version F), consistent with the standard DEB $\kappa$-rule. In addition, we introduced a model variant with a context-dependent allocation rule for $\kappa$ to account for reproductive opportunities (equation version C, @eq-chap3kappaC). Specifically, energy allocation shifts when individuals reach maturity (at time $t_p$), reflecting the biological constraint that reproduction requires the presence of conspecifics. This transition can occur progressively over a characteristic timescale $\tau$ (d).</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>x &amp;= </span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>\begin{cases}</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>\text{if } E_h &lt; E_h^p, &amp; 0 <span class="sc">\\</span></span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>\text{if } E_h \geq E_h^p, &amp; \min \left( 1, \frac{t-t_p}{\tau}\right)</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>\end{cases} <span class="sc">\\</span></span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>\kappa_{real} &amp;= (1-x)\kappa_J + x\ \kappa_A</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3kappaC}</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>Finally, two alternative formulations were considered to relate structural size ($L$) to fresh body mass ($W_W$), reflecting different assumptions regarding reserve ($E$) contribution to total body weight. In the first formulation, reserve contribution was assumed proportional to structural size, consistent with the weak homeostasis assumption of DEB theory, whereby reserve covaries with structure. In the second formulation, reserve contribution was represented independently of structural size, allowing fresh body mass to vary according to reserve dynamics independently of structural growth (@eq-chap3RLW).</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>W_W &amp;= L^3 \left( d_V + \frac{E}{E_m} w_E \right) &amp; \text{(version w)} <span class="sc">\\</span></span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>W_W &amp;= L^3 \ d_V + E\ d_E  &amp; \text{(version e)}</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>$$ {#eq-chap3RLW}</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>with :</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$d_V$ the density of structure (g$\cdot$cm$^{-3}$)</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$d_E$ the density of reserve (g$\cdot$J$^{-1}$)</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$w_E$ the contribution of reserve to body weight (g$\cdot$cm$^{-3}$)</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>$E_m$ the maximum reserve (J).</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>Models are designated with a combination of letters corresponding to the different variants of equations.</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Description <span class="pp">|</span> Unit <span class="pp">|</span> Value <span class="pp">|</span></span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a><span class="pp">|----|----|----|----|</span></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="sc">\{</span>\dot p_{Am}<span class="sc">\}</span>$ <span class="pp">|</span> Surface area-specific maximum assimilation rate <span class="pp">|</span> $\mathrm{J\cdot d^{-1}\cdot cm^{-2}}$ <span class="pp">|</span> 259.9 <span class="sc">\[</span>234.8 ; 285.7<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $<span class="co">[</span><span class="ot">\dot{F}_m</span><span class="co">]</span>$ <span class="pp">|</span> Structure mass-specific maximum searching rate <span class="pp">|</span> $\mathrm{g \cdot d^{-1} \cdot g^{-3}}$ <span class="pp">|</span> 3.9 <span class="sc">\[</span>2.4 ; 8.8<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_X$ <span class="pp">|</span> Fraction of food energy fixed in reserve (digestion efficiency) <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.258<span class="sc">\*</span> <span class="co">[</span><span class="ot">@whalen_1999</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $K$ <span class="pp">|</span> Slope of the normalized hyperbolic functional response <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.06 <span class="sc">\[</span>0.03 ; 0.17<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot \nu$ <span class="pp">|</span> Energy conductance <span class="pp">|</span> $\mathrm{cm \cdot d^{-1}}$ <span class="pp">|</span> 0.23 <span class="sc">\[</span>0.20 ; 0.26<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{J}$ <span class="pp">|</span> Apparent allocation fraction to soma during the juvenile stage <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.98 <span class="sc">\[</span>0.97 ; 0.99<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{A}$ <span class="pp">|</span> Apparent allocation fraction to soma during the adult stage when individuals are grouped <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.71 <span class="sc">\[</span>0.63 ; 0.76<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\tau$ <span class="pp">|</span> Transition time between $\kappa_{J}$ and $\kappa_{A}$ <span class="pp">|</span> $\mathrm{d}$ <span class="pp">|</span> &nbsp;11.9 <span class="sc">\[</span>6.1 ; 20.4<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{R}$ <span class="pp">|</span> Fraction of reproduction energy fixed in eggs (reproduction efficiency) <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.475<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left<span class="co">[</span><span class="ot"> \dot p_M \right</span><span class="co">]</span>$ <span class="pp">|</span> Volume-specific somatic maintenance rate <span class="pp">|</span> $\mathrm{J\cdot d^{-1}\cdot cm^{-3}}$ <span class="pp">|</span> 182.2 <span class="sc">\[</span>144.6 ; 212.3<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left <span class="sc">\{</span> \dot p_T \right <span class="sc">\}</span>$ <span class="pp">|</span> Surface area-specific somatic maintenance rate <span class="pp">|</span> $\mathrm{J\cdot d^{-1}\cdot cm^{-3}}$ <span class="pp">|</span> 0<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot k_J$ <span class="pp">|</span> Maturity maintenance rate coefficient <span class="pp">|</span> $\mathrm{d^{-1}}$ <span class="pp">|</span> 0.002793<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\left<span class="co">[</span><span class="ot"> \dot E_G \right</span><span class="co">]</span>$ <span class="pp">|</span> Volume-specific costs of structure <span class="pp">|</span> $\mathrm{J\cdot cm^{-3}}$ <span class="pp">|</span> 4183<span class="sc">\*</span> (standard value) <span class="pp">|</span></span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h^b$ <span class="pp">|</span> Maturity at birth <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 0.5<span class="sc">\*</span> <span class="pp">|</span></span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h^p$ <span class="pp">|</span> Maturity at puberty <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 73.1 <span class="sc">\[</span>55.9 ; 127.7<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_{coc}$ <span class="pp">|</span> Energy in a cocoon <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span> 57.8 <span class="sc">\[</span>51.2 ; 70.0<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d_V$ <span class="pp">|</span> Density of structure <span class="pp">|</span> $\mathrm{g\cdot cm^{-3}}$ <span class="pp">|</span> 1.21 <span class="sc">\[</span>1.09 ; 1.26<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $d_E$ <span class="pp">|</span> Density of reserve <span class="pp">|</span> $\mathrm{g\cdot J^{-1}}$ <span class="pp">|</span> 1.1e-9 <span class="sc">\[</span>1.1e-9 ; 6.8e-7<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> *Soil organic matter parameters* <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\mu_{OM}$ <span class="pp">|</span> Soil organic matter energy content <span class="pp">|</span> $\mathrm{J\cdot g^{-1}}$ <span class="pp">|</span> 11700<span class="sc">\*</span> <span class="pp">|</span></span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $r_{OM}$ <span class="pp">|</span> Fraction of energy in soil compared to horse dung organic matter <span class="pp">|</span> <span class="sc">\-</span> <span class="pp">|</span> 0.029 <span class="sc">\[</span>0.019 ; 0.045<span class="sc">\]</span> <span class="pp">|</span></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> *Metabolic response to temperature* <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_A^H$ <span class="pp">|</span> Arrhenius temperature for upper boundary <span class="pp">|</span> K <span class="pp">|</span> 28750<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T^H$ <span class="pp">|</span> Upper boundary <span class="pp">|</span> K <span class="pp">|</span> 293.2<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_A$ <span class="pp">|</span> Arrhenius temperature <span class="pp">|</span> K <span class="pp">|</span> 7976<span class="sc">\*</span> <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $T_{\mathrm{ref}}$ <span class="pp">|</span> Reference temperature <span class="pp">|</span> K <span class="pp">|</span> 293.15 <span class="co">[</span><span class="ot">@gergs_2022</span><span class="co">]</span> <span class="pp">|</span></span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a>: **Parameter description and their estimated values for the best-performing model.** Results are expressed as the modes of the distributions and their respective credibility interval (95%). Fixed parameters are indicated with an asterisque. {#tbl-chap3Param}</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Symbol <span class="pp">|</span> Description <span class="pp">|</span> Unit <span class="pp">|</span></span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a><span class="pp">|:---|:---|</span>:--:<span class="pp">|</span></span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Environmental state variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $OM_{horse}$ <span class="pp">|</span> Horse dung organic matter mass <span class="pp">|</span> $\mathrm{g_{OM}}$ <span class="pp">|</span></span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $OM_{soil}$ <span class="pp">|</span> Soil organic matter mass <span class="pp">|</span> $\mathrm{g_{OM}}$ <span class="pp">|</span></span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $W_{soil}$ <span class="pp">|</span> Dry mass of soil in the cosm <span class="pp">|</span> $\mathrm{g_{soil}}$ <span class="pp">|</span></span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $W_{cosm}$ <span class="pp">|</span> Dry mass of matter in the cosm <span class="pp">|</span> $\mathrm{g_{soil}}$ <span class="pp">|</span></span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Organism state variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E$ <span class="pp">|</span> Energy reserve <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span></span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_h$ <span class="pp">|</span> Maturity <span class="pp">|</span> $\mathrm{J}$ <span class="pp">|</span></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $L$ <span class="pp">|</span> Volumetric structural length <span class="pp">|</span> $\mathrm{cm}$ <span class="pp">|</span></span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $R$ <span class="pp">|</span> Cumulated reproduction <span class="pp">|</span> $<span class="sc">\#</span>$ <span class="pp">|</span></span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $W_w$ <span class="pp">|</span> Wet weight <span class="pp">|</span> $\mathrm{g}$ <span class="pp">|</span></span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **Intermediate variables** <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span></span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $E_m$ <span class="pp">|</span> $\displaystyle \frac{\left<span class="sc">\{</span>\dot{p}_{Am}\right<span class="sc">\}</span>}{v}$ <span class="pp">|</span> $\mathrm{J.cm^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $f$ <span class="pp">|</span> Scaled functional response <span class="pp">|</span> $-$ <span class="pp">|</span></span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $g$ <span class="pp">|</span> $\displaystyle \frac{<span class="co">[</span><span class="ot">E_G</span><span class="co">]</span>}{\kappa_{real} E_m}$ <span class="pp">|</span> $\mathrm{cm^{-2}}$ <span class="pp">|</span></span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot k_M$ <span class="pp">|</span> $\displaystyle \frac{\left<span class="co">[</span><span class="ot">\dot{p}_M\right</span><span class="co">]</span>_t}{<span class="co">[</span><span class="ot">E_G</span><span class="co">]</span>}$ <span class="pp">|</span> $\mathrm{d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\kappa_{real}$ <span class="pp">|</span> Allocation fraction to soma <span class="pp">|</span> $-$ <span class="pp">|</span></span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $L_m$ <span class="pp">|</span> $\displaystyle \frac{v_t}{\dot k_M g}$ <span class="pp">|</span> $\mathrm{cm}$ <span class="pp">|</span></span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{OM}_{out}^{horse}$ | Rate of consumption of horse dung organic matter | $\mathrm{g_{OM}.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{OM}_{out}^{soil}$ | Rate of consumption of soil organic matter | $\mathrm{g_{OM}.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{p}_C$ <span class="pp">|</span> Flux of mobilized energy from reserve <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{p}_R$ <span class="pp">|</span> Energy flux allocated to maturity / reproduction <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{f,max}$ <span class="pp">|</span> Maximum rate of ingested energy <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{matter}$ <span class="pp">|</span> Rate of matter ingestion <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{matter, max}$ <span class="pp">|</span> Maximum rate of matter ingestion <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{horse}$ <span class="pp">|</span> Rate of horse dung organic matter ingestion <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_{soil}$ <span class="pp">|</span> Rate of soil organic matter ingestion <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_f^{horse}$ <span class="pp">|</span> Rate of energy ingested through horse dung <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> $\dot{Q}_f^{soil}$ <span class="pp">|</span> Rate of energy ingested through soil <span class="pp">|</span> $\mathrm{J.d^{-1}}$ <span class="pp">|</span></span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>: **Model state and intermediate variables.** {#tbl-art4ModStateVar tbl-pos="H"}</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a><span class="fu">## Model parametrization and calibration</span></span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a>The DEB model was calibrated and evaluated using both literature datasets and the new density experiment conducted in this study. Together, these datasets cover multiple life stages and experimental conditions, including isolated individuals, grouped adults, and juveniles reared under different density and food availability conditions. The main characteristics of each dataset, including density treatment and feeding conditions are summarized in @tbl-chap3XP (more detail @sec-DataSynth). This combination of datasets provides complementary information for characterizing growth, maturation, and reproduction processes across a range of environmental conditions (temperature, feeding, population density).</span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Source <span class="pp">|</span> Experiment name <span class="pp">|</span> T <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (°C) <span class="pp">|</span> Humidity (%WHC) <span class="pp">|</span> Soil quantity (g) <span class="pp">|</span> Added horse dung (g/ind/14d) <span class="pp">|</span> Ind./Cosm <span class="pp">|</span> Development stage <span class="pp">|</span> Sample size <span class="pp">|</span></span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a><span class="pp">|----|----|----|----|----|----|----|----|----|</span></span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bart et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2019) <span class="pp">|</span> XP1_1 <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 3 individuals <span class="pp">|</span></span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP1_2 <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 then grouped<span class="sc">\*\*</span> <span class="pp">|</span> Juveniles to grouped adults <span class="pp">|</span> 6 individuals <span class="pp">|</span></span>
+<span id="cb1-288"><a href="#cb1-288" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP3 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> Varying \newline (0 or 3)<span class="sc">\*</span> <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 5 individuals <span class="pp">|</span></span>
+<span id="cb1-289"><a href="#cb1-289" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP4_1 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 2 individuals <span class="pp">|</span></span>
+<span id="cb1-290"><a href="#cb1-290" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP4_2 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1 <span class="pp">|</span> 1 then grouped<span class="sc">\*\*</span> <span class="pp">|</span> Juveniles to grouped adults <span class="pp">|</span> 6 individuals <span class="pp">|</span></span>
+<span id="cb1-291"><a href="#cb1-291" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> XP5 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1.5 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 5 individuals <span class="pp">|</span></span>
+<span id="cb1-292"><a href="#cb1-292" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Bart et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2020) <span class="pp">|</span> Control \newline individuals <span class="pp">|</span> 15 <span class="pp">|</span> 70 <span class="pp">|</span> 400 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles <span class="pp">|</span> 91 between 0–42 days then 7 individuals <span class="pp">|</span></span>
+<span id="cb1-293"><a href="#cb1-293" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Gollot et al. <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (2026) <span class="pp">|</span> D1 <span class="pp">|</span> 18 <span class="pp">|</span> 70 <span class="pp">|</span> 200 <span class="pp">|</span> 3 <span class="pp">|</span> 1 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
+<span id="cb1-294"><a href="#cb1-294" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D2 <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (limiting food) <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 1.5 <span class="pp">|</span> 2 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
+<span id="cb1-295"><a href="#cb1-295" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D2b <span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span> (*ad libitum*) <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 3 <span class="pp">|</span> 2 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 2 replicates <span class="pp">|</span></span>
+<span id="cb1-296"><a href="#cb1-296" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D5 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 0.6 <span class="pp">|</span> 5 <span class="pp">|</span> Juveniles to adults <span class="pp">|</span> 4 replicates <span class="pp">|</span></span>
+<span id="cb1-297"><a href="#cb1-297" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>  <span class="pp">|</span> D7 <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span>  <span class="pp">|</span> 0.43 <span class="pp">|</span> 7 <span class="pp">|</span> Juveniles <span class="pp">|</span> 3 replicates <span class="pp">|</span></span>
+<span id="cb1-298"><a href="#cb1-298" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-299"><a href="#cb1-299" aria-hidden="true" tabindex="-1"></a>: **Summary of the experimental conditions for each experiment used to calibrate the DEB model.** The experiment numbering for Bart et al. (2019) follows that of the original publication. In experiments XP1 and XP4, individuals were either maintained in isolation throughout the experiment ou grouped only after puberty was detected. These experiments were therefore split into separate datasets to distinguish isolated individuals from individuals grouped at the adult stage (1: isolated; 2: grouped after puberty). Control individuals from Bart et al. (2020) include those from the XP2 experiment reported in Bart (2019). WHC: Water Holding Capacity. \newline <span class="sc">\*</span> 3 g/ind are given days 70, 84 and 140.\</span>
+<span id="cb1-300"><a href="#cb1-300" aria-hidden="true" tabindex="-1"></a>\newline <span class="sc">\*\*</span> Earthworms are first put individually in cosms before being grouped when adults. They are first grouped by 2 for 98 days then by 3 for 84 days then by 6. {#tbl-chap3XP}</span>
+<span id="cb1-301"><a href="#cb1-301" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-302"><a href="#cb1-302" aria-hidden="true" tabindex="-1"></a>The DEB models were calibrated and evaluated using both literature datasets and the new density experiment conducted in this study. Together, these datasets cover multiple life stages and experimental conditions, including isolated individuals, grouped adults, and juveniles reared under different density and food availability conditions. The main characteristics of each dataset, including density treatment and feeding conditions are summarized in @tbl-chap3XP. This combination of datasets provides complementary information for characterizing growth, maturation, and reproduction processes across a range of environmental conditions (temperature, feeding, population density).</span>
+<span id="cb1-303"><a href="#cb1-303" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-304"><a href="#cb1-304" aria-hidden="true" tabindex="-1"></a>Model calibration was performed exclusively using datasets corresponding to juvenile individuals and adults maintained in groups. Data from isolated adults were excluded from the calibration procedure because reproduction cannot occur in the absence of mating partners, potentially affecting energy allocation patterns and biasing the estimation of reproductive parameters.</span>
+<span id="cb1-305"><a href="#cb1-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-306"><a href="#cb1-306" aria-hidden="true" tabindex="-1"></a>Model parameters were estimated within a Bayesian framework using largely weakly informative priors, while incorporating more constrained priors for parameters with available biological or physiological knowledge. The full set of prior distributions is detailed in @sec-DEB The models were implemented in the MCSim environment. Parameter inference was performed using Bayesian numerical calibration following @bois_2009. Likelihood functions were defined assuming normally distributed errors for body weight and Poisson-distributed counts for reproduction. Markov Chain Monte Carlo (MCMC) simulations were run with 3 chains for 30,000 iterations to approximate posterior distributions of model parameters which were estimated from the last 10,000 iterations of the MCMC chains. Point estimates were defined as the modes of the posterior distributions with their 95% credibility intervals.</span>
+<span id="cb1-307"><a href="#cb1-307" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-308"><a href="#cb1-308" aria-hidden="true" tabindex="-1"></a>Not all possible combinations of model assumptions were tested in a full factorial design. Candidate formulations were instead evaluated sequentially, based on biological plausibility and on the behaviour of preliminary fits. Eight combinations were retained for comparison: L.Y.F.w, L.Y.F.e, L.K.F.e, W.K.F.e, L.Y.C.e, L.K.C.e, W.Y.C.e, and W.K.C.e. This selection allowed the main alternative assumptions concerning searching-rate scaling, functional-response shape, post-maturation allocation, and reserve contribution to body mass to be compared while limiting redundant or weakly supported formulations. Model comparison was based on the Bayesian Information Criterion (BIC), which balances goodness-of-fit and model complexity by penalizing models with a higher number of parameters, but also on the RMSE of each experiment. In addition, to investigate whether model performance and prediction bias varied across experimental conditions, predicted-observed relationships were examined according to temperature, density, food availability, and developmental stage.</span>
+<span id="cb1-309"><a href="#cb1-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-310"><a href="#cb1-310" aria-hidden="true" tabindex="-1"></a>A global sensitivity analysis was conducted on the best-performing model using the Sobol method with the Jansen estimator, implemented in the “sensitivity” R package <span class="co">[</span><span class="ot">@ioss_2026</span><span class="co">]</span>. Two complementary analyses were performed: one including the parameters governing temperature dependence and one excluding them, in order to distinguish the contribution of thermal correction from that of the remaining physiological and environmental parameters. Parameter values were varied independently within ±10% of their posterior estimates to quantify their relative influence on model outputs.</span>
+<span id="cb1-311"><a href="#cb1-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-312"><a href="#cb1-312" aria-hidden="true" tabindex="-1"></a>The sensitivity analysis was based on simulations of the Gollot2026_D2 experiment, in which two earthworms were maintained per cosm under moderate food availability. Body mass, reserve energy, and maturity were evaluated at both the juvenile stage ($t = 50$ days) and the adult stage ($t = 140$ days). Reproductive output at $t = 140$ days and the total amount of organic matter remaining in the cosm at $t = 50$ days were also included as endpoints. These endpoints were selected to characterize parameter influence on energy acquisition, individual state, life-history transitions, and reproductive performance at contrasting developmental stages.</span>
+<span id="cb1-313"><a href="#cb1-313" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-314"><a href="#cb1-314" aria-hidden="true" tabindex="-1"></a>Finally, the case of isolated adults was therefore explored only through simulations to investigate the resulting patterns of energy allocation in the absence of reproductive opportunities. Two alternative formulations were considered: (i) maintaining the juvenile allocation fraction throughout adulthood ($\kappa_J$), and (ii) introducing a transition toward the adult allocation fraction ($\kappa_A$ ) after maturation, as implemented for grouped adults.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
