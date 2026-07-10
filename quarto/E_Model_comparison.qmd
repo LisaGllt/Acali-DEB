@@ -523,7 +523,7 @@ df_result |> datatable(
 ## Chains
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -545,7 +545,7 @@ ggsave(
   )
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -567,7 +567,7 @@ ggsave(
   )
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -589,7 +589,7 @@ ggsave(
   )
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -611,7 +611,7 @@ ggsave(
   )
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -633,7 +633,7 @@ ggsave(
   )
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -655,7 +655,7 @@ ggsave(
   )
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -677,7 +677,7 @@ ggsave(
   )
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Parameters chains. Only the last `r Nb_iter_kept` are represented.
@@ -703,7 +703,7 @@ ggsave(
 ## Likelihoods
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -725,7 +725,7 @@ ggsave(
   )
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -747,7 +747,7 @@ ggsave(
   )
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -769,7 +769,7 @@ ggsave(
   )
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -791,7 +791,7 @@ ggsave(
   )
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -813,7 +813,7 @@ ggsave(
   )
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -835,7 +835,7 @@ ggsave(
   )
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -857,7 +857,7 @@ ggsave(
   )
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, message=F, warning=F, echo=F}
 #| fig-cap: Evolution of likelihood and deviance ratio through the iterations.
@@ -883,7 +883,7 @@ ggsave(
 ## Chains convergence
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -905,7 +905,7 @@ f_Plot_ipairs(MCMC_out_A_FLYw, file_rds)
 
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -927,7 +927,7 @@ f_Plot_ipairs(MCMC_out_B_FLYe, file_rds)
 
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -949,7 +949,7 @@ f_Plot_ipairs(MCMC_out_C_CWYe, file_rds)
 
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -1012,7 +1012,7 @@ dev.off()
 
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -1034,7 +1034,7 @@ f_Plot_ipairs(MCMC_out_E_CLYe, file_rds)
 
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -1056,7 +1056,7 @@ f_Plot_ipairs(MCMC_out_F_CLKe, file_rds)
 
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -1078,7 +1078,7 @@ f_Plot_ipairs(MCMC_out_G_FLKe, file_rds)
 
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Chains convergence.
@@ -1104,7 +1104,7 @@ f_Plot_ipairs(MCMC_out_H_FWKe, file_rds)
 ## Posterior distributions
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1126,7 +1126,7 @@ ggsave(
 
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1148,7 +1148,7 @@ ggsave(
 
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1170,7 +1170,7 @@ ggsave(
 
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1192,7 +1192,7 @@ ggsave(
 
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1214,7 +1214,7 @@ ggsave(
 
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1236,7 +1236,7 @@ ggsave(
 
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1258,7 +1258,7 @@ ggsave(
 
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Distributions of the priors and the posteriors.
@@ -1633,7 +1633,7 @@ df_predobs_Weight_H_FWKe <- df_data_obs |>
 ```
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -1817,7 +1817,7 @@ ggsave(
 ) 
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2001,7 +2001,7 @@ ggsave(
 ) 
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2184,7 +2184,7 @@ ggsave(
 ) 
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2370,7 +2370,7 @@ ggsave(
 ) 
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2554,7 +2554,7 @@ ggsave(
 ) 
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2738,7 +2738,7 @@ ggsave(
 ) 
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -2922,7 +2922,7 @@ ggsave(
 ) 
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, message=F, warning=F}
 #| fig-cap: Results of the model fit on experimental data. Predicted values are represented with points with their respective credibility interval of 95%. Thin black and grey lines represent the 2-folds and 5-fold changes, respectively. The thicker black line represents the identity line. 
@@ -3330,7 +3330,7 @@ ggsave(
 ## Predicted trajectories for Weight and Reproduction
 
 ::: panel-tabset
-## A_FLYw
+## A_L.Y.F.w
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -3491,7 +3491,7 @@ ggsave(
   )
 ```
 
-## B_FLYe
+## B_L.Y.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -3653,7 +3653,7 @@ ggsave(
 
 ```
 
-## C_CWYe
+## C_W.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -3814,7 +3814,7 @@ ggsave(
 
 ```
 
-## D_CWKe
+## D_W.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -3978,7 +3978,7 @@ ggsave(
 
 ```
 
-## E_CLYe
+## E_L.Y.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -4140,7 +4140,7 @@ ggsave(
 
 ```
 
-## F_CLKe
+## F_L.K.C.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -4302,7 +4302,7 @@ ggsave(
 
 ```
 
-## G_FLKe
+## G_L.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
@@ -4464,7 +4464,7 @@ ggsave(
 
 ```
 
-## H_FWKe
+## H_W.K.F.e
 
 ```{r, echo=F, message=F, warning=F}
 #| fig-cap: Predicted Weight and Reproduction for each experiment.
